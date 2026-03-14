@@ -21,6 +21,9 @@ import {
   StatBox,
   CardSkeleton,
 } from "@/components/common";
+import { setSelectedSex } from "@/store";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 // ─── SVG ILLUSTRATSIYALAR ───────────────────────────────────────────
 const SexSVG = {
@@ -598,6 +601,428 @@ const SexSVG = {
       />
     </svg>
   ),
+  "SEX-07": ({ pulse = false }) => (
+    <svg
+      viewBox="0 0 120 80"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ width: "100%", height: "100%" }}
+    >
+      <defs>
+        {/* Korpus metall gradyenti */}
+        <linearGradient
+          id="korpus"
+          x1="8"
+          y1="22"
+          x2="96"
+          y2="68"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0%" stopColor="#4a5568" />
+          <stop offset="40%" stopColor="#2d3748" />
+          <stop offset="100%" stopColor="#1a202c" />
+        </linearGradient>
+        {/* Chap rulon (po'lat) */}
+        <linearGradient
+          id="rulon_l"
+          x1="17"
+          y1="36"
+          x2="29"
+          y2="36"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0%" stopColor="#718096" />
+          <stop offset="30%" stopColor="#e2e8f0" />
+          <stop offset="60%" stopColor="#a0aec0" />
+          <stop offset="100%" stopColor="#4a5568" />
+        </linearGradient>
+        {/* O'ng rulon (po'lat) */}
+        <linearGradient
+          id="rulon_r"
+          x1="75"
+          y1="36"
+          x2="87"
+          y2="36"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0%" stopColor="#718096" />
+          <stop offset="30%" stopColor="#e2e8f0" />
+          <stop offset="60%" stopColor="#a0aec0" />
+          <stop offset="100%" stopColor="#4a5568" />
+        </linearGradient>
+        {/* Yuqori bosim silindr (sariq po'lat) */}
+        <linearGradient
+          id="bosim_t"
+          x1="44"
+          y1="33"
+          x2="60"
+          y2="33"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0%" stopColor="#744210" />
+          <stop offset="35%" stopColor="#f6c34b" />
+          <stop offset="65%" stopColor="#d69e2e" />
+          <stop offset="100%" stopColor="#744210" />
+        </linearGradient>
+        {/* Pastki bosim silindr */}
+        <linearGradient
+          id="bosim_b"
+          x1="44"
+          y1="47"
+          x2="60"
+          y2="47"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0%" stopColor="#744210" />
+          <stop offset="35%" stopColor="#f6c34b" />
+          <stop offset="65%" stopColor="#d69e2e" />
+          <stop offset="100%" stopColor="#744210" />
+        </linearGradient>
+        {/* Nazorat paneli (ko'k) */}
+        <linearGradient
+          id="panel"
+          x1="96"
+          y1="10"
+          x2="116"
+          y2="38"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0%" stopColor="#2b4299" />
+          <stop offset="100%" stopColor="#1a2a6c" />
+        </linearGradient>
+        {/* Taglik */}
+        <linearGradient
+          id="taglik"
+          x1="8"
+          y1="68"
+          x2="96"
+          y2="72"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0%" stopColor="#4a5568" />
+          <stop offset="50%" stopColor="#718096" />
+          <stop offset="100%" stopColor="#4a5568" />
+        </linearGradient>
+        {/* List lenta (qizil) */}
+        <linearGradient
+          id="list_grad"
+          x1="29"
+          y1="40"
+          x2="75"
+          y2="46"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0%" stopColor="#c0392b" />
+          <stop offset="50%" stopColor="#e74c3c" />
+          <stop offset="100%" stopColor="#c0392b" />
+        </linearGradient>
+        {/* Strelka */}
+        <marker
+          id="arr07c"
+          viewBox="0 0 8 8"
+          refX="6"
+          refY="4"
+          markerWidth="4"
+          markerHeight="4"
+          orient="auto"
+        >
+          <path
+            d="M1 1L7 4L1 7"
+            fill="none"
+            stroke="#e2e8f0"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </marker>
+      </defs>
+
+      {/* Asosiy korpus */}
+      <rect
+        x="8"
+        y="22"
+        width="88"
+        height="46"
+        rx="4"
+        fill="url(#korpus)"
+        stroke="#718096"
+        strokeWidth="0.8"
+      />
+      <rect
+        x="9"
+        y="22.5"
+        width="86"
+        height="1.5"
+        rx="1"
+        fill="#718096"
+        opacity="0.5"
+      />
+
+      {/* Chap rulon bloki */}
+      <rect
+        x="13"
+        y="30"
+        width="20"
+        height="30"
+        rx="3"
+        fill="#2d3748"
+        stroke="#4a5568"
+        strokeWidth="0.6"
+      />
+      <ellipse
+        cx="23"
+        cy="45"
+        rx="7"
+        ry="10"
+        fill="url(#rulon_l)"
+        stroke="#a0aec0"
+        strokeWidth="0.5"
+      />
+      <line
+        x1="23"
+        y1="35.2"
+        x2="23"
+        y2="54.8"
+        stroke="#4a5568"
+        strokeWidth="0.6"
+        opacity="0.7"
+      />
+      <ellipse
+        cx="23"
+        cy="45"
+        rx="2"
+        ry="2.8"
+        fill="#2d3748"
+        stroke="#718096"
+        strokeWidth="0.5"
+      />
+      <circle cx="23" cy="45" r="1" fill="#e2e8f0" />
+
+      {/* O'ng rulon bloki */}
+      <rect
+        x="71"
+        y="30"
+        width="20"
+        height="30"
+        rx="3"
+        fill="#2d3748"
+        stroke="#4a5568"
+        strokeWidth="0.6"
+      />
+      <ellipse
+        cx="81"
+        cy="45"
+        rx="7"
+        ry="10"
+        fill="url(#rulon_r)"
+        stroke="#a0aec0"
+        strokeWidth="0.5"
+      />
+      <line
+        x1="81"
+        y1="35.2"
+        x2="81"
+        y2="54.8"
+        stroke="#4a5568"
+        strokeWidth="0.6"
+        opacity="0.7"
+      />
+      <ellipse
+        cx="81"
+        cy="45"
+        rx="2"
+        ry="2.8"
+        fill="#2d3748"
+        stroke="#718096"
+        strokeWidth="0.5"
+      />
+      <circle cx="81" cy="45" r="1" fill="#e2e8f0" />
+
+      {/* List lenta */}
+      <path
+        d="M30 43.5 Q41 40.5 52 43.5 Q63 46.5 74 43.5"
+        stroke="url(#list_grad)"
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+      <path
+        d="M30 43.5 Q41 40.5 52 43.5 Q63 46.5 74 43.5"
+        stroke="#ff6b6b"
+        strokeWidth="1"
+        strokeLinecap="round"
+        opacity="0.5"
+      />
+      <path
+        d="M30 46 Q41 43 52 46 Q63 49 74 46"
+        stroke="#922b21"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        opacity="0.7"
+      />
+
+      {/* Yuqori bosim silindr */}
+      <ellipse
+        cx="52"
+        cy="37"
+        rx="9"
+        ry="5.5"
+        fill="url(#bosim_t)"
+        stroke="#b7791f"
+        strokeWidth="0.8"
+      />
+      <ellipse cx="52" cy="37" rx="3.5" ry="2" fill="#744210" opacity="0.6" />
+
+      {/* Pastki bosim silindr */}
+      <ellipse
+        cx="52"
+        cy="53"
+        rx="9"
+        ry="5.5"
+        fill="url(#bosim_b)"
+        stroke="#b7791f"
+        strokeWidth="0.8"
+      />
+      <ellipse cx="52" cy="53" rx="3.5" ry="2" fill="#744210" opacity="0.6" />
+
+      {/* Shatun */}
+      <rect
+        x="50"
+        y="42"
+        width="4"
+        height="11"
+        rx="1"
+        fill="#4a5568"
+        stroke="#718096"
+        strokeWidth="0.5"
+      />
+
+      {/* Nazorat paneli */}
+      <rect
+        x="96"
+        y="9"
+        width="20"
+        height="30"
+        rx="3"
+        fill="url(#panel)"
+        stroke="#4299e1"
+        strokeWidth="0.8"
+      />
+      <rect
+        x="97"
+        y="9.5"
+        width="18"
+        height="1"
+        rx="0.5"
+        fill="#63b3ed"
+        opacity="0.5"
+      />
+      <circle
+        cx="106"
+        cy="16"
+        r="3"
+        fill="#38a169"
+        stroke="#276749"
+        strokeWidth="0.5"
+      />
+      <circle cx="106" cy="16" r="1.5" fill="#68d391" opacity="0.8" />
+      <circle
+        cx="106"
+        cy="24"
+        r="2.5"
+        fill="#e53e3e"
+        stroke="#9b2c2c"
+        strokeWidth="0.5"
+      />
+      <circle cx="106" cy="24" r="1.2" fill="#fc8181" opacity="0.7" />
+      <rect
+        x="99"
+        y="30"
+        width="14"
+        height="3"
+        rx="1.5"
+        fill="#2c5282"
+        stroke="#4299e1"
+        strokeWidth="0.4"
+      />
+      <rect
+        x="103"
+        y="29.5"
+        width="4"
+        height="4"
+        rx="1"
+        fill="#90cdf4"
+        stroke="#4299e1"
+        strokeWidth="0.4"
+      />
+
+      {/* Tezlik o'zgartgich */}
+      <path
+        d="M91 40 L100 36 L100 44 Z"
+        fill="#f6c34b"
+        stroke="#b7791f"
+        strokeWidth="0.5"
+      />
+
+      {/* Kirish/chiqish strelkalar */}
+      <path
+        d="M1 45 L11 45"
+        stroke="#e2e8f0"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        markerEnd="url(#arr07c)"
+      />
+      <text x="1" y="42" fontSize="3.5" fill="#a0aec0" fontFamily="monospace">
+        IN
+      </text>
+      <path
+        d="M93 45 L104 45"
+        stroke="#e2e8f0"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        markerEnd="url(#arr07c)"
+      />
+      <text x="95" y="42" fontSize="3.5" fill="#a0aec0" fontFamily="monospace">
+        OUT
+      </text>
+
+      {/* Taglik va oyoqlar */}
+      <rect
+        x="8"
+        y="68"
+        width="88"
+        height="5"
+        rx="2"
+        fill="url(#taglik)"
+        stroke="#4a5568"
+        strokeWidth="0.6"
+      />
+      <rect
+        x="14"
+        y="73"
+        width="6"
+        height="7"
+        rx="1.5"
+        fill="#2d3748"
+        stroke="#4a5568"
+        strokeWidth="0.5"
+      />
+      <rect x="24" y="75" width="4" height="5" rx="1" fill="#4a5568" />
+      <rect
+        x="84"
+        y="73"
+        width="6"
+        height="7"
+        rx="1.5"
+        fill="#2d3748"
+        stroke="#4a5568"
+        strokeWidth="0.5"
+      />
+      <rect x="76" y="75" width="4" height="5" rx="1" fill="#4a5568" />
+
+      {/* Yer soyasi */}
+      <ellipse cx="52" cy="81" rx="44" ry="2" fill="#000" opacity="0.2" />
+    </svg>
+  ),
 };
 
 // ─── SEX DETAIL PANEL ───────────────────────────────────────────────
@@ -1050,7 +1475,8 @@ export default function Sexlar() {
     queryFn: getSexlar,
   });
   const sexlar = data?.data || [];
-
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   return (
     <Box sx={{ p: 2.5, display: "flex", flexDirection: "column", gap: 2 }}>
       {/* HEADER */}
@@ -1125,7 +1551,16 @@ export default function Sexlar() {
               <SexCard
                 s={s}
                 selected={selected}
-                onClick={() => setSelected(selected?.id === s.id ? null : s)}
+                onClick={() => {
+                  const newSelected = selected?.id === s.id ? null : s;
+
+                  setSelected(newSelected);
+
+                  if (newSelected) {
+                    dispatch(setSelectedSex(newSelected));
+                    navigate("/uchastkalar");
+                  }
+                }}
               />
             </Grid>
           ))}

@@ -205,7 +205,7 @@ export function Layout({ children }) {
                 "@keyframes blink": { "50%": { opacity: 0.2 } },
               }}
             />
-            <Typography
+            {/* <Typography
               sx={{
                 fontFamily: "'Share Tech Mono',monospace",
                 fontSize: "0.6rem",
@@ -214,9 +214,53 @@ export function Layout({ children }) {
               }}
             >
               TIZIM FAOL · 142 DATCHIK · 6 SEX
+            </Typography> */}
+          </Box>
+          <Box
+            sx={{
+              position: "absolute",
+              left: "50%",
+              transform: "translateX(-50%)",
+              pointerEvents: "none",
+            }}
+          >
+            <Typography
+              sx={{
+                fontFamily: "'Orbitron', monospace",
+                fontSize: "0.95rem",
+                fontWeight: 800,
+                letterSpacing: "0.35em",
+                textTransform: "uppercase",
+                color: "primary.main",
+                textAlign: "center",
+
+                textShadow: `
+        0 0 5px rgba(0,255,157,0.6),
+        0 0 10px rgba(0,255,157,0.4),
+        0 0 20px rgba(0,255,157,0.2)
+      `,
+
+                animation: "glowPulse 3s ease-in-out infinite",
+
+                "@keyframes glowPulse": {
+                  "0%": {
+                    textShadow:
+                      "0 0 5px rgba(0,255,157,0.6),0 0 10px rgba(0,255,157,0.4)",
+                  },
+                  "50%": {
+                    textShadow:
+                      "0 0 10px rgba(0,255,157,1),0 0 25px rgba(0,255,157,0.8)",
+                  },
+                  "100%": {
+                    textShadow:
+                      "0 0 5px rgba(0,255,157,0.6),0 0 10px rgba(0,255,157,0.4)",
+                  },
+                },
+              }}
+            >
+              RAQAMLI • INNOVATSION • XAVFSIZ KOMBINAT
             </Typography>
           </Box>
-
           <Box sx={{ flex: 1 }} />
 
           <LiveBadge />

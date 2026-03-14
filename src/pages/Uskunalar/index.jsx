@@ -4284,6 +4284,8 @@ function UskunaCard({ u, onClick }) {
 // ══════════════════════════════════════════════════════════════════════
 export default function Uskunalar() {
   const dispatch = useDispatch();
+  // const selectedUchastka = useSelector((state) => state.ui.selectedUchastka);
+  const selectedSex = useSelector((state) => state.ui.selectedSex);
   const filter = useSelector((s) => s.uskunalar.filter);
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
@@ -4301,9 +4303,14 @@ export default function Uskunalar() {
   });
   const uskunalar = data?.data || [];
   const sx = sexlar?.data || [];
-  const filtered = filter.holat
+  let filtered = filter.holat
     ? uskunalar.filter((u) => u.holat === filter.holat)
     : uskunalar;
+
+  filtered = filter.uchastkId
+    ? uskunalar.filter((u) => u.uchastkId === filter.uchastkId)
+    : uskunalar;
+  console.log(filtered);
 
   const handleOpen = (u) => {
     setSelectedUsk(u);
@@ -4488,7 +4495,7 @@ export default function Uskunalar() {
           <FormControl size="small" sx={{ minWidth: 148 }}>
             <InputLabel>SEX</InputLabel>
             <Select
-              value={filter.sexId || ""}
+              value={selectedSex.id || filter.sexId || ""}
               onChange={(e) =>
                 dispatch(setUskunaFilter({ sexId: e.target.value }))
               }

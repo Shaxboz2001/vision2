@@ -10,4 +10,11 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 8003,
   },
+  proxy: {
+    "/camera": {
+      target: "http://172.16.35.120",
+      changeOrigin: true,
+      secure: false,
+    },
+  },
 });
