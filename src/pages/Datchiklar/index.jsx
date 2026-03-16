@@ -287,7 +287,7 @@ export default function Datchiklar() {
               onChange={(e) =>
                 dispatch(setDatchikFilter({ sexId: e.target.value }))
               }
-              label="SEX"
+              label="BO'LINMA"
               sx={{
                 fontFamily: "'Share Tech Mono',monospace",
                 fontSize: "0.75rem",

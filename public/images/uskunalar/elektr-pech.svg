@@ -1,0 +1,288 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 640">
+<defs>
+  <linearGradient id="e_shell" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#070810"/>
+    <stop offset="20%"  stop-color="#101028"/>
+    <stop offset="45%"  stop-color="#181838"/>
+    <stop offset="65%"  stop-color="#202040"/>
+    <stop offset="82%"  stop-color="#101028"/>
+    <stop offset="100%" stop-color="#070810"/>
+  </linearGradient>
+  <linearGradient id="e_electrode" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#0c0c1e"/>
+    <stop offset="35%"  stop-color="#1e1e38"/>
+    <stop offset="65%"  stop-color="#282848"/>
+    <stop offset="100%" stop-color="#0c0c1e"/>
+  </linearGradient>
+  <linearGradient id="e_svod_top" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="#1e1e30"/>
+    <stop offset="100%" stop-color="#0e0e20"/>
+  </linearGradient>
+  <radialGradient id="e_ark" cx="50%" cy="50%" r="55%">
+    <stop offset="0%"   stop-color="#dd99ff" stop-opacity="1"/>
+    <stop offset="35%"  stop-color="#9944ee" stop-opacity="0.7"/>
+    <stop offset="70%"  stop-color="#6622cc" stop-opacity="0.4"/>
+    <stop offset="100%" stop-color="#3300aa" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="e_metal" cx="50%" cy="58%" r="55%">
+    <stop offset="0%"   stop-color="#ffee88"/>
+    <stop offset="28%"  stop-color="#ff9900"/>
+    <stop offset="65%"  stop-color="#cc3300"/>
+    <stop offset="100%" stop-color="#660000"/>
+  </radialGradient>
+  <linearGradient id="e_trans" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#080818"/>
+    <stop offset="40%"  stop-color="#141430"/>
+    <stop offset="60%"  stop-color="#1c1c3c"/>
+    <stop offset="100%" stop-color="#080818"/>
+  </linearGradient>
+  <filter id="e_glow6"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="e_glow12"><feGaussianBlur stdDeviation="12" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="e_blur5"><feGaussianBlur stdDeviation="5"/></filter>
+  <filter id="e_blur10"><feGaussianBlur stdDeviation="10"/></filter>
+  <pattern id="e_brick" x="0" y="0" width="14" height="9" patternUnits="userSpaceOnUse">
+    <rect x="0.5" y="0.5" width="13" height="8" fill="none" stroke="#141428" stroke-width="0.4" opacity="0.6"/>
+  </pattern>
+</defs>
+
+<rect width="480" height="640" fill="#040508"/>
+
+<!-- === TUTUN / GAZLAR === -->
+<ellipse cx="240" cy="26" rx="36" ry="22" fill="#1a1428" opacity="0.55" filter="url(#e_blur10)"/>
+<ellipse cx="215" cy="14" rx="24" ry="16" fill="#121020" opacity="0.45" filter="url(#e_blur10)"/>
+<ellipse cx="268" cy="18" rx="20" ry="13" fill="#1e162a" opacity="0.35" filter="url(#e_blur10)"/>
+
+<!-- === TRANSFORMATOR (chap tomon) === -->
+<rect x="14" y="96" width="86" height="150" rx="5"
+  fill="url(#e_trans)" stroke="#161630" stroke-width="2"/>
+<!-- Radiator qovurg'alar -->
+<g stroke="#0e0e24" stroke-width="1.5" fill="#0a0a1e">
+  <rect x="18" y="104" width="78" height="7" rx="2"/>
+  <rect x="18" y="115" width="78" height="7" rx="2"/>
+  <rect x="18" y="126" width="78" height="7" rx="2"/>
+  <rect x="18" y="137" width="78" height="7" rx="2"/>
+  <rect x="18" y="148" width="78" height="7" rx="2"/>
+  <rect x="18" y="159" width="78" height="7" rx="2"/>
+  <rect x="18" y="170" width="78" height="7" rx="2"/>
+  <rect x="18" y="181" width="78" height="7" rx="2"/>
+  <rect x="18" y="192" width="78" height="7" rx="2"/>
+  <rect x="18" y="203" width="78" height="7" rx="2"/>
+  <rect x="18" y="214" width="78" height="7" rx="2"/>
+  <rect x="18" y="225" width="78" height="7" rx="2"/>
+</g>
+<!-- Transformator markazi (yadro) -->
+<circle cx="57" cy="168" r="28" fill="#080814" stroke="#141430" stroke-width="2"/>
+<circle cx="57" cy="168" r="21" fill="#0c0c20" stroke="#1a1a38" stroke-width="1.5">
+  <animateTransform attributeName="transform" type="rotate" from="0 57 168" to="360 57 168" dur="5s" repeatCount="indefinite"/>
+</circle>
+<circle cx="57" cy="168" r="12" fill="#080818" stroke="#101028" stroke-width="1.2"/>
+<circle cx="57" cy="168" r="5"  fill="#0e0e22" stroke="#1a1a38" stroke-width="1"/>
+<!-- Kabel chiqishlar (3 faza) -->
+<path d="M100 126 Q118 118 142 102" fill="none" stroke="#1a1a38" stroke-width="5" stroke-linecap="round"/>
+<path d="M100 155 Q122 154 144 154" fill="none" stroke="#1a1a38" stroke-width="5" stroke-linecap="round"/>
+<path d="M100 186 Q118 194 142 210" fill="none" stroke="#1a1a38" stroke-width="5" stroke-linecap="round"/>
+<!-- Kabel izolatsiya halqalari -->
+<g fill="none" stroke="#2a2a48" stroke-width="2">
+  <ellipse cx="118" cy="119" rx="5" ry="4" transform="rotate(-20 118 119)"/>
+  <ellipse cx="120" cy="154" rx="5" ry="4"/>
+  <ellipse cx="118" cy="194" rx="5" ry="4" transform="rotate(20 118 194)"/>
+</g>
+<!-- Kabel bosh tutgichlar -->
+<g fill="#0e1828" stroke="#1e2838" stroke-width="1.5">
+  <rect x="138" y="96"  width="8" height="12" rx="3"/>
+  <rect x="140" y="148" width="8" height="12" rx="3"/>
+  <rect x="138" y="204" width="8" height="12" rx="3"/>
+</g>
+
+<!-- === ELEKTROD TUTGICH KONSTRUKSIYASI === -->
+<!-- Chap ko'ndalang tutgich -->
+<rect x="148" y="96" width="76" height="12" rx="4" fill="#101028" stroke="#1e1e38" stroke-width="1.5"/>
+<rect x="148" y="148" width="76" height="12" rx="4" fill="#101028" stroke="#1e1e38" stroke-width="1.5"/>
+<rect x="148" y="204" width="76" height="12" rx="4" fill="#101028" stroke="#1e1e38" stroke-width="1.5"/>
+<!-- O'ng ko'ndalang tutgich -->
+<rect x="256" y="96"  width="76" height="12" rx="4" fill="#101028" stroke="#1e1e38" stroke-width="1.5"/>
+<rect x="256" y="148" width="76" height="12" rx="4" fill="#101028" stroke="#1e1e38" stroke-width="1.5"/>
+<rect x="256" y="204" width="76" height="12" rx="4" fill="#101028" stroke="#1e1e38" stroke-width="1.5"/>
+
+<!-- === ELEKTRODLAR (A / B / C faza) === -->
+<!-- A-faza (chap) -->
+<rect x="166" y="14" width="30" height="230" rx="15"
+  fill="url(#e_electrode)" stroke="#1e1e38" stroke-width="2"/>
+<rect x="171" y="18" width="20" height="224" rx="10" fill="#0c0c20" stroke="#161630" stroke-width="1"/>
+<!-- Grafite tekstura -->
+<g stroke="#181830" stroke-width="0.8" opacity="0.5">
+  <line x1="176" y1="22" x2="176" y2="240"/>
+  <line x1="181" y1="22" x2="181" y2="240"/>
+  <line x1="186" y1="22" x2="186" y2="240"/>
+</g>
+<!-- Elektrod boshlanish flansi -->
+<rect x="162" y="10" width="38" height="10" rx="4" fill="#161630" stroke="#222244" stroke-width="1.2"/>
+<!-- Ark uchi glow -->
+<ellipse cx="181" cy="242" rx="10" ry="4" fill="#cc88ff" opacity="0.9" filter="url(#e_glow6)">
+  <animate attributeName="rx" values="10;15;7;12;10" dur="0.45s" repeatCount="indefinite"/>
+  <animate attributeName="opacity" values="0.9;0.3;0.9" dur="0.4s" repeatCount="indefinite"/>
+</ellipse>
+
+<!-- B-faza (o'rta) -->
+<rect x="225" y="14" width="30" height="230" rx="15"
+  fill="url(#e_electrode)" stroke="#1e1e38" stroke-width="2"/>
+<rect x="230" y="18" width="20" height="224" rx="10" fill="#0c0c20" stroke="#161630" stroke-width="1"/>
+<g stroke="#181830" stroke-width="0.8" opacity="0.5">
+  <line x1="235" y1="22" x2="235" y2="240"/>
+  <line x1="240" y1="22" x2="240" y2="240"/>
+  <line x1="245" y1="22" x2="245" y2="240"/>
+</g>
+<rect x="221" y="10" width="38" height="10" rx="4" fill="#161630" stroke="#222244" stroke-width="1.2"/>
+<ellipse cx="240" cy="242" rx="10" ry="4" fill="#cc88ff" opacity="0.9" filter="url(#e_glow6)">
+  <animate attributeName="rx" values="10;14;8;12;10" dur="0.5s" begin="0.1s" repeatCount="indefinite"/>
+  <animate attributeName="opacity" values="0.9;0.2;0.9" dur="0.42s" begin="0.1s" repeatCount="indefinite"/>
+</ellipse>
+
+<!-- C-faza (o'ng) -->
+<rect x="284" y="14" width="30" height="230" rx="15"
+  fill="url(#e_electrode)" stroke="#1e1e38" stroke-width="2"/>
+<rect x="289" y="18" width="20" height="224" rx="10" fill="#0c0c20" stroke="#161630" stroke-width="1"/>
+<g stroke="#181830" stroke-width="0.8" opacity="0.5">
+  <line x1="294" y1="22" x2="294" y2="240"/>
+  <line x1="299" y1="22" x2="299" y2="240"/>
+  <line x1="304" y1="22" x2="304" y2="240"/>
+</g>
+<rect x="280" y="10" width="38" height="10" rx="4" fill="#161630" stroke="#222244" stroke-width="1.2"/>
+<ellipse cx="299" cy="242" rx="10" ry="4" fill="#cc88ff" opacity="0.9" filter="url(#e_glow6)">
+  <animate attributeName="rx" values="10;16;7;13;10" dur="0.48s" begin="0.2s" repeatCount="indefinite"/>
+  <animate attributeName="opacity" values="0.9;0.25;0.9" dur="0.44s" begin="0.2s" repeatCount="indefinite"/>
+</ellipse>
+
+<!-- === SVOD (yopiq qopqoq) === -->
+<ellipse cx="240" cy="248" rx="138" ry="36"
+  fill="url(#e_svod_top)" stroke="#1a1a30" stroke-width="2.5"/>
+<!-- Svod suv sovutish panellari -->
+<ellipse cx="240" cy="246" rx="132" ry="32" fill="#0c0c1e" stroke="#161630" stroke-width="1.5"/>
+<ellipse cx="240" cy="248" rx="124" ry="28" fill="none" stroke="#121224" stroke-width="1" stroke-dasharray="6,4"/>
+<!-- Sovutish liniyalar -->
+<g stroke="#1a1a30" stroke-width="1.8" fill="none">
+  <path d="M106 248 Q240 260 374 248"/>
+  <path d="M108 256 Q240 268 372 256"/>
+</g>
+<!-- Elektrod o'tish teshiklari -->
+<ellipse cx="181" cy="248" rx="17" ry="5" fill="#060610" stroke="#1c1c34" stroke-width="1.5"/>
+<ellipse cx="240" cy="248" rx="17" ry="5" fill="#060610" stroke="#1c1c34" stroke-width="1.5"/>
+<ellipse cx="299" cy="248" rx="17" ry="5" fill="#060610" stroke="#1c1c34" stroke-width="1.5"/>
+<!-- Svod tutqichlari (4 ta) -->
+<g fill="#0e0e22" stroke="#181832" stroke-width="1.5">
+  <rect x="114" y="238" width="20" height="20" rx="4"/>
+  <rect x="346" y="238" width="20" height="20" rx="4"/>
+  <rect x="160" y="234" width="16" height="16" rx="3"/>
+  <rect x="304" y="234" width="16" height="16" rx="3"/>
+</g>
+
+<!-- === TANA (silindrsimon qobiq) === -->
+<path d="M102 280 L92 430 L388 430 L378 280 Z" fill="url(#e_shell)"/>
+<path d="M102 280 L92 430 L388 430 L378 280 Z" fill="url(#e_brick)" opacity="0.4"/>
+<line x1="102" y1="280" x2="92" y2="430" stroke="#040510" stroke-width="4"/>
+<line x1="378" y1="280" x2="388" y2="430" stroke="#040510" stroke-width="4"/>
+<!-- Kuchlaydiruvchi halqalar -->
+<g fill="none" stroke="#141428" stroke-width="3">
+  <path d="M100 318 Q240 326 380 318"/>
+  <path d="M97"  d="M97 360 Q240 369 383 360" stroke="#141428" stroke-width="3"/>
+  <path d="M94 402 Q240 412 386 402"/>
+</g>
+<!-- Suv sovutish panellari belgilari -->
+<g stroke="#1a1a30" stroke-width="1" fill="none" opacity="0.5">
+  <path d="M100 285 Q108 290 100 300 Q108 305 100 315"/>
+  <path d="M380 285 Q372 290 380 300 Q372 305 380 315"/>
+  <path d="M100 335 Q108 340 100 350 Q108 355 100 365"/>
+  <path d="M380 335 Q372 340 380 350 Q372 355 380 365"/>
+</g>
+<!-- Bolt uchlar -->
+<g fill="#0a0a1a" stroke="#141428" stroke-width="0.8">
+  <circle cx="98"  cy="318" r="4"/> <circle cx="382" cy="318" r="4"/>
+  <circle cx="96"  cy="360" r="4"/> <circle cx="384" cy="360" r="4"/>
+  <circle cx="94"  cy="402" r="4"/> <circle cx="386" cy="402" r="4"/>
+</g>
+
+<!-- === ARK NURLANISHI === -->
+<ellipse cx="240" cy="360" rx="100" ry="72" fill="url(#e_ark)" opacity="0.65" filter="url(#e_blur5)">
+  <animate attributeName="rx" values="100;120;85;108;100" dur="0.75s" repeatCount="indefinite"/>
+  <animate attributeName="ry" values="72;88;62;78;72" dur="0.65s" repeatCount="indefinite"/>
+  <animate attributeName="opacity" values="0.65;0.22;0.65" dur="0.55s" repeatCount="indefinite"/>
+</ellipse>
+<!-- Kuchli ark markaziy flash -->
+<ellipse cx="240" cy="290" rx="35" ry="20" fill="#dd99ff" opacity="0.4" filter="url(#e_blur5)">
+  <animate attributeName="opacity" values="0.4;0;0.4" dur="0.4s" repeatCount="indefinite"/>
+</ellipse>
+<!-- Uchqunlar -->
+<g filter="url(#e_glow6)">
+  <line x1="192" y1="275" x2="175" y2="252" stroke="#cc88ff" stroke-width="2" opacity="0.8">
+    <animate attributeName="opacity" values="0.8;0;0.8" dur="0.4s" repeatCount="indefinite"/>
+  </line>
+  <line x1="240" y1="270" x2="254" y2="248" stroke="#aa66ee" stroke-width="2" opacity="0.8">
+    <animate attributeName="opacity" values="0.8;0;0.8" dur="0.35s" begin="0.08s" repeatCount="indefinite"/>
+  </line>
+  <line x1="286" y1="276" x2="302" y2="256" stroke="#bb77ff" stroke-width="2" opacity="0.7">
+    <animate attributeName="opacity" values="0.7;0;0.7" dur="0.38s" begin="0.18s" repeatCount="indefinite"/>
+  </line>
+  <line x1="220" y1="272" x2="210" y2="256" stroke="#cc88ff" stroke-width="1.5" opacity="0.6">
+    <animate attributeName="opacity" values="0.6;0;0.6" dur="0.32s" begin="0.25s" repeatCount="indefinite"/>
+  </line>
+  <line x1="260" y1="272" x2="272" y2="258" stroke="#9955dd" stroke-width="1.5" opacity="0.6">
+    <animate attributeName="opacity" values="0.6;0;0.6" dur="0.36s" begin="0.12s" repeatCount="indefinite"/>
+  </line>
+</g>
+
+<!-- === POD (metall vanna) === -->
+<path d="M92 430 Q88 462 240 468 Q392 462 388 430 Z"
+  fill="#12121e" stroke="#1c1c30" stroke-width="1.5"/>
+<ellipse cx="240" cy="456" rx="120" ry="22" fill="url(#e_metal)" opacity="0.72">
+  <animate attributeName="opacity" values="0.72;0.42;0.72" dur="2.2s" repeatCount="indefinite"/>
+</ellipse>
+<ellipse cx="240" cy="452" rx="75" ry="13" fill="#ffdd00" opacity="0.22" filter="url(#e_blur5)">
+  <animate attributeName="ry" values="13;20;10;16;13" dur="2.5s" repeatCount="indefinite"/>
+</ellipse>
+
+<!-- === GAZ CHIQARISH === -->
+<path d="M102 300 Q68 282 50 254 Q38 232 44 208"
+  fill="none" stroke="#141428" stroke-width="16" stroke-linecap="round"/>
+<path d="M102 300 Q68 282 50 254 Q38 232 44 208"
+  fill="none" stroke="#1e1e34" stroke-width="9" stroke-linecap="round"/>
+<path d="M102 300 Q68 282 50 254 Q38 232 44 208"
+  fill="none" stroke="#4455aa" stroke-width="2.5" stroke-dasharray="10,8" opacity="0.4">
+  <animate attributeName="stroke-dashoffset" values="0;-36" dur="1.5s" repeatCount="indefinite"/>
+</path>
+<!-- Flanslar -->
+<ellipse cx="72" cy="284" rx="11" ry="8" fill="none" stroke="#242440" stroke-width="2.5" transform="rotate(-25 72 284)"/>
+<ellipse cx="50" cy="255" rx="10" ry="8" fill="none" stroke="#242440" stroke-width="2.5" transform="rotate(-48 50 255)"/>
+<circle cx="44" cy="208" r="13" fill="#0c0c20" stroke="#181830" stroke-width="2"/>
+<circle cx="44" cy="208" r="8"  fill="#080810" stroke="#121224" stroke-width="1.2"/>
+
+<!-- === TAPHOLE === -->
+<rect x="374" y="408" width="64" height="26" rx="5" fill="#0e0e1e" stroke="#1c1c30" stroke-width="1.5"/>
+<path d="M432 421 Q460 416 472 427 Q468 436 432 434 Z"
+  fill="url(#e_metal)" opacity="0.85" filter="url(#e_glow6)">
+  <animate attributeName="opacity" values="0.85;0.4;0.85" dur="1.8s" repeatCount="indefinite"/>
+</path>
+
+<!-- === PECH TAGI === -->
+<ellipse cx="240" cy="472" rx="148" ry="18" fill="#0a0a18" stroke="#141428" stroke-width="1.5"/>
+<rect x="92"  y="466" width="296" height="20" rx="5" fill="#080810" stroke="#101020" stroke-width="1.2"/>
+<rect x="78"  y="484" width="324" height="14" rx="4" fill="#060610" stroke="#0e0e1c" stroke-width="1"/>
+<g fill="#0a0a18" stroke="#141424" stroke-width="1">
+  <rect x="102" y="478" width="14" height="18" rx="3"/>
+  <rect x="140" y="478" width="14" height="18" rx="3"/>
+  <rect x="185" y="478" width="14" height="18" rx="3"/>
+  <rect x="234" y="478" width="14" height="18" rx="3"/>
+  <rect x="281" y="478" width="14" height="18" rx="3"/>
+  <rect x="326" y="478" width="14" height="18" rx="3"/>
+  <rect x="364" y="478" width="14" height="18" rx="3"/>
+</g>
+
+<!-- === YAG'DU === -->
+<ellipse cx="240" cy="446" rx="130" ry="30" fill="#9922ee" opacity="0.06" filter="url(#e_blur10)"/>
+<ellipse cx="454" cy="428" rx="35"  ry="18" fill="#ffaa00" opacity="0.1" filter="url(#e_blur5)"/>
+
+<!-- === MATN === -->
+<text x="240" y="564" text-anchor="middle" font-family="'Courier New',monospace"
+  font-size="13" font-weight="bold" fill="#242450" letter-spacing="4">ELEKTR PECH (EAF)</text>
+<text x="240" y="582" text-anchor="middle" font-family="'Courier New',monospace"
+  font-size="9" fill="#181838" letter-spacing="3">ELECTRIC ARC FURNACE · EAF-120</text>
+</svg>

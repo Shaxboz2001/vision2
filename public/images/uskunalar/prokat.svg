@@ -1,0 +1,355 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 640">
+<defs>
+  <linearGradient id="p_rolik" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#050c14"/>
+    <stop offset="18%"  stop-color="#142030"/>
+    <stop offset="40%"  stop-color="#1c2e42"/>
+    <stop offset="60%"  stop-color="#243850"/>
+    <stop offset="82%"  stop-color="#142030"/>
+    <stop offset="100%" stop-color="#050c14"/>
+  </linearGradient>
+  <linearGradient id="p_rolikV" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="#081018"/>
+    <stop offset="35%"  stop-color="#1a3040"/>
+    <stop offset="65%"  stop-color="#243848"/>
+    <stop offset="100%" stop-color="#081018"/>
+  </linearGradient>
+  <linearGradient id="p_metal" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="#b84400"/>
+    <stop offset="28%"  stop-color="#ff7a00"/>
+    <stop offset="50%"  stop-color="#ffb800"/>
+    <stop offset="72%"  stop-color="#ff7a00"/>
+    <stop offset="100%" stop-color="#b84400"/>
+  </linearGradient>
+  <linearGradient id="p_frame" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#040810"/>
+    <stop offset="35%"  stop-color="#0e1828"/>
+    <stop offset="65%"  stop-color="#0e1828"/>
+    <stop offset="100%" stop-color="#040810"/>
+  </linearGradient>
+  <linearGradient id="p_press" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="#101828"/>
+    <stop offset="50%"  stop-color="#182435"/>
+    <stop offset="100%" stop-color="#0c1420"/>
+  </linearGradient>
+  <radialGradient id="p_spark" cx="50%" cy="50%" r="50%">
+    <stop offset="0%"   stop-color="#ffee44"/>
+    <stop offset="60%"  stop-color="#ff7700" stop-opacity="0.5"/>
+    <stop offset="100%" stop-color="#ff4400" stop-opacity="0"/>
+  </radialGradient>
+  <filter id="p_glow4"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="p_blur3"><feGaussianBlur stdDeviation="3"/></filter>
+  <filter id="p_blur6"><feGaussianBlur stdDeviation="6"/></filter>
+</defs>
+
+<rect width="480" height="640" fill="#050a10"/>
+
+<!-- === GIDRAVLIK PRESS TIZIMI (yuqori) === -->
+<!-- Asosiy press balka -->
+<rect x="28" y="40" width="424" height="58" rx="5"
+  fill="url(#p_press)" stroke="#142030" stroke-width="2"/>
+<!-- Press kuchlaydiruvchi nervalar -->
+<g stroke="#0c1828" stroke-width="2" fill="none">
+  <line x1="28" y1="68" x2="452" y2="68"/>
+</g>
+<!-- Gidravlik silindrlar (6 ta) -->
+<g fill="#0a1220" stroke="#1a2e40" stroke-width="1.5">
+  <rect x="52"  y="48" width="38" height="42" rx="6"/>
+  <rect x="118" y="48" width="38" height="42" rx="6"/>
+  <rect x="184" y="48" width="38" height="42" rx="6"/>
+  <rect x="260" y="48" width="38" height="42" rx="6"/>
+  <rect x="326" y="48" width="38" height="42" rx="6"/>
+  <rect x="392" y="48" width="38" height="42" rx="6"/>
+</g>
+<!-- Silindr ichki (piston ko'rinadigan qism) -->
+<g fill="#0c1828" stroke="#1e3040" stroke-width="1">
+  <rect x="57"  y="52" width="28" height="34" rx="4"/>
+  <rect x="123" y="52" width="28" height="34" rx="4"/>
+  <rect x="189" y="52" width="28" height="34" rx="4"/>
+  <rect x="265" y="52" width="28" height="34" rx="4"/>
+  <rect x="331" y="52" width="28" height="34" rx="4"/>
+  <rect x="397" y="52" width="28" height="34" rx="4"/>
+</g>
+<!-- Piston shtoklar -->
+<g fill="#1a3040" stroke="#2a4858" stroke-width="1.2">
+  <rect x="63"  y="90" width="16" height="50" rx="6"/>
+  <rect x="129" y="90" width="16" height="50" rx="6"/>
+  <rect x="195" y="90" width="16" height="50" rx="6"/>
+  <rect x="271" y="90" width="16" height="50" rx="6"/>
+  <rect x="337" y="90" width="16" height="50" rx="6"/>
+  <rect x="403" y="90" width="16" height="50" rx="6"/>
+</g>
+<!-- Shtok xrom yuzasi -->
+<g fill="#2e5070" opacity="0.45">
+  <rect x="65"  y="92" width="5" height="46" rx="2"/>
+  <rect x="131" y="92" width="5" height="46" rx="2"/>
+  <rect x="197" y="92" width="5" height="46" rx="2"/>
+  <rect x="273" y="92" width="5" height="46" rx="2"/>
+  <rect x="339" y="92" width="5" height="46" rx="2"/>
+  <rect x="405" y="92" width="5" height="46" rx="2"/>
+</g>
+<!-- Gidravlik linia (yuqori) -->
+<path d="M71 48 Q71 28 120 24 Q240 18 360 24 Q409 28 409 48"
+  fill="none" stroke="#1a2e40" stroke-width="4.5" stroke-linecap="round"/>
+<path d="M71 48 Q71 28 120 24 Q240 18 360 24 Q409 28 409 48"
+  fill="none" stroke="#243848" stroke-width="2.5" stroke-linecap="round"/>
+<!-- Gidravlik oqim -->
+<path d="M71 48 Q71 28 120 24 Q240 18 360 24 Q409 28 409 48"
+  fill="none" stroke="#4488aa" stroke-width="1.5" stroke-dasharray="8,6" opacity="0.35">
+  <animate attributeName="stroke-dashoffset" values="0;-28" dur="1.2s" repeatCount="indefinite"/>
+</path>
+
+<!-- === USTKI TAYANCH ROLIK (backup roll) === -->
+<rect x="14" y="140" width="452" height="58" rx="29"
+  fill="url(#p_rolik)" stroke="#142030" stroke-width="2.5"/>
+<rect x="18" y="144" width="444" height="50" rx="25"
+  fill="url(#p_rolikV)" opacity="0.6"/>
+<!-- Rolik disklar -->
+<g fill="#080e18" stroke="#1a2e40" stroke-width="1.5">
+  <circle cx="58"  cy="169" r="22"/>
+  <circle cx="128" cy="169" r="22"/>
+  <circle cx="198" cy="169" r="22"/>
+  <circle cx="240" cy="169" r="22"/>
+  <circle cx="282" cy="169" r="22"/>
+  <circle cx="352" cy="169" r="22"/>
+  <circle cx="422" cy="169" r="22"/>
+</g>
+<g fill="none" stroke="#243a50" stroke-width="1.2">
+  <circle cx="58"  cy="169" r="14"/>
+  <circle cx="128" cy="169" r="14"/>
+  <circle cx="198" cy="169" r="14"/>
+  <circle cx="240" cy="169" r="14"/>
+  <circle cx="282" cy="169" r="14"/>
+  <circle cx="352" cy="169" r="14"/>
+  <circle cx="422" cy="169" r="14"/>
+</g>
+
+<!-- === USTKI ISHCHI ROLIK === -->
+<rect x="22" y="197" width="436" height="52" rx="26"
+  fill="url(#p_rolik)" stroke="#1a3040" stroke-width="2.5"/>
+<rect x="26" y="201" width="428" height="44" rx="22"
+  fill="url(#p_rolikV)" opacity="0.5"/>
+<!-- Rolik qoplamalari (ishchi sirt) -->
+<rect x="22" y="200" width="436" height="4" rx="2" fill="#203040" opacity="0.6"/>
+<!-- Aylanuvchi disklar -->
+<g fill="#070e18" stroke="#1a3040" stroke-width="1.8">
+  <ellipse cx="68"  cy="223" rx="20" ry="26">
+    <animateTransform attributeName="transform" type="rotate" from="0 68 223" to="360 68 223" dur="1.1s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="134" cy="223" rx="20" ry="26">
+    <animateTransform attributeName="transform" type="rotate" from="0 134 223" to="360 134 223" dur="1.1s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="200" cy="223" rx="20" ry="26">
+    <animateTransform attributeName="transform" type="rotate" from="0 200 223" to="360 200 223" dur="1.1s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="240" cy="223" rx="20" ry="26">
+    <animateTransform attributeName="transform" type="rotate" from="0 240 223" to="360 240 223" dur="1.1s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="280" cy="223" rx="20" ry="26">
+    <animateTransform attributeName="transform" type="rotate" from="0 280 223" to="360 280 223" dur="1.1s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="346" cy="223" rx="20" ry="26">
+    <animateTransform attributeName="transform" type="rotate" from="0 346 223" to="360 346 223" dur="1.1s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="412" cy="223" rx="20" ry="26">
+    <animateTransform attributeName="transform" type="rotate" from="0 412 223" to="360 412 223" dur="1.1s" repeatCount="indefinite"/>
+  </ellipse>
+</g>
+
+<!-- === METALL TASMA === -->
+<!-- Kirish (chap) qiziq qism -->
+<rect x="0" y="249" width="36" height="24" fill="#cc4400" opacity="0.9"/>
+<!-- Asosiy tasma -->
+<rect x="0" y="249" width="480" height="24" fill="url(#p_metal)"/>
+<!-- Harakatlanuvchi yorug'lik effekti -->
+<rect x="-100" y="249" width="80" height="24" fill="#ffee88" opacity="0.2">
+  <animate attributeName="x" values="-100;520" dur="1.5s" repeatCount="indefinite"/>
+</rect>
+<rect x="-200" y="249" width="60" height="24" fill="#ffffaa" opacity="0.12">
+  <animate attributeName="x" values="-200;520" dur="1.5s" begin="0.5s" repeatCount="indefinite"/>
+</rect>
+<!-- Tasma yuzasi chiziqlar -->
+<g stroke="#ff660030" stroke-width="1">
+  <line x1="0" y1="252" x2="480" y2="252"/>
+  <line x1="0" y1="261" x2="480" y2="261"/>
+  <line x1="0" y1="270" x2="480" y2="270"/>
+</g>
+<!-- Issiqlik yorug'ligi -->
+<rect x="0" y="244" width="480" height="34" fill="#ff7700" opacity="0.06" filter="url(#p_blur3)"/>
+
+<!-- === KESISH NUQTASI UCHQUNLARI (chap) === -->
+<ellipse cx="30" cy="261" rx="14" ry="7" fill="url(#p_spark)" opacity="0.75" filter="url(#p_glow4)">
+  <animate attributeName="opacity" values="0.75;0.15;0.75" dur="0.5s" repeatCount="indefinite"/>
+</ellipse>
+<g filter="url(#p_glow4)">
+  <line x1="28" y1="257" x2="18" y2="240" stroke="#ffee44" stroke-width="1.8" opacity="0.8">
+    <animate attributeName="opacity" values="0.8;0;0.8" dur="0.35s" repeatCount="indefinite"/>
+  </line>
+  <line x1="32" y1="256" x2="44" y2="240" stroke="#ffcc00" stroke-width="1.8" opacity="0.7">
+    <animate attributeName="opacity" values="0.7;0;0.7" dur="0.3s" begin="0.1s" repeatCount="indefinite"/>
+  </line>
+  <line x1="30" y1="255" x2="30" y2="238" stroke="#ff8800" stroke-width="1.2" opacity="0.6">
+    <animate attributeName="opacity" values="0.6;0;0.6" dur="0.28s" begin="0.2s" repeatCount="indefinite"/>
+  </line>
+</g>
+
+<!-- === PASTKI ISHCHI ROLIK === -->
+<rect x="22" y="273" width="436" height="52" rx="26"
+  fill="url(#p_rolik)" stroke="#1a3040" stroke-width="2.5"/>
+<rect x="26" y="277" width="428" height="44" rx="22"
+  fill="url(#p_rolikV)" opacity="0.5"/>
+<rect x="22" y="321" width="436" height="4" rx="2" fill="#203040" opacity="0.6"/>
+<g fill="#070e18" stroke="#1a3040" stroke-width="1.8">
+  <ellipse cx="68"  cy="299" rx="20" ry="26">
+    <animateTransform attributeName="transform" type="rotate" from="0 68 299" to="-360 68 299" dur="1.1s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="134" cy="299" rx="20" ry="26">
+    <animateTransform attributeName="transform" type="rotate" from="0 134 299" to="-360 134 299" dur="1.1s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="200" cy="299" rx="20" ry="26">
+    <animateTransform attributeName="transform" type="rotate" from="0 200 299" to="-360 200 299" dur="1.1s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="240" cy="299" rx="20" ry="26">
+    <animateTransform attributeName="transform" type="rotate" from="0 240 299" to="-360 240 299" dur="1.1s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="280" cy="299" rx="20" ry="26">
+    <animateTransform attributeName="transform" type="rotate" from="0 280 299" to="-360 280 299" dur="1.1s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="346" cy="299" rx="20" ry="26">
+    <animateTransform attributeName="transform" type="rotate" from="0 346 299" to="-360 346 299" dur="1.1s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="412" cy="299" rx="20" ry="26">
+    <animateTransform attributeName="transform" type="rotate" from="0 412 299" to="-360 412 299" dur="1.1s" repeatCount="indefinite"/>
+  </ellipse>
+</g>
+
+<!-- === PASTKI TAYANCH ROLIK === -->
+<rect x="14" y="325" width="452" height="58" rx="29"
+  fill="url(#p_rolik)" stroke="#142030" stroke-width="2.5"/>
+<rect x="18" y="329" width="444" height="50" rx="25"
+  fill="url(#p_rolikV)" opacity="0.6"/>
+<g fill="#080e18" stroke="#1a2e40" stroke-width="1.5">
+  <circle cx="58"  cy="354" r="22"/>
+  <circle cx="128" cy="354" r="22"/>
+  <circle cx="198" cy="354" r="22"/>
+  <circle cx="240" cy="354" r="22"/>
+  <circle cx="282" cy="354" r="22"/>
+  <circle cx="352" cy="354" r="22"/>
+  <circle cx="422" cy="354" r="22"/>
+</g>
+<g fill="none" stroke="#243a50" stroke-width="1.2">
+  <circle cx="58"  cy="354" r="14"/>
+  <circle cx="128" cy="354" r="14"/>
+  <circle cx="198" cy="354" r="14"/>
+  <circle cx="240" cy="354" r="14"/>
+  <circle cx="282" cy="354" r="14"/>
+  <circle cx="352" cy="354" r="14"/>
+  <circle cx="422" cy="354" r="14"/>
+</g>
+
+<!-- === ASOSIY RAME (ikki yon ustun) === -->
+<!-- Chap ustun -->
+<rect x="6"  y="140" width="30" height="244" rx="5"
+  fill="url(#p_frame)" stroke="#101e2e" stroke-width="2"/>
+<!-- O'ng ustun -->
+<rect x="444" y="140" width="30" height="244" rx="5"
+  fill="url(#p_frame)" stroke="#101e2e" stroke-width="2"/>
+<!-- Ustun boltlari -->
+<g fill="#08101e" stroke="#121c2c" stroke-width="1">
+  <circle cx="21" cy="168" r="5"/> <circle cx="21" cy="224" r="5"/> <circle cx="21" cy="300" r="5"/> <circle cx="21" cy="354" r="5"/>
+  <circle cx="459" cy="168" r="5"/> <circle cx="459" cy="224" r="5"/> <circle cx="459" cy="300" r="5"/> <circle cx="459" cy="354" r="5"/>
+</g>
+
+<!-- === MOTOR va REDUKTOR BLOKI === -->
+<rect x="0" y="408" width="108" height="96" rx="5"
+  fill="#0a1020" stroke="#14202e" stroke-width="1.8"/>
+<!-- Radyator qovurg'alar -->
+<g stroke="#0e1828" stroke-width="1.5" fill="#080e1a">
+  <rect x="4"  y="416" width="100" height="7" rx="2"/>
+  <rect x="4"  y="427" width="100" height="7" rx="2"/>
+  <rect x="4"  y="438" width="100" height="7" rx="2"/>
+  <rect x="4"  y="449" width="100" height="7" rx="2"/>
+  <rect x="4"  y="460" width="100" height="7" rx="2"/>
+  <rect x="4"  y="471" width="100" height="7" rx="2"/>
+  <rect x="4"  y="482" width="100" height="7" rx="2"/>
+  <rect x="4"  y="493" width="100" height="7" rx="2"/>
+</g>
+<!-- Motor markazi -->
+<circle cx="54" cy="454" r="32" fill="#08101e" stroke="#14202e" stroke-width="2"/>
+<circle cx="54" cy="454" r="24" fill="#0c1828" stroke="#1a2838" stroke-width="1.5">
+  <animateTransform attributeName="transform" type="rotate" from="0 54 454" to="360 54 454" dur="1.8s" repeatCount="indefinite"/>
+</circle>
+<circle cx="54" cy="454" r="12" fill="#081018" stroke="#102030" stroke-width="1.2"/>
+<circle cx="54" cy="454" r="5"  fill="#0e1828" stroke="#182838" stroke-width="1"/>
+<!-- Terminal blok -->
+<rect x="6" y="495" width="64" height="14" rx="3" fill="#0c1828" stroke="#1a2838" stroke-width="1"/>
+<g fill="#1e4060">
+  <circle cx="14"  cy="502" r="3"/>
+  <circle cx="24"  cy="502" r="3"/>
+  <circle cx="34"  cy="502" r="3"/>
+  <circle cx="44"  cy="502" r="3"/>
+  <circle cx="54"  cy="502" r="3"/>
+</g>
+<!-- Reduktor -->
+<rect x="108" y="424" width="44" height="70" rx="4" fill="#0e1828" stroke="#182838" stroke-width="1.5"/>
+<rect x="113" y="430" width="34" height="58" rx="3" fill="#0a1220" stroke="#142030" stroke-width="1"/>
+<!-- Val -->
+<rect x="152" y="450" width="50" height="16" rx="8" fill="#14243a" stroke="#1e2e4a" stroke-width="1.5"/>
+<!-- Mufta -->
+<rect x="196" y="444" width="30" height="28" rx="6" fill="#0e1828" stroke="#182838" stroke-width="1.5"/>
+<ellipse cx="211" cy="458" rx="11" ry="14" fill="#081420" stroke="#162030" stroke-width="1.2"/>
+<ellipse cx="211" cy="458" rx="6"  ry="8"  fill="#101e2e" stroke="#1a2838" stroke-width="1"/>
+
+<!-- === YOG'LASH TIZIMI === -->
+<rect x="360" y="414" width="92" height="76" rx="4" fill="#0a1220" stroke="#162030" stroke-width="1.5"/>
+<g stroke="#0e1828" stroke-width="1.2" fill="#080e18">
+  <rect x="364" y="422" width="84" height="5" rx="1"/>
+  <rect x="364" y="431" width="84" height="5" rx="1"/>
+  <rect x="364" y="440" width="84" height="5" rx="1"/>
+  <rect x="364" y="449" width="84" height="5" rx="1"/>
+  <rect x="364" y="458" width="84" height="5" rx="1"/>
+  <rect x="364" y="467" width="84" height="5" rx="1"/>
+  <rect x="364" y="476" width="84" height="5" rx="1"/>
+</g>
+<ellipse cx="406" cy="448" rx="26" ry="26" fill="#060e18" stroke="#10202e" stroke-width="1.5"/>
+<ellipse cx="406" cy="448" rx="18" ry="18" fill="#0a1828" stroke="#162030" stroke-width="1.2">
+  <animateTransform attributeName="transform" type="rotate" from="0 406 448" to="360 406 448" dur="3s" repeatCount="indefinite"/>
+</ellipse>
+
+<!-- === KESUVCHI (chap uchida) === -->
+<rect x="6" y="244" width="16" height="30" rx="4"
+  fill="#142030" stroke="#1e3040" stroke-width="1.8"/>
+<path d="M6 244 L22 244 L14 236 Z" fill="#2a4860" stroke="#3a5870" stroke-width="1.2"/>
+<path d="M6 274 L22 274 L14 282 Z" fill="#2a4860" stroke="#3a5870" stroke-width="1.2"/>
+
+<!-- === SOVUTISH TRUBALAR === -->
+<path d="M460 249 Q474 249 480 265 Q484 282 474 295 Q460 302 446 295"
+  fill="none" stroke="#1a3040" stroke-width="9" stroke-linecap="round"/>
+<path d="M460 249 Q474 249 480 265 Q484 282 474 295 Q460 302 446 295"
+  fill="none" stroke="#2a4050" stroke-width="5" stroke-linecap="round"/>
+<path d="M460 249 Q474 249 480 265 Q484 282 474 295 Q460 302 446 295"
+  fill="none" stroke="#5588aa" stroke-width="2" stroke-dasharray="6,5" opacity="0.35">
+  <animate attributeName="stroke-dashoffset" values="0;22" dur="1.2s" repeatCount="indefinite"/>
+</path>
+
+<!-- === ZAMIN === -->
+<rect x="0" y="506" width="480" height="16" rx="3" fill="#070c14" stroke="#0e1828" stroke-width="1"/>
+<rect x="0" y="520" width="480" height="10" rx="2" fill="#050810"/>
+<!-- Zamin boltlar -->
+<g fill="#0a1020" stroke="#141e2c" stroke-width="1">
+  <rect x="16"  y="504" width="14" height="18" rx="3"/>
+  <rect x="54"  y="504" width="14" height="18" rx="3"/>
+  <rect x="412" y="504" width="14" height="18" rx="3"/>
+  <rect x="450" y="504" width="14" height="18" rx="3"/>
+</g>
+
+<!-- === YAG'DU === -->
+<rect x="0" y="244" width="480" height="34" fill="#ff6600" opacity="0.05" filter="url(#p_blur6)"/>
+<ellipse cx="30" cy="261" rx="30" ry="15" fill="#ffcc00" opacity="0.12" filter="url(#p_blur3)"/>
+
+<!-- === MATN === -->
+<text x="240" y="564" text-anchor="middle" font-family="'Courier New',monospace"
+  font-size="13" font-weight="bold" fill="#1a3248" letter-spacing="4">PROKAT MASHINASI</text>
+<text x="240" y="582" text-anchor="middle" font-family="'Courier New',monospace"
+  font-size="9" fill="#122438" letter-spacing="3">HOT ROLLING MILL · RM-650H</text>
+</svg>

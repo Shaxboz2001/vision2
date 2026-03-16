@@ -1,0 +1,256 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 640">
+<defs>
+  <linearGradient id="k_steel" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#08101e"/>
+    <stop offset="20%"  stop-color="#162535"/>
+    <stop offset="42%"  stop-color="#1e3348"/>
+    <stop offset="62%"  stop-color="#264060"/>
+    <stop offset="82%"  stop-color="#162535"/>
+    <stop offset="100%" stop-color="#08101e"/>
+  </linearGradient>
+  <linearGradient id="k_lance" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#0a1828"/>
+    <stop offset="35%"  stop-color="#243a50"/>
+    <stop offset="65%"  stop-color="#2e4860"/>
+    <stop offset="100%" stop-color="#0a1828"/>
+  </linearGradient>
+  <linearGradient id="k_trunnion" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#060c18"/>
+    <stop offset="40%"  stop-color="#18263a"/>
+    <stop offset="60%"  stop-color="#202e44"/>
+    <stop offset="100%" stop-color="#060c18"/>
+  </linearGradient>
+  <linearGradient id="k_gorn" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#100500"/>
+    <stop offset="35%"  stop-color="#3a1200"/>
+    <stop offset="65%"  stop-color="#501800"/>
+    <stop offset="100%" stop-color="#100500"/>
+  </linearGradient>
+  <radialGradient id="k_metal" cx="50%" cy="55%" r="55%">
+    <stop offset="0%"   stop-color="#ffee00"/>
+    <stop offset="30%"  stop-color="#ff8800"/>
+    <stop offset="65%"  stop-color="#cc3300"/>
+    <stop offset="100%" stop-color="#660000"/>
+  </radialGradient>
+  <radialGradient id="k_lanceTip" cx="50%" cy="100%" r="70%">
+    <stop offset="0%"   stop-color="#00ffcc" stop-opacity="1"/>
+    <stop offset="50%"  stop-color="#00cc88" stop-opacity="0.6"/>
+    <stop offset="100%" stop-color="#008844" stop-opacity="0"/>
+  </radialGradient>
+  <filter id="k_glow5"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="k_glow10"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="k_blur5"><feGaussianBlur stdDeviation="5"/></filter>
+  <filter id="k_blur8"><feGaussianBlur stdDeviation="8"/></filter>
+  <pattern id="k_brick" x="0" y="0" width="14" height="9" patternUnits="userSpaceOnUse">
+    <rect x="0.5" y="0.5" width="13" height="8" fill="none" stroke="#102030" stroke-width="0.4" opacity="0.5"/>
+  </pattern>
+</defs>
+
+<rect width="480" height="640" fill="#060910"/>
+
+<!-- === TUTUN === -->
+<ellipse cx="240" cy="28" rx="32" ry="20" fill="#1a1e28" opacity="0.5" filter="url(#k_blur8)"/>
+<ellipse cx="218" cy="16" rx="22" ry="15" fill="#131720" opacity="0.4" filter="url(#k_blur8)"/>
+<ellipse cx="262" cy="20" rx="18" ry="12" fill="#1a1e2a" opacity="0.32" filter="url(#k_blur8)"/>
+
+<!-- === USTKI KONSTRUKSIYA (portal ferma) === -->
+<!-- Gorizontal balka -->
+<rect x="64" y="50" width="352" height="20" rx="4" fill="#0e1828" stroke="#1a2838" stroke-width="1.5"/>
+<rect x="86" y="38" width="308" height="16" rx="3" fill="#0c1525" stroke="#162030" stroke-width="1.2"/>
+<rect x="110" y="30" width="260" height="12" rx="3" fill="#0a1220" stroke="#141e2c" stroke-width="1"/>
+<!-- Portal ustunlari -->
+<rect x="64"  y="50" width="24" height="200" rx="3" fill="#0c1828" stroke="#182030" stroke-width="1.5"/>
+<rect x="392" y="50" width="24" height="200" rx="3" fill="#0c1828" stroke="#182030" stroke-width="1.5"/>
+<!-- Diagonal birkamlar -->
+<g stroke="#0e1828" stroke-width="1.5" fill="none">
+  <line x1="88"  y1="50"  x2="108" y2="85"/>
+  <line x1="108" y1="50"  x2="88"  y2="85"/>
+  <line x1="392" y1="50"  x2="372" y2="85"/>
+  <line x1="372" y1="50"  x2="392" y2="85"/>
+</g>
+
+<!-- Gidravlik lift (lance ushlagich) -->
+<rect x="110" y="28" width="260" height="14" rx="3" fill="#0e1828" stroke="#1e2e40" stroke-width="1.5"/>
+<g fill="#0a1220" stroke="#162030" stroke-width="1">
+  <circle cx="120" cy="35" r="4"/>
+  <circle cx="146" cy="35" r="4"/>
+  <circle cx="334" cy="35" r="4"/>
+  <circle cx="360" cy="35" r="4"/>
+</g>
+
+<!-- === LANCE (kislorod) === -->
+<!-- Tashqi qobiq -->
+<rect x="218" y="14" width="44" height="216" rx="10"
+  fill="url(#k_lance)" stroke="#203848" stroke-width="2.2"/>
+<!-- 3 ichki naycha -->
+<rect x="224" y="18" width="10" height="210" rx="5" fill="#0a1828" stroke="#304858" stroke-width="1"/>
+<rect x="235" y="18" width="10" height="210" rx="5" fill="#081420" stroke="#263844" stroke-width="1"/>
+<rect x="246" y="18" width="10" height="210" rx="5" fill="#0a1828" stroke="#304858" stroke-width="1"/>
+<!-- Fitinglar (5 ta) -->
+<g fill="#182838" stroke="#243848" stroke-width="1.2">
+  <rect x="215" y="54"  width="50" height="10" rx="5"/>
+  <rect x="215" y="98"  width="50" height="10" rx="5"/>
+  <rect x="215" y="142" width="50" height="10" rx="5"/>
+  <rect x="215" y="182" width="50" height="10" rx="5"/>
+  <rect x="215" y="212" width="50" height="10" rx="5"/>
+</g>
+<!-- Lance uchi effekti -->
+<ellipse cx="240" cy="228" rx="18" ry="7" fill="url(#k_lanceTip)" filter="url(#k_glow5)"/>
+<ellipse cx="240" cy="228" rx="10" ry="4" fill="#00ffcc" opacity="0.9">
+  <animate attributeName="ry" values="4;7;3;5;4" dur="0.5s" repeatCount="indefinite"/>
+  <animate attributeName="opacity" values="0.9;0.3;0.9" dur="0.45s" repeatCount="indefinite"/>
+</ellipse>
+<!-- Kislorod uchqunlar -->
+<g filter="url(#k_glow5)">
+  <line x1="236" y1="224" x2="228" y2="208" stroke="#00ffaa" stroke-width="1.5" opacity="0.7">
+    <animate attributeName="opacity" values="0.7;0;0.7" dur="0.4s" repeatCount="indefinite"/>
+  </line>
+  <line x1="244" y1="224" x2="252" y2="208" stroke="#00ffaa" stroke-width="1.5" opacity="0.7">
+    <animate attributeName="opacity" values="0.7;0;0.7" dur="0.35s" begin="0.1s" repeatCount="indefinite"/>
+  </line>
+  <line x1="240" y1="226" x2="240" y2="210" stroke="#00ffcc" stroke-width="1" opacity="0.5">
+    <animate attributeName="opacity" values="0.5;0;0.5" dur="0.3s" begin="0.15s" repeatCount="indefinite"/>
+  </line>
+</g>
+
+<!-- === BO'YIN (og'iz) === -->
+<path d="M142 228 Q135 204 144 188 L215 180 L265 180 L336 188 Q345 204 338 228 Z"
+  fill="url(#k_steel)" stroke="#162030" stroke-width="2"/>
+<path d="M148 228 Q142 208 150 196 L216 190 L264 190 L330 196 Q338 208 332 228 Z"
+  fill="#0a1828" opacity="0.6"/>
+<!-- Bo'yin sovutish panellari -->
+<g stroke="#1a3040" stroke-width="1.2" fill="none">
+  <path d="M146 210 Q240 216 334 210"/>
+  <path d="M144 220 Q240 226 336 220"/>
+</g>
+
+<!-- === TANA (asosiy reaktor) === -->
+<path d="M134 232 L118 390 Q116 418 240 424 Q364 418 362 390 L346 232 Z"
+  fill="url(#k_steel)"/>
+<path d="M134 232 L118 390 Q116 418 240 424 Q364 418 362 390 L346 232 Z"
+  fill="url(#k_brick)" opacity="0.4"/>
+<!-- Qobiq chiziqlar -->
+<line x1="134" y1="232" x2="118" y2="390" stroke="#06101e" stroke-width="4"/>
+<line x1="346" y1="232" x2="362" y2="390" stroke="#06101e" stroke-width="4"/>
+<!-- Kuchlaydiruvchi halqalar -->
+<g fill="none" stroke="#182838" stroke-width="3">
+  <path d="M132 272 Q240 280 348 272"/>
+  <path d="M128 316 Q240 325 352 316"/>
+  <path d="M124 360 Q240 370 356 360"/>
+</g>
+<!-- Bolt uchlar -->
+<g fill="#0a1420" stroke="#162030" stroke-width="0.8">
+  <circle cx="130" cy="272" r="4"/> <circle cx="350" cy="272" r="4"/>
+  <circle cx="152" cy="273" r="3"/> <circle cx="328" cy="273" r="3"/>
+  <circle cx="126" cy="316" r="4"/> <circle cx="354" cy="316" r="4"/>
+  <circle cx="122" cy="360" r="4"/> <circle cx="358" cy="360" r="4"/>
+</g>
+
+<!-- === METALL VANNA === -->
+<path d="M120 386 Q116 418 240 424 Q364 418 360 386 Z"
+  fill="url(#k_metal)" opacity="0.88">
+  <animate attributeName="opacity" values="0.88;0.55;0.88" dur="2.2s" repeatCount="indefinite"/>
+</path>
+<ellipse cx="240" cy="414" rx="85" ry="16" fill="#ffcc00" opacity="0.22" filter="url(#k_blur5)">
+  <animate attributeName="ry" values="16;24;12;20;16" dur="2.5s" repeatCount="indefinite"/>
+</ellipse>
+<!-- Metall sirt to'lqinlari -->
+<path d="M158 412 Q180 408 200 412 Q220 416 240 412 Q260 408 280 412 Q300 416 322 412"
+  stroke="#ffcc0060" stroke-width="1.5" fill="none" opacity="0.5">
+  <animate attributeName="d"
+    values="M158 412 Q180 408 200 412 Q220 416 240 412 Q260 408 280 412 Q300 416 322 412;
+            M158 412 Q180 416 200 412 Q220 408 240 412 Q260 416 280 412 Q300 408 322 412;
+            M158 412 Q180 408 200 412 Q220 416 240 412 Q260 408 280 412 Q300 416 322 412"
+    dur="1.5s" repeatCount="indefinite"/>
+</path>
+
+<!-- === TRUNNION O'Q HALQALARI === -->
+<!-- Chap -->
+<rect x="24" y="296" width="94" height="40" rx="20"
+  fill="url(#k_trunnion)" stroke="#1e2e44" stroke-width="2.2"/>
+<ellipse cx="118" cy="316" rx="18" ry="20" fill="#0c1828" stroke="#1e2e44" stroke-width="2"/>
+<ellipse cx="118" cy="316" rx="12" ry="14" fill="#081020" stroke="#162030" stroke-width="1.2"/>
+<!-- Trunnion boltlari -->
+<g fill="#08101e" stroke="#14202e" stroke-width="1">
+  <circle cx="36"  cy="306" r="5"/> <circle cx="36"  cy="326" r="5"/>
+  <circle cx="58"  cy="300" r="5"/> <circle cx="58"  cy="332" r="5"/>
+  <circle cx="80"  cy="298" r="5"/> <circle cx="80"  cy="334" r="5"/>
+  <circle cx="100" cy="298" r="5"/> <circle cx="100" cy="334" r="5"/>
+</g>
+<!-- O'ng trunnion -->
+<rect x="362" y="296" width="94" height="40" rx="20"
+  fill="url(#k_trunnion)" stroke="#1e2e44" stroke-width="2.2"/>
+<ellipse cx="362" cy="316" rx="18" ry="20" fill="#0c1828" stroke="#1e2e44" stroke-width="2"/>
+<ellipse cx="362" cy="316" rx="12" ry="14" fill="#081020" stroke="#162030" stroke-width="1.2"/>
+<g fill="#08101e" stroke="#14202e" stroke-width="1">
+  <circle cx="444" cy="306" r="5"/> <circle cx="444" cy="326" r="5"/>
+  <circle cx="422" cy="300" r="5"/> <circle cx="422" cy="332" r="5"/>
+  <circle cx="400" cy="298" r="5"/> <circle cx="400" cy="334" r="5"/>
+  <circle cx="380" cy="298" r="5"/> <circle cx="380" cy="334" r="5"/>
+</g>
+
+<!-- === GAZ TUTUVCHI va CHIQARISH === -->
+<!-- Chap gaz quvuri -->
+<path d="M138 210 Q96 192 74 162 Q58 140 64 116"
+  fill="none" stroke="#162030" stroke-width="16" stroke-linecap="round"/>
+<path d="M138 210 Q96 192 74 162 Q58 140 64 116"
+  fill="none" stroke="#202e40" stroke-width="9" stroke-linecap="round"/>
+<path d="M138 210 Q96 192 74 162 Q58 140 64 116"
+  fill="none" stroke="#4466aa" stroke-width="2.5" stroke-dasharray="10,8" opacity="0.4">
+  <animate attributeName="stroke-dashoffset" values="0;-36" dur="1.4s" repeatCount="indefinite"/>
+</path>
+<!-- Quvur flanslar -->
+<ellipse cx="96" cy="192" rx="11" ry="8" fill="none" stroke="#243848" stroke-width="2.5" transform="rotate(-20 96 192)"/>
+<ellipse cx="72" cy="162" rx="10" ry="8" fill="none" stroke="#243848" stroke-width="2.5" transform="rotate(-40 72 162)"/>
+<circle cx="64" cy="116" r="13" fill="#0e1828" stroke="#1e3040" stroke-width="2"/>
+<circle cx="64" cy="116" r="8"  fill="#081220" stroke="#162838" stroke-width="1.2"/>
+
+<!-- === TAPHOLE (po'lat chiqarish) === -->
+<!-- Taphole tiqin qurilma -->
+<rect x="348" y="370" width="58" height="24" rx="5"
+  fill="#101828" stroke="#1e2838" stroke-width="1.5"/>
+<rect x="400" y="374" width="36" height="16" rx="8"
+  fill="#0c1828" stroke="#1a2838" stroke-width="1.2"/>
+<!-- Oqayotgan po'lat -->
+<path d="M400 382 Q432 376 455 388 Q466 398 456 408 Q438 416 414 408 Q398 400 400 382 Z"
+  fill="url(#k_metal)" opacity="0.92" filter="url(#k_glow5)">
+  <animate attributeName="opacity" values="0.92;0.5;0.92" dur="2s" repeatCount="indefinite"/>
+</path>
+<ellipse cx="430" cy="396" rx="20" ry="9" fill="#ffcc00" opacity="0.4" filter="url(#k_blur5)">
+  <animate attributeName="opacity" values="0.4;0.15;0.4" dur="2s" repeatCount="indefinite"/>
+</ellipse>
+<!-- Po'lat kovsh -->
+<path d="M446 406 Q440 436 442 460 Q444 484 466 488 Q488 490 494 468 Q498 446 490 418 Z"
+  fill="#101828" stroke="#1a2838" stroke-width="1.5"/>
+<ellipse cx="468" cy="444" rx="20" ry="9" fill="url(#k_metal)" opacity="0.55" filter="url(#k_blur5)"/>
+
+<!-- === SHLAK KOVSH (chap) === -->
+<path d="M78 378 Q46 374 30 386 Q18 396 28 410 Q40 422 64 416 Z"
+  fill="#1a1e28" stroke="#242838" stroke-width="1.5"/>
+<path d="M14 402 Q8 424 10 448 Q12 470 36 474 Q60 476 64 456 Q68 436 58 412 Z"
+  fill="#101828" stroke="#1a2238" stroke-width="1.5"/>
+<ellipse cx="38" cy="432" rx="22" ry="10" fill="#2a3a1a" opacity="0.45"/>
+
+<!-- === PECH TAGI === -->
+<ellipse cx="240" cy="430" rx="130" ry="18" fill="#0c1020" stroke="#182030" stroke-width="1.5"/>
+<rect x="110" y="424" width="260" height="20" rx="5" fill="#0a0e1a" stroke="#141c2a" stroke-width="1.2"/>
+<rect x="96"  y="442" width="288" height="14" rx="4" fill="#070a14" stroke="#0e1425" stroke-width="1"/>
+<g fill="#0d1428" stroke="#1a2238" stroke-width="1">
+  <rect x="120" y="438" width="14" height="18" rx="3"/>
+  <rect x="155" y="438" width="14" height="18" rx="3"/>
+  <rect x="200" y="438" width="14" height="18" rx="3"/>
+  <rect x="246" y="438" width="14" height="18" rx="3"/>
+  <rect x="290" y="438" width="14" height="18" rx="3"/>
+  <rect x="335" y="438" width="14" height="18" rx="3"/>
+</g>
+
+<!-- === YAG'DU === -->
+<ellipse cx="240" cy="408" rx="110" ry="25" fill="#ff6600" opacity="0.07" filter="url(#k_blur8)"/>
+<ellipse cx="430" cy="396" rx="40"  ry="18" fill="#ffaa00" opacity="0.12" filter="url(#k_blur8)"/>
+
+<!-- === MATN === -->
+<text x="240" y="592" text-anchor="middle" font-family="'Courier New',monospace"
+  font-size="13" font-weight="bold" fill="#1e3850" letter-spacing="4">KONVERTER (BOF)</text>
+<text x="240" y="610" text-anchor="middle" font-family="'Courier New',monospace"
+  font-size="9" fill="#162a3e" letter-spacing="3">BASIC OXYGEN FURNACE · LD-300T</text>
+</svg>

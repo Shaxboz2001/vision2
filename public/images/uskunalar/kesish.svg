@@ -1,0 +1,404 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 640">
+<defs>
+  <linearGradient id="ks_frame" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#040810"/>
+    <stop offset="28%"  stop-color="#0e1828"/>
+    <stop offset="55%"  stop-color="#141e32"/>
+    <stop offset="78%"  stop-color="#0e1828"/>
+    <stop offset="100%" stop-color="#040810"/>
+  </linearGradient>
+  <linearGradient id="ks_blade" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="#203848"/>
+    <stop offset="30%"  stop-color="#304e68"/>
+    <stop offset="55%"  stop-color="#406080"/>
+    <stop offset="80%"  stop-color="#304e68"/>
+    <stop offset="100%" stop-color="#182e40"/>
+  </linearGradient>
+  <linearGradient id="ks_blade_edge" x1="0%" y1="100%" x2="0%" y2="0%">
+    <stop offset="0%"   stop-color="#6a9ab8"/>
+    <stop offset="25%"  stop-color="#90bcd8"/>
+    <stop offset="55%"  stop-color="#78a8c4"/>
+    <stop offset="100%" stop-color="#3a6888"/>
+  </linearGradient>
+  <linearGradient id="ks_hyd" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#08101e"/>
+    <stop offset="40%"  stop-color="#182840"/>
+    <stop offset="60%"  stop-color="#1e3048"/>
+    <stop offset="100%" stop-color="#08101e"/>
+  </linearGradient>
+  <linearGradient id="ks_metal" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="#bb4400"/>
+    <stop offset="30%"  stop-color="#ff7800"/>
+    <stop offset="50%"  stop-color="#ffaa00"/>
+    <stop offset="70%"  stop-color="#ff7800"/>
+    <stop offset="100%" stop-color="#bb4400"/>
+  </linearGradient>
+  <radialGradient id="ks_spark" cx="50%" cy="50%" r="50%">
+    <stop offset="0%"   stop-color="#ffee44"/>
+    <stop offset="55%"  stop-color="#ff8800" stop-opacity="0.5"/>
+    <stop offset="100%" stop-color="#ff4400" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="ks_oil" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="#0a1828"/>
+    <stop offset="50%"  stop-color="#162438"/>
+    <stop offset="100%" stop-color="#0a1828"/>
+  </linearGradient>
+  <filter id="ks_glow4"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="ks_blur3"><feGaussianBlur stdDeviation="3"/></filter>
+  <filter id="ks_blur6"><feGaussianBlur stdDeviation="6"/></filter>
+</defs>
+
+<rect width="480" height="640" fill="#05080e"/>
+
+<!-- ============================================================
+     USTKI QISM — gidravlik press
+     ============================================================ -->
+
+<!-- Gidravlik stansiya (yuqori orqa) -->
+<rect x="44" y="28" width="392" height="62" rx="5"
+  fill="url(#ks_frame)" stroke="#121e30" stroke-width="2"/>
+<rect x="48" y="32" width="384" height="54" rx="4"
+  fill="#080e1a" stroke="#0e1828" stroke-width="1"/>
+
+<!-- 6 ta gidravlik silindr -->
+<g fill="url(#ks_hyd)" stroke="#1e3040" stroke-width="1.8">
+  <rect x="62"  y="34" width="42" height="52" rx="7"/>
+  <rect x="124" y="34" width="42" height="52" rx="7"/>
+  <rect x="196" y="34" width="42" height="52" rx="7"/>
+  <rect x="268" y="34" width="42" height="52" rx="7"/>
+  <rect x="340" y="34" width="42" height="52" rx="7"/>
+  <rect x="402" y="34" width="28" height="52" rx="7"/>
+</g>
+<!-- Silindr ichki (piston görünen) -->
+<g fill="#0a1828" stroke="#1a2e40" stroke-width="1">
+  <rect x="67"  y="38" width="32" height="44" rx="5"/>
+  <rect x="129" y="38" width="32" height="44" rx="5"/>
+  <rect x="201" y="38" width="32" height="44" rx="5"/>
+  <rect x="273" y="38" width="32" height="44" rx="5"/>
+  <rect x="345" y="38" width="32" height="44" rx="5"/>
+  <rect x="407" y="38" width="18" height="44" rx="5"/>
+</g>
+<!-- Silindr yuz (xrom) -->
+<g fill="#1e3848" opacity="0.4">
+  <rect x="68"  y="40" width="10" height="40" rx="2"/>
+  <rect x="130" y="40" width="10" height="40" rx="2"/>
+  <rect x="202" y="40" width="10" height="40" rx="2"/>
+  <rect x="274" y="40" width="10" height="40" rx="2"/>
+  <rect x="346" y="40" width="10" height="40" rx="2"/>
+</g>
+<!-- Gidravlik linia (tepa) -->
+<path d="M83 34 Q83 16 130 12 Q240 6 360 12 Q407 16 416 34"
+  fill="none" stroke="#162838" stroke-width="5" stroke-linecap="round"/>
+<path d="M83 34 Q83 16 130 12 Q240 6 360 12 Q407 16 416 34"
+  fill="none" stroke="#243848" stroke-width="3" stroke-linecap="round"/>
+<!-- Gidravlik oqim -->
+<path d="M83 34 Q83 16 130 12 Q240 6 360 12 Q407 16 416 34"
+  fill="none" stroke="#4488aa" stroke-width="1.8" stroke-dasharray="8,6" opacity="0.35">
+  <animate attributeName="stroke-dashoffset" values="0;-28" dur="1.2s" repeatCount="indefinite"/>
+</path>
+<!-- Bosim o'lchagich (tepa o'ng) -->
+<circle cx="446" cy="42" r="18" fill="#08101e" stroke="#162030" stroke-width="1.8"/>
+<circle cx="446" cy="42" r="13" fill="#060c18" stroke="#102030" stroke-width="1.2"/>
+<circle cx="446" cy="42" r="11" fill="none" stroke="#1a2838" stroke-width="0.6" stroke-dasharray="2,2"/>
+<line x1="446" y1="42" x2="452" y2="34" stroke="#ff6600" stroke-width="1.8" stroke-linecap="round"/>
+<circle cx="446" cy="42" r="2.5" fill="#ff6600"/>
+
+<!-- Piston shtoklar (6 ta) -->
+<g fill="#162838" stroke="#2a4258" stroke-width="1.2">
+  <rect x="74"  y="86" width="18" height="62" rx="7"/>
+  <rect x="136" y="86" width="18" height="62" rx="7"/>
+  <rect x="208" y="86" width="18" height="62" rx="7"/>
+  <rect x="280" y="86" width="18" height="62" rx="7"/>
+  <rect x="352" y="86" width="18" height="62" rx="7"/>
+  <rect x="410" y="86" width="14" height="62" rx="5"/>
+</g>
+<!-- Shtok xrom yuzasi -->
+<g fill="#2e5a78" opacity="0.4">
+  <rect x="76"  y="88" width="6" height="58" rx="2"/>
+  <rect x="138" y="88" width="6" height="58" rx="2"/>
+  <rect x="210" y="88" width="6" height="58" rx="2"/>
+  <rect x="282" y="88" width="6" height="58" rx="2"/>
+  <rect x="354" y="88" width="6" height="58" rx="2"/>
+</g>
+
+<!-- Harakatlanuvchi balka (ustki pichoq tutgich) -->
+<rect x="44" y="148" width="392" height="42" rx="5"
+  fill="url(#ks_frame)" stroke="#1a2838" stroke-width="2"/>
+<!-- Balka kuchlaydiruvchi nervalar -->
+<g stroke="#0e1828" stroke-width="1.5" fill="none">
+  <line x1="44" y1="169" x2="436" y2="169"/>
+</g>
+<!-- Balka boltlari -->
+<g fill="#08101e" stroke="#14202e" stroke-width="1">
+  <circle cx="56"  cy="158" r="5"/> <circle cx="56"  cy="182" r="5"/>
+  <circle cx="96"  cy="158" r="5"/> <circle cx="96"  cy="182" r="5"/>
+  <circle cx="144" cy="158" r="5"/> <circle cx="144" cy="182" r="5"/>
+  <circle cx="196" cy="158" r="5"/> <circle cx="196" cy="182" r="5"/>
+  <circle cx="248" cy="158" r="5"/> <circle cx="248" cy="182" r="5"/>
+  <circle cx="300" cy="158" r="5"/> <circle cx="300" cy="182" r="5"/>
+  <circle cx="352" cy="158" r="5"/> <circle cx="352" cy="182" r="5"/>
+  <circle cx="400" cy="158" r="5"/> <circle cx="400" cy="182" r="5"/>
+  <circle cx="428" cy="158" r="5"/> <circle cx="428" cy="182" r="5"/>
+</g>
+
+<!-- ============================================================
+     USTKI PICHOQ
+     ============================================================ -->
+<rect x="44" y="190" width="392" height="26" rx="3"
+  fill="url(#ks_blade)" stroke="#1e3848" stroke-width="1.8">
+  <animate attributeName="y" values="190;220;190" dur="2.5s" repeatCount="indefinite"
+    calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1"/>
+</rect>
+<!-- Pichoq kesuvchi qirra -->
+<rect x="44" y="212" width="392" height="4" rx="1"
+  fill="url(#ks_blade_edge)" opacity="0.9">
+  <animate attributeName="y" values="212;242;212" dur="2.5s" repeatCount="indefinite"
+    calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1"/>
+</rect>
+<!-- Pichoq sirt highlight -->
+<rect x="44" y="191" width="392" height="4" rx="1"
+  fill="#5a8aaa" opacity="0.35">
+  <animate attributeName="y" values="191;221;191" dur="2.5s" repeatCount="indefinite"
+    calcMode="spline" keySplines="0.4 0 0.2 1;0.4 0 0.2 1"/>
+</rect>
+
+<!-- ============================================================
+     METALL TASMA (kesilayotgan)
+     ============================================================ -->
+<!-- Kirish (chap) -->
+<rect x="0"   y="216" width="56"  height="20" fill="#bb4400" opacity="0.88"/>
+<!-- Asosiy tasma -->
+<rect x="44"  y="216" width="392" height="20" fill="url(#ks_metal)"/>
+<!-- Chiqish (o'ng) -->
+<rect x="424" y="216" width="56"  height="20" fill="#884400" opacity="0.75"/>
+<!-- Harakatlanuvchi yorug'lik -->
+<rect x="-80" y="216" width="60" height="20" fill="#ffee88" opacity="0.18">
+  <animate attributeName="x" values="-80;520" dur="1.8s" repeatCount="indefinite"/>
+</rect>
+<!-- Tasma yuzasi -->
+<g stroke="#ff660028" stroke-width="1">
+  <line x1="0" y1="219" x2="480" y2="219"/>
+  <line x1="0" y1="226" x2="480" y2="226"/>
+  <line x1="0" y1="234" x2="480" y2="234"/>
+</g>
+<!-- Issiqlik -->
+<rect x="0" y="212" width="480" height="28" fill="#ff7700" opacity="0.05" filter="url(#ks_blur3)"/>
+
+<!-- ============================================================
+     KESISH NUQTASI — UCHQUNLAR
+     ============================================================ -->
+<ellipse cx="240" cy="226" rx="16" ry="8" fill="url(#ks_spark)" opacity="0.8" filter="url(#ks_glow4)">
+  <animate attributeName="rx" values="16;22;11;18;16" dur="0.45s" repeatCount="indefinite"/>
+  <animate attributeName="opacity" values="0.8;0.15;0.8" dur="0.4s" repeatCount="indefinite"/>
+</ellipse>
+<g filter="url(#ks_glow4)">
+  <line x1="237" y1="222" x2="228" y2="206" stroke="#ffee44" stroke-width="2" opacity="0.85">
+    <animate attributeName="opacity" values="0.85;0;0.85" dur="0.38s" repeatCount="indefinite"/>
+  </line>
+  <line x1="243" y1="222" x2="252" y2="206" stroke="#ffcc00" stroke-width="2" opacity="0.8">
+    <animate attributeName="opacity" values="0.8;0;0.8" dur="0.32s" begin="0.08s" repeatCount="indefinite"/>
+  </line>
+  <line x1="240" y1="221" x2="240" y2="204" stroke="#ff9900" stroke-width="1.5" opacity="0.7">
+    <animate attributeName="opacity" values="0.7;0;0.7" dur="0.3s" begin="0.16s" repeatCount="indefinite"/>
+  </line>
+  <line x1="234" y1="223" x2="224" y2="211" stroke="#ffaa00" stroke-width="1.5" opacity="0.6">
+    <animate attributeName="opacity" values="0.6;0;0.6" dur="0.36s" begin="0.22s" repeatCount="indefinite"/>
+  </line>
+  <line x1="246" y1="223" x2="256" y2="210" stroke="#ffcc44" stroke-width="1.5" opacity="0.6">
+    <animate attributeName="opacity" values="0.6;0;0.6" dur="0.34s" begin="0.12s" repeatCount="indefinite"/>
+  </line>
+</g>
+<ellipse cx="240" cy="226" rx="40" ry="16" fill="#ff8800" opacity="0.1" filter="url(#ks_blur6)"/>
+
+<!-- ============================================================
+     PASTKI PICHOQ (sobit)
+     ============================================================ -->
+<rect x="44" y="236" width="392" height="22" rx="3"
+  fill="url(#ks_blade)" stroke="#1e3848" stroke-width="1.8"/>
+<rect x="44" y="236" width="392" height="4" rx="1"
+  fill="url(#ks_blade_edge)" opacity="0.8"/>
+
+<!-- Pastki pichoq tutgich vintlar -->
+<g fill="#08101e" stroke="#141e2e" stroke-width="1">
+  <circle cx="56"  cy="247" r="5"/> <circle cx="56"  cy="257" r="5"/>
+  <circle cx="96"  cy="247" r="5"/> <circle cx="96"  cy="257" r="5"/>
+  <circle cx="144" cy="247" r="5"/> <circle cx="144" cy="257" r="5"/>
+  <circle cx="196" cy="247" r="5"/> <circle cx="196" cy="257" r="5"/>
+  <circle cx="248" cy="247" r="5"/> <circle cx="248" cy="257" r="5"/>
+  <circle cx="300" cy="247" r="5"/> <circle cx="300" cy="257" r="5"/>
+  <circle cx="352" cy="247" r="5"/> <circle cx="352" cy="257" r="5"/>
+  <circle cx="400" cy="247" r="5"/> <circle cx="400" cy="257" r="5"/>
+  <circle cx="428" cy="247" r="5"/> <circle cx="428" cy="257" r="5"/>
+</g>
+
+<!-- ============================================================
+     PASTKI ASOSIY RAMA
+     ============================================================ -->
+<rect x="28" y="258" width="424" height="148" rx="6"
+  fill="url(#ks_frame)" stroke="#101828" stroke-width="2.5"/>
+<rect x="34" y="264" width="412" height="136" rx="4"
+  fill="#06090f" stroke="#0c1420" stroke-width="1.5"/>
+
+<!-- Pastki rama kuchlaydiruvchi qovurg'alar -->
+<g stroke="#0e1828" stroke-width="1.8" fill="none">
+  <line x1="34" y1="298" x2="446" y2="298"/>
+  <line x1="34" y1="332" x2="446" y2="332"/>
+  <line x1="34" y1="366" x2="446" y2="366"/>
+  <line x1="34" y1="390" x2="446" y2="390"/>
+</g>
+<!-- Diagonal qovurg'alar -->
+<g stroke="#0c1828" stroke-width="1.2" fill="none" opacity="0.5">
+  <line x1="34"  y1="264" x2="84"  y2="406"/>
+  <line x1="84"  y1="264" x2="34"  y2="406"/>
+  <line x1="84"  y1="264" x2="160" y2="406"/>
+  <line x1="160" y1="264" x2="84"  y2="406"/>
+  <line x1="320" y1="264" x2="396" y2="406"/>
+  <line x1="396" y1="264" x2="320" y2="406"/>
+  <line x1="396" y1="264" x2="446" y2="406"/>
+  <line x1="446" y1="264" x2="396" y2="406"/>
+</g>
+
+<!-- ============================================================
+     GIDRAVLIK STANSIYA (o'ng tomon)
+     ============================================================ -->
+<rect x="282" y="270" width="152" height="122" rx="4"
+  fill="url(#ks_oil)" stroke="#162030" stroke-width="1.8"/>
+<!-- Yog' baki qovurg'alar -->
+<g stroke="#0e1828" stroke-width="1.5" fill="#080e1a">
+  <rect x="286" y="278" width="144" height="6" rx="1"/>
+  <rect x="286" y="288" width="144" height="6" rx="1"/>
+  <rect x="286" y="298" width="144" height="6" rx="1"/>
+  <rect x="286" y="308" width="144" height="6" rx="1"/>
+  <rect x="286" y="318" width="144" height="6" rx="1"/>
+  <rect x="286" y="328" width="144" height="6" rx="1"/>
+  <rect x="286" y="338" width="144" height="6" rx="1"/>
+  <rect x="286" y="348" width="144" height="6" rx="1"/>
+  <rect x="286" y="358" width="144" height="6" rx="1"/>
+  <rect x="286" y="368" width="144" height="6" rx="1"/>
+  <rect x="286" y="378" width="144" height="6" rx="1"/>
+</g>
+<!-- Gidronasoskasi -->
+<circle cx="358" cy="330" r="32" fill="#060e18" stroke="#102030" stroke-width="2"/>
+<circle cx="358" cy="330" r="24" fill="#0a1420" stroke="#162030" stroke-width="1.8">
+  <animateTransform attributeName="transform" type="rotate" from="0 358 330" to="360 358 330" dur="2.2s" repeatCount="indefinite"/>
+</circle>
+<circle cx="358" cy="330" r="12" fill="#080e1a" stroke="#101828" stroke-width="1.2"/>
+<circle cx="358" cy="330" r="5"  fill="#0e1828" stroke="#182838" stroke-width="1"/>
+<!-- Gidravlik hose ulanishlari -->
+<g fill="none" stroke="#162030" stroke-width="4" stroke-linecap="round">
+  <path d="M282 300 Q268 300 258 290 Q248 278 248 264"/>
+  <path d="M282 330 Q268 332 258 340 Q248 350 240 360"/>
+  <path d="M282 360 Q265 358 248 370 Q234 380 230 396"/>
+</g>
+<g fill="none" stroke="#1e3040" stroke-width="2" stroke-linecap="round">
+  <path d="M282 300 Q268 300 258 290 Q248 278 248 264"/>
+  <path d="M282 330 Q268 332 258 340 Q248 350 240 360"/>
+  <path d="M282 360 Q265 358 248 370 Q234 380 230 396"/>
+</g>
+
+<!-- ============================================================
+     BOSHQARUV PANELI (chap tomon)
+     ============================================================ -->
+<rect x="36" y="270" width="192" height="126" rx="4"
+  fill="#0a1428" stroke="#162030" stroke-width="1.8"/>
+
+<!-- Ekran -->
+<rect x="42" y="278" width="110" height="70" rx="3"
+  fill="#040c18" stroke="#0e2030" stroke-width="1.5"/>
+<rect x="44" y="280" width="106" height="66" rx="2"
+  fill="#020a10" stroke="#081828" stroke-width="1"/>
+<!-- Ekran ma'lumotlari -->
+<g font-family="'Courier New',monospace" font-size="7.5" fill="#00cc88">
+  <text x="48" y="296">HOLAT   : FAOL</text>
+  <text x="48" y="308">BOSIM   : 180 bar</text>
+  <text x="48" y="320">TEZLIK  : 12 mm/s</text>
+  <text x="48" y="332">KES/SON : 1248 ta</text>
+  <text x="48" y="344">HARORAT : 42°C</text>
+</g>
+<!-- Ekran kursor miltillashi -->
+<rect x="100" y="344" width="6" height="8" fill="#00cc88" opacity="0.9">
+  <animate attributeName="opacity" values="0.9;0;0.9" dur="0.8s" repeatCount="indefinite"/>
+</rect>
+
+<!-- Tugmalar bloki -->
+<rect x="158" y="278" width="64" height="16" rx="3" fill="#0c1828" stroke="#182030" stroke-width="1"/>
+<text x="190" y="290" text-anchor="middle" font-family="monospace" font-size="6" fill="#2a4a60">NAZORAT</text>
+<!-- START/STOP/RESET tugmalari -->
+<g>
+  <rect x="160" y="298" width="26" height="14" rx="3" fill="#122a18" stroke="#1e4024" stroke-width="1"/>
+  <text x="173" y="308" text-anchor="middle" font-family="monospace" font-size="6" fill="#44aa55">START</text>
+  <rect x="190" y="298" width="26" height="14" rx="3" fill="#2a1212" stroke="#40181a" stroke-width="1"/>
+  <text x="203" y="308" text-anchor="middle" font-family="monospace" font-size="6" fill="#aa4444">STOP</text>
+  <rect x="160" y="316" width="58" height="14" rx="3" fill="#1a1a10" stroke="#2e2e18" stroke-width="1"/>
+  <text x="189" y="326" text-anchor="middle" font-family="monospace" font-size="6" fill="#aaaa44">RESET</text>
+</g>
+<!-- Reostat (qalinlik tanlash) -->
+<rect x="160" y="334" width="58" height="16" rx="3" fill="#0c1828" stroke="#182030" stroke-width="1"/>
+<rect x="164" y="338" width="42" height="8" rx="2" fill="#060e18" stroke="#0e1828" stroke-width="0.8"/>
+<rect x="180" y="337" width="12" height="10" rx="2" fill="#1a2e40" stroke="#243848" stroke-width="1"/>
+<text x="189" y="358" text-anchor="middle" font-family="monospace" font-size="5.5" fill="#2a3e52">QALINLIK</text>
+
+<!-- Indikator chiroqlar -->
+<g>
+  <circle cx="44"  cy="362" r="6" fill="#00cc00" opacity="0.9" filter="url(#ks_blur3)">
+    <animate attributeName="opacity" values="0.9;0.4;0.9" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <text x="56" y="366" font-family="monospace" font-size="6" fill="#2a5030">TAYYOR</text>
+
+  <circle cx="100" cy="362" r="6" fill="#ff9900" opacity="0.8" filter="url(#ks_blur3)">
+    <animate attributeName="opacity" values="0.8;0.2;0.8" dur="2.5s" begin="0.5s" repeatCount="indefinite"/>
+  </circle>
+  <text x="112" y="366" font-family="monospace" font-size="6" fill="#504020">BOSIM</text>
+
+  <circle cx="156" cy="362" r="6" fill="#cc2200" opacity="0.4"/>
+  <text x="168" y="366" font-family="monospace" font-size="6" fill="#402020">AVARIA</text>
+</g>
+
+<!-- Metall hisoblagich -->
+<rect x="42" y="372" width="54" height="20" rx="3" fill="#060e18" stroke="#0e2030" stroke-width="1.2"/>
+<text x="69" y="380" text-anchor="middle" font-family="monospace" font-size="6" fill="#2a5060">HISOB</text>
+<text x="69" y="389" text-anchor="middle" font-family="monospace" font-size="8" fill="#00aacc" font-weight="bold">001248</text>
+
+<!-- ============================================================
+     KESISH STOLICHA (o'rta oraliq)
+     ============================================================ -->
+<!-- Qabul qilish stolchasi (chiqish tomoni) -->
+<rect x="0"   y="236" width="50"  height="18" fill="#101828" stroke="#162030" stroke-width="1.2"/>
+<rect x="430" y="236" width="50"  height="18" fill="#101828" stroke="#162030" stroke-width="1.2"/>
+<!-- Stolcha roliklariga -->
+<g fill="#080e18" stroke="#122030" stroke-width="1.2">
+  <ellipse cx="14"  cy="245" rx="7" ry="7"/>
+  <ellipse cx="28"  cy="245" rx="7" ry="7"/>
+  <ellipse cx="42"  cy="245" rx="7" ry="7"/>
+  <ellipse cx="438" cy="245" rx="7" ry="7"/>
+  <ellipse cx="452" cy="245" rx="7" ry="7"/>
+  <ellipse cx="466" cy="245" rx="7" ry="7"/>
+</g>
+
+<!-- ============================================================
+     ZAMIN PLITASI
+     ============================================================ -->
+<rect x="16"  y="406" width="448" height="18" rx="4" fill="#080c18" stroke="#101828" stroke-width="1.5"/>
+<rect x="4"   y="422" width="472" height="12" rx="3" fill="#06080f" stroke="#0c1018" stroke-width="1"/>
+<!-- Anchor boltlar -->
+<g fill="#0a1020" stroke="#141e2c" stroke-width="1">
+  <rect x="32"  y="402" width="16" height="22" rx="3"/>
+  <rect x="70"  y="402" width="16" height="22" rx="3"/>
+  <rect x="240" y="402" width="16" height="22" rx="3"/>
+  <rect x="394" y="402" width="16" height="22" rx="3"/>
+  <rect x="432" y="402" width="16" height="22" rx="3"/>
+</g>
+
+<!-- ============================================================
+     YAG'DU
+     ============================================================ -->
+<ellipse cx="240" cy="226" rx="60" ry="24" fill="#ffaa00" opacity="0.07" filter="url(#ks_blur6)"/>
+
+<!-- ============================================================
+     MATN
+     ============================================================ -->
+<text x="240" y="470" text-anchor="middle" font-family="'Courier New',monospace"
+  font-size="13" font-weight="bold" fill="#1e3855" letter-spacing="4">KESISH STANOGI</text>
+<text x="240" y="488" text-anchor="middle" font-family="'Courier New',monospace"
+  font-size="9" fill="#162a40" letter-spacing="3">HYDRAULIC SHEAR · CS-1200</text>
+</svg>

@@ -1,0 +1,340 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 640">
+<defs>
+  <linearGradient id="kr_ferma" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="#121c2c"/>
+    <stop offset="35%"  stop-color="#1c2c40"/>
+    <stop offset="65%"  stop-color="#223250"/>
+    <stop offset="100%" stop-color="#0e1828"/>
+  </linearGradient>
+  <linearGradient id="kr_rels" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="#243850"/>
+    <stop offset="40%"  stop-color="#344c68"/>
+    <stop offset="70%"  stop-color="#3e5878"/>
+    <stop offset="100%" stop-color="#182c40"/>
+  </linearGradient>
+  <linearGradient id="kr_ustun" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#060c18"/>
+    <stop offset="35%"  stop-color="#10182e"/>
+    <stop offset="65%"  stop-color="#141c34"/>
+    <stop offset="100%" stop-color="#060c18"/>
+  </linearGradient>
+  <linearGradient id="kr_telezka" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#0c1424"/>
+    <stop offset="35%"  stop-color="#18263c"/>
+    <stop offset="65%"  stop-color="#1e2e48"/>
+    <stop offset="100%" stop-color="#0c1424"/>
+  </linearGradient>
+  <linearGradient id="kr_kanat" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#14202e"/>
+    <stop offset="50%"  stop-color="#2a3848"/>
+    <stop offset="100%" stop-color="#14202e"/>
+  </linearGradient>
+  <linearGradient id="kr_kabin" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#0c1828"/>
+    <stop offset="50%"  stop-color="#1a2c40"/>
+    <stop offset="100%" stop-color="#0c1828"/>
+  </linearGradient>
+  <filter id="kr_blur3"><feGaussianBlur stdDeviation="3"/></filter>
+  <filter id="kr_blur6"><feGaussianBlur stdDeviation="6"/></filter>
+  <filter id="kr_glow4"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+
+<rect width="480" height="640" fill="#06080e"/>
+<!-- Zavod shiftiga o'xshash fon -->
+<rect x="0" y="0" width="480" height="12" fill="#0a0c18" stroke="#121828" stroke-width="1"/>
+<!-- Shift beton panellari -->
+<g fill="#08090f" stroke="#0e1020" stroke-width="0.8">
+  <rect x="0"   y="0" width="80"  height="12"/>
+  <rect x="80"  y="0" width="80"  height="12"/>
+  <rect x="160" y="0" width="80"  height="12"/>
+  <rect x="240" y="0" width="80"  height="12"/>
+  <rect x="320" y="0" width="80"  height="12"/>
+  <rect x="400" y="0" width="80"  height="12"/>
+</g>
+<!-- Shift tirkama kronshteynlari -->
+<g fill="#0c1020" stroke="#141828" stroke-width="1.2">
+  <rect x="12"  y="0" width="18" height="28" rx="2"/>
+  <rect x="72"  y="0" width="18" height="28" rx="2"/>
+  <rect x="132" y="0" width="18" height="28" rx="2"/>
+  <rect x="192" y="0" width="18" height="28" rx="2"/>
+  <rect x="258" y="0" width="18" height="28" rx="2"/>
+  <rect x="318" y="0" width="18" height="28" rx="2"/>
+  <rect x="378" y="0" width="18" height="28" rx="2"/>
+  <rect x="438" y="0" width="18" height="28" rx="2"/>
+</g>
+
+<!-- === USTKI RELSLAR === -->
+<rect x="6" y="22" width="468" height="16" rx="7" fill="url(#kr_rels)" stroke="#1e3040" stroke-width="1.8"/>
+<rect x="10" y="25" width="460" height="10" rx="5" fill="#2e4860" opacity="0.7"/>
+<!-- Rels vintlar/boltlar -->
+<g fill="#0e1828" stroke="#182838" stroke-width="1">
+  <rect x="18"  y="21" width="12" height="18" rx="2"/>
+  <rect x="60"  y="21" width="12" height="18" rx="2"/>
+  <rect x="106" y="21" width="12" height="18" rx="2"/>
+  <rect x="152" y="21" width="12" height="18" rx="2"/>
+  <rect x="198" y="21" width="12" height="18" rx="2"/>
+  <rect x="240" y="21" width="12" height="18" rx="2"/>
+  <rect x="284" y="21" width="12" height="18" rx="2"/>
+  <rect x="330" y="21" width="12" height="18" rx="2"/>
+  <rect x="376" y="21" width="12" height="18" rx="2"/>
+  <rect x="422" y="21" width="12" height="18" rx="2"/>
+  <rect x="450" y="21" width="12" height="18" rx="2"/>
+</g>
+
+<!-- === ASOSIY FERMA (box girder) === -->
+<!-- Yuqori qoplama plita -->
+<rect x="18" y="38" width="444" height="22" rx="4" fill="url(#kr_ferma)" stroke="#182838" stroke-width="1.8"/>
+<!-- Ferma bo'shlig'i (diagonal kuchlaydiruvchilar bilan) -->
+<rect x="18" y="60" width="444" height="82" fill="#08101e" stroke="#121c2e" stroke-width="1.5"/>
+<!-- Kuchlaydiruvchi diagonallar -->
+<g stroke="#18263a" stroke-width="1.5" opacity="0.7">
+  <line x1="18"  y1="60"  x2="52"  y2="142"/>  <line x1="52"  y1="60"  x2="18"  y2="142"/>
+  <line x1="52"  y1="60"  x2="88"  y2="142"/>  <line x1="88"  y1="60"  x2="52"  y2="142"/>
+  <line x1="88"  y1="60"  x2="124" y2="142"/>  <line x1="124" y1="60"  x2="88"  y2="142"/>
+  <line x1="124" y1="60"  x2="160" y2="142"/>  <line x1="160" y1="60"  x2="124" y2="142"/>
+  <line x1="160" y1="60"  x2="196" y2="142"/>  <line x1="196" y1="60"  x2="160" y2="142"/>
+  <line x1="196" y1="60"  x2="232" y2="142"/>  <line x1="232" y1="60"  x2="196" y2="142"/>
+  <line x1="232" y1="60"  x2="268" y2="142"/>  <line x1="268" y1="60"  x2="232" y2="142"/>
+  <line x1="268" y1="60"  x2="304" y2="142"/>  <line x1="304" y1="60"  x2="268" y2="142"/>
+  <line x1="304" y1="60"  x2="340" y2="142"/>  <line x1="340" y1="60"  x2="304" y2="142"/>
+  <line x1="340" y1="60"  x2="376" y2="142"/>  <line x1="376" y1="60"  x2="340" y2="142"/>
+  <line x1="376" y1="60"  x2="412" y2="142"/>  <line x1="412" y1="60"  x2="376" y2="142"/>
+  <line x1="412" y1="60"  x2="462" y2="142"/>  <line x1="462" y1="60"  x2="412" y2="142"/>
+</g>
+<!-- Vertical kuchlaydiruvchilar -->
+<g stroke="#14202e" stroke-width="1.2" opacity="0.5">
+  <line x1="88"  y1="60" x2="88"  y2="142"/>
+  <line x1="160" y1="60" x2="160" y2="142"/>
+  <line x1="240" y1="60" x2="240" y2="142"/>
+  <line x1="320" y1="60" x2="320" y2="142"/>
+  <line x1="392" y1="60" x2="392" y2="142"/>
+</g>
+<!-- Pastki qoplama plita -->
+<rect x="18" y="142" width="444" height="20" rx="4" fill="url(#kr_ferma)" stroke="#182838" stroke-width="1.8"/>
+<!-- Pastki rels (telezka uchun) -->
+<rect x="18" y="162" width="444" height="10" rx="5" fill="url(#kr_rels)" stroke="#1e3040" stroke-width="1.2"/>
+
+<!-- === TELEZKA (harakatlanuvchi) === -->
+<g>
+  <animate attributeName="transform" values="translate(0,0);translate(118,0);translate(0,0)"
+    dur="8s" repeatCount="indefinite" calcMode="spline"
+    keySplines="0.42 0 0.58 1;0.42 0 0.58 1"/>
+
+  <!-- Telezka asosiy ramkasi -->
+  <rect x="148" y="162" width="148" height="60" rx="6"
+    fill="url(#kr_telezka)" stroke="#1a2e44" stroke-width="2"/>
+  <!-- Telezka g'ildiraklari (4 ta) -->
+  <g fill="#08101e" stroke="#162030" stroke-width="1.8">
+    <ellipse cx="170" cy="170" rx="9" ry="9">
+      <animateTransform attributeName="transform" type="rotate" from="0 170 170" to="360 170 170" dur="1s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="198" cy="170" rx="9" ry="9">
+      <animateTransform attributeName="transform" type="rotate" from="0 198 170" to="360 198 170" dur="1s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="248" cy="170" rx="9" ry="9">
+      <animateTransform attributeName="transform" type="rotate" from="0 248 170" to="360 248 170" dur="1s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="276" cy="170" rx="9" ry="9">
+      <animateTransform attributeName="transform" type="rotate" from="0 276 170" to="360 276 170" dur="1s" repeatCount="indefinite"/>
+    </ellipse>
+  </g>
+  <g fill="#08101e" stroke="#162030" stroke-width="1.8">
+    <ellipse cx="170" cy="214" rx="9" ry="9">
+      <animateTransform attributeName="transform" type="rotate" from="0 170 214" to="360 170 214" dur="1s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="198" cy="214" rx="9" ry="9">
+      <animateTransform attributeName="transform" type="rotate" from="0 198 214" to="360 198 214" dur="1s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="248" cy="214" rx="9" ry="9">
+      <animateTransform attributeName="transform" type="rotate" from="0 248 214" to="360 248 214" dur="1s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="276" cy="214" rx="9" ry="9">
+      <animateTransform attributeName="transform" type="rotate" from="0 276 214" to="360 276 214" dur="1s" repeatCount="indefinite"/>
+    </ellipse>
+  </g>
+
+  <!-- Hoist motori (ko'tarish) -->
+  <rect x="178" y="178" width="88" height="32" rx="5"
+    fill="#0e1828" stroke="#1a2838" stroke-width="1.5"/>
+  <!-- Motor baraban -->
+  <rect x="184" y="182" width="76" height="24" rx="10" fill="#081420" stroke="#162030" stroke-width="1.2"/>
+  <ellipse cx="222" cy="194" rx="28" ry="12" fill="#060e1a" stroke="#142030" stroke-width="1.2">
+    <animateTransform attributeName="transform" type="rotate" from="0 222 194" to="360 222 194" dur="2s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="222" cy="194" rx="14" ry="6" fill="#0a1220" stroke="#182030" stroke-width="1"/>
+
+  <!-- === KANAT === -->
+  <!-- 3 ta kanat ipi -->
+  <line x1="215" y1="222" x2="215" y2="410" stroke="url(#kr_kanat)" stroke-width="4"/>
+  <line x1="222" y1="222" x2="222" y2="410" stroke="url(#kr_kanat)" stroke-width="4"/>
+  <line x1="229" y1="222" x2="229" y2="410" stroke="url(#kr_kanat)" stroke-width="4"/>
+  <!-- Kanat spiral chiziqlar -->
+  <line x1="216" y1="222" x2="216" y2="410" stroke="#2a3848" stroke-width="1.5" stroke-dasharray="4,5"/>
+  <line x1="228" y1="222" x2="228" y2="410" stroke="#2a3848" stroke-width="1.5" stroke-dasharray="4,5">
+    <animate attributeName="stroke-dashoffset" values="0;-18" dur="1.2s" repeatCount="indefinite"/>
+  </line>
+
+  <!-- === KRYUK BLOKI === -->
+  <!-- Blok korpusi -->
+  <rect x="196" y="410" width="48" height="34" rx="5"
+    fill="#0c1828" stroke="#1a2838" stroke-width="1.8"/>
+  <!-- Blok g'ildiraklari -->
+  <circle cx="212" cy="427" r="12" fill="#070e18" stroke="#142030" stroke-width="1.5"/>
+  <circle cx="212" cy="427" r="7"  fill="#0c1420" stroke="#182030" stroke-width="1.2"/>
+  <circle cx="228" cy="427" r="12" fill="#070e18" stroke="#142030" stroke-width="1.5">
+    <animateTransform attributeName="transform" type="rotate" from="0 228 427" to="360 228 427" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="228" cy="427" r="7"  fill="#0c1420" stroke="#182030" stroke-width="1.2"/>
+  <!-- Val -->
+  <rect x="207" y="418" width="10" height="18" rx="5" fill="#162030" stroke="#202e3e" stroke-width="1.2"/>
+  <!-- Kryuk -->
+  <path d="M215 444 Q217 458 226 464 Q240 470 245 460 Q250 448 244 440"
+    fill="none" stroke="#1e3050" stroke-width="7" stroke-linecap="round"/>
+  <path d="M215 444 Q217 458 226 464 Q240 470 245 460 Q250 448 244 440"
+    fill="none" stroke="#2e4868" stroke-width="4" stroke-linecap="round"/>
+  <!-- Kryuk sap (yoke) -->
+  <rect x="212" y="432" width="10" height="14" rx="5"
+    fill="#162030" stroke="#203040" stroke-width="1.2"/>
+
+  <!-- Yuk (ko'rinadigan) — kran qismi -->
+  <rect x="192" y="472" width="56" height="44" rx="4"
+    fill="#0c1428" stroke="#1a2438" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.6"/>
+  <!-- Zanjir -->
+  <g stroke="#182838" stroke-width="2" fill="none" opacity="0.5">
+    <ellipse cx="204" cy="470" rx="5" ry="3"/>
+    <ellipse cx="214" cy="470" rx="5" ry="3"/>
+    <ellipse cx="226" cy="470" rx="5" ry="3"/>
+    <ellipse cx="238" cy="470" rx="5" ry="3"/>
+  </g>
+</g>
+
+<!-- === YURISH MOTORLARI va USTUNLAR === -->
+<!-- Chap tomon tizimi -->
+<!-- Ustun -->
+<rect x="14" y="172" width="36" height="368" rx="5"
+  fill="url(#kr_ustun)" stroke="#101c2c" stroke-width="2"/>
+<!-- Ustun diagonal kuchlaydiruvchilar -->
+<g stroke="#18263a" stroke-width="1.5" opacity="0.55">
+  <line x1="14" y1="200" x2="50" y2="238"/> <line x1="50" y1="200" x2="14" y2="238"/>
+  <line x1="14" y1="256" x2="50" y2="294"/> <line x1="50" y1="256" x2="14" y2="294"/>
+  <line x1="14" y1="312" x2="50" y2="350"/> <line x1="50" y1="312" x2="14" y2="350"/>
+  <line x1="14" y1="368" x2="50" y2="406"/> <line x1="50" y1="368" x2="14" y2="406"/>
+  <line x1="14" y1="424" x2="50" y2="462"/> <line x1="50" y1="424" x2="14" y2="462"/>
+  <line x1="14" y1="484" x2="50" y2="522"/> <line x1="50" y1="484" x2="14" y2="522"/>
+</g>
+<!-- Yurish motori korpusi (chap) -->
+<rect x="8" y="180" width="52" height="48" rx="4"
+  fill="#0e1828" stroke="#1a2838" stroke-width="1.8"/>
+<circle cx="34" cy="204" r="18" fill="#08101e" stroke="#142030" stroke-width="1.8"/>
+<circle cx="34" cy="204" r="12" fill="#0c1428" stroke="#1a2838" stroke-width="1.5">
+  <animateTransform attributeName="transform" type="rotate" from="0 34 204" to="360 34 204" dur="3s" repeatCount="indefinite"/>
+</circle>
+<circle cx="34" cy="204" r="5"  fill="#081020" stroke="#121e2c" stroke-width="1"/>
+
+<!-- G'ildiraklar chap (2 ta) -->
+<rect x="10" y="524" width="44" height="12" rx="5" fill="#0e1828" stroke="#182838" stroke-width="1.2"/>
+<ellipse cx="22" cy="534" rx="14" ry="14" fill="#07101e" stroke="#142030" stroke-width="2">
+  <animateTransform attributeName="transform" type="rotate" from="0 22 534" to="360 22 534" dur="3.5s" repeatCount="indefinite"/>
+</ellipse>
+<ellipse cx="22" cy="534" rx="8"  ry="8"  fill="#0c1828" stroke="#182838" stroke-width="1.5"/>
+<ellipse cx="42" cy="534" rx="14" ry="14" fill="#07101e" stroke="#142030" stroke-width="2">
+  <animateTransform attributeName="transform" type="rotate" from="0 42 534" to="360 42 534" dur="3.5s" repeatCount="indefinite"/>
+</ellipse>
+<ellipse cx="42" cy="534" rx="8"  ry="8"  fill="#0c1828" stroke="#182838" stroke-width="1.5"/>
+
+<!-- O'ng tomon -->
+<rect x="430" y="172" width="36" height="368" rx="5"
+  fill="url(#kr_ustun)" stroke="#101c2c" stroke-width="2"/>
+<g stroke="#18263a" stroke-width="1.5" opacity="0.55">
+  <line x1="430" y1="200" x2="466" y2="238"/> <line x1="466" y1="200" x2="430" y2="238"/>
+  <line x1="430" y1="256" x2="466" y2="294"/> <line x1="466" y1="256" x2="430" y2="294"/>
+  <line x1="430" y1="312" x2="466" y2="350"/> <line x1="466" y1="312" x2="430" y2="350"/>
+  <line x1="430" y1="368" x2="466" y2="406"/> <line x1="466" y1="368" x2="430" y2="406"/>
+  <line x1="430" y1="424" x2="466" y2="462"/> <line x1="466" y1="424" x2="430" y2="462"/>
+  <line x1="430" y1="484" x2="466" y2="522"/> <line x1="466" y1="484" x2="430" y2="522"/>
+</g>
+<rect x="420" y="180" width="52" height="48" rx="4"
+  fill="#0e1828" stroke="#1a2838" stroke-width="1.8"/>
+<circle cx="446" cy="204" r="18" fill="#08101e" stroke="#142030" stroke-width="1.8"/>
+<circle cx="446" cy="204" r="12" fill="#0c1428" stroke="#1a2838" stroke-width="1.5">
+  <animateTransform attributeName="transform" type="rotate" from="0 446 204" to="360 446 204" dur="3s" repeatCount="indefinite"/>
+</circle>
+<circle cx="446" cy="204" r="5"  fill="#081020" stroke="#121e2c" stroke-width="1"/>
+<rect x="426" y="524" width="44" height="12" rx="5" fill="#0e1828" stroke="#182838" stroke-width="1.2"/>
+<ellipse cx="438" cy="534" rx="14" ry="14" fill="#07101e" stroke="#142030" stroke-width="2">
+  <animateTransform attributeName="transform" type="rotate" from="0 438 534" to="360 438 534" dur="3.5s" repeatCount="indefinite"/>
+</ellipse>
+<ellipse cx="438" cy="534" rx="8"  ry="8"  fill="#0c1828" stroke="#182838" stroke-width="1.5"/>
+<ellipse cx="458" cy="534" rx="14" ry="14" fill="#07101e" stroke="#142030" stroke-width="2">
+  <animateTransform attributeName="transform" type="rotate" from="0 458 534" to="360 458 534" dur="3.5s" repeatCount="indefinite"/>
+</ellipse>
+<ellipse cx="458" cy="534" rx="8"  ry="8"  fill="#0c1828" stroke="#182838" stroke-width="1.5"/>
+
+<!-- Pastki relslar -->
+<rect x="0" y="544" width="480" height="13" rx="6" fill="url(#kr_rels)" stroke="#1e3040" stroke-width="1.5"/>
+<rect x="4" y="547" width="472" height="7" rx="3" fill="#2e4860" opacity="0.65"/>
+<!-- Rels vintlar -->
+<g fill="#0e1828" stroke="#162030" stroke-width="1">
+  <rect x="14"  y="543" width="11" height="16" rx="2"/>
+  <rect x="56"  y="543" width="11" height="16" rx="2"/>
+  <rect x="104" y="543" width="11" height="16" rx="2"/>
+  <rect x="180" y="543" width="11" height="16" rx="2"/>
+  <rect x="252" y="543" width="11" height="16" rx="2"/>
+  <rect x="328" y="543" width="11" height="16" rx="2"/>
+  <rect x="400" y="543" width="11" height="16" rx="2"/>
+  <rect x="455" y="543" width="11" height="16" rx="2"/>
+</g>
+
+<!-- === OPERATOR KABINASI === -->
+<rect x="54" y="360" width="66" height="86" rx="4"
+  fill="url(#kr_kabin)" stroke="#1a2e44" stroke-width="2"/>
+<!-- Kabin oynalari (4 ta) -->
+<rect x="58" y="366" width="26" height="16" rx="2" fill="#082040" stroke="#1a3858" stroke-width="1.2" opacity="0.85"/>
+<rect x="90" y="366" width="24" height="16" rx="2" fill="#082040" stroke="#1a3858" stroke-width="1.2" opacity="0.85"/>
+<rect x="58" y="388" width="26" height="16" rx="2" fill="#061838" stroke="#162e50" stroke-width="1.2" opacity="0.75"/>
+<rect x="90" y="388" width="24" height="16" rx="2" fill="#061838" stroke="#162e50" stroke-width="1.2" opacity="0.75"/>
+<!-- Kabin eshigi -->
+<rect x="82" y="408" width="32" height="36" rx="3" fill="#0a1828" stroke="#162030" stroke-width="1.2"/>
+<!-- Eshik tutqich -->
+<rect x="100" y="424" width="5" height="12" rx="2.5" fill="#1e3040" stroke="#243848" stroke-width="1"/>
+<!-- Boshqaruv pulti -->
+<rect x="59" y="410" width="20" height="28" rx="3" fill="#0c2040" stroke="#1a3050" stroke-width="1.2"/>
+<g fill="#1e4060">
+  <circle cx="64"  cy="416" r="3"/>
+  <circle cx="74"  cy="416" r="3"/>
+  <circle cx="64"  cy="426" r="3"/>
+  <circle cx="74"  cy="426" r="3"/>
+  <circle cx="64"  cy="436" r="3"/>
+</g>
+<!-- Ekran -->
+<rect x="60" y="412" width="18" height="8" rx="1" fill="#061828" stroke="#0e2840" stroke-width="0.8"/>
+<text x="69" y="419" text-anchor="middle" font-family="monospace" font-size="4" fill="#00cc88">OK</text>
+<!-- Signal chiroqlar -->
+<circle cx="87" cy="364" r="5" fill="#ffcc00" opacity="0.85" filter="url(#kr_blur3)">
+  <animate attributeName="opacity" values="0.85;0.15;0.85" dur="1.8s" repeatCount="indefinite"/>
+</circle>
+<circle cx="98" cy="364" r="4" fill="#00cc44" opacity="0.7">
+  <animate attributeName="opacity" values="0.7;0.2;0.7" dur="2.5s" begin="0.5s" repeatCount="indefinite"/>
+</circle>
+<!-- Kabin pastki platforma -->
+<rect x="52" y="442" width="70" height="6" rx="2" fill="#0e1828" stroke="#1a2838" stroke-width="1"/>
+<!-- Platforma tutqich zinalar -->
+<g stroke="#12202e" stroke-width="1.2" fill="none">
+  <line x1="58"  y1="442" x2="58"  y2="448"/>
+  <line x1="70"  y1="442" x2="70"  y2="448"/>
+  <line x1="82"  y1="442" x2="82"  y2="448"/>
+  <line x1="94"  y1="442" x2="94"  y2="448"/>
+  <line x1="106" y1="442" x2="106" y2="448"/>
+  <line x1="52"  y1="447" x2="122" y2="447"/>
+</g>
+
+<!-- === ZAMIN === -->
+<rect x="0" y="558" width="480" height="16" rx="3" fill="#050810" stroke="#0c1018" stroke-width="1"/>
+<rect x="0" y="572" width="480" height="10" rx="2" fill="#03050c"/>
+
+<!-- === MATN === -->
+<text x="240" y="604" text-anchor="middle" font-family="'Courier New',monospace"
+  font-size="13" font-weight="bold" fill="#1a3050" letter-spacing="4">KO'TARISH KRANI</text>
+<text x="240" y="622" text-anchor="middle" font-family="'Courier New',monospace"
+  font-size="9" fill="#122440" letter-spacing="3">OVERHEAD BRIDGE CRANE · CR-50T</text>
+</svg>

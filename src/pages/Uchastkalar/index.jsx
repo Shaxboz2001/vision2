@@ -31,6 +31,7 @@ import { setSelectedUchastka } from "@/store";
 import { DataGrid } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 import { setUskunaFilter } from "../../store";
+import { useAllProductionReports } from "../../hooks/useProduction";
 
 // ─── UCHASTKA MINI CHART (sparkline) ──────────────────────────────
 const MiniSparkline = ({ color = "#00d4ff", pct = 70 }) => {
@@ -647,6 +648,19 @@ export default function Uchastkalar() {
   const uchastkalar = data?.data || [];
   const sx = sexlar?.data || [];
 
+  if (selectedSex?.id === "SEX-07") {
+    const today = new Date().toISOString().split("T")[0];
+    const yesterday = new Date(Date.now() - 86_400_000)
+      .toISOString()
+      .split("T")[0];
+    const { eaf, lrf, tsc, vod, isAnyLoading, refetchAll } =
+      useAllProductionReports({
+        startDate: yesterday,
+        endDate: today,
+      });
+    console.log(eaf);
+  }
+
   const handleOpen = (u) => {
     setSelected(u);
     // setDrawerOpen(true);
@@ -690,7 +704,7 @@ export default function Uchastkalar() {
     },
     {
       field: "sexId",
-      headerName: "SEX",
+      headerName: "BO'LINMA",
       width: 90,
       renderCell: (p) => (
         <Typography

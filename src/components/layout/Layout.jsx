@@ -168,7 +168,7 @@ export function Layout({ children }) {
             >
               ⬡
             </Box> */}
-            <img src="/public/images/logo.svg" alt="" width={30} />
+            <img src="/images/logo.svg" alt="" width={30} />
             <Box>
               <Typography
                 sx={{

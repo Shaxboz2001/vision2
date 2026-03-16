@@ -1,0 +1,430 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 640">
+<defs>
+  <!-- Asosiy gradientlar -->
+  <linearGradient id="steelH" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#0d1117"/>
+    <stop offset="18%"  stop-color="#1e2d3d"/>
+    <stop offset="38%"  stop-color="#2a4055"/>
+    <stop offset="58%"  stop-color="#355070"/>
+    <stop offset="78%"  stop-color="#1e2d3d"/>
+    <stop offset="100%" stop-color="#0d1117"/>
+  </linearGradient>
+  <linearGradient id="steelH2" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#080c10"/>
+    <stop offset="20%"  stop-color="#182535"/>
+    <stop offset="50%"  stop-color="#243a50"/>
+    <stop offset="80%"  stop-color="#182535"/>
+    <stop offset="100%" stop-color="#080c10"/>
+  </linearGradient>
+  <linearGradient id="brickL" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#150700"/>
+    <stop offset="25%"  stop-color="#3a1800"/>
+    <stop offset="50%"  stop-color="#552500"/>
+    <stop offset="75%"  stop-color="#3a1800"/>
+    <stop offset="100%" stop-color="#150700"/>
+  </linearGradient>
+  <linearGradient id="brickHot" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#1a0500"/>
+    <stop offset="30%"  stop-color="#4a1200"/>
+    <stop offset="50%"  stop-color="#6a2000"/>
+    <stop offset="70%"  stop-color="#4a1200"/>
+    <stop offset="100%" stop-color="#1a0500"/>
+  </linearGradient>
+  <radialGradient id="fireCore" cx="50%" cy="70%" r="55%">
+    <stop offset="0%"   stop-color="#ffcc00" stop-opacity="1"/>
+    <stop offset="25%"  stop-color="#ff6600" stop-opacity="0.9"/>
+    <stop offset="60%"  stop-color="#cc2200" stop-opacity="0.6"/>
+    <stop offset="100%" stop-color="#880000" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="ironGlow" cx="50%" cy="50%" r="50%">
+    <stop offset="0%"   stop-color="#ffee00"/>
+    <stop offset="35%"  stop-color="#ff8800"/>
+    <stop offset="75%"  stop-color="#cc3300"/>
+    <stop offset="100%" stop-color="#660000"/>
+  </radialGradient>
+  <linearGradient id="pipeH" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="#0a1828"/>
+    <stop offset="35%"  stop-color="#1e3848"/>
+    <stop offset="60%"  stop-color="#284858"/>
+    <stop offset="100%" stop-color="#0a1828"/>
+  </linearGradient>
+  <linearGradient id="pipeV" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%"   stop-color="#0a1828"/>
+    <stop offset="35%"  stop-color="#1e3848"/>
+    <stop offset="60%"  stop-color="#284858"/>
+    <stop offset="100%" stop-color="#0a1828"/>
+  </linearGradient>
+  <linearGradient id="platform" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="#141e2e"/>
+    <stop offset="100%" stop-color="#0a1020"/>
+  </linearGradient>
+
+  <!-- Filterlar -->
+  <filter id="glow4">
+    <feGaussianBlur stdDeviation="4" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="glow8">
+    <feGaussianBlur stdDeviation="8" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="blur5"><feGaussianBlur stdDeviation="5"/></filter>
+  <filter id="blur8"><feGaussianBlur stdDeviation="8"/></filter>
+
+  <!-- G'isht pattern -->
+  <pattern id="brickPat" x="0" y="0" width="16" height="10" patternUnits="userSpaceOnUse">
+    <rect width="16" height="10" fill="none"/>
+    <rect x="0.5" y="0.5" width="15" height="9" fill="none" stroke="#3a1400" stroke-width="0.6" opacity="0.5"/>
+  </pattern>
+  <pattern id="brickPat2" x="0" y="0" width="16" height="10" patternUnits="userSpaceOnUse">
+    <rect width="16" height="10" fill="none"/>
+    <rect x="0.5" y="0.5" width="15" height="9" fill="none" stroke="#500800" stroke-width="0.5" opacity="0.4"/>
+  </pattern>
+
+  <!-- Metal bolt pattern -->
+  <pattern id="boltPat" x="0" y="0" width="1" height="30" patternUnits="userSpaceOnUse">
+    <circle cx="0" cy="15" r="3.5" fill="#0e1828" stroke="#1e2e3e" stroke-width="1"/>
+  </pattern>
+</defs>
+
+<!-- === FON === -->
+<rect width="480" height="640" fill="#050810"/>
+
+<!-- === TUTUN (orqada) === -->
+<ellipse cx="240" cy="32" rx="28" ry="18" fill="#1a1e2a" opacity="0.55" filter="url(#blur8)"/>
+<ellipse cx="222" cy="20" rx="20" ry="14" fill="#141820" opacity="0.45" filter="url(#blur8)"/>
+<ellipse cx="258" cy="15" rx="15" ry="11" fill="#1e2030" opacity="0.38" filter="url(#blur8)"/>
+<ellipse cx="240" cy="10" rx="10" ry="8"  fill="#12151e" opacity="0.3"  filter="url(#blur5)"/>
+
+<!-- === LIFT MAST (chap) === -->
+<!-- Asosiy direktoriya ustun -->
+<rect x="44" y="68" width="18" height="460" rx="3" fill="#0e1828" stroke="#1e2838" stroke-width="1.5"/>
+<rect x="50" y="68" width="6" height="460" fill="#182838" opacity="0.4"/>
+<!-- Kross membranlar -->
+<g stroke="#162030" stroke-width="1.2" fill="none">
+  <line x1="44" y1="120" x2="62" y2="120"/>
+  <line x1="44" y1="180" x2="62" y2="180"/>
+  <line x1="44" y1="240" x2="62" y2="240"/>
+  <line x1="44" y1="300" x2="62" y2="300"/>
+  <line x1="44" y1="360" x2="62" y2="360"/>
+  <line x1="44" y1="420" x2="62" y2="420"/>
+</g>
+<!-- Lift platformasi -->
+<rect x="28" y="188" width="50" height="72" rx="4" fill="#0e1828" stroke="#1e2e40" stroke-width="1.5"/>
+<rect x="32" y="192" width="42" height="64" rx="3" fill="#0c1525" stroke="#162030" stroke-width="1"/>
+<!-- Lift deraza -->
+<rect x="35" y="196" width="18" height="10" rx="2" fill="#0a2040" stroke="#1a3a60" stroke-width="1" opacity="0.8"/>
+<rect x="35" y="210" width="18" height="10" rx="2" fill="#081828" stroke="#1a3050" stroke-width="1" opacity="0.7"/>
+<!-- Lift trosi -->
+<line x1="53" y1="68" x2="53" y2="188" stroke="#283848" stroke-width="2" stroke-dasharray="5,4"/>
+<line x1="53" y1="260" x2="53" y2="528" stroke="#283848" stroke-width="2" stroke-dasharray="5,4"/>
+
+<!-- === O'NG TOMON KONSTRUKSIYA === -->
+<rect x="418" y="120" width="18" height="380" rx="3" fill="#0e1828" stroke="#1e2838" stroke-width="1.5"/>
+<g stroke="#162030" stroke-width="1.2" fill="none">
+  <line x1="418" y1="170" x2="436" y2="170"/>
+  <line x1="418" y1="240" x2="436" y2="240"/>
+  <line x1="418" y1="310" x2="436" y2="310"/>
+  <line x1="418" y1="380" x2="436" y2="380"/>
+  <line x1="418" y1="450" x2="436" y2="450"/>
+</g>
+
+<!-- === GAZ QUVURI (chap yuqorida) === -->
+<path d="M182 96 Q140 80 112 54 Q96 36 100 18"
+  fill="none" stroke="#1e2e40" stroke-width="14" stroke-linecap="round"/>
+<path d="M182 96 Q140 80 112 54 Q96 36 100 18"
+  fill="none" stroke="#2a3e52" stroke-width="8" stroke-linecap="round"/>
+<!-- Gaz oqim animatsiyasi -->
+<path d="M182 96 Q140 80 112 54 Q96 36 100 18"
+  fill="none" stroke="#3a6888" stroke-width="2.5" stroke-dasharray="10,8" opacity="0.45">
+  <animate attributeName="stroke-dashoffset" values="0;-36" dur="1.8s" repeatCount="indefinite"/>
+</path>
+<!-- Quvur flanslar -->
+<ellipse cx="140" cy="82" rx="9" ry="7" fill="none" stroke="#283848" stroke-width="2.5"/>
+<ellipse cx="112" cy="56" rx="9" ry="7" fill="none" stroke="#283848" stroke-width="2.5"
+  transform="rotate(-35 112 56)"/>
+<!-- Quvur boshi -->
+<circle cx="100" cy="18" r="10" fill="#0e1828" stroke="#1e3040" stroke-width="2"/>
+<circle cx="100" cy="18" r="6"  fill="#081218" stroke="#162838" stroke-width="1.2"/>
+
+<!-- === O'NG GAZ QUVURI === -->
+<path d="M298 92 Q336 76 356 52 Q368 36 365 18"
+  fill="none" stroke="#1e2e40" stroke-width="12" stroke-linecap="round"/>
+<path d="M298 92 Q336 76 356 52 Q368 36 365 18"
+  fill="none" stroke="#2a3e52" stroke-width="7" stroke-linecap="round"/>
+<path d="M298 92 Q336 76 356 52 Q368 36 365 18"
+  fill="none" stroke="#3a6888" stroke-width="2" stroke-dasharray="8,7" opacity="0.35">
+  <animate attributeName="stroke-dashoffset" values="0;-30" dur="2s" repeatCount="indefinite"/>
+</path>
+<circle cx="365" cy="18" r="9" fill="#0e1828" stroke="#1e3040" stroke-width="1.8"/>
+
+<!-- ===================================================
+     PECH ASOSIY TANASI
+     =================================================== -->
+
+<!-- KOLOSHNIK TRUBASI -->
+<rect x="214" y="32" width="52" height="62" rx="8"
+  fill="url(#pipeV)" stroke="#1e3040" stroke-width="2"/>
+<rect x="220" y="36" width="40" height="56" rx="6"
+  fill="#081420" stroke="#162030" stroke-width="1"/>
+<!-- Truba ichki kanal -->
+<rect x="226" y="36" width="28" height="56" rx="5" fill="#040810" opacity="0.8"/>
+<!-- Truba flansi (tepada) -->
+<rect x="206" y="28" width="68" height="14" rx="5"
+  fill="url(#platform)" stroke="#1e2e40" stroke-width="1.5"/>
+<g fill="#0a1220" stroke="#182030" stroke-width="1">
+  <circle cx="213" cy="35" r="4"/>
+  <circle cx="224" cy="35" r="4"/>
+  <circle cx="256" cy="35" r="4"/>
+  <circle cx="267" cy="35" r="4"/>
+</g>
+
+<!-- KOLOSHNIK QOPQOGI (bell) -->
+<ellipse cx="240" cy="94" rx="64" ry="18"
+  fill="url(#steelH)" stroke="#1e3040" stroke-width="2"/>
+<ellipse cx="240" cy="92" rx="58" ry="14"
+  fill="#0e1828" stroke="#253e55" stroke-width="1.5"/>
+<ellipse cx="240" cy="90" rx="50" ry="10"
+  fill="#0a1220" stroke="#1a3040" stroke-width="1"/>
+<!-- Bell yuklash halqalari -->
+<g fill="none" stroke="#243848" stroke-width="1.5">
+  <rect x="178" y="82" width="124" height="14" rx="6"/>
+  <rect x="186" y="70" width="108" height="16" rx="5"/>
+</g>
+
+<!-- SHAFT (asosiy silindrsimon tana) -->
+<path d="M176 112 L156 340 L324 340 L304 112 Z" fill="url(#steelH)"/>
+<!-- G'isht qatlami -->
+<path d="M176 112 L156 340 L324 340 L304 112 Z" fill="url(#brickPat)" opacity="0.4"/>
+<!-- Tashqi qobiq qirralar -->
+<line x1="176" y1="112" x2="156" y2="340" stroke="#070e18" stroke-width="4"/>
+<line x1="304" y1="112" x2="324" y2="340" stroke="#070e18" stroke-width="4"/>
+
+<!-- Shaft kuchlaydiruvchi halqalar (10 ta) -->
+<g fill="none">
+  <!-- har halqa: yo'l + bolt uchlar -->
+  <path d="M174 148 Q240 154 306 148" stroke="#1e3040" stroke-width="3.5"/>
+  <path d="M172 186 Q240 193 308 186" stroke="#1e3040" stroke-width="3.5"/>
+  <path d="M170 224 Q240 231 310 224" stroke="#1e3040" stroke-width="3.5"/>
+  <path d="M168 262 Q240 270 312 262" stroke="#1e3040" stroke-width="3.5"/>
+  <path d="M166 300 Q240 308 314 300" stroke="#1e3040" stroke-width="3.5"/>
+  <!-- Halqa boltlari -->
+  <g fill="#0a1420" stroke="#162030" stroke-width="0.8">
+    <!-- 148 -->
+    <circle cx="172" cy="148" r="4"/><circle cx="308" cy="148" r="4"/>
+    <circle cx="192" cy="149" r="3"/><circle cx="288" cy="149" r="3"/>
+    <!-- 186 -->
+    <circle cx="170" cy="186" r="4"/><circle cx="310" cy="186" r="4"/>
+    <circle cx="190" cy="187" r="3"/><circle cx="290" cy="187" r="3"/>
+    <!-- 224 -->
+    <circle cx="168" cy="224" r="4"/><circle cx="312" cy="224" r="4"/>
+    <!-- 262 -->
+    <circle cx="166" cy="262" r="4"/><circle cx="314" cy="262" r="4"/>
+    <!-- 300 -->
+    <circle cx="164" cy="300" r="4"/><circle cx="316" cy="300" r="4"/>
+  </g>
+</g>
+
+<!-- Shaft plastinka chiziqlar (qalinlashgan 3D effekt) -->
+<path d="M177 112 L157 340" stroke="#0e1828" stroke-width="2" opacity="0.6"/>
+<path d="M303 112 L323 340" stroke="#0e1828" stroke-width="2" opacity="0.6"/>
+
+<!-- ZAPLES (toraytuvchi) -->
+<path d="M156 340 L138 390 L342 390 L324 340 Z" fill="url(#steelH2)" stroke="#0e1a28" stroke-width="2"/>
+<rect x="138" y="384" width="204" height="10" rx="3" fill="#0c1520" stroke="#182030" stroke-width="1"/>
+<!-- Zaples boltlar -->
+<g fill="#0a1220" stroke="#162030" stroke-width="1">
+  <rect x="145" y="382" width="12" height="14" rx="2"/>
+  <rect x="175" y="382" width="12" height="14" rx="2"/>
+  <rect x="213" y="382" width="12" height="14" rx="2"/>
+  <rect x="255" y="382" width="12" height="14" rx="2"/>
+  <rect x="293" y="382" width="12" height="14" rx="2"/>
+  <rect x="323" y="382" width="12" height="14" rx="2"/>
+</g>
+
+<!-- RASSVAR (kengayuvchi) -->
+<path d="M138 394 L120 444 L360 444 L342 394 Z" fill="url(#brickL)" stroke="#0e1520" stroke-width="2"/>
+<path d="M138 394 L120 444 L360 444 L342 394 Z" fill="url(#brickPat2)" opacity="0.5"/>
+<!-- Rassvar halqalar -->
+<path d="M136 414 Q240 420 344 414" stroke="#1e0800" stroke-width="2.5" fill="none"/>
+<path d="M132 430 Q240 437 348 430" stroke="#1e0800" stroke-width="2.5" fill="none"/>
+
+<!-- TUYERLAR (havo kiritish — 7 ta ko'rinadigan) -->
+<!-- Chap tuyerlar kollektor -->
+<path d="M76 432 Q58 430 48 446 Q40 460 54 472 Q68 480 88 474"
+  fill="none" stroke="#182838" stroke-width="12" stroke-linecap="round"/>
+<path d="M76 432 Q58 430 48 446 Q40 460 54 472 Q68 480 88 474"
+  fill="none" stroke="#223848" stroke-width="7" stroke-linecap="round"/>
+<!-- Havo animatsiyasi -->
+<path d="M76 432 Q58 430 48 446 Q40 460 54 472 Q68 480 88 474"
+  fill="none" stroke="#4488aa" stroke-width="2.5" stroke-dasharray="8,6" opacity="0.5">
+  <animate attributeName="stroke-dashoffset" values="20;0" dur="0.9s" repeatCount="indefinite"/>
+</path>
+
+<!-- Chap tuyer teshiklari (4 ta) -->
+<g fill="#0c1828" stroke="#1e3040" stroke-width="1.5">
+  <rect x="108" y="410" width="30" height="16" rx="8"/>
+  <ellipse cx="120" cy="418" rx="8" ry="8"/>
+  <rect x="108" y="430" width="30" height="16" rx="8"/>
+  <ellipse cx="120" cy="438" rx="8" ry="8"/>
+  <rect x="108" y="450" width="30" height="16" rx="8"/>
+  <ellipse cx="120" cy="458" rx="8" ry="8"/>
+</g>
+<!-- O'ng tuyerlar -->
+<path d="M404 432 Q422 430 432 446 Q440 460 426 472 Q412 480 392 474"
+  fill="none" stroke="#182838" stroke-width="12" stroke-linecap="round"/>
+<path d="M404 432 Q422 430 432 446 Q440 460 426 472 Q412 480 392 474"
+  fill="none" stroke="#223848" stroke-width="7" stroke-linecap="round"/>
+<path d="M404 432 Q422 430 432 446 Q440 460 426 472 Q412 480 392 474"
+  fill="none" stroke="#4488aa" stroke-width="2.5" stroke-dasharray="8,6" opacity="0.5">
+  <animate attributeName="stroke-dashoffset" values="0;20" dur="0.9s" repeatCount="indefinite"/>
+</path>
+<g fill="#0c1828" stroke="#1e3040" stroke-width="1.5">
+  <rect x="342" y="410" width="30" height="16" rx="8"/>
+  <ellipse cx="360" cy="418" rx="8" ry="8"/>
+  <rect x="342" y="430" width="30" height="16" rx="8"/>
+  <ellipse cx="360" cy="438" rx="8" ry="8"/>
+  <rect x="342" y="450" width="30" height="16" rx="8"/>
+  <ellipse cx="360" cy="458" rx="8" ry="8"/>
+</g>
+
+<!-- GORN (pastki kamera) -->
+<path d="M120 444 L110 524 Q108 546 240 550 Q372 546 370 524 L360 444 Z"
+  fill="url(#brickHot)" stroke="#0e1020" stroke-width="2.5"/>
+<path d="M120 444 L110 524 Q108 546 240 550 Q372 546 370 524 L360 444 Z"
+  fill="url(#brickPat2)" opacity="0.45"/>
+
+<!-- Gorn yoritilishi — olov effekti -->
+<ellipse cx="240" cy="535" rx="95" ry="22" fill="url(#fireCore)" filter="url(#blur8)" opacity="0.85">
+  <animate attributeName="ry" values="22;30;18;26;22" dur="2.2s" repeatCount="indefinite"/>
+  <animate attributeName="opacity" values="0.85;0.5;0.85" dur="1.8s" repeatCount="indefinite"/>
+</ellipse>
+<!-- Olov alangalari -->
+<path d="M200 524 Q210 500 218 516 Q224 504 230 520 Q235 508 240 522 Q245 508 250 520 Q256 504 262 516 Q270 500 280 524 Z"
+  fill="#ff6600" opacity="0.65" filter="url(#blur5)">
+  <animate attributeName="d"
+    values="M200 524 Q210 500 218 516 Q224 504 230 520 Q235 508 240 522 Q245 508 250 520 Q256 504 262 516 Q270 500 280 524 Z;
+            M200 524 Q212 496 219 513 Q225 502 231 518 Q236 506 240 521 Q244 506 249 518 Q255 502 261 513 Q268 496 280 524 Z;
+            M200 524 Q210 500 218 516 Q224 504 230 520 Q235 508 240 522 Q245 508 250 520 Q256 504 262 516 Q270 500 280 524 Z"
+    dur="1.5s" repeatCount="indefinite"/>
+</path>
+<path d="M215 524 Q222 506 228 518 Q234 510 240 522 Q246 510 252 518 Q258 506 265 524 Z"
+  fill="#ff9900" opacity="0.5" filter="url(#blur5)">
+  <animate attributeName="opacity" values="0.5;0.2;0.5" dur="1.2s" repeatCount="indefinite"/>
+</path>
+
+<!-- === LETKA (cho'yan chiqarish) === -->
+<!-- Letka qurilma -->
+<rect x="352" y="490" width="52" height="20" rx="4"
+  fill="#1a1020" stroke="#2e2040" stroke-width="1.5"/>
+<!-- Letka drill -->
+<rect x="398" y="494" width="32" height="12" rx="6"
+  fill="#0e1828" stroke="#1e2838" stroke-width="1.5"/>
+<rect x="428" y="496" width="18" height="8" rx="4"
+  fill="#142030" stroke="#1e2e40" stroke-width="1"/>
+<!-- Oqayotgan cho'yan -->
+<path d="M398 500 Q428 496 458 510 Q468 520 458 528 Q440 534 418 526 Q400 518 398 500 Z"
+  fill="url(#ironGlow)" opacity="0.9" filter="url(#glow4)">
+  <animate attributeName="opacity" values="0.9;0.55;0.9" dur="2s" repeatCount="indefinite"/>
+</path>
+<ellipse cx="438" cy="516" rx="16" ry="8" fill="#ffaa00" opacity="0.4" filter="url(#blur5)">
+  <animate attributeName="opacity" values="0.4;0.15;0.4" dur="1.8s" repeatCount="indefinite"/>
+</ellipse>
+<!-- Cho'yan kovsh -->
+<path d="M448 524 Q442 548 444 570 Q446 592 470 596 Q494 598 500 578 Q504 558 496 536 Z"
+  fill="#101828" stroke="#1a2838" stroke-width="1.5"/>
+<ellipse cx="474" cy="548" rx="22" ry="10" fill="url(#ironGlow)" opacity="0.6" filter="url(#blur5)"/>
+
+<!-- SHLAK CHIQARISH (chap) -->
+<rect x="78" y="480" width="48" height="18" rx="4"
+  fill="#1a1020" stroke="#2a2040" stroke-width="1.5"/>
+<path d="M78 489 Q48 486 36 498 Q28 508 38 518 Q50 526 70 520 Z"
+  fill="#2a3a1a" opacity="0.75"/>
+<!-- Shlak kovsh -->
+<path d="M20 512 Q14 530 16 552 Q18 574 40 578 Q62 580 66 562 Q70 544 62 526 Z"
+  fill="#10181e" stroke="#18222a" stroke-width="1.5"/>
+
+<!-- === PECH TAGI === -->
+<ellipse cx="240" cy="552" rx="128" ry="16" fill="#0c1020" stroke="#182030" stroke-width="2"/>
+<rect x="112" y="548" width="256" height="18" rx="5" fill="#0a0e1a" stroke="#141e2c" stroke-width="1.5"/>
+<rect x="98"  y="564" width="284" height="12" rx="4" fill="#070a14" stroke="#10182a" stroke-width="1"/>
+<!-- Tagi boltlar -->
+<g fill="#0d1428" stroke="#1a2238" stroke-width="1">
+  <rect x="116" y="560" width="14" height="16" rx="3"/>
+  <rect x="148" y="560" width="14" height="16" rx="3"/>
+  <rect x="186" y="560" width="14" height="16" rx="3"/>
+  <rect x="240" y="560" width="14" height="16" rx="3"/>
+  <rect x="280" y="560" width="14" height="16" rx="3"/>
+  <rect x="318" y="560" width="14" height="16" rx="3"/>
+  <rect x="350" y="560" width="14" height="16" rx="3"/>
+</g>
+
+<!-- === O'LCHOV QURILMALARI === -->
+<!-- Manometr 1 -->
+<g transform="translate(348,165)">
+  <circle cx="18" cy="18" r="18" fill="#0c1428" stroke="#1e2e44" stroke-width="2"/>
+  <circle cx="18" cy="18" r="14" fill="#08101e" stroke="#162035" stroke-width="1.5"/>
+  <circle cx="18" cy="18" r="12" fill="none" stroke="#1e3040" stroke-width="0.6" stroke-dasharray="2,2"/>
+  <!-- Shkala riski -->
+  <g stroke="#253545" stroke-width="1">
+    <line x1="18" y1="7"  x2="18" y2="10"/>
+    <line x1="28" y1="10" x2="26" y2="12"/>
+    <line x1="30" y1="18" x2="27" y2="18"/>
+    <line x1="28" y1="26" x2="26" y2="24"/>
+    <line x1="18" y1="29" x2="18" y2="26"/>
+    <line x1="8"  y1="26" x2="10" y2="24"/>
+    <line x1="6"  y1="18" x2="9"  y2="18"/>
+  </g>
+  <line x1="18" y1="18" x2="26" y2="10" stroke="#ff6600" stroke-width="1.8" stroke-linecap="round"/>
+  <circle cx="18" cy="18" r="2.5" fill="#ff6600"/>
+  <text x="18" y="40" text-anchor="middle" fill="#2a3e52" font-family="monospace" font-size="6">bar</text>
+</g>
+<line x1="336" y1="183" x2="348" y2="183" stroke="#182838" stroke-width="3"/>
+
+<!-- Manometr 2 -->
+<g transform="translate(348,228)">
+  <circle cx="18" cy="18" r="18" fill="#0c1428" stroke="#1e2e44" stroke-width="2"/>
+  <circle cx="18" cy="18" r="14" fill="#08101e" stroke="#162035" stroke-width="1.5"/>
+  <circle cx="18" cy="18" r="12" fill="none" stroke="#1e3040" stroke-width="0.6" stroke-dasharray="2,2"/>
+  <line x1="18" y1="18" x2="12" y2="10" stroke="#00d4ff" stroke-width="1.8" stroke-linecap="round"/>
+  <circle cx="18" cy="18" r="2.5" fill="#00d4ff"/>
+  <text x="18" y="40" text-anchor="middle" fill="#2a3e52" font-family="monospace" font-size="6">°C</text>
+</g>
+<line x1="336" y1="246" x2="348" y2="246" stroke="#182838" stroke-width="3"/>
+
+<!-- Termometr -->
+<g transform="translate(358,295)">
+  <rect x="8" y="0" width="20" height="50" rx="10" fill="#0c1428" stroke="#1e2e44" stroke-width="1.5"/>
+  <rect x="11" y="6" width="14" height="32" rx="7" fill="#081018"/>
+  <rect x="12" y="24" width="12" height="15" rx="6" fill="#cc3300" opacity="0.85"/>
+  <rect x="13" y="24" width="5" height="15" rx="3" fill="#ff5500" opacity="0.5"/>
+  <circle cx="18" cy="42" r="7" fill="#cc3300" opacity="0.9"/>
+  <circle cx="18" cy="42" r="5" fill="#ff4400" opacity="0.7"/>
+</g>
+<line x1="336" y1="318" x2="358" y2="318" stroke="#182838" stroke-width="3"/>
+
+<!-- === TEPA PLATFORMA === -->
+<rect x="154" y="108" width="172" height="10" rx="3" fill="url(#platform)" stroke="#1e2e40" stroke-width="1.2"/>
+<!-- Platforma panjar -->
+<g stroke="#1a2838" stroke-width="1" fill="none">
+  <line x1="165" y1="108" x2="165" y2="98"/>
+  <line x1="185" y1="108" x2="185" y2="98"/>
+  <line x1="205" y1="108" x2="205" y2="98"/>
+  <line x1="225" y1="108" x2="225" y2="98"/>
+  <line x1="255" y1="108" x2="255" y2="98"/>
+  <line x1="275" y1="108" x2="275" y2="98"/>
+  <line x1="295" y1="108" x2="295" y2="98"/>
+  <line x1="315" y1="108" x2="315" y2="98"/>
+  <line x1="155" y1="103" x2="325" y2="103"/>
+</g>
+
+<!-- === YAG'DU / UMUMIY YORUG'LIK === -->
+<ellipse cx="240" cy="510" rx="100" ry="20" fill="#ff4400" opacity="0.06" filter="url(#blur8)"/>
+<ellipse cx="438" cy="516" rx="35"  ry="16" fill="#ffaa00" opacity="0.12" filter="url(#blur8)"/>
+
+<!-- === MATN LABEL === -->
+<text x="240" y="608" text-anchor="middle" font-family="'Courier New',monospace"
+  font-size="13" font-weight="bold" fill="#1e3a52" letter-spacing="4">DOMNA PECHI</text>
+<text x="240" y="625" text-anchor="middle" font-family="'Courier New',monospace"
+  font-size="9" fill="#162a3e" letter-spacing="3">BLAST FURNACE · BF-2400X</text>
+</svg>
