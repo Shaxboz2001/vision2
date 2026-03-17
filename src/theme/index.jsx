@@ -24,7 +24,7 @@ const getTokens = (mode) =>
         miniStatBg: "rgba(0,0,0,0.2)",
       }
     : {
-        bg: "#f0f4f8",
+        bg: "#f0f4f8 !important",
         bgSecond: "#e8eef5",
         bgCard: "#ffffff",
         border: "#d1dce8",

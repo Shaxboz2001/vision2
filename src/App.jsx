@@ -33,7 +33,7 @@ export default function App() {
                 <Layout>
                   <Routes>
                     <Route path="/" element={<Dashboard />} />
-                    <Route path="/sexlar" element={<Sexlar />} />
+                    <Route path="/bo'linmalar" element={<Sexlar />} />
                     <Route path="/uchastkalar" element={<Uchastkalar />} />
                     <Route path="/uskunalar" element={<Uskunalar />} />
                     <Route path="/datchiklar" element={<Datchiklar />} />

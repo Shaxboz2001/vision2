@@ -44,7 +44,7 @@ const navItems = [
     badge: null,
   },
   {
-    path: "/sexlar",
+    path: "/bo'linmalar",
     label: "Bo'linmalar",
     icon: <FactoryIcon sx={{ fontSize: 18 }} />,
     badge: null,

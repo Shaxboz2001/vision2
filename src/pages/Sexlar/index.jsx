@@ -1255,7 +1255,7 @@ function SexCard({ s, selected, onClick }) {
       {/* SVG RASMLI YUQORI QISM */}
       <Box
         sx={{
-          height: 110,
+          height: 200,
           background: isDark
             ? `radial-gradient(ellipse at center, ${color}10 0%, transparent 70%)`
             : `radial-gradient(ellipse at center, ${color}08 0%, transparent 70%)`,
@@ -1280,9 +1280,31 @@ function SexCard({ s, selected, onClick }) {
             backgroundSize: "16px 16px",
           }}
         />
-        {Illustration && (
-          <Illustration color={color} pulse={s.holat === "faol"} />
+        {s.id === "SEX-07" ||
+        s.id === "SEX-02" ||
+        s.id === "SEX-04" ||
+        s.id === "SEX-01" ||
+        s.id === "SEX-03" ||
+        s.id === "SEX-06" ||
+        s.id === "SEX-08" ||
+        s.id === "SEX-05" ||
+        s.id === "SEX-09" ? (
+          <img
+            src={`/images/${s.id}.jpg`}
+            alt=""
+            style={{
+              objectFit: "cover",
+              filter: "brightness(0.8)",
+              objectPosition: "center top",
+            }}
+            width={"100%"}
+          />
+        ) : (
+          Illustration && (
+            <Illustration color={color} pulse={s.holat === "faol"} />
+          )
         )}
+
         {/* ID badge */}
         <Box
           sx={{
@@ -1296,7 +1318,7 @@ function SexCard({ s, selected, onClick }) {
             py: 0.2,
           }}
         >
-          <Typography
+          {/* <Typography
             sx={{
               fontFamily: "'Share Tech Mono',monospace",
               fontSize: "0.58rem",
@@ -1305,7 +1327,7 @@ function SexCard({ s, selected, onClick }) {
             }}
           >
             {s.id}
-          </Typography>
+          </Typography> */}
         </Box>
         {/* Holat dot */}
         <Box
@@ -1506,7 +1528,7 @@ export default function Sexlar() {
               color: "text.secondary",
             }}
           >
-            Jami {sexlar.length} sex ·{" "}
+            Jami {sexlar.length} bo'linma ·{" "}
             {sexlar.filter((s) => s.holat === "faol").length} faol ·{" "}
             {sexlar.filter((s) => s.holat === "xato").length} xato
           </Typography>
@@ -1609,7 +1631,7 @@ export default function Sexlar() {
                       >
                         {s.nom}
                       </Typography>
-                      <Typography
+                      {/* <Typography
                         sx={{
                           fontFamily: "'Share Tech Mono',monospace",
                           fontSize: "0.58rem",
@@ -1617,7 +1639,7 @@ export default function Sexlar() {
                         }}
                       >
                         {s.id}
-                      </Typography>
+                      </Typography> */}
                     </Box>
                   </Box>
                 </TableCell>

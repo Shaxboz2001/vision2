@@ -71,12 +71,17 @@ const CT = ({ active, payload, label }) => {
 };
 
 const samaradorlikData = [
-  { sex: "SEX-01", samaradorlik: 94, plan: 90 },
-  { sex: "SEX-02", samaradorlik: 82, plan: 85 },
-  { sex: "SEX-03", samaradorlik: 72, plan: 85 },
-  { sex: "SEX-04", samaradorlik: 88, plan: 88 },
-  { sex: "SEX-05", samaradorlik: 45, plan: 80 },
-  { sex: "SEX-06", samaradorlik: 0, plan: 0 },
+  { sex: "ЛПК", samaradorlik: 94, plan: 90 },
+  { sex: "ПТНП", samaradorlik: 82, plan: 85 },
+  { sex: "СПП", samaradorlik: 72, plan: 85 },
+  { sex: "ШПП", samaradorlik: 88, plan: 88 },
+  // {
+  //   sex: "Подразделение по переработке лома и отходов металла",
+  //   samaradorlik: 45,
+  //   plan: 80,
+  // },
+  { sex: "ЦПФ", samaradorlik: 60, plan: 80 },
+  { sex: "ЭСПЦ", samaradorlik: 60, plan: 80 },
 ];
 
 const energiyaData = Array.from({ length: 12 }, (_, i) => ({
@@ -230,21 +235,21 @@ export default function Analitika() {
                       />
                       <Bar
                         dataKey="choyan"
-                        name="Cho'yan"
+                        name="Armatura"
                         fill="#ff6b1a"
                         opacity={0.85}
                         radius={[2, 2, 0, 0]}
                       />
                       <Bar
                         dataKey="polat"
-                        name="Po'lat"
+                        name="List"
                         fill="#00d4ff"
                         opacity={0.85}
                         radius={[2, 2, 0, 0]}
                       />
                       <Bar
                         dataKey="prokat"
-                        name="Prokat"
+                        name="Zoldir Shar"
                         fill="#00ff9d"
                         opacity={0.85}
                         radius={[2, 2, 0, 0]}
@@ -582,21 +587,21 @@ export default function Analitika() {
                       }}
                     />
                     <Radar
-                      name="SEX-01 Domna"
+                      name="ЛПК Домна"
                       dataKey="SEX01"
                       stroke="#ff2d55"
                       fill="#ff2d55"
                       fillOpacity={0.15}
                     />
                     <Radar
-                      name="SEX-02 Konverter"
+                      name="ЭСПП Конвертер"
                       dataKey="SEX02"
                       stroke="#00d4ff"
                       fill="#00d4ff"
                       fillOpacity={0.15}
                     />
                     <Radar
-                      name="SEX-04 Prokat"
+                      name="СПП Прокат"
                       dataKey="SEX04"
                       stroke="#00ff9d"
                       fill="#00ff9d"

@@ -102,7 +102,7 @@ function DatchikCard({ d, isDark }) {
         />
       </Box>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography
+        {/* <Typography
           sx={{
             fontFamily: "'Share Tech Mono',monospace",
             fontSize: "0.55rem",
@@ -110,7 +110,7 @@ function DatchikCard({ d, isDark }) {
           }}
         >
           {d.sexId}
-        </Typography>
+        </Typography> */}
         <Typography
           sx={{
             fontFamily: "'Share Tech Mono',monospace",
@@ -280,7 +280,7 @@ export default function Datchiklar() {
                 fontSize: "0.7rem",
               }}
             >
-              SEX
+              BO'LINMA
             </InputLabel>
             <Select
               value={filter.sexId || ""}
@@ -305,7 +305,7 @@ export default function Datchiklar() {
                     fontSize: "0.75rem",
                   }}
                 >
-                  {s.id}
+                  {s.nom}
                 </MenuItem>
               ))}
             </Select>

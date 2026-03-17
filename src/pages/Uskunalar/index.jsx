@@ -19,10 +19,29 @@ import {
   useTheme,
   Chip,
   Badge,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  CircularProgress,
+  Collapse,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { getUskunalar, getSexlar } from "@/api";
+import { useEAFReport } from "@/hooks/useProduction";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip as RTooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import { StatusChip, SectionHeader, CardSkeleton } from "@/components/common";
 import { setUskunaFilter, setUskunaSelected } from "@/store";
 import { DataGrid } from "@mui/x-data-grid";
@@ -11726,8 +11745,685 @@ function UskunaDiagram({ u, isDark }) {
     Qadoqlash: <QadoqlashDiagram u={u} isDark={isDark} />,
   };
 
-  return map[u.tur] || <DefaultDiagram u={u} isDark={isDark} />;
+  return map[u.tur] || <QadoqlashDiagram u={u} isDark={isDark} />;
 }
+// ══════════════════════════════════════════════════════════════════════
+//  USKUNA DETAIL DRAWER
+// ══════════════════════════════════════════════════════════════════════
+// ─── EAF API key mapper ─────────────────────────────────────────────
+const UCH_API = {
+  "UCH-07A": "eaf",
+  "UCH-07B": "lrf",
+  "UCH-07C": "tsc",
+};
+
+// ─── Yordamchi formatlovchilar ───────────────────────────────────────
+const fmtN = (v, d = 1) =>
+  v != null && !isNaN(v) ? Number(v).toFixed(d) : "—";
+const fmtT = (s) =>
+  s
+    ? new Date(s).toLocaleString("uz-UZ", {
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "—";
+const fmtDur = (s, e) => {
+  if (!s || !e) return "—";
+  const m = Math.round((new Date(e) - new Date(s)) / 60000);
+  return `${Math.floor(m / 60)}s ${m % 60}d`;
+};
+
+// ─── EAF Statistika Tab ─────────────────────────────────────────────
+function EAFStatsTab({ uskuna, c, isDark }) {
+  const today = new Date().toISOString().split("T")[0];
+  const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
+  const {
+    data: heats,
+    isLoading,
+    isError,
+    refetch,
+    isFetching,
+  } = useEAFReport({ startDate: yesterday, endDate: today });
+
+  const lastHeat = heats[heats.length - 1];
+
+  // Harorat grafigi uchun data
+  const tempData = (lastHeat?.temperatures || []).map((t, i) => ({
+    i: i + 1,
+    temp: t.temperature,
+    o2: t.o2 || 0,
+    t: fmtT(t.dateTime),
+  }));
+
+  // Kun statistikasi
+  const avgTapping = heats.length
+    ? Math.round(
+        heats.reduce((s, h) => s + (h.tappingWeight || 0), 0) / heats.length,
+      )
+    : 0;
+  const avgEnergy = heats.length
+    ? Math.round(
+        heats.reduce((s, h) => s + (h.electricalEnergy || 0), 0) / heats.length,
+      )
+    : 0;
+  const totalScrap = heats.reduce((s, h) => s + (h.totalScrap || 0), 0);
+  const totalHBI = heats.reduce((s, h) => s + (h.totalHBI || 0), 0);
+
+  if (isLoading)
+    return (
+      <Box sx={{ py: 6, display: "flex", justifyContent: "center" }}>
+        <CircularProgress size={28} sx={{ color: c }} />
+      </Box>
+    );
+
+  if (isError)
+    return (
+      <Box sx={{ py: 4, textAlign: "center" }}>
+        <Typography
+          sx={{
+            fontFamily: "'Share Tech Mono',monospace",
+            fontSize: "0.65rem",
+            color: "#ff2d55",
+          }}
+        >
+          API xato — server ishlayaptimi?
+        </Typography>
+      </Box>
+    );
+
+  return (
+    <Box sx={{ p: 2 }}>
+      {/* ── Sarlavha + yangilash ── */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          mb: 2,
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Box
+            sx={{
+              width: 8,
+              height: 8,
+              borderRadius: "50%",
+              background: c,
+              boxShadow: `0 0 8px ${c}`,
+            }}
+          />
+          <Typography
+            sx={{
+              fontFamily: "'Share Tech Mono',monospace",
+              fontSize: "0.62rem",
+              color: c,
+              letterSpacing: "0.1em",
+            }}
+          >
+            EAF BUGUNGI STATISTIKA
+          </Typography>
+          <Chip
+            label={`${heats.length} heat`}
+            size="small"
+            sx={{
+              height: 16,
+              fontSize: "0.5rem",
+              bgcolor: `${c}18`,
+              color: c,
+              fontFamily: "monospace",
+            }}
+          />
+        </Box>
+        <RefreshIcon
+          onClick={refetch}
+          sx={{
+            fontSize: 16,
+            color: isFetching ? c : "#6b7280",
+            cursor: "pointer",
+            animation: isFetching ? "spin 1s linear infinite" : "none",
+            "@keyframes spin": { "100%": { transform: "rotate(360deg)" } },
+          }}
+        />
+      </Box>
+
+      {/* ── Kun umumiy statistikasi ── */}
+      <Grid container spacing={1} sx={{ mb: 2 }}>
+        {[
+          { l: "HEAT SONI", v: heats.length, c: "#00d4ff", icon: "🔥" },
+          {
+            l: "O'RT CHIQARISH",
+            v: `${fmtN(avgTapping / 1000, 1)} t`,
+            c: "#00e676",
+            icon: "⚖️",
+          },
+          {
+            l: "O'RT ELEKTR",
+            v: `${fmtN(avgEnergy / 1000, 1)} MWh`,
+            c: "#ffd60a",
+            icon: "⚡",
+          },
+          {
+            l: "JAMI SHLAM",
+            v: `${fmtN(totalScrap / 1000, 1)} t`,
+            c: "#ff6b1a",
+            icon: "🏗️",
+          },
+          {
+            l: "JAMI HBI",
+            v: `${fmtN(totalHBI / 1000, 1)} t`,
+            c: "#a78bfa",
+            icon: "🔩",
+          },
+          { l: "SMENA", v: lastHeat?.shift || "—", c: "#6b7280", icon: "👷" },
+        ].map((s) => (
+          <Grid item xs={4} key={s.l}>
+            <Box
+              sx={{
+                p: 1,
+                background: `${s.c}10`,
+                border: `1px solid ${s.c}25`,
+                borderRadius: 1,
+                textAlign: "center",
+              }}
+            >
+              <Typography sx={{ fontSize: "0.75rem", mb: 0.2 }}>
+                {s.icon}
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: "'Orbitron',monospace",
+                  fontSize: "0.75rem",
+                  fontWeight: 700,
+                  color: s.c,
+                }}
+              >
+                {s.v}
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: "'Share Tech Mono',monospace",
+                  fontSize: "0.47rem",
+                  color: "#6b7280",
+                  letterSpacing: "0.06em",
+                }}
+              >
+                {s.l}
+              </Typography>
+            </Box>
+          </Grid>
+        ))}
+      </Grid>
+
+      {/* ── Oxirgi heat ── */}
+      {lastHeat && (
+        <Box
+          sx={{
+            mb: 2,
+            p: 1.5,
+            background: `${c}08`,
+            border: `1px solid ${c}25`,
+            borderRadius: 1,
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+            <Typography
+              sx={{
+                fontFamily: "'Orbitron',monospace",
+                fontSize: "0.65rem",
+                color: c,
+                fontWeight: 700,
+              }}
+            >
+              OXIRGI HEAT #{lastHeat.heatId}
+            </Typography>
+            <Chip
+              label={lastHeat.steelGradeName}
+              size="small"
+              sx={{
+                height: 16,
+                fontSize: "0.5rem",
+                bgcolor: `${c}18`,
+                color: c,
+                fontFamily: "monospace",
+              }}
+            />
+            <Typography
+              sx={{
+                fontFamily: "'Share Tech Mono',monospace",
+                fontSize: "0.55rem",
+                color: "#6b7280",
+                ml: "auto",
+              }}
+            >
+              {fmtT(lastHeat.startTime)} → {fmtT(lastHeat.stopTime)}
+            </Typography>
+          </Box>
+          <Grid container spacing={0.8}>
+            {[
+              {
+                l: "Chiqarish",
+                v: `${fmtN((lastHeat.tappingWeight || 0) / 1000, 2)} t`,
+                c: "#00e676",
+              },
+              {
+                l: "Elektr",
+                v: `${fmtN(lastHeat.electricalEnergy / 1000, 1)} MWh`,
+                c: "#ffd60a",
+              },
+              {
+                l: "O₂",
+                v: `${fmtN(lastHeat.injectedO2, 0)} m³`,
+                c: "#00d4ff",
+              },
+              {
+                l: "Uglerod",
+                v: `${fmtN(lastHeat.injectedCarbon, 0)} kg`,
+                c: "#ff9500",
+              },
+              {
+                l: "Yoqilg'i",
+                v: `${fmtN(lastHeat.injectedFuel, 0)} kg`,
+                c: "#a78bfa",
+              },
+              {
+                l: "Quvvat vaqt",
+                v: `${Math.floor((lastHeat.powerOnTime || 0) / 60)}d`,
+                c: "#ff6b1a",
+              },
+              {
+                l: "O'rt quvvat",
+                v: `${fmtN((lastHeat.averagePower || 0) / 1000, 0)} MW`,
+                c: "#ffd60a",
+              },
+              {
+                l: "Shlam",
+                v: `${fmtN((lastHeat.totalScrap || 0) / 1000, 1)} t`,
+                c: "#6b7280",
+              },
+              {
+                l: "HBI",
+                v: `${fmtN((lastHeat.totalHBI || 0) / 1000, 1)} t`,
+                c: "#6b7280",
+              },
+            ].map((s) => (
+              <Grid item xs={4} key={s.l}>
+                <Box
+                  sx={{
+                    px: 0.8,
+                    py: 0.5,
+                    background: isDark ? "rgba(0,0,0,0.2)" : "rgba(0,0,0,0.03)",
+                    borderRadius: 0.5,
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: "'Share Tech Mono',monospace",
+                      fontSize: "0.48rem",
+                      color: "#6b7280",
+                    }}
+                  >
+                    {s.l}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontFamily: "'Share Tech Mono',monospace",
+                      fontSize: "0.65rem",
+                      fontWeight: 700,
+                      color: s.c,
+                    }}
+                  >
+                    {s.v}
+                  </Typography>
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      )}
+
+      {/* ── Harorat grafigi ── */}
+      {tempData.length > 0 && (
+        <Box sx={{ mb: 2 }}>
+          <Typography
+            sx={{
+              fontFamily: "'Share Tech Mono',monospace",
+              fontSize: "0.6rem",
+              color: "#6b7280",
+              mb: 1,
+              letterSpacing: "0.08em",
+            }}
+          >
+            OXIRGI HEAT — HARORAT GRAFIGI (°C)
+          </Typography>
+          <ResponsiveContainer width="100%" height={150}>
+            <LineChart data={tempData}>
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke={isDark ? "#1a2235" : "#e5e7eb"}
+              />
+              <XAxis dataKey="i" tick={{ fontSize: 9, fill: "#6b7280" }} />
+              <YAxis
+                domain={["auto", "auto"]}
+                tick={{ fontSize: 9, fill: "#6b7280" }}
+              />
+              <RTooltip
+                contentStyle={{
+                  background: "#060810",
+                  border: `1px solid ${c}40`,
+                  fontSize: 11,
+                  fontFamily: "monospace",
+                }}
+                formatter={(v, n) => [v, n]}
+                labelFormatter={(_, p) => p?.[0]?.payload?.t || ""}
+              />
+              <Legend wrapperStyle={{ fontSize: 10 }} />
+              <Line
+                type="monotone"
+                dataKey="temp"
+                stroke={c}
+                dot={{ r: 3 }}
+                name="Harorat °C"
+                strokeWidth={2}
+              />
+              <Line
+                type="monotone"
+                dataKey="o2"
+                stroke="#ff6b1a"
+                dot={{ r: 2 }}
+                name="O₂"
+                strokeWidth={1.5}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </Box>
+      )}
+
+      {/* ── Kimyoviy tarkib ── */}
+      {lastHeat?.steelAnalysis?.length > 0 &&
+        (() => {
+          const analysis =
+            lastHeat.steelAnalysis[lastHeat.steelAnalysis.length - 1];
+          return (
+            <Box sx={{ mb: 2 }}>
+              <Typography
+                sx={{
+                  fontFamily: "'Share Tech Mono',monospace",
+                  fontSize: "0.6rem",
+                  color: "#6b7280",
+                  mb: 1,
+                  letterSpacing: "0.08em",
+                }}
+              >
+                KIMYOVIY TARKIB — {analysis.sampleId} ·{" "}
+                {fmtT(analysis.sampleTime)}
+              </Typography>
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                {analysis.chemicalAnalysis?.map((ca) => (
+                  <Box
+                    key={ca.code}
+                    sx={{
+                      px: 0.8,
+                      py: 0.4,
+                      background: `${c}12`,
+                      border: `1px solid ${c}28`,
+                      borderRadius: 0.5,
+                      textAlign: "center",
+                      minWidth: 40,
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontFamily: "'Share Tech Mono',monospace",
+                        fontSize: "0.48rem",
+                        color: "#6b7280",
+                      }}
+                    >
+                      {ca.code}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontFamily: "'Orbitron',monospace",
+                        fontSize: "0.62rem",
+                        fontWeight: 700,
+                        color: c,
+                      }}
+                    >
+                      {Number(ca.value).toFixed(ca.value < 0.01 ? 4 : 3)}
+                    </Typography>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          );
+        })()}
+
+      {/* ── Kechikishlar ── */}
+      {lastHeat?.delays?.length > 0 && (
+        <Box sx={{ mb: 2 }}>
+          <Typography
+            sx={{
+              fontFamily: "'Share Tech Mono',monospace",
+              fontSize: "0.6rem",
+              color: "#ffd60a",
+              mb: 1,
+              letterSpacing: "0.08em",
+            }}
+          >
+            KECHIKISHLAR ({lastHeat.delays.length} ta)
+          </Typography>
+          {lastHeat.delays.map((d, i) => (
+            <Box
+              key={i}
+              sx={{
+                display: "flex",
+                gap: 1,
+                py: 0.5,
+                borderBottom: "1px solid",
+                borderColor: "divider",
+                "&:last-child": { border: 0 },
+              }}
+            >
+              <Box
+                sx={{
+                  width: 3,
+                  background: "#ffd60a",
+                  borderRadius: 1,
+                  flexShrink: 0,
+                }}
+              />
+              <Typography
+                sx={{
+                  fontFamily: "'Share Tech Mono',monospace",
+                  fontSize: "0.58rem",
+                  color: "#c8d8e8",
+                  flex: 1,
+                }}
+              >
+                {d.delayOperation}
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: "'Share Tech Mono',monospace",
+                  fontSize: "0.55rem",
+                  color: "#6b7280",
+                  flexShrink: 0,
+                }}
+              >
+                {fmtDur(d.startTime, d.stopTime)}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
+      )}
+
+      {/* ── Barcha heats ro'yxati ── */}
+      <Typography
+        sx={{
+          fontFamily: "'Share Tech Mono',monospace",
+          fontSize: "0.6rem",
+          color: "#6b7280",
+          mb: 1,
+          letterSpacing: "0.08em",
+        }}
+      >
+        BUGUNGI BARCHA HEATS
+      </Typography>
+      <Box sx={{ overflow: "auto", maxHeight: 200 }}>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              {[
+                "Heat",
+                "Po'lat",
+                "Boshlanish",
+                "Davomiylik",
+                "Chiqarish",
+                "Elektr",
+              ].map((h) => (
+                <TableCell
+                  key={h}
+                  sx={{
+                    py: 0.5,
+                    background: isDark ? "#04060c" : "#f8fafc",
+                    borderBottom: `1px solid ${c}25`,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: "'Share Tech Mono',monospace",
+                      fontSize: "0.5rem",
+                      color: "#6b7280",
+                    }}
+                  >
+                    {h}
+                  </Typography>
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {heats.map((h) => (
+              <TableRow
+                key={h.heatId}
+                sx={{ "&:hover": { background: `${c}08` } }}
+              >
+                <TableCell
+                  sx={{
+                    py: 0.5,
+                    borderBottom: "1px solid",
+                    borderColor: "divider",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: "'Share Tech Mono',monospace",
+                      fontSize: "0.6rem",
+                      color: c,
+                      fontWeight: 700,
+                    }}
+                  >
+                    #{h.heatId}
+                  </Typography>
+                </TableCell>
+                <TableCell
+                  sx={{
+                    py: 0.5,
+                    borderBottom: "1px solid",
+                    borderColor: "divider",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: "'Share Tech Mono',monospace",
+                      fontSize: "0.58rem",
+                      color: "#c8d8e8",
+                    }}
+                  >
+                    {h.steelGradeName}
+                  </Typography>
+                </TableCell>
+                <TableCell
+                  sx={{
+                    py: 0.5,
+                    borderBottom: "1px solid",
+                    borderColor: "divider",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: "'Share Tech Mono',monospace",
+                      fontSize: "0.55rem",
+                      color: "#9ca3af",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {fmtT(h.startTime)}
+                  </Typography>
+                </TableCell>
+                <TableCell
+                  sx={{
+                    py: 0.5,
+                    borderBottom: "1px solid",
+                    borderColor: "divider",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: "'Share Tech Mono',monospace",
+                      fontSize: "0.55rem",
+                      color: "#9ca3af",
+                    }}
+                  >
+                    {fmtDur(h.startTime, h.stopTime)}
+                  </Typography>
+                </TableCell>
+                <TableCell
+                  sx={{
+                    py: 0.5,
+                    borderBottom: "1px solid",
+                    borderColor: "divider",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: "'Share Tech Mono',monospace",
+                      fontSize: "0.6rem",
+                      color: "#00e676",
+                      fontWeight: 700,
+                    }}
+                  >
+                    {fmtN((h.tappingWeight || 0) / 1000, 2)} t
+                  </Typography>
+                </TableCell>
+                <TableCell
+                  sx={{
+                    py: 0.5,
+                    borderBottom: "1px solid",
+                    borderColor: "divider",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: "'Share Tech Mono',monospace",
+                      fontSize: "0.58rem",
+                      color: "#ffd60a",
+                    }}
+                  >
+                    {fmtN((h.electricalEnergy || 0) / 1000, 1)} MWh
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Box>
+    </Box>
+  );
+}
+
 // ══════════════════════════════════════════════════════════════════════
 //  USKUNA DETAIL DRAWER
 // ══════════════════════════════════════════════════════════════════════
@@ -11744,10 +12440,27 @@ function UskunaDetail({ uskuna, onClose }) {
         ? "#ffd60a"
         : "#ff2d55";
 
+  // SEX-07 uchunga EAF tab qo'shiladi
+  const isSex07 = uskuna.sexId === "SEX-07";
+
+  const tabs = [
+    "🔧 Interaktiv Sxema",
+    "📊 Ko'rsatkichlar",
+    ...(isSex07 ? ["🔥 EAF Statistika"] : []),
+    "📋 Tarix",
+    "Kamera",
+  ];
+  // Tab indekslari
+  const TAB_SXEMA = 0;
+  const TAB_KORS = 1;
+  const TAB_EAF = isSex07 ? 2 : -1;
+  const TAB_TARIX = isSex07 ? 3 : 2;
+  const TAB_KAMERA = isSex07 ? 4 : 3;
+
   return (
     <Box
       sx={{
-        width: 540,
+        width: 740,
         height: "100%",
         display: "flex",
         flexDirection: "column",
@@ -11779,7 +12492,7 @@ function UskunaDetail({ uskuna, onClose }) {
                   letterSpacing: "0.15em",
                 }}
               >
-                {uskuna.id}
+                {uskuna.nom}
               </Typography>
               <Typography
                 sx={{
@@ -11791,6 +12504,20 @@ function UskunaDetail({ uskuna, onClose }) {
               >
                 {uskuna.model}
               </Typography>
+              {isSex07 && (
+                <Chip
+                  label="SEX-07 · EAF"
+                  size="small"
+                  sx={{
+                    height: 16,
+                    fontSize: "0.48rem",
+                    bgcolor: `${c}20`,
+                    color: c,
+                    fontFamily: "monospace",
+                    ml: 0.5,
+                  }}
+                />
+              )}
             </Box>
             <Typography
               sx={{
@@ -11825,15 +12552,15 @@ function UskunaDetail({ uskuna, onClose }) {
                   "& .MuiChip-label": { px: 0.8 },
                 }}
               />
-              <Typography
+              {/* <Typography
                 sx={{
                   fontFamily: "'Share Tech Mono',monospace",
                   fontSize: "0.6rem",
                   color: "text.secondary",
                 }}
               >
-                {uskuna.sexId} · {uskuna.uchastkId}
-              </Typography>
+                {uskuna.se} · {uskuna.uchastkId}
+              </Typography> */}
             </Box>
           </Box>
           <IconButton
@@ -11857,25 +12584,23 @@ function UskunaDetail({ uskuna, onClose }) {
           "& .MuiTabs-indicator": { bgcolor: c },
         }}
       >
-        {["🔧 Interaktiv Sxema", "📊 Ko'rsatkichlar", "📋 Tarix"].map(
-          (t, i) => (
-            <Tab
-              key={i}
-              label={t}
-              sx={{
-                fontSize: "0.65rem",
-                minHeight: 38,
-                fontFamily: "'Share Tech Mono',monospace",
-                letterSpacing: "0.06em",
-              }}
-            />
-          ),
-        )}
+        {tabs.map((t, i) => (
+          <Tab
+            key={i}
+            label={t}
+            sx={{
+              fontSize: "0.6rem",
+              minHeight: 38,
+              fontFamily: "'Share Tech Mono',monospace",
+              letterSpacing: "0.06em",
+            }}
+          />
+        ))}
       </Tabs>
 
       <Box sx={{ flex: 1, overflow: "auto" }}>
         {/* TAB 0 — INTERAKTIV SXEMA */}
-        {tab === 0 && (
+        {tab === TAB_SXEMA && (
           <Box sx={{ p: 2 }}>
             <Box
               sx={{
@@ -11907,7 +12632,6 @@ function UskunaDetail({ uskuna, onClose }) {
                 chiqadi
               </Typography>
             </Box>
-            {/* SVG RASM MAYDONI */}
             <Box
               sx={{
                 background: isDark ? "rgba(4,6,14,0.95)" : "#f4f7fc",
@@ -11916,7 +12640,6 @@ function UskunaDetail({ uskuna, onClose }) {
                 position: "relative",
                 overflow: "hidden",
                 minHeight: 340,
-                // corner brackets
                 "&::before": {
                   content: '""',
                   position: "absolute",
@@ -11940,7 +12663,6 @@ function UskunaDetail({ uskuna, onClose }) {
               }}
             >
               <UskunaDiagram u={uskuna} isDark={isDark} />
-              {/* bottom corners */}
               <Box
                 sx={{
                   position: "absolute",
@@ -11963,7 +12685,6 @@ function UskunaDetail({ uskuna, onClose }) {
                   borderRight: `2px solid ${c}50`,
                 }}
               />
-              {/* watermark */}
               <Typography
                 sx={{
                   position: "absolute",
@@ -11982,9 +12703,8 @@ function UskunaDetail({ uskuna, onClose }) {
         )}
 
         {/* TAB 1 — KO'RSATKICHLAR */}
-        {tab === 1 && (
+        {tab === TAB_KORS && (
           <Box sx={{ p: 2 }}>
-            {/* samaradorlik */}
             <Box
               sx={{
                 mb: 2,
@@ -12152,8 +12872,13 @@ function UskunaDetail({ uskuna, onClose }) {
           </Box>
         )}
 
-        {/* TAB 2 — TARIX */}
-        {tab === 2 && (
+        {/* TAB 2 — EAF STATISTIKA (faqat SEX-07) */}
+        {isSex07 && tab === TAB_EAF && (
+          <EAFStatsTab uskuna={uskuna} c={c} isDark={isDark} />
+        )}
+
+        {/* TARIX TAB */}
+        {tab === TAB_TARIX && (
           <Box sx={{ p: 2 }}>
             <Typography
               sx={{
@@ -12279,9 +13004,12 @@ function UskunaDetail({ uskuna, onClose }) {
             ))}
           </Box>
         )}
-      </Box>
-      <Box sx={{ marginTop: "20px" }}>
-        <CameraFeed cam={{ channel: 2 }} />
+        {/* kamera */}
+        {tab === TAB_KAMERA && (
+          <Box sx={{ marginTop: "20px" }}>
+            <CameraFeed cam={{ channel: 2 }} />
+          </Box>
+        )}
       </Box>
     </Box>
   );
@@ -12359,7 +13087,7 @@ function UskunaCard({ u, onClick }) {
           }}
         />
         {/* badges */}
-        <Box
+        {/* <Box
           sx={{
             position: "absolute",
             top: 6,
@@ -12380,7 +13108,7 @@ function UskunaCard({ u, onClick }) {
           >
             {u.id}
           </Typography>
-        </Box>
+        </Box> */}
         <Box sx={{ position: "absolute", top: 6, right: 6 }}>
           <StatusChip holat={u.holat} />
         </Box>
@@ -12413,7 +13141,7 @@ function UskunaCard({ u, onClick }) {
               "& .MuiChip-label": { px: 0.7 },
             }}
           />
-          <Typography
+          {/* <Typography
             sx={{
               fontFamily: "'Share Tech Mono',monospace",
               fontSize: "0.58rem",
@@ -12422,7 +13150,7 @@ function UskunaCard({ u, onClick }) {
             }}
           >
             {u.sexId}
-          </Typography>
+          </Typography> */}
         </Box>
         <Grid container spacing={0.5} sx={{ mb: 0.9 }}>
           {[
@@ -12579,22 +13307,22 @@ export default function Uskunalar() {
         />
       ),
     },
-    {
-      field: "sexId",
-      headerName: "BO'LINMA",
-      width: 80,
-      renderCell: (p) => (
-        <Typography
-          sx={{
-            fontFamily: "'Share Tech Mono',monospace",
-            fontSize: "0.68rem",
-            color: "secondary.main",
-          }}
-        >
-          {p.value}
-        </Typography>
-      ),
-    },
+    // {
+    //   field: "sexId",
+    //   headerName: "BO'LINMA",
+    //   width: 80,
+    //   renderCell: (p) => (
+    //     <Typography
+    //       sx={{
+    //         fontFamily: "'Share Tech Mono',monospace",
+    //         fontSize: "0.68rem",
+    //         color: "secondary.main",
+    //       }}
+    //     >
+    //       {p.value}
+    //     </Typography>
+    //   ),
+    // },
     {
       field: "holat",
       headerName: "HOLAT",
@@ -12718,7 +13446,7 @@ export default function Uskunalar() {
               <MenuItem value="">Barchasi</MenuItem>
               {sx.map((s) => (
                 <MenuItem key={s.id} value={s.id}>
-                  {s.id}
+                  {s.nom}
                 </MenuItem>
               ))}
             </Select>

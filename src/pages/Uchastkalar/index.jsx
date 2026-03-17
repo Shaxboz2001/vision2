@@ -677,43 +677,13 @@ export default function Uchastkalar() {
 
   const columns = [
     {
-      field: "id",
-      headerName: "ID",
-      width: 100,
-      renderCell: (p) => (
-        <Typography
-          sx={{
-            fontFamily: "'Share Tech Mono',monospace",
-            fontSize: "0.7rem",
-            color: "secondary.main",
-          }}
-        >
-          {p.value}
-        </Typography>
-      ),
-    },
-    {
       field: "nom",
-      headerName: "NOMI",
+      headerName: "BO'LINMA NOMI",
       flex: 1,
+      headerAlign: "left",
+      align: "left",
       renderCell: (p) => (
-        <Typography sx={{ fontWeight: 600, fontSize: "0.85rem" }}>
-          {p.value}
-        </Typography>
-      ),
-    },
-    {
-      field: "sexId",
-      headerName: "BO'LINMA",
-      width: 90,
-      renderCell: (p) => (
-        <Typography
-          sx={{
-            fontFamily: "'Share Tech Mono',monospace",
-            fontSize: "0.7rem",
-            color: "primary.main",
-          }}
-        >
+        <Typography sx={{ fontWeight: 600, fontSize: "0.85rem", pl: 2 }}>
           {p.value}
         </Typography>
       ),
@@ -722,12 +692,16 @@ export default function Uchastkalar() {
       field: "holat",
       headerName: "HOLAT",
       width: 130,
+      headerAlign: "center",
+      align: "center",
       renderCell: (p) => <StatusChip holat={p.value} />,
     },
     {
       field: "uskunalar",
       headerName: "USKUNALAR",
       width: 100,
+      headerAlign: "center",
+      align: "center",
       renderCell: (p) => (
         <Typography
           sx={{
@@ -743,6 +717,8 @@ export default function Uchastkalar() {
       field: "ishchilar",
       headerName: "ISHCHILAR",
       width: 100,
+      headerAlign: "center",
+      align: "center",
       renderCell: (p) => (
         <Typography
           sx={{
@@ -759,6 +735,8 @@ export default function Uchastkalar() {
       field: "harorat",
       headerName: "HARORAT",
       width: 110,
+      headerAlign: "center",
+      align: "center",
       renderCell: (p) => (
         <Typography
           sx={{
@@ -780,17 +758,27 @@ export default function Uchastkalar() {
       field: "samaradorlik",
       headerName: "SAMARADORLIK",
       width: 160,
+      headerAlign: "center",
+      align: "center",
       renderCell: (p) => (
         <Box
-          sx={{ display: "flex", alignItems: "center", gap: 1, width: "100%" }}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            width: "100%",
+            justifyContent: "center",
+          }}
         >
           <LinearProgress
             variant="determinate"
             value={p.value}
             sx={{
               flex: 1,
+              height: 6,
+              borderRadius: 5,
               "& .MuiLinearProgress-bar": {
-                background: p.value > 80 ? "success.main" : "#ffd60a",
+                backgroundColor: p.value > 80 ? "success.main" : "#ffd60a",
               },
             }}
           />
@@ -799,6 +787,7 @@ export default function Uchastkalar() {
               fontFamily: "'Share Tech Mono',monospace",
               fontSize: "0.65rem",
               minWidth: 34,
+              textAlign: "right",
             }}
           >
             {p.value}%
@@ -859,7 +848,7 @@ export default function Uchastkalar() {
             <MenuItem value="">Barchasi</MenuItem>
             {sx.map((s) => (
               <MenuItem key={s.id} value={s.id}>
-                {s.id} — {s.nom}
+                {s.nom}
               </MenuItem>
             ))}
           </Select>
@@ -1027,7 +1016,39 @@ export default function Uchastkalar() {
                 rowsPerPageOptions={[12, 24]}
                 disableSelectionOnClick
                 onRowClick={(p) => handleOpen(p.row)}
-                sx={{ border: "none", cursor: "pointer" }}
+                // sx={{ border: "none", cursor: "pointer" }}
+                sx={{
+                  border: "none",
+
+                  "& .MuiDataGrid-columnHeaders": {
+                    backgroundColor: "#0b1220",
+                    borderBottom: "1px solid rgba(255,255,255,0.1)",
+                  },
+
+                  "& .MuiDataGrid-columnHeader": {
+                    fontSize: "0.7rem",
+                    letterSpacing: "1px",
+                  },
+
+                  "& .MuiDataGrid-cell": {
+                    borderBottom: "1px solid rgba(255,255,255,0.05)",
+                    display: "flex",
+                    alignItems: "center",
+                  },
+
+                  "& .MuiDataGrid-row": {
+                    "&:hover": {
+                      backgroundColor: "rgba(0,255,200,0.04)",
+                    },
+                  },
+
+                  "& .MuiDataGrid-cellContent": {
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  },
+                }}
               />
             )}
           </Box>

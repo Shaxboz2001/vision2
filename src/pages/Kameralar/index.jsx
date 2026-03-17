@@ -536,7 +536,7 @@ export default function Kameralar() {
                     color: "#00d4ff",
                   }}
                 >
-                  {fullscreen.id} — {fullscreen.nom}
+                  {fullscreen.nom}
                 </Typography>
                 <Typography
                   sx={{
