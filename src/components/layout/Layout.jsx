@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
@@ -16,6 +16,8 @@ import {
   Divider,
   Tooltip,
   Avatar,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -35,6 +37,7 @@ import { useThemeMode } from "@/theme";
 import { LiveBadge } from "@/components/common";
 
 const DRAWER_WIDTH = 225;
+const APPBAR_HEIGHT = 52;
 
 const navItems = [
   {
@@ -92,17 +95,20 @@ const navItems = [
 
 function Clock() {
   const [t, setT] = useState(new Date());
-  useState(() => {
+
+  useEffect(() => {
     const id = setInterval(() => setT(new Date()), 1000);
     return () => clearInterval(id);
-  });
+  }, []);
+
   return (
     <Typography
       sx={{
-        fontFamily: "'Share Tech Mono',monospace",
+        fontFamily: "'Share Tech Mono', monospace",
         fontSize: "0.75rem",
         color: "primary.main",
         letterSpacing: "0.1em",
+        whiteSpace: "nowrap",
       }}
     >
       {t.toLocaleTimeString("uz-UZ")}
@@ -115,7 +121,11 @@ export function Layout({ children }) {
   const open = useSelector((s) => s.ui.sidebarOpen);
   const navigate = useNavigate();
   const location = useLocation();
-  const { mode, toggleMode, isDark } = useThemeMode();
+  const { toggleMode, isDark } = useThemeMode();
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
 
   const miniStats = [
     { l: "Temp Maks", v: "1480°C", c: "#ff2d55" },
@@ -124,22 +134,283 @@ export function Layout({ children }) {
     { l: "Smena", v: "II-SMENA", c: "primary.main" },
   ];
 
-  return (
-    <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
-      {/* ── APPBAR ── */}
-      <AppBar
-        position="fixed"
+  const handleToggleSidebar = () => {
+    dispatch(toggleSidebar());
+  };
+
+  const handleNavigate = (path) => {
+    navigate(path);
+    if (isMobile && open) {
+      dispatch(toggleSidebar());
+    }
+  };
+
+  const drawerContent = (
+    <>
+      <Box sx={{ p: 1.5, borderBottom: "1px solid", borderColor: "divider" }}>
+        {miniStats.map((s) => (
+          <Box
+            key={s.l}
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              py: 0.6,
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "0.65rem",
+                color: "text.secondary",
+                fontFamily: "'Share Tech Mono', monospace",
+              }}
+            >
+              {s.l}
+            </Typography>
+            <Typography
+              sx={{
+                fontFamily: "'Share Tech Mono', monospace",
+                fontSize: "0.72rem",
+                color: s.c,
+              }}
+            >
+              {s.v}
+            </Typography>
+          </Box>
+        ))}
+      </Box>
+
+      <List dense disablePadding sx={{ flex: 1 }}>
+        <Box sx={{ px: 2, pt: 1.5, pb: 0.5 }}>
+          <Typography
+            sx={{
+              fontFamily: "'Share Tech Mono', monospace",
+              fontSize: "0.55rem",
+              letterSpacing: "0.2em",
+              color: "text.disabled",
+              textTransform: "uppercase",
+            }}
+          >
+            Asosiy
+          </Typography>
+        </Box>
+
+        {navItems.slice(0, 6).map((item) => (
+          <ListItemButton
+            key={item.path}
+            selected={location.pathname === item.path}
+            onClick={() => handleNavigate(item.path)}
+            sx={{ py: 0.8, px: 2, minHeight: 38 }}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 32,
+                color:
+                  location.pathname === item.path
+                    ? "primary.main"
+                    : "text.secondary",
+              }}
+            >
+              {item.badge ? (
+                <Badge
+                  badgeContent={item.badge}
+                  color={item.badgeColor || "error"}
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      fontSize: "0.5rem",
+                      minWidth: 14,
+                      height: 14,
+                    },
+                  }}
+                >
+                  {item.icon}
+                </Badge>
+              ) : (
+                item.icon
+              )}
+            </ListItemIcon>
+            <ListItemText
+              primary={item.label}
+              primaryTypographyProps={{
+                fontSize: "0.82rem",
+                fontWeight: location.pathname === item.path ? 600 : 400,
+                letterSpacing: "0.03em",
+              }}
+            />
+          </ListItemButton>
+        ))}
+
+        <Divider sx={{ my: 1 }} />
+
+        <Box sx={{ px: 2, pb: 0.5 }}>
+          <Typography
+            sx={{
+              fontFamily: "'Share Tech Mono', monospace",
+              fontSize: "0.55rem",
+              letterSpacing: "0.2em",
+              color: "text.disabled",
+              textTransform: "uppercase",
+            }}
+          >
+            Boshqaruv
+          </Typography>
+        </Box>
+
+        {navItems.slice(6).map((item) => (
+          <ListItemButton
+            key={item.path}
+            selected={location.pathname === item.path}
+            onClick={() => handleNavigate(item.path)}
+            sx={{ py: 0.8, px: 2, minHeight: 38 }}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 32,
+                color:
+                  location.pathname === item.path
+                    ? "primary.main"
+                    : "text.secondary",
+              }}
+            >
+              {item.badge ? (
+                <Badge
+                  badgeContent={item.badge}
+                  color={item.badgeColor || "error"}
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      fontSize: "0.5rem",
+                      minWidth: 14,
+                      height: 14,
+                    },
+                  }}
+                >
+                  {item.icon}
+                </Badge>
+              ) : (
+                item.icon
+              )}
+            </ListItemIcon>
+            <ListItemText
+              primary={item.label}
+              primaryTypographyProps={{
+                fontSize: "0.82rem",
+                fontWeight: location.pathname === item.path ? 600 : 400,
+              }}
+            />
+          </ListItemButton>
+        ))}
+
+        <Divider sx={{ my: 1 }} />
+
+        <ListItemButton sx={{ py: 0.8, px: 2, minHeight: 38 }}>
+          <ListItemIcon sx={{ minWidth: 32, color: "text.secondary" }}>
+            <SettingsIcon sx={{ fontSize: 18 }} />
+          </ListItemIcon>
+          <ListItemText
+            primary="Sozlamalar"
+            primaryTypographyProps={{ fontSize: "0.82rem" }}
+          />
+        </ListItemButton>
+      </List>
+
+      <Box
         sx={{
-          zIndex: 1300,
-          width: open ? `calc(100% - ${DRAWER_WIDTH}px)` : "100%",
-          ml: open ? `${DRAWER_WIDTH}px` : 0,
-          transition: "all 0.25s",
+          p: 1.5,
+          borderTop: "1px solid",
+          borderColor: "divider",
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
         }}
       >
-        <Toolbar sx={{ minHeight: "52px !important", px: 2, gap: 2 }}>
+        <BoltIcon
+          sx={{ fontSize: 14, color: isDark ? "#00ff9d" : "#00a85a" }}
+        />
+        <Typography
+          sx={{
+            fontFamily: "'Share Tech Mono', monospace",
+            fontSize: "0.6rem",
+            color: "text.secondary",
+          }}
+        >
+          v2.4.1 · FAOL
+        </Typography>
+        <Box sx={{ flex: 1 }} />
+        <Typography
+          sx={{
+            fontFamily: "'Share Tech Mono', monospace",
+            fontSize: "0.6rem",
+            color: "text.secondary",
+          }}
+        >
+          {isDark ? "🌙 KECHA" : "☀️ KUNDUZ"}
+        </Typography>
+      </Box>
+    </>
+  );
+
+  const sloganWrapRef = useRef(null);
+  const sloganTextRef = useRef(null);
+  const [shouldAnimateSlogan, setShouldAnimateSlogan] = useState(false);
+
+  useEffect(() => {
+    const checkSloganOverflow = () => {
+      if (!sloganWrapRef.current || !sloganTextRef.current) return;
+
+      const wrapWidth = sloganWrapRef.current.offsetWidth;
+      const textWidth = sloganTextRef.current.scrollWidth;
+
+      setShouldAnimateSlogan(textWidth > wrapWidth);
+    };
+
+    checkSloganOverflow();
+
+    const timeout = setTimeout(checkSloganOverflow, 100);
+
+    window.addEventListener("resize", checkSloganOverflow);
+
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener("resize", checkSloganOverflow);
+    };
+  }, [open, isMobile, isSmall]);
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        minHeight: "100vh",
+        bgcolor: "background.default",
+      }}
+    >
+      {/* <AppBar
+        position="fixed"
+        sx={{
+          zIndex: theme.zIndex.drawer + 1,
+          height: APPBAR_HEIGHT,
+          justifyContent: "center",
+          width: {
+            xs: "100%",
+            md: open ? `calc(100% - ${DRAWER_WIDTH}px)` : "100%",
+          },
+          ml: {
+            xs: 0,
+            md: open ? `${DRAWER_WIDTH}px` : 0,
+          },
+          transition: theme.transitions.create(["width", "margin"], {
+            duration: theme.transitions.duration.shorter,
+          }),
+        }}
+      >
+        <Toolbar
+          sx={{
+            minHeight: `${APPBAR_HEIGHT}px !important`,
+            px: { xs: 1, sm: 2 },
+            gap: { xs: 1, sm: 2 },
+          }}
+        >
           <IconButton
             size="small"
-            onClick={() => dispatch(toggleSidebar())}
+            onClick={handleToggleSidebar}
             sx={{
               color: "text.secondary",
               "&:hover": { color: "primary.main" },
@@ -148,125 +419,99 @@ export function Layout({ children }) {
             <MenuIcon fontSize="small" />
           </IconButton>
 
-          {/* LOGO */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            {/* <Box
-              sx={{
-                width: 28,
-                height: 28,
-                background: "linear-gradient(135deg,#ff6b1a,#ff3d00)",
-                clipPath:
-                  "polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 10,
-                fontWeight: 900,
-                color: "#fff",
-                fontFamily: "'Orbitron',monospace",
-              }}
-            >
-              ⬡
-            </Box> */}
-            <img src="/images/logo.svg" alt="" width={30} />
-            <Box>
+          <Box
+            sx={{ display: "flex", alignItems: "center", gap: 1, minWidth: 0 }}
+          >
+            <img src="/images/logo.svg" alt="logo" width={isSmall ? 24 : 30} />
+            <Box sx={{ minWidth: 0 }}>
               <Typography
                 sx={{
-                  fontFamily: "'Orbitron',monospace",
-                  fontSize: "0.85rem",
+                  fontFamily: "'Orbitron', monospace",
+                  fontSize: { xs: "0.72rem", sm: "0.85rem" },
                   fontWeight: 900,
-                  letterSpacing: "0.2em",
+                  letterSpacing: { xs: "0.08em", sm: "0.2em" },
                   lineHeight: 1,
                   color: "text.primary",
                   textTransform: "uppercase",
+                  whiteSpace: "nowrap",
                 }}
               >
                 Uzmetkombinat
               </Typography>
-              <Typography
-                sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
-                  fontSize: "0.5rem",
-                  color: "text.secondary",
-                  letterSpacing: "0.15em",
-                }}
-              ></Typography>
             </Box>
           </Box>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, ml: 2 }}>
+          {!isSmall && (
+            <Box
+              sx={{ display: "flex", alignItems: "center", gap: 0.5, ml: 1 }}
+            >
+              <Box
+                sx={{
+                  width: 5,
+                  height: 5,
+                  borderRadius: "50%",
+                  background: isDark ? "#00ff9d" : "#00a85a",
+                  animation: "blink 1.2s step-end infinite",
+                  "@keyframes blink": { "50%": { opacity: 0.2 } },
+                }}
+              />
+            </Box>
+          )}
+
+          {!isMobile && (
             <Box
               sx={{
-                width: 5,
-                height: 5,
-                borderRadius: "50%",
-                background: isDark ? "#00ff9d" : "#00a85a",
-                animation: "blink 1.2s step-end infinite",
-                "@keyframes blink": { "50%": { opacity: 0.2 } },
-              }}
-            />
-            {/* <Typography
-              sx={{
-                fontFamily: "'Share Tech Mono',monospace",
-                fontSize: "0.6rem",
-                color: "text.secondary",
-                letterSpacing: "0.1em",
+                position: "absolute",
+                left: "50%",
+                transform: "translateX(-50%)",
+                pointerEvents: "none",
+                maxWidth: "42%",
               }}
             >
-              TIZIM FAOL · 142 DATCHIK · 6 SEX
-            </Typography> */}
-          </Box>
-          <Box
-            sx={{
-              position: "absolute",
-              left: "50%",
-              transform: "translateX(-50%)",
-              pointerEvents: "none",
-            }}
-          >
-            <Typography
-              sx={{
-                fontFamily: "'Orbitron', monospace",
-                fontSize: "0.95rem",
-                fontWeight: 800,
-                letterSpacing: "0.35em",
-                textTransform: "uppercase",
-                color: "primary.main",
-                textAlign: "center",
-
-                textShadow: `
-        0 0 5px rgba(0,255,157,0.6),
-        0 0 10px rgba(0,255,157,0.4),
-        0 0 20px rgba(0,255,157,0.2)
-      `,
-
-                animation: "glowPulse 3s ease-in-out infinite",
-
-                "@keyframes glowPulse": {
-                  "0%": {
-                    textShadow:
-                      "0 0 5px rgba(0,255,157,0.6),0 0 10px rgba(0,255,157,0.4)",
+              <Typography
+                sx={{
+                  fontFamily: "'Orbitron', monospace",
+                  fontSize: "0.82rem",
+                  fontWeight: 800,
+                  letterSpacing: "0.22em",
+                  textTransform: "uppercase",
+                  color: "primary.main",
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  textShadow: `
+                    0 0 5px rgba(0,255,157,0.6),
+                    0 0 10px rgba(0,255,157,0.4),
+                    0 0 20px rgba(0,255,157,0.2)
+                  `,
+                  animation: "glowPulse 3s ease-in-out infinite",
+                  "@keyframes glowPulse": {
+                    "0%": {
+                      textShadow:
+                        "0 0 5px rgba(0,255,157,0.6),0 0 10px rgba(0,255,157,0.4)",
+                    },
+                    "50%": {
+                      textShadow:
+                        "0 0 10px rgba(0,255,157,1),0 0 25px rgba(0,255,157,0.8)",
+                    },
+                    "100%": {
+                      textShadow:
+                        "0 0 5px rgba(0,255,157,0.6),0 0 10px rgba(0,255,157,0.4)",
+                    },
                   },
-                  "50%": {
-                    textShadow:
-                      "0 0 10px rgba(0,255,157,1),0 0 25px rgba(0,255,157,0.8)",
-                  },
-                  "100%": {
-                    textShadow:
-                      "0 0 5px rgba(0,255,157,0.6),0 0 10px rgba(0,255,157,0.4)",
-                  },
-                },
-              }}
-            >
-              RAQAMLI • INNOVATSION • XAVFSIZ KOMBINAT
-            </Typography>
-          </Box>
+                }}
+              >
+                RAQAMLI • INNOVATSION • XAVFSIZ KOMBINAT
+              </Typography>
+            </Box>
+          )}
+
           <Box sx={{ flex: 1 }} />
 
-          <LiveBadge />
-          <Clock />
+          {!isSmall && <LiveBadge />}
+          {!isSmall && <Clock />}
 
-          {/* THEME TOGGLE */}
           <Tooltip title={isDark ? "Kunduzgi rejim" : "Kechki rejim"}>
             <IconButton
               size="small"
@@ -276,7 +521,9 @@ export function Layout({ children }) {
                 background: isDark
                   ? "rgba(255,214,10,0.08)"
                   : "rgba(0,100,200,0.08)",
-                border: `1px solid ${isDark ? "rgba(255,214,10,0.2)" : "rgba(0,100,200,0.2)"}`,
+                border: `1px solid ${
+                  isDark ? "rgba(255,214,10,0.2)" : "rgba(0,100,200,0.2)"
+                }`,
                 borderRadius: 1,
                 width: 32,
                 height: 32,
@@ -302,7 +549,7 @@ export function Layout({ children }) {
             color="error"
             sx={{
               "& .MuiBadge-badge": {
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Share Tech Mono', monospace",
                 fontSize: "0.55rem",
               },
             }}
@@ -318,252 +565,321 @@ export function Layout({ children }) {
             </IconButton>
           </Badge>
 
-          <Tooltip title="Admin">
-            <Avatar
+          {!isSmall && (
+            <Tooltip title="Admin">
+              <Avatar
+                sx={{
+                  width: 28,
+                  height: 28,
+                  bgcolor: "divider",
+                  fontSize: "0.7rem",
+                  fontFamily: "'Orbitron', monospace",
+                  border: "1px solid",
+                  borderColor: "divider",
+                  cursor: "pointer",
+                  color: "text.primary",
+                  "&:hover": { borderColor: "primary.main" },
+                }}
+              >
+                A
+              </Avatar>
+            </Tooltip>
+          )}
+        </Toolbar>
+      </AppBar> */}
+      <AppBar
+        position="fixed"
+        sx={{
+          zIndex: theme.zIndex.drawer + 1,
+          height: APPBAR_HEIGHT,
+          justifyContent: "center",
+          width: {
+            xs: "100%",
+            md: open ? `calc(100% - ${DRAWER_WIDTH}px)` : "100%",
+          },
+          ml: {
+            xs: 0,
+            md: open ? `${DRAWER_WIDTH}px` : 0,
+          },
+          transition: theme.transitions.create(["width", "margin"], {
+            duration: theme.transitions.duration.shorter,
+          }),
+        }}
+      >
+        <Toolbar
+          sx={{
+            minHeight: `${APPBAR_HEIGHT}px !important`,
+            px: { xs: 1, sm: 1.5, md: 2 },
+            gap: 1,
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          {/* LEFT */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              minWidth: 0,
+              flexShrink: 0,
+            }}
+          >
+            <IconButton
+              size="small"
+              onClick={handleToggleSidebar}
               sx={{
-                width: 28,
-                height: 28,
-                bgcolor: "divider",
-                fontSize: "0.7rem",
-                fontFamily: "'Orbitron',monospace",
-                border: "1px solid",
-                borderColor: "divider",
-                cursor: "pointer",
-                color: "text.primary",
-                "&:hover": { borderColor: "primary.main" },
+                color: "text.secondary",
+                "&:hover": { color: "primary.main" },
               }}
             >
-              A
-            </Avatar>
-          </Tooltip>
+              <MenuIcon fontSize="small" />
+            </IconButton>
+
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                minWidth: 0,
+              }}
+            >
+              <img
+                src="/images/logo.svg"
+                alt="logo"
+                width={isSmall ? 24 : 30}
+              />
+
+              <Typography
+                sx={{
+                  fontFamily: "'Orbitron', monospace",
+                  fontSize: { xs: "0.72rem", sm: "0.85rem" },
+                  fontWeight: 900,
+                  letterSpacing: { xs: "0.06em", sm: "0.14em" },
+                  lineHeight: 1,
+                  color: "text.primary",
+                  textTransform: "uppercase",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Uzmetkombinat
+              </Typography>
+            </Box>
+
+            {!isSmall && (
+              <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                <Box
+                  sx={{
+                    width: 5,
+                    height: 5,
+                    borderRadius: "50%",
+                    background: isDark ? "#00ff9d" : "#00a85a",
+                    animation: "blink 1.2s step-end infinite",
+                    "@keyframes blink": {
+                      "50%": { opacity: 0.2 },
+                    },
+                  }}
+                />
+              </Box>
+            )}
+          </Box>
+
+          {/* CENTER */}
+          {!isMobile && (
+            <Box
+              sx={{
+                flex: 1,
+                minWidth: 0,
+                px: { md: 1, lg: 2 },
+                display: "flex",
+                alignItems: "center",
+                overflow: "hidden",
+              }}
+            >
+              <Box
+                ref={sloganWrapRef}
+                sx={{
+                  width: "100%",
+                  overflow: "hidden",
+                  position: "relative",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: shouldAnimateSlogan ? "flex-start" : "center",
+                }}
+              >
+                <Typography
+                  ref={sloganTextRef}
+                  sx={{
+                    fontFamily: "'Orbitron', monospace",
+                    fontSize: {
+                      md: open ? "0.66rem" : "0.76rem",
+                      lg: open ? "0.76rem" : "0.88rem",
+                      xl: "0.92rem",
+                    },
+                    fontWeight: 800,
+                    letterSpacing: {
+                      md: open ? "0.06em" : "0.12em",
+                      lg: open ? "0.12em" : "0.18em",
+                      xl: "0.22em",
+                    },
+                    textTransform: "uppercase",
+                    color: "primary.main",
+                    textAlign: "center",
+                    whiteSpace: "nowrap",
+                    width: "max-content",
+                    maxWidth: shouldAnimateSlogan ? "none" : "100%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    display: "inline-block",
+                    textShadow: `
+                0 0 5px rgba(0,255,157,0.6),
+                0 0 10px rgba(0,255,157,0.4),
+                0 0 20px rgba(0,255,157,0.2)
+              `,
+                    animation: shouldAnimateSlogan
+                      ? "sloganLeftToRight 12s linear infinite"
+                      : "none",
+                    "@keyframes sloganLeftToRight": {
+                      "0%": {
+                        transform: "translateX(-100%)",
+                      },
+                      "100%": {
+                        transform: "translateX(100%)",
+                      },
+                    },
+                  }}
+                >
+                  RAQAMLI • INNOVATSION • XAVFSIZ KOMBINAT
+                </Typography>
+              </Box>
+            </Box>
+          )}
+
+          {/* RIGHT */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: { xs: 0.5, sm: 1 },
+              flexShrink: 0,
+            }}
+          >
+            {!isSmall && <LiveBadge />}
+            {!isSmall && <Clock />}
+
+            <Tooltip title={isDark ? "Kunduzgi rejim" : "Kechki rejim"}>
+              <IconButton
+                size="small"
+                onClick={toggleMode}
+                sx={{
+                  color: isDark ? "#ffd60a" : "#0064c8",
+                  background: isDark
+                    ? "rgba(255,214,10,0.08)"
+                    : "rgba(0,100,200,0.08)",
+                  border: `1px solid ${
+                    isDark ? "rgba(255,214,10,0.2)" : "rgba(0,100,200,0.2)"
+                  }`,
+                  borderRadius: 1,
+                  width: 32,
+                  height: 32,
+                  transition: "all 0.3s",
+                  "&:hover": {
+                    background: isDark
+                      ? "rgba(255,214,10,0.16)"
+                      : "rgba(0,100,200,0.14)",
+                    transform: "rotate(20deg)",
+                  },
+                }}
+              >
+                {isDark ? (
+                  <LightModeIcon sx={{ fontSize: 16 }} />
+                ) : (
+                  <DarkModeIcon sx={{ fontSize: 16 }} />
+                )}
+              </IconButton>
+            </Tooltip>
+
+            <Badge
+              badgeContent={3}
+              color="error"
+              sx={{
+                "& .MuiBadge-badge": {
+                  fontFamily: "'Share Tech Mono', monospace",
+                  fontSize: "0.55rem",
+                },
+              }}
+            >
+              <IconButton
+                size="small"
+                sx={{
+                  color: "text.secondary",
+                  "&:hover": { color: "error.main" },
+                }}
+              >
+                <NotificationsIcon fontSize="small" />
+              </IconButton>
+            </Badge>
+
+            {!isSmall && (
+              <Tooltip title="Admin">
+                <Avatar
+                  sx={{
+                    width: 28,
+                    height: 28,
+                    bgcolor: "divider",
+                    fontSize: "0.7rem",
+                    fontFamily: "'Orbitron', monospace",
+                    border: "1px solid",
+                    borderColor: "divider",
+                    cursor: "pointer",
+                    color: "text.primary",
+                    "&:hover": { borderColor: "primary.main" },
+                  }}
+                >
+                  A
+                </Avatar>
+              </Tooltip>
+            )}
+          </Box>
         </Toolbar>
       </AppBar>
 
-      {/* ── SIDEBAR ── */}
       <Drawer
-        variant="persistent"
+        variant={isMobile ? "temporary" : "persistent"}
         open={open}
+        onClose={handleToggleSidebar}
+        ModalProps={{ keepMounted: true }}
         sx={{
-          width: DRAWER_WIDTH,
+          width: !(open || isMobile) ? 0 : DRAWER_WIDTH,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
             width: DRAWER_WIDTH,
-            mt: "52px",
-            height: "calc(100% - 52px)",
+            mt: `${APPBAR_HEIGHT}px`,
+            height: `calc(100% - ${APPBAR_HEIGHT}px)`,
             overflowX: "hidden",
+            boxSizing: "border-box",
+            transition: "width .32s ease",
           },
         }}
       >
-        {/* MINI STATS */}
-        <Box sx={{ p: 1.5, borderBottom: "1px solid", borderColor: "divider" }}>
-          {miniStats.map((s) => (
-            <Box
-              key={s.l}
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                py: 0.6,
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: "0.65rem",
-                  color: "text.secondary",
-                  fontFamily: "'Share Tech Mono',monospace",
-                }}
-              >
-                {s.l}
-              </Typography>
-              <Typography
-                sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
-                  fontSize: "0.72rem",
-                  color: s.c,
-                }}
-              >
-                {s.v}
-              </Typography>
-            </Box>
-          ))}
-        </Box>
-
-        {/* NAV */}
-        <List dense disablePadding sx={{ flex: 1 }}>
-          <Box sx={{ px: 2, pt: 1.5, pb: 0.5 }}>
-            <Typography
-              sx={{
-                fontFamily: "'Share Tech Mono',monospace",
-                fontSize: "0.55rem",
-                letterSpacing: "0.2em",
-                color: "text.disabled",
-                textTransform: "uppercase",
-              }}
-            >
-              Asosiy
-            </Typography>
-          </Box>
-          {navItems.slice(0, 6).map((item) => (
-            <ListItemButton
-              key={item.path}
-              selected={location.pathname === item.path}
-              onClick={() => navigate(item.path)}
-              sx={{ py: 0.8, px: 2, minHeight: 38 }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 32,
-                  color:
-                    location.pathname === item.path
-                      ? "primary.main"
-                      : "text.secondary",
-                }}
-              >
-                {item.badge ? (
-                  <Badge
-                    badgeContent={item.badge}
-                    color={item.badgeColor || "error"}
-                    sx={{
-                      "& .MuiBadge-badge": {
-                        fontSize: "0.5rem",
-                        minWidth: 14,
-                        height: 14,
-                      },
-                    }}
-                  >
-                    {item.icon}
-                  </Badge>
-                ) : (
-                  item.icon
-                )}
-              </ListItemIcon>
-              <ListItemText
-                primary={item.label}
-                primaryTypographyProps={{
-                  fontSize: "0.82rem",
-                  fontWeight: location.pathname === item.path ? 600 : 400,
-                  letterSpacing: "0.03em",
-                }}
-              />
-            </ListItemButton>
-          ))}
-
-          <Divider sx={{ my: 1 }} />
-          <Box sx={{ px: 2, pb: 0.5 }}>
-            <Typography
-              sx={{
-                fontFamily: "'Share Tech Mono',monospace",
-                fontSize: "0.55rem",
-                letterSpacing: "0.2em",
-                color: "text.disabled",
-                textTransform: "uppercase",
-              }}
-            >
-              Boshqaruv
-            </Typography>
-          </Box>
-          {navItems.slice(6).map((item) => (
-            <ListItemButton
-              key={item.path}
-              selected={location.pathname === item.path}
-              onClick={() => navigate(item.path)}
-              sx={{ py: 0.8, px: 2, minHeight: 38 }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 32,
-                  color:
-                    location.pathname === item.path
-                      ? "primary.main"
-                      : "text.secondary",
-                }}
-              >
-                {item.badge ? (
-                  <Badge
-                    badgeContent={item.badge}
-                    color={item.badgeColor || "error"}
-                    sx={{
-                      "& .MuiBadge-badge": {
-                        fontSize: "0.5rem",
-                        minWidth: 14,
-                        height: 14,
-                      },
-                    }}
-                  >
-                    {item.icon}
-                  </Badge>
-                ) : (
-                  item.icon
-                )}
-              </ListItemIcon>
-              <ListItemText
-                primary={item.label}
-                primaryTypographyProps={{
-                  fontSize: "0.82rem",
-                  fontWeight: location.pathname === item.path ? 600 : 400,
-                }}
-              />
-            </ListItemButton>
-          ))}
-
-          <Divider sx={{ my: 1 }} />
-          <ListItemButton sx={{ py: 0.8, px: 2, minHeight: 38 }}>
-            <ListItemIcon sx={{ minWidth: 32, color: "text.secondary" }}>
-              <SettingsIcon sx={{ fontSize: 18 }} />
-            </ListItemIcon>
-            <ListItemText
-              primary="Sozlamalar"
-              primaryTypographyProps={{ fontSize: "0.82rem" }}
-            />
-          </ListItemButton>
-        </List>
-
-        {/* BOTTOM */}
-        <Box
-          sx={{
-            p: 1.5,
-            borderTop: "1px solid",
-            borderColor: "divider",
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-          }}
-        >
-          <BoltIcon
-            sx={{ fontSize: 14, color: isDark ? "#00ff9d" : "#00a85a" }}
-          />
-          <Typography
-            sx={{
-              fontFamily: "'Share Tech Mono',monospace",
-              fontSize: "0.6rem",
-              color: "text.secondary",
-            }}
-          >
-            v2.4.1 · FAOL
-          </Typography>
-          <Box sx={{ flex: 1 }} />
-          <Typography
-            sx={{
-              fontFamily: "'Share Tech Mono',monospace",
-              fontSize: "0.6rem",
-              color: "text.secondary",
-            }}
-          >
-            {isDark ? "🌙 KECHA" : "☀️ KUNDUZ"}
-          </Typography>
-        </Box>
+        {drawerContent}
       </Drawer>
 
-      {/* ── MAIN ── */}
       <Box
         component="main"
         sx={{
-          flex: 1,
-          mt: "52px",
+          flexGrow: 1,
+          width: {
+            xs: "100%",
+            md: open ? `calc(100% - ${DRAWER_WIDTH}px)` : "100%",
+          },
+          mt: `${APPBAR_HEIGHT}px`,
+          minHeight: `calc(100vh - ${APPBAR_HEIGHT}px)`,
           overflow: "auto",
-          width: open ? `calc(100% - ${DRAWER_WIDTH}px)` : "100%",
-          transition: "all 0.25s",
-          bgcolor: "background.default",
+          transition: theme.transitions.create(["width", "margin"], {
+            duration: theme.transitions.duration.shorter,
+          }),
+          transition: "width .32s ease",
         }}
       >
         {children}
