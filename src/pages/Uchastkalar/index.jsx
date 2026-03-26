@@ -658,7 +658,6 @@ export default function Uchastkalar() {
         startDate: yesterday,
         endDate: today,
       });
-    console.log(eaf);
   }
 
   const handleOpen = (u) => {

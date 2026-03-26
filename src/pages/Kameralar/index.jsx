@@ -490,11 +490,38 @@ export default function Kameralar() {
 
       {/* CAMERA GRID */}
       <Paper>
-        <SectionHeader title="Kamera Eko'nlari" dot="#ff2d55">
+        <SectionHeader title="Kameralar" dot="#ff2d55">
           <LiveBadge />
         </SectionHeader>
         <Box sx={{ p: 2 }}>
-          <Grid container spacing={3}>
+          <Grid container spacing={3} justifyContent="center">
+            {/* MAIN STREAM */}
+            <Grid item xs={12}>
+              <Box
+                sx={{
+                  width: "100%",
+                  maxWidth: "1200px",
+                  margin: "0 auto",
+                  background: "#070a12",
+                  border: "1px solid #1e2a3d",
+                  borderRadius: 2,
+                  overflow: "hidden",
+                  aspectRatio: "16/9",
+                }}
+              >
+                <Box
+                  component="img"
+                  src="http://172.16.55.12:8005/video"
+                  alt="stream"
+                  sx={{
+                    width: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              </Box>
+            </Grid>
+
+            {/* CAMERA LIST */}
             {filtered.map((cam) => (
               <Grid item xs={12} sm={6} md={3} key={cam.id}>
                 <CameraFeed cam={cam} onClick={setFullscreen} />
