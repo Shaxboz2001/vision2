@@ -14,7 +14,12 @@ import {
   TableBody,
   useTheme,
 } from "@mui/material";
-import { getSexlar, getUchastkalar, getUskunalar } from "@/api";
+// import { getUchastkalar, getUskunalar } from "@/api";
+import {
+  getSexlarHybrid,
+  getUchastkalarHybrid,
+  getUskunalarHybrid,
+} from "@/api/hybrid";
 import {
   StatusChip,
   SectionHeader,
@@ -1029,13 +1034,39 @@ const SexSVG = {
 function SexDetailPanel({ sex }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
-  const { data: uch } = useQuery({
-    queryKey: ["uchastkalar", sex.id],
-    queryFn: () => getUchastkalar(sex.id),
+  // const { data: uch } = useQuery({
+  //   queryKey: ["uchastkalar", sex.id],
+  //   queryFn: () => getUchastkalar(sex.id),
+  // });
+  // const { data: usk } = useQuery({
+  //   queryKey: ["uskunalar", sex.id],
+  //   queryFn: () => getUskunalar({ sexId: sex.id }),
+  // });
+  const today = new Date().toISOString().split("T")[0];
+
+  const { data: uch, isFetching: uchFetching } = useQuery({
+    queryKey: ["uchastkalar", "hybrid", sex.id, today],
+    queryFn: () =>
+      getUchastkalarHybrid(sex.id, {
+        startDate: today,
+        endDate: today,
+      }),
+    refetchInterval: sex.id === "SEX-07" ? 60_000 : false,
+    refetchOnWindowFocus: true,
   });
-  const { data: usk } = useQuery({
-    queryKey: ["uskunalar", sex.id],
-    queryFn: () => getUskunalar({ sexId: sex.id }),
+
+  const { data: usk, isFetching: uskFetching } = useQuery({
+    queryKey: ["uskunalar", "hybrid", sex.id, today],
+    queryFn: () =>
+      getUskunalarHybrid(
+        { sexId: sex.id },
+        {
+          startDate: today,
+          endDate: today,
+        },
+      ),
+    refetchInterval: sex.id === "SEX-07" ? 60_000 : false,
+    refetchOnWindowFocus: true,
   });
   const uchastkalar = uch?.data || [];
   const uskunalar = usk?.data || [];
@@ -1111,7 +1142,7 @@ function SexDetailPanel({ sex }) {
           >
             UCHASTKALAR
           </Typography>
-          {uchastkalar.map((u) => (
+          {/* {uchastkalar.map((u) => (
             <Box
               key={u.id}
               sx={{
@@ -1148,6 +1179,101 @@ function SexDetailPanel({ sex }) {
               >
                 {u.harorat}°C
               </Typography>
+            </Box>
+          ))} */}
+          {uchastkalar.map((u) => (
+            <Box
+              key={u.id}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 1.5,
+                py: 1,
+                borderBottom: "1px solid",
+                borderColor: "divider",
+              }}
+            >
+              <Box sx={{ minWidth: 0 }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Typography
+                    sx={{
+                      fontWeight: 600,
+                      fontSize: "0.82rem",
+                      color: "text.primary",
+                    }}
+                  >
+                    {u.nom}
+                  </Typography>
+
+                  {u.live && (
+                    <Typography
+                      sx={{
+                        fontFamily: "'Share Tech Mono',monospace",
+                        fontSize: "0.55rem",
+                        color: "#00e676",
+                        px: 0.5,
+                        py: 0.1,
+                        border: "1px solid rgba(0,230,118,0.35)",
+                        borderRadius: 0.5,
+                        background: "rgba(0,230,118,0.08)",
+                      }}
+                    >
+                      LIVE
+                    </Typography>
+                  )}
+                </Box>
+
+                <Typography
+                  sx={{
+                    fontFamily: "'Share Tech Mono',monospace",
+                    fontSize: "0.62rem",
+                    color: "text.secondary",
+                    mt: 0.2,
+                  }}
+                >
+                  {u.id} · {u.uskunalar} uskuna · {u.ishchilar} ishchi
+                  {u.extraLabel ? ` · ${u.extraLabel}` : ""}
+                </Typography>
+              </Box>
+
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1.2 }}>
+                <Typography
+                  sx={{
+                    fontFamily: "'Share Tech Mono',monospace",
+                    fontSize: "0.72rem",
+                    color:
+                      u.harorat > 1200
+                        ? "error.main"
+                        : u.harorat > 200
+                          ? "secondary.main"
+                          : "text.secondary",
+                    minWidth: 64,
+                    textAlign: "right",
+                  }}
+                >
+                  {u.harorat}°C
+                </Typography>
+
+                <Typography
+                  sx={{
+                    fontFamily: "'Share Tech Mono',monospace",
+                    fontSize: "0.72rem",
+                    color:
+                      u.samaradorlik >= 90
+                        ? "success.main"
+                        : u.samaradorlik >= 70
+                          ? "warning.main"
+                          : "error.main",
+                    minWidth: 52,
+                    textAlign: "right",
+                  }}
+                >
+                  {u.samaradorlik}%
+                </Typography>
+
+                <StatusChip holat={u.holat} />
+              </Box>
             </Box>
           ))}
         </Grid>
@@ -1352,7 +1478,7 @@ function SexCard({ s, selected, onClick }) {
 
       {/* INFO QISM */}
       <Box sx={{ p: 1.5 }}>
-        <Box
+        {/* <Box
           sx={{
             display: "flex",
             alignItems: "center",
@@ -1366,8 +1492,42 @@ function SexCard({ s, selected, onClick }) {
             {s.nom}
           </Typography>
           <StatusChip holat={s.holat} />
-        </Box>
+        </Box> */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            mb: 1.2,
+          }}
+        >
+          <Typography
+            sx={{ fontWeight: 700, fontSize: "0.9rem", color: "text.primary" }}
+          >
+            {s.nom}
+          </Typography>
 
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.8 }}>
+            {s.live && (
+              <Typography
+                sx={{
+                  fontFamily: "'Share Tech Mono',monospace",
+                  fontSize: "0.58rem",
+                  color: "#00e676",
+                  px: 0.6,
+                  py: 0.15,
+                  borderRadius: 0.5,
+                  border: "1px solid rgba(0,230,118,0.35)",
+                  background: "rgba(0,230,118,0.08)",
+                  letterSpacing: "0.08em",
+                }}
+              >
+                LIVE
+              </Typography>
+            )}
+            <StatusChip holat={s.holat} />
+          </Box>
+        </Box>
         {/* STATS ROW */}
         <Grid container spacing={0.5} sx={{ mb: 1.2 }}>
           {[
@@ -1490,15 +1650,307 @@ function SexCard({ s, selected, onClick }) {
 }
 
 // ─── ASOSIY SAHIFA ──────────────────────────────────────────────────
+// export default function Sexlar() {
+//   const [selected, setSelected] = useState(null);
+//   // const { data, isLoading } = useQuery({
+//   //   queryKey: ["sexlar"],
+//   //   queryFn: getSexlar,
+//   // });
+//   const today = new Date().toISOString().split("T")[0];
+
+// const { data, isLoading, isFetching } = useQuery({
+//   queryKey: ["sexlar", "hybrid", today],
+//   queryFn: () =>
+//     getSexlarHybrid({
+//       startDate: today,
+//       endDate: today,
+//     }),
+//   refetchInterval: 60_000,
+//   refetchOnWindowFocus: true,
+// });
+//   const sexlar = data?.data || [];
+//   const navigate = useNavigate();
+//   const dispatch = useDispatch();
+//   return (
+//     <Box sx={{ p: 2.5, display: "flex", flexDirection: "column", gap: 2 }}>
+//       {/* HEADER */}
+//       <Box
+//         sx={{
+//           display: "flex",
+//           alignItems: "center",
+//           justifyContent: "space-between",
+//         }}
+//       >
+//         <Box>
+//           <Typography
+//             sx={{
+//               fontFamily: "'Orbitron',monospace",
+//               fontSize: "1.1rem",
+//               fontWeight: 700,
+//               letterSpacing: "0.15em",
+//               color: "text.primary",
+//             }}
+//           >
+//             BO'LINMALAR BOSHQARUVI
+//           </Typography>
+//           <Typography
+//             sx={{
+//               fontFamily: "'Share Tech Mono',monospace",
+//               fontSize: "0.65rem",
+//               color: "text.secondary",
+//             }}
+//           >
+//             Jami {sexlar.length} bo'linma ·{" "}
+//             {sexlar.filter((s) => s.holat === "faol").length} faol ·{" "}
+//             {sexlar.filter((s) => s.holat === "xato").length} xato
+//           </Typography>
+//         </Box>
+//         <Box sx={{ display: "flex", gap: 1.5 }}>
+//           {Object.entries(holatRang).map(([h, c]) => (
+//             <Box
+//               key={h}
+//               sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
+//             >
+//               <Box
+//                 sx={{
+//                   width: 7,
+//                   height: 7,
+//                   borderRadius: "50%",
+//                   background: c,
+//                   boxShadow: `0 0 5px ${c}`,
+//                 }}
+//               />
+//               <Typography
+//                 sx={{
+//                   fontFamily: "'Share Tech Mono',monospace",
+//                   fontSize: "0.6rem",
+//                   color: "text.secondary",
+//                   textTransform: "capitalize",
+//                 }}
+//               >
+//                 {h}
+//               </Typography>
+//             </Box>
+//           ))}
+//         </Box>
+//       </Box>
+
+//       {/* KARTALAR */}
+//       {isLoading ? (
+//         <CardSkeleton />
+//       ) : (
+//         <Grid container spacing={1.5}>
+//           {sexlar.map((s) => (
+//             <Grid item xs={12} sm={6} md={4} key={s.id}>
+//               <SexCard
+//                 s={s}
+//                 selected={selected}
+//                 onClick={() => {
+//                   const newSelected = selected?.id === s.id ? null : s;
+
+//                   setSelected(newSelected);
+
+//                   if (newSelected) {
+//                     dispatch(setSelectedSex(newSelected));
+//                     navigate("/uchastkalar");
+//                   }
+//                 }}
+//               />
+//             </Grid>
+//           ))}
+//         </Grid>
+//       )}
+
+//       {/* JADVAL KO'RINISH */}
+//       <Paper>
+//         <SectionHeader title="Bo'linmalar Jadvali" dot="#ff6b1a" />
+//         <Table size="small">
+//           <TableHead>
+//             <TableRow>
+//               <TableCell>BO'LINMALAR</TableCell>
+//               <TableCell>HOLAT</TableCell>
+//               <TableCell>UCHASTKALAR</TableCell>
+//               <TableCell>USKUNALAR</TableCell>
+//               <TableCell>YUK</TableCell>
+//               <TableCell>HARORAT</TableCell>
+//               <TableCell>ISHCHILAR</TableCell>
+//             </TableRow>
+//           </TableHead>
+//           <TableBody>
+//             {sexlar.map((s) => (
+//               <TableRow
+//                 key={s.id}
+//                 onClick={() => setSelected(selected?.id === s.id ? null : s)}
+//                 sx={{ cursor: "pointer" }}
+//               >
+//                 <TableCell>
+//                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+//                     <Box sx={{ width: 28, height: 28, flexShrink: 0 }}>
+//                       {(() => {
+//                         const SvgIcon = SexSVG[s.id];
+//                         return SvgIcon ? (
+//                           <SvgIcon color={svgColor[s.id]} />
+//                         ) : null;
+//                       })()}
+//                     </Box>
+//                     <Box>
+//                       <Typography
+//                         sx={{
+//                           fontWeight: 600,
+//                           fontSize: "0.83rem",
+//                           color: "text.primary",
+//                         }}
+//                       >
+//                         {s.nom}
+//                       </Typography>
+//                       {/* <Typography
+//                         sx={{
+//                           fontFamily: "'Share Tech Mono',monospace",
+//                           fontSize: "0.58rem",
+//                           color: "text.secondary",
+//                         }}
+//                       >
+//                         {s.id}
+//                       </Typography> */}
+//                     </Box>
+//                   </Box>
+//                 </TableCell>
+//                 <TableCell>
+//                   <StatusChip holat={s.holat} />
+//                 </TableCell>
+//                 <TableCell>
+//                   <Typography
+//                     sx={{
+//                       fontFamily: "'Share Tech Mono',monospace",
+//                       fontSize: "0.72rem",
+//                       color: "text.secondary",
+//                     }}
+//                   >
+//                     {s.uchastkalar} ta
+//                   </Typography>
+//                 </TableCell>
+//                 <TableCell>
+//                   <Typography
+//                     sx={{
+//                       fontFamily: "'Share Tech Mono',monospace",
+//                       fontSize: "0.75rem",
+//                       color: "text.primary",
+//                     }}
+//                   >
+//                     {s.faolUskunalar}/{s.uskunalar}
+//                   </Typography>
+//                 </TableCell>
+//                 <TableCell>
+//                   <Box
+//                     sx={{
+//                       display: "flex",
+//                       alignItems: "center",
+//                       gap: 1,
+//                       minWidth: 110,
+//                     }}
+//                   >
+//                     <LinearProgress
+//                       variant="determinate"
+//                       value={s.yuk}
+//                       sx={{
+//                         flex: 1,
+//                         "& .MuiLinearProgress-bar": {
+//                           background:
+//                             s.yuk > 90
+//                               ? "#ffd60a"
+//                               : s.yuk > 0
+//                                 ? svgColor[s.id]
+//                                 : "#374151",
+//                         },
+//                       }}
+//                     />
+//                     <Typography
+//                       sx={{
+//                         fontFamily: "'Share Tech Mono',monospace",
+//                         fontSize: "0.65rem",
+//                         color: "text.secondary",
+//                         minWidth: 28,
+//                       }}
+//                     >
+//                       {s.yuk}%
+//                     </Typography>
+//                   </Box>
+//                 </TableCell>
+//                 <TableCell>
+//                   <Typography
+//                     sx={{
+//                       fontFamily: "'Share Tech Mono',monospace",
+//                       fontSize: "0.75rem",
+//                       color:
+//                         s.harorat > 1400
+//                           ? "error.main"
+//                           : s.harorat > 200
+//                             ? "secondary.main"
+//                             : "text.secondary",
+//                     }}
+//                   >
+//                     {s.harorat}°C
+//                   </Typography>
+//                 </TableCell>
+//                 <TableCell>
+//                   <Typography
+//                     sx={{
+//                       fontFamily: "'Share Tech Mono',monospace",
+//                       fontSize: "0.75rem",
+//                       color: "success.main",
+//                     }}
+//                   >
+//                     {s.ishchilar}
+//                   </Typography>
+//                 </TableCell>
+//               </TableRow>
+//             ))}
+//           </TableBody>
+//         </Table>
+//       </Paper>
+
+//       {/* DETAIL PANEL */}
+//       {selected && (
+//         <Paper sx={{ border: `1px solid ${svgColor[selected.id]}40` }}>
+//           <SectionHeader
+//             title={`${selected.nom} — Batafsil Ma'lumot`}
+//             dot={svgColor[selected.id]}
+//             action={
+//               <span
+//                 onClick={() => setSelected(null)}
+//                 style={{ cursor: "pointer" }}
+//               >
+//                 ✕ YOPISH
+//               </span>
+//             }
+//           />
+//           <SexDetailPanel sex={selected} />
+//         </Paper>
+//       )}
+//     </Box>
+//   );
+// }
+
 export default function Sexlar() {
   const [selected, setSelected] = useState(null);
-  const { data, isLoading } = useQuery({
-    queryKey: ["sexlar"],
-    queryFn: getSexlar,
-  });
-  const sexlar = data?.data || [];
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const today = new Date().toISOString().split("T")[0];
+
+  const { data, isLoading, isFetching } = useQuery({
+    queryKey: ["sexlar", "hybrid", today],
+    queryFn: () =>
+      getSexlarHybrid({
+        startDate: today,
+        endDate: today,
+      }),
+    refetchInterval: 60_000,
+    refetchOnWindowFocus: true,
+  });
+
+  const sexlar = data?.data || [];
+
   return (
     <Box sx={{ p: 2.5, display: "flex", flexDirection: "column", gap: 2 }}>
       {/* HEADER */}
@@ -1533,33 +1985,48 @@ export default function Sexlar() {
             {sexlar.filter((s) => s.holat === "xato").length} xato
           </Typography>
         </Box>
-        <Box sx={{ display: "flex", gap: 1.5 }}>
-          {Object.entries(holatRang).map(([h, c]) => (
-            <Box
-              key={h}
-              sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
+
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+          {isFetching && (
+            <Typography
+              sx={{
+                fontFamily: "'Share Tech Mono',monospace",
+                fontSize: "0.6rem",
+                color: "#00d4ff",
+              }}
             >
+              Yangilanmoqda...
+            </Typography>
+          )}
+
+          <Box sx={{ display: "flex", gap: 1.5 }}>
+            {Object.entries(holatRang).map(([h, c]) => (
               <Box
-                sx={{
-                  width: 7,
-                  height: 7,
-                  borderRadius: "50%",
-                  background: c,
-                  boxShadow: `0 0 5px ${c}`,
-                }}
-              />
-              <Typography
-                sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
-                  fontSize: "0.6rem",
-                  color: "text.secondary",
-                  textTransform: "capitalize",
-                }}
+                key={h}
+                sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
               >
-                {h}
-              </Typography>
-            </Box>
-          ))}
+                <Box
+                  sx={{
+                    width: 7,
+                    height: 7,
+                    borderRadius: "50%",
+                    background: c,
+                    boxShadow: `0 0 5px ${c}`,
+                  }}
+                />
+                <Typography
+                  sx={{
+                    fontFamily: "'Share Tech Mono',monospace",
+                    fontSize: "0.6rem",
+                    color: "text.secondary",
+                    textTransform: "capitalize",
+                  }}
+                >
+                  {h}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
         </Box>
       </Box>
 
@@ -1589,7 +2056,6 @@ export default function Sexlar() {
         </Grid>
       )}
 
-      {/* JADVAL KO'RINISH */}
       <Paper>
         <SectionHeader title="Bo'linmalar Jadvali" dot="#ff6b1a" />
         <Table size="small">

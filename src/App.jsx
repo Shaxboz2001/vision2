@@ -14,7 +14,7 @@ import Datchiklar from "@/pages/Datchiklar";
 import Kameralar from "@/pages/Kameralar";
 import Ogohlantirishlar from "@/pages/Ogohlantirishlar";
 import Analitika from "@/pages/Analitika";
-import UskunaDetailPage from "./pages/UskunlarDetail";
+import UskunaDetail from "./pages/UskunlarDetail";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -37,10 +37,7 @@ export default function App() {
                     <Route path="/bo'linmalar" element={<Sexlar />} />
                     <Route path="/uchastkalar" element={<Uchastkalar />} />
                     <Route path="/uskunalar" element={<Uskunalar />} />
-                    <Route
-                      path="/uskunalar/:id"
-                      element={<UskunaDetailPage />}
-                    />
+                    <Route path="/uskunalar/:id" element={<UskunaDetail />} />
                     <Route path="/datchiklar" element={<Datchiklar />} />
                     <Route path="/kameralar" element={<Kameralar />} />
                     <Route path="/analitika" element={<Analitika />} />
