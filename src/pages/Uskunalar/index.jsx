@@ -834,8 +834,8 @@ function DomnaPechiDiagram({ u, isDark }) {
     // </Box>
     <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
       <img
-        src="/public/images/Electric Arc Furnace in action.png"
-        style={{ objectFit: "contain", width: "100%" }}
+        src="/public/images/uskunalar/klet.png"
+        style={{ objectFit: "contain", width: "50%" }}
         alt=""
       />
     </Box>
@@ -11723,39 +11723,97 @@ function QadoqlashDiagram({ u, isDark }) {
 // ──────────────────────────────────────────────────────────────────────
 // Tur bo'yicha diagram tanlash
 // ──────────────────────────────────────────────────────────────────────
+// function UskunaDiagram({ u, isDark }) {
+//   const getProkratDiagram = () => {
+//     if (
+//       u.model?.startsWith("CLM") ||
+//       u.nom?.toLowerCase().includes("ingichka")
+//     ) {
+//       return <IngichkaDiagram u={u} isDark={isDark} />;
+//     }
+//     if (u.model?.startsWith("RW") || u.nom?.toLowerCase().includes("rulo")) {
+//       return <RuloDiagram u={u} isDark={isDark} />;
+//     }
+//     return <ProkatDiagram u={u} isDark={isDark} />;
+//   };
+
+//   const map = {
+//     Pech: <DomnaPechiDiagram u={u} isDark={isDark} />,
+//     Konverter: <KonverterDiagram u={u} isDark={isDark} />,
+//     "Elektr Pech": <ElektrPechDiagram u={u} isDark={isDark} />,
+//     Prokat: getProkratDiagram(),
+//     Nasos: <NasosDiagram u={u} isDark={isDark} />,
+//     Kran: <KranDiagram u={u} isDark={isDark} />,
+//     Kesish: <KesishDiagram u={u} isDark={isDark} />,
+//     // ── YANGI TURLAR ──
+//     Transport: <TransportDiagram u={u} isDark={isDark} />,
+//     Sensor: <SensorDiagram u={u} isDark={isDark} />,
+//     Manipulator: <ManipulatorDiagram u={u} isDark={isDark} />,
+//     Press: <PressDiagram u={u} isDark={isDark} />,
+//     Sovitish: <SovitishDiagram u={u} isDark={isDark} />,
+//     Tekislash: <TekislashDiagram u={u} isDark={isDark} />,
+//     Qadoqlash: <QadoqlashDiagram u={u} isDark={isDark} />,
+//   };
+
+//   return map[u.tur] || <QadoqlashDiagram u={u} isDark={isDark} />;
+// }
 function UskunaDiagram({ u, isDark }) {
-  const getProkratDiagram = () => {
+  const getProkratImage = () => {
     if (
       u.model?.startsWith("CLM") ||
       u.nom?.toLowerCase().includes("ingichka")
     ) {
-      return <IngichkaDiagram u={u} isDark={isDark} />;
+      return <UskunaImage u={u} />;
     }
+
     if (u.model?.startsWith("RW") || u.nom?.toLowerCase().includes("rulo")) {
-      return <RuloDiagram u={u} isDark={isDark} />;
+      return <UskunaImage u={u} />;
     }
-    return <ProkatDiagram u={u} isDark={isDark} />;
+
+    return <UskunaImage u={u} />;
   };
 
   const map = {
-    Pech: <DomnaPechiDiagram u={u} isDark={isDark} />,
-    Konverter: <KonverterDiagram u={u} isDark={isDark} />,
-    "Elektr Pech": <ElektrPechDiagram u={u} isDark={isDark} />,
-    Prokat: getProkratDiagram(),
-    Nasos: <NasosDiagram u={u} isDark={isDark} />,
-    Kran: <KranDiagram u={u} isDark={isDark} />,
-    Kesish: <KesishDiagram u={u} isDark={isDark} />,
-    // ── YANGI TURLAR ──
-    Transport: <TransportDiagram u={u} isDark={isDark} />,
-    Sensor: <SensorDiagram u={u} isDark={isDark} />,
-    Manipulator: <ManipulatorDiagram u={u} isDark={isDark} />,
-    Press: <PressDiagram u={u} isDark={isDark} />,
-    Sovitish: <SovitishDiagram u={u} isDark={isDark} />,
-    Tekislash: <TekislashDiagram u={u} isDark={isDark} />,
-    Qadoqlash: <QadoqlashDiagram u={u} isDark={isDark} />,
+    Pech: <UskunaImage u={u} />,
+    Konverter: <UskunaImage u={u} />,
+    "Elektr Pech": <UskunaImage u={u} />,
+    Prokat: getProkratImage(),
+    Nasos: <UskunaImage u={u} />,
+    Kran: <UskunaImage u={u} />,
+    Kesish: <UskunaImage u={u} />,
+    Transport: <UskunaImage u={u} />,
+    Sensor: <UskunaImage u={u} />,
+    Manipulator: <UskunaImage u={u} />,
+    Press: <UskunaImage u={u} />,
+    Sovitish: <UskunaImage u={u} />,
+    Tekislash: <UskunaImage u={u} />,
+    Qadoqlash: <UskunaImage u={u} />,
   };
 
-  return map[u.tur] || <QadoqlashDiagram u={u} isDark={isDark} />;
+  return map[u.tur] || <UskunaImage u={u} />;
+}
+const ID_IMAGES = {
+  "USK-001": "/images/uskunalar/klet.png",
+  "USK-002": "/images/uskunalar/vakuum.png",
+};
+function UskunaImage({ u }) {
+  const src = ID_IMAGES[u.id] || "/images/Electric Arc Furnace in action.png";
+
+  return (
+    <img
+      src={src}
+      alt={u.nom}
+      onError={(e) => {
+        e.target.src = "/images/uskunalar/default.png";
+      }}
+      style={{
+        width: "100%",
+        height: "100%",
+        objectFit: "contain",
+        filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.6))",
+      }}
+    />
+  );
 }
 // ══════════════════════════════════════════════════════════════════════
 //  USKUNA DETAIL DRAWER
@@ -12234,7 +12292,7 @@ export default function Uskunalar() {
         </Box>
         <Box sx={{ display: "flex", gap: 1.5 }}>
           <FormControl size="small" sx={{ minWidth: 180 }}>
-            <InputLabel>SEX</InputLabel>
+            <InputLabel>BO'LIM</InputLabel>
             <Select
               value={effectiveSexId}
               label="SEX"

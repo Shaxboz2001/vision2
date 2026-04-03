@@ -52,6 +52,7 @@ import {
 } from "@/hooks/useProduction";
 import { StatusChip } from "@/components/common";
 import EAFFurnace3D from "../../components/UskunaImages/EafUskuna";
+import UskunaImageView from "../../components/UskunaImages/UskunaImageView";
 
 function PartInfoPanel({ part, onClose }) {
   if (!part) return null;
@@ -15758,199 +15759,199 @@ export default function UskunaDetailPage() {
         }}
       >
         {tab === TAB_SXEMA && (
-          <Grid container spacing={2.5}>
-            <Grid item xs={12} md={5}>
-              <Paper
-                sx={{ p: 1.5, border: `1px solid ${c}25`, height: "100%" }}
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1,
-                    mb: 1.5,
-                    p: 1,
-                    background: isDark
-                      ? "rgba(0,212,255,0.04)"
-                      : "rgba(0,100,200,0.04)",
-                    border: "1px solid",
-                    borderColor: isDark
-                      ? "rgba(0,212,255,0.15)"
-                      : "rgba(0,100,200,0.12)",
-                    borderRadius: 1,
-                  }}
-                >
-                  <InfoOutlinedIcon
-                    sx={{ fontSize: 14, color: "primary.main" }}
-                  />
-                  <Typography
-                    sx={{
-                      fontFamily: "'Share Tech Mono',monospace",
-                      fontSize: "0.6rem",
-                      color: "primary.main",
-                      letterSpacing: "0.06em",
-                    }}
-                  >
-                    Qism ustiga BOSING — nomi, tavsifi va joriy ko'rsatkichlari
-                    chiqadi
-                  </Typography>
-                </Box>
+          // <Grid container spacing={2.5}>
+          //   <Grid item xs={12} md={5}>
+          //     <Paper
+          //       sx={{ p: 1.5, border: `1px solid ${c}25`, height: "100%" }}
+          //     >
+          //       <Box
+          //         sx={{
+          //           display: "flex",
+          //           alignItems: "center",
+          //           gap: 1,
+          //           mb: 1.5,
+          //           p: 1,
+          //           background: isDark
+          //             ? "rgba(0,212,255,0.04)"
+          //             : "rgba(0,100,200,0.04)",
+          //           border: "1px solid",
+          //           borderColor: isDark
+          //             ? "rgba(0,212,255,0.15)"
+          //             : "rgba(0,100,200,0.12)",
+          //           borderRadius: 1,
+          //         }}
+          //       >
+          //         <InfoOutlinedIcon
+          //           sx={{ fontSize: 14, color: "primary.main" }}
+          //         />
+          //         <Typography
+          //           sx={{
+          //             fontFamily: "'Share Tech Mono',monospace",
+          //             fontSize: "0.6rem",
+          //             color: "primary.main",
+          //             letterSpacing: "0.06em",
+          //           }}
+          //         >
+          //           Qism ustiga BOSING — nomi, tavsifi va joriy ko'rsatkichlari
+          //           chiqadi
+          //         </Typography>
+          //       </Box>
 
-                <Box
-                  sx={{
-                    background: isDark ? "rgba(4,6,14,0.95)" : "#f4f7fc",
-                    border: `1px solid ${c}30`,
-                    borderRadius: 1,
-                    position: "relative",
-                    overflow: "hidden",
-                    minHeight: 400,
-                  }}
-                >
-                  {/* <UskunaDiagram u={uskuna} isDark={isDark} /> */}
-                  <img
-                    src="/public/images/Electric Arc Furnace in action.png"
-                    alt=""
-                    style={{ objectFit: "contain", width: "100%" }}
-                  />
-                </Box>
-              </Paper>
-            </Grid>
+          //       <Box
+          //         sx={{
+          //           background: isDark ? "rgba(4,6,14,0.95)" : "#f4f7fc",
+          //           border: `1px solid ${c}30`,
+          //           borderRadius: 1,
+          //           position: "relative",
+          //           overflow: "hidden",
+          //           minHeight: 400,
+          //         }}
+          //       >
+          //         {/* <UskunaDiagram u={uskuna} isDark={isDark} /> */}
+          //         <img
+          //           src="/public/images/uskunalar/klet.png"
+          //           alt=""
+          //           style={{ objectFit: "contain", width: "100%" }}
+          //         />
+          //       </Box>
+          //     </Paper>
+          //   </Grid>
 
-            <Grid item xs={12} md={7}>
-              <Paper sx={{ p: 2, border: `1px solid ${c}25`, height: "100%" }}>
-                <Box
-                  sx={{
-                    mb: 2.5,
-                    p: 1.5,
-                    background: isDark ? "rgba(0,0,0,0.2)" : "rgba(0,0,0,0.02)",
-                    border: "1px solid",
-                    borderColor: "divider",
-                    borderRadius: 1,
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      mb: 1,
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontFamily: "'Share Tech Mono',monospace",
-                        fontSize: "0.6rem",
-                        color: "text.secondary",
-                        letterSpacing: "0.1em",
-                      }}
-                    >
-                      UMUMIY SAMARADORLIK
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontFamily: "'Orbitron',monospace",
-                        fontSize: "1.3rem",
-                        fontWeight: 700,
-                        color: samColor,
-                      }}
-                    >
-                      {uskuna.samaradorlik}%
-                    </Typography>
-                  </Box>
+          //   <Grid item xs={12} md={7}>
+          //     <Paper sx={{ p: 2, border: `1px solid ${c}25`, height: "100%" }}>
+          //       <Box
+          //         sx={{
+          //           mb: 2.5,
+          //           p: 1.5,
+          //           background: isDark ? "rgba(0,0,0,0.2)" : "rgba(0,0,0,0.02)",
+          //           border: "1px solid",
+          //           borderColor: "divider",
+          //           borderRadius: 1,
+          //         }}
+          //       >
+          //         <Box
+          //           sx={{
+          //             display: "flex",
+          //             justifyContent: "space-between",
+          //             mb: 1,
+          //           }}
+          //         >
+          //           <Typography
+          //             sx={{
+          //               fontFamily: "'Share Tech Mono',monospace",
+          //               fontSize: "0.6rem",
+          //               color: "text.secondary",
+          //               letterSpacing: "0.1em",
+          //             }}
+          //           >
+          //             UMUMIY SAMARADORLIK
+          //           </Typography>
+          //           <Typography
+          //             sx={{
+          //               fontFamily: "'Orbitron',monospace",
+          //               fontSize: "1.3rem",
+          //               fontWeight: 700,
+          //               color: samColor,
+          //             }}
+          //           >
+          //             {uskuna.samaradorlik}%
+          //           </Typography>
+          //         </Box>
 
-                  <LinearProgress
-                    variant="determinate"
-                    value={uskuna.samaradorlik}
-                    sx={{
-                      height: 12,
-                      borderRadius: 1,
-                      "& .MuiLinearProgress-bar": {
-                        background: `linear-gradient(90deg,${samColor}aa,${samColor})`,
-                        borderRadius: 1,
-                      },
-                    }}
-                  />
-                </Box>
+          //         <LinearProgress
+          //           variant="determinate"
+          //           value={uskuna.samaradorlik}
+          //           sx={{
+          //             height: 12,
+          //             borderRadius: 1,
+          //             "& .MuiLinearProgress-bar": {
+          //               background: `linear-gradient(90deg,${samColor}aa,${samColor})`,
+          //               borderRadius: 1,
+          //             },
+          //           }}
+          //         />
+          //       </Box>
 
-                <Grid container spacing={1.5}>
-                  {[
-                    {
-                      l: "HARORAT",
-                      v: `${uskuna.harorat}°C`,
-                      c: uskuna.harorat > 1000 ? "#ff2d55" : "#ff6b1a",
-                      icon: "🌡️",
-                    },
-                    {
-                      l: "BOSIM",
-                      v: `${uskuna.bosim} bar`,
-                      c: "#00d4ff",
-                      icon: "💨",
-                    },
-                    {
-                      l: "QUVVAT",
-                      v: `${uskuna.quvvat} kW`,
-                      c: "#a78bfa",
-                      icon: "⚡",
-                    },
-                    {
-                      l: "ISH VAQTI",
-                      v: `${uskuna.ishVaqti?.toLocaleString?.() || uskuna.ishVaqti || "—"} soat`,
-                      c: "#00e676",
-                      icon: "⏱️",
-                    },
-                    {
-                      l: "KEYINGI TA",
-                      v: `${uskuna.keyingiTA || "—"} kun`,
-                      c: uskuna.keyingiTA < 30 ? "#ffd60a" : "#6b7280",
-                      icon: "🔧",
-                    },
-                    { l: "MODEL", v: uskuna.model, c: "#00d4ff", icon: "🏭" },
-                    { l: "ISHLAB", v: uskuna.ishlab, c: "#6b7280", icon: "📅" },
-                    { l: "UCHASTKA", v: uskuna.uchastkId, c, icon: "📍" },
-                  ].map((m) => (
-                    <Grid item xs={6} sm={3} key={m.l}>
-                      <Box
-                        sx={{
-                          p: 1.2,
-                          background: isDark
-                            ? "rgba(0,0,0,0.2)"
-                            : "rgba(0,0,0,0.025)",
-                          border: "1px solid",
-                          borderColor: "divider",
-                          borderRadius: 1,
-                        }}
-                      >
-                        <Typography sx={{ fontSize: "0.85rem", mb: 0.3 }}>
-                          {m.icon}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontFamily: "'Share Tech Mono',monospace",
-                            fontSize: "1rem",
-                            fontWeight: 700,
-                            color: m.c,
-                          }}
-                        >
-                          {m.v}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontFamily: "'Share Tech Mono',monospace",
-                            fontSize: "0.5rem",
-                            color: "text.disabled",
-                            letterSpacing: "0.08em",
-                            mt: 0.2,
-                          }}
-                        >
-                          {m.l}
-                        </Typography>
-                      </Box>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Paper>
-            </Grid>
-          </Grid>
-          // <EAFFurnace3D height={700} />
+          //       <Grid container spacing={1.5}>
+          //         {[
+          //           {
+          //             l: "HARORAT",
+          //             v: `${uskuna.harorat}°C`,
+          //             c: uskuna.harorat > 1000 ? "#ff2d55" : "#ff6b1a",
+          //             icon: "🌡️",
+          //           },
+          //           {
+          //             l: "BOSIM",
+          //             v: `${uskuna.bosim} bar`,
+          //             c: "#00d4ff",
+          //             icon: "💨",
+          //           },
+          //           {
+          //             l: "QUVVAT",
+          //             v: `${uskuna.quvvat} kW`,
+          //             c: "#a78bfa",
+          //             icon: "⚡",
+          //           },
+          //           {
+          //             l: "ISH VAQTI",
+          //             v: `${uskuna.ishVaqti?.toLocaleString?.() || uskuna.ishVaqti || "—"} soat`,
+          //             c: "#00e676",
+          //             icon: "⏱️",
+          //           },
+          //           {
+          //             l: "KEYINGI TA",
+          //             v: `${uskuna.keyingiTA || "—"} kun`,
+          //             c: uskuna.keyingiTA < 30 ? "#ffd60a" : "#6b7280",
+          //             icon: "🔧",
+          //           },
+          //           { l: "MODEL", v: uskuna.model, c: "#00d4ff", icon: "🏭" },
+          //           { l: "ISHLAB", v: uskuna.ishlab, c: "#6b7280", icon: "📅" },
+          //           { l: "UCHASTKA", v: uskuna.uchastkId, c, icon: "📍" },
+          //         ].map((m) => (
+          //           <Grid item xs={6} sm={3} key={m.l}>
+          //             <Box
+          //               sx={{
+          //                 p: 1.2,
+          //                 background: isDark
+          //                   ? "rgba(0,0,0,0.2)"
+          //                   : "rgba(0,0,0,0.025)",
+          //                 border: "1px solid",
+          //                 borderColor: "divider",
+          //                 borderRadius: 1,
+          //               }}
+          //             >
+          //               <Typography sx={{ fontSize: "0.85rem", mb: 0.3 }}>
+          //                 {m.icon}
+          //               </Typography>
+          //               <Typography
+          //                 sx={{
+          //                   fontFamily: "'Share Tech Mono',monospace",
+          //                   fontSize: "1rem",
+          //                   fontWeight: 700,
+          //                   color: m.c,
+          //                 }}
+          //               >
+          //                 {m.v}
+          //               </Typography>
+          //               <Typography
+          //                 sx={{
+          //                   fontFamily: "'Share Tech Mono',monospace",
+          //                   fontSize: "0.5rem",
+          //                   color: "text.disabled",
+          //                   letterSpacing: "0.08em",
+          //                   mt: 0.2,
+          //                 }}
+          //               >
+          //                 {m.l}
+          //               </Typography>
+          //             </Box>
+          //           </Grid>
+          //         ))}
+          //       </Grid>
+          //     </Paper>
+          //   </Grid>
+          // </Grid>
+          <UskunaImageView uskuna={uskuna} />
         )}
 
         {tab === TAB_KORS && (
