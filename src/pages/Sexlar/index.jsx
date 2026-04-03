@@ -1544,7 +1544,7 @@ function SexCard({ s, selected, onClick }) {
               <Box
                 sx={{
                   textAlign: "center",
-                  background: isDark ? "rgba(0,0,0,0.2)" : "rgba(0,0,0,0.03)",
+                  background: isDark ? "rgba(0,0,0,0.8)" : "rgba(0,0,0,0.03)",
                   borderRadius: 0.5,
                   py: 0.6,
                   border: "1px solid",
@@ -1565,7 +1565,7 @@ function SexCard({ s, selected, onClick }) {
                   sx={{
                     fontFamily: "'Share Tech Mono',monospace",
                     fontSize: "0.47rem",
-                    color: "text.disabled",
+                    color: isDark ? "#fff" : "#000",
                     letterSpacing: "0.08em",
                   }}
                 >
@@ -1585,7 +1585,7 @@ function SexCard({ s, selected, onClick }) {
               sx={{
                 fontFamily: "'Share Tech Mono',monospace",
                 fontSize: "0.58rem",
-                color: "text.secondary",
+                color: isDark ? "#fff" : "#000",
               }}
             >
               YUK KO'RSATKICHI
@@ -1623,7 +1623,7 @@ function SexCard({ s, selected, onClick }) {
               sx={{
                 fontFamily: "'Share Tech Mono',monospace",
                 fontSize: "0.58rem",
-                color: "text.secondary",
+                color: isDark ? "#fff" : "#000",
               }}
             >
               HARORAT

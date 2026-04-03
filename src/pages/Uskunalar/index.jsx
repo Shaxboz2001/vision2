@@ -320,517 +320,524 @@ function DomnaPechiDiagram({ u, isDark }) {
   const sw = (key) => (active?.id === key ? 2.5 : 1.8);
 
   return (
-    <Box sx={{ position: "relative", width: "100%", height: "100%" }}>
-      <svg
-        viewBox="0 0 380 440"
-        style={{ width: "100%", height: "100%", display: "block" }}
-      >
-        <defs>
-          <radialGradient id="fireGlow" cx="50%" cy="70%" r="50%">
-            <stop offset="0%" stopColor="#ff4500" stopOpacity="0.5" />
-            <stop offset="100%" stopColor="#ff2d55" stopOpacity="0" />
-          </radialGradient>
-          <filter id="softGlow">
-            <feGaussianBlur stdDeviation="2.5" result="b" />
-            <feMerge>
-              <feMergeNode in="b" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
+    // <Box sx={{ position: "relative", width: "100%", height: "100%" }}>
+    //   <svg
+    //     viewBox="0 0 380 440"
+    //     style={{ width: "100%", height: "100%", display: "block" }}
+    //   >
+    //     <defs>
+    //       <radialGradient id="fireGlow" cx="50%" cy="70%" r="50%">
+    //         <stop offset="0%" stopColor="#ff4500" stopOpacity="0.5" />
+    //         <stop offset="100%" stopColor="#ff2d55" stopOpacity="0" />
+    //       </radialGradient>
+    //       <filter id="softGlow">
+    //         <feGaussianBlur stdDeviation="2.5" result="b" />
+    //         <feMerge>
+    //           <feMergeNode in="b" />
+    //           <feMergeNode in="SourceGraphic" />
+    //         </feMerge>
+    //       </filter>
+    //     </defs>
 
-        {/* Grid fon */}
-        {[...Array(10)].map((_, i) => (
-          <line
-            key={`h${i}`}
-            x1="0"
-            y1={i * 44}
-            x2="380"
-            y2={i * 44}
-            stroke={isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.025)"}
-            strokeWidth="1"
-          />
-        ))}
-        {[...Array(8)].map((_, i) => (
-          <line
-            key={`v${i}`}
-            x1={i * 50}
-            y1="0"
-            x2={i * 50}
-            y2="440"
-            stroke={isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.025)"}
-            strokeWidth="1"
-          />
-        ))}
+    //     {/* Grid fon */}
+    //     {[...Array(10)].map((_, i) => (
+    //       <line
+    //         key={`h${i}`}
+    //         x1="0"
+    //         y1={i * 44}
+    //         x2="380"
+    //         y2={i * 44}
+    //         stroke={isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.025)"}
+    //         strokeWidth="1"
+    //       />
+    //     ))}
+    //     {[...Array(8)].map((_, i) => (
+    //       <line
+    //         key={`v${i}`}
+    //         x1={i * 50}
+    //         y1="0"
+    //         x2={i * 50}
+    //         y2="440"
+    //         stroke={isDark ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.025)"}
+    //         strokeWidth="1"
+    //       />
+    //     ))}
 
-        {/* ── KOLOSHNIK (tepa) ── */}
-        <g
-          onClick={() => handleClick("KOLOSHNIK")}
-          style={{ cursor: "pointer" }}
-          opacity={active && active.id !== "KOLOSHNIK" ? 0.35 : 1}
-        >
-          <ellipse
-            cx="190"
-            cy="62"
-            rx="68"
-            ry="18"
-            fill={accentFill("KOLOSHNIK")}
-            stroke={stroke("KOLOSHNIK")}
-            strokeWidth={sw("KOLOSHNIK")}
-          />
-          <text
-            x="190"
-            y="66"
-            fill={parts.KOLOSHNIK.color}
-            fontSize="8"
-            fontFamily="'Share Tech Mono',monospace"
-            textAnchor="middle"
-            opacity="0.85"
-          >
-            KOLOSHNIK
-          </text>
-        </g>
+    //     {/* ── KOLOSHNIK (tepa) ── */}
+    //     <g
+    //       onClick={() => handleClick("KOLOSHNIK")}
+    //       style={{ cursor: "pointer" }}
+    //       opacity={active && active.id !== "KOLOSHNIK" ? 0.35 : 1}
+    //     >
+    //       <ellipse
+    //         cx="190"
+    //         cy="62"
+    //         rx="68"
+    //         ry="18"
+    //         fill={accentFill("KOLOSHNIK")}
+    //         stroke={stroke("KOLOSHNIK")}
+    //         strokeWidth={sw("KOLOSHNIK")}
+    //       />
+    //       <text
+    //         x="190"
+    //         y="66"
+    //         fill={parts.KOLOSHNIK.color}
+    //         fontSize="8"
+    //         fontFamily="'Share Tech Mono',monospace"
+    //         textAnchor="middle"
+    //         opacity="0.85"
+    //       >
+    //         KOLOSHNIK
+    //       </text>
+    //     </g>
 
-        {/* ── YUKLASH qurilmasi ── */}
-        <g
-          onClick={() => handleClick("YUKLASH")}
-          style={{ cursor: "pointer" }}
-          opacity={active && active.id !== "YUKLASH" ? 0.35 : 1}
-        >
-          <rect
-            x="154"
-            y="78"
-            width="72"
-            height="24"
-            rx="3"
-            fill={accentFill("YUKLASH")}
-            stroke={stroke("YUKLASH")}
-            strokeWidth={sw("YUKLASH")}
-          />
-          <text
-            x="190"
-            y="93"
-            fill={parts.YUKLASH.color}
-            fontSize="7"
-            fontFamily="'Share Tech Mono',monospace"
-            textAnchor="middle"
-            opacity="0.85"
-          >
-            YUKLASH QURILMASI
-          </text>
-        </g>
+    //     {/* ── YUKLASH qurilmasi ── */}
+    //     <g
+    //       onClick={() => handleClick("YUKLASH")}
+    //       style={{ cursor: "pointer" }}
+    //       opacity={active && active.id !== "YUKLASH" ? 0.35 : 1}
+    //     >
+    //       <rect
+    //         x="154"
+    //         y="78"
+    //         width="72"
+    //         height="24"
+    //         rx="3"
+    //         fill={accentFill("YUKLASH")}
+    //         stroke={stroke("YUKLASH")}
+    //         strokeWidth={sw("YUKLASH")}
+    //       />
+    //       <text
+    //         x="190"
+    //         y="93"
+    //         fill={parts.YUKLASH.color}
+    //         fontSize="7"
+    //         fontFamily="'Share Tech Mono',monospace"
+    //         textAnchor="middle"
+    //         opacity="0.85"
+    //       >
+    //         YUKLASH QURILMASI
+    //       </text>
+    //     </g>
 
-        {/* ── SHAFT (asosiy tana) ── */}
-        <g
-          onClick={() => handleClick("SHAFT")}
-          style={{ cursor: "pointer" }}
-          opacity={active && active.id !== "SHAFT" ? 0.35 : 1}
-        >
-          <path
-            d="M122 102 L108 200 L272 200 L258 102Z"
-            fill={accentFill("SHAFT")}
-            stroke={stroke("SHAFT")}
-            strokeWidth={sw("SHAFT")}
-          />
-          <text
-            x="190"
-            y="158"
-            fill={parts.SHAFT.color}
-            fontSize="9"
-            fontFamily="'Share Tech Mono',monospace"
-            textAnchor="middle"
-            opacity="0.85"
-            fontWeight="bold"
-          >
-            SHAFT
-          </text>
-          <text
-            x="190"
-            y="172"
-            fill={parts.SHAFT.color}
-            fontSize="7"
-            fontFamily="'Share Tech Mono',monospace"
-            textAnchor="middle"
-            opacity="0.65"
-          >
-            {u.harorat}°C
-          </text>
-        </g>
+    //     {/* ── SHAFT (asosiy tana) ── */}
+    //     <g
+    //       onClick={() => handleClick("SHAFT")}
+    //       style={{ cursor: "pointer" }}
+    //       opacity={active && active.id !== "SHAFT" ? 0.35 : 1}
+    //     >
+    //       <path
+    //         d="M122 102 L108 200 L272 200 L258 102Z"
+    //         fill={accentFill("SHAFT")}
+    //         stroke={stroke("SHAFT")}
+    //         strokeWidth={sw("SHAFT")}
+    //       />
+    //       <text
+    //         x="190"
+    //         y="158"
+    //         fill={parts.SHAFT.color}
+    //         fontSize="9"
+    //         fontFamily="'Share Tech Mono',monospace"
+    //         textAnchor="middle"
+    //         opacity="0.85"
+    //         fontWeight="bold"
+    //       >
+    //         SHAFT
+    //       </text>
+    //       <text
+    //         x="190"
+    //         y="172"
+    //         fill={parts.SHAFT.color}
+    //         fontSize="7"
+    //         fontFamily="'Share Tech Mono',monospace"
+    //         textAnchor="middle"
+    //         opacity="0.65"
+    //       >
+    //         {u.harorat}°C
+    //       </text>
+    //     </g>
 
-        {/* ── ZAPLES ── */}
-        <g
-          onClick={() => handleClick("ZAPLES")}
-          style={{ cursor: "pointer" }}
-          opacity={active && active.id !== "ZAPLES" ? 0.35 : 1}
-        >
-          <path
-            d="M108 200 L98 232 L282 232 L272 200Z"
-            fill={accentFill("ZAPLES")}
-            stroke={stroke("ZAPLES")}
-            strokeWidth={sw("ZAPLES")}
-          />
-          <text
-            x="190"
-            y="221"
-            fill={parts.ZAPLES.color}
-            fontSize="7.5"
-            fontFamily="'Share Tech Mono',monospace"
-            textAnchor="middle"
-            opacity="0.85"
-          >
-            ZAPLES
-          </text>
-        </g>
+    //     {/* ── ZAPLES ── */}
+    //     <g
+    //       onClick={() => handleClick("ZAPLES")}
+    //       style={{ cursor: "pointer" }}
+    //       opacity={active && active.id !== "ZAPLES" ? 0.35 : 1}
+    //     >
+    //       <path
+    //         d="M108 200 L98 232 L282 232 L272 200Z"
+    //         fill={accentFill("ZAPLES")}
+    //         stroke={stroke("ZAPLES")}
+    //         strokeWidth={sw("ZAPLES")}
+    //       />
+    //       <text
+    //         x="190"
+    //         y="221"
+    //         fill={parts.ZAPLES.color}
+    //         fontSize="7.5"
+    //         fontFamily="'Share Tech Mono',monospace"
+    //         textAnchor="middle"
+    //         opacity="0.85"
+    //       >
+    //         ZAPLES
+    //       </text>
+    //     </g>
 
-        {/* ── RASSVAR ── */}
-        <g
-          onClick={() => handleClick("RASSVAR")}
-          style={{ cursor: "pointer" }}
-          opacity={active && active.id !== "RASSVAR" ? 0.35 : 1}
-        >
-          <path
-            d="M98 232 L92 270 L288 270 L282 232Z"
-            fill={accentFill("RASSVAR")}
-            stroke={stroke("RASSVAR")}
-            strokeWidth={sw("RASSVAR")}
-          />
-          <text
-            x="190"
-            y="256"
-            fill={parts.RASSVAR.color}
-            fontSize="7.5"
-            fontFamily="'Share Tech Mono',monospace"
-            textAnchor="middle"
-            opacity="0.85"
-          >
-            RASSVAR
-          </text>
-        </g>
+    //     {/* ── RASSVAR ── */}
+    //     <g
+    //       onClick={() => handleClick("RASSVAR")}
+    //       style={{ cursor: "pointer" }}
+    //       opacity={active && active.id !== "RASSVAR" ? 0.35 : 1}
+    //     >
+    //       <path
+    //         d="M98 232 L92 270 L288 270 L282 232Z"
+    //         fill={accentFill("RASSVAR")}
+    //         stroke={stroke("RASSVAR")}
+    //         strokeWidth={sw("RASSVAR")}
+    //       />
+    //       <text
+    //         x="190"
+    //         y="256"
+    //         fill={parts.RASSVAR.color}
+    //         fontSize="7.5"
+    //         fontFamily="'Share Tech Mono',monospace"
+    //         textAnchor="middle"
+    //         opacity="0.85"
+    //       >
+    //         RASSVAR
+    //       </text>
+    //     </g>
 
-        {/* ── VOZDUSHKA (tuyerlar) ── */}
-        <g
-          onClick={() => handleClick("VOZDUSHKA")}
-          style={{ cursor: "pointer" }}
-          opacity={active && active.id !== "VOZDUSHKA" ? 0.35 : 1}
-        >
-          {/* chap quvur */}
-          <rect
-            x="28"
-            y="252"
-            width="64"
-            height="12"
-            rx="6"
-            fill={accentFill("VOZDUSHKA")}
-            stroke={stroke("VOZDUSHKA")}
-            strokeWidth={sw("VOZDUSHKA")}
-          />
-          {/* o'ng quvur */}
-          <rect
-            x="288"
-            y="252"
-            width="64"
-            height="12"
-            rx="6"
-            fill={accentFill("VOZDUSHKA")}
-            stroke={stroke("VOZDUSHKA")}
-            strokeWidth={sw("VOZDUSHKA")}
-          />
-          <text
-            x="60"
-            y="248"
-            fill={parts.VOZDUSHKA.color}
-            fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
-            textAnchor="middle"
-            opacity="0.85"
-          >
-            TUYERLAR
-          </text>
-          {/* havo oqim strelkasi */}
-          <path
-            d="M92 258 L108 258"
-            fill="none"
-            stroke={parts.VOZDUSHKA.color}
-            strokeWidth="1.5"
-            opacity="0.5"
-            markerEnd="url(#arrowG)"
-          />
-          <path
-            d="M288 258 L272 258"
-            fill="none"
-            stroke={parts.VOZDUSHKA.color}
-            strokeWidth="1.5"
-            opacity="0.5"
-          />
-        </g>
+    //     {/* ── VOZDUSHKA (tuyerlar) ── */}
+    //     <g
+    //       onClick={() => handleClick("VOZDUSHKA")}
+    //       style={{ cursor: "pointer" }}
+    //       opacity={active && active.id !== "VOZDUSHKA" ? 0.35 : 1}
+    //     >
+    //       {/* chap quvur */}
+    //       <rect
+    //         x="28"
+    //         y="252"
+    //         width="64"
+    //         height="12"
+    //         rx="6"
+    //         fill={accentFill("VOZDUSHKA")}
+    //         stroke={stroke("VOZDUSHKA")}
+    //         strokeWidth={sw("VOZDUSHKA")}
+    //       />
+    //       {/* o'ng quvur */}
+    //       <rect
+    //         x="288"
+    //         y="252"
+    //         width="64"
+    //         height="12"
+    //         rx="6"
+    //         fill={accentFill("VOZDUSHKA")}
+    //         stroke={stroke("VOZDUSHKA")}
+    //         strokeWidth={sw("VOZDUSHKA")}
+    //       />
+    //       <text
+    //         x="60"
+    //         y="248"
+    //         fill={parts.VOZDUSHKA.color}
+    //         fontSize="6.5"
+    //         fontFamily="'Share Tech Mono',monospace"
+    //         textAnchor="middle"
+    //         opacity="0.85"
+    //       >
+    //         TUYERLAR
+    //       </text>
+    //       {/* havo oqim strelkasi */}
+    //       <path
+    //         d="M92 258 L108 258"
+    //         fill="none"
+    //         stroke={parts.VOZDUSHKA.color}
+    //         strokeWidth="1.5"
+    //         opacity="0.5"
+    //         markerEnd="url(#arrowG)"
+    //       />
+    //       <path
+    //         d="M288 258 L272 258"
+    //         fill="none"
+    //         stroke={parts.VOZDUSHKA.color}
+    //         strokeWidth="1.5"
+    //         opacity="0.5"
+    //       />
+    //     </g>
 
-        {/* ── GORN ── */}
-        <g
-          onClick={() => handleClick("GORN")}
-          style={{ cursor: "pointer" }}
-          opacity={active && active.id !== "GORN" ? 0.35 : 1}
-        >
-          <path
-            d="M92 270 L88 326 L292 326 L288 270Z"
-            fill={accentFill("GORN")}
-            stroke={stroke("GORN")}
-            strokeWidth={sw("GORN")}
-          />
-          {/* Olov animatsiyasi */}
-          {u.holat === "faol" && (
-            <ellipse
-              cx="190"
-              cy="310"
-              rx="40"
-              ry="15"
-              fill="url(#fireGlow)"
-              opacity="0.7"
-            >
-              <animate
-                attributeName="ry"
-                values="15;20;13;18;15"
-                dur="2.5s"
-                repeatCount="indefinite"
-              />
-            </ellipse>
-          )}
-          <text
-            x="190"
-            y="300"
-            fill={parts.GORN.color}
-            fontSize="9"
-            fontFamily="'Share Tech Mono',monospace"
-            textAnchor="middle"
-            opacity="0.85"
-            fontWeight="bold"
-          >
-            GORN
-          </text>
-          <text
-            x="190"
-            y="315"
-            fill={parts.GORN.color}
-            fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
-            textAnchor="middle"
-            opacity="0.65"
-          >
-            {Math.round(u.harorat * 1.1)}°C
-          </text>
-        </g>
+    //     {/* ── GORN ── */}
+    //     <g
+    //       onClick={() => handleClick("GORN")}
+    //       style={{ cursor: "pointer" }}
+    //       opacity={active && active.id !== "GORN" ? 0.35 : 1}
+    //     >
+    //       <path
+    //         d="M92 270 L88 326 L292 326 L288 270Z"
+    //         fill={accentFill("GORN")}
+    //         stroke={stroke("GORN")}
+    //         strokeWidth={sw("GORN")}
+    //       />
+    //       {/* Olov animatsiyasi */}
+    //       {u.holat === "faol" && (
+    //         <ellipse
+    //           cx="190"
+    //           cy="310"
+    //           rx="40"
+    //           ry="15"
+    //           fill="url(#fireGlow)"
+    //           opacity="0.7"
+    //         >
+    //           <animate
+    //             attributeName="ry"
+    //             values="15;20;13;18;15"
+    //             dur="2.5s"
+    //             repeatCount="indefinite"
+    //           />
+    //         </ellipse>
+    //       )}
+    //       <text
+    //         x="190"
+    //         y="300"
+    //         fill={parts.GORN.color}
+    //         fontSize="9"
+    //         fontFamily="'Share Tech Mono',monospace"
+    //         textAnchor="middle"
+    //         opacity="0.85"
+    //         fontWeight="bold"
+    //       >
+    //         GORN
+    //       </text>
+    //       <text
+    //         x="190"
+    //         y="315"
+    //         fill={parts.GORN.color}
+    //         fontSize="6.5"
+    //         fontFamily="'Share Tech Mono',monospace"
+    //         textAnchor="middle"
+    //         opacity="0.65"
+    //       >
+    //         {Math.round(u.harorat * 1.1)}°C
+    //       </text>
+    //     </g>
 
-        {/* ── LETKA ── */}
-        <g
-          onClick={() => handleClick("LETKA")}
-          style={{ cursor: "pointer" }}
-          opacity={active && active.id !== "LETKA" ? 0.35 : 1}
-        >
-          {/* cho'yan letka */}
-          <rect
-            x="288"
-            y="298"
-            width="68"
-            height="14"
-            rx="7"
-            fill={accentFill("LETKA")}
-            stroke={stroke("LETKA")}
-            strokeWidth={sw("LETKA")}
-          />
-          <text
-            x="322"
-            y="310"
-            fill={parts.LETKA.color}
-            fontSize="6"
-            fontFamily="'Share Tech Mono',monospace"
-            textAnchor="middle"
-            opacity="0.85"
-          >
-            LETKA
-          </text>
-          {/* suyuq metall oqim */}
-          {u.holat === "faol" && (
-            <path
-              d="M356 305 Q368 305 372 315 Q368 325 356 325"
-              fill="#ff950025"
-              stroke="#ff9500"
-              strokeWidth="1.2"
-              opacity="0.6"
-            >
-              <animate
-                attributeName="opacity"
-                values="0.6;0.2;0.6"
-                dur="1.8s"
-                repeatCount="indefinite"
-              />
-            </path>
-          )}
-        </g>
+    //     {/* ── LETKA ── */}
+    //     <g
+    //       onClick={() => handleClick("LETKA")}
+    //       style={{ cursor: "pointer" }}
+    //       opacity={active && active.id !== "LETKA" ? 0.35 : 1}
+    //     >
+    //       {/* cho'yan letka */}
+    //       <rect
+    //         x="288"
+    //         y="298"
+    //         width="68"
+    //         height="14"
+    //         rx="7"
+    //         fill={accentFill("LETKA")}
+    //         stroke={stroke("LETKA")}
+    //         strokeWidth={sw("LETKA")}
+    //       />
+    //       <text
+    //         x="322"
+    //         y="310"
+    //         fill={parts.LETKA.color}
+    //         fontSize="6"
+    //         fontFamily="'Share Tech Mono',monospace"
+    //         textAnchor="middle"
+    //         opacity="0.85"
+    //       >
+    //         LETKA
+    //       </text>
+    //       {/* suyuq metall oqim */}
+    //       {u.holat === "faol" && (
+    //         <path
+    //           d="M356 305 Q368 305 372 315 Q368 325 356 325"
+    //           fill="#ff950025"
+    //           stroke="#ff9500"
+    //           strokeWidth="1.2"
+    //           opacity="0.6"
+    //         >
+    //           <animate
+    //             attributeName="opacity"
+    //             values="0.6;0.2;0.6"
+    //             dur="1.8s"
+    //             repeatCount="indefinite"
+    //           />
+    //         </path>
+    //       )}
+    //     </g>
 
-        {/* ── PECH TAGI ── */}
-        <ellipse
-          cx="190"
-          cy="326"
-          rx="102"
-          ry="12"
-          fill={isDark ? "rgba(255,45,85,0.1)" : "rgba(255,45,85,0.06)"}
-          stroke="#ff2d5555"
-          strokeWidth="1.5"
-        />
-        <rect
-          x="88"
-          y="326"
-          width="204"
-          height="18"
-          rx="0"
-          fill={isDark ? "rgba(100,100,120,0.15)" : "rgba(100,100,120,0.06)"}
-          stroke={isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}
-          strokeWidth="1"
-        />
+    //     {/* ── PECH TAGI ── */}
+    //     <ellipse
+    //       cx="190"
+    //       cy="326"
+    //       rx="102"
+    //       ry="12"
+    //       fill={isDark ? "rgba(255,45,85,0.1)" : "rgba(255,45,85,0.06)"}
+    //       stroke="#ff2d5555"
+    //       strokeWidth="1.5"
+    //     />
+    //     <rect
+    //       x="88"
+    //       y="326"
+    //       width="204"
+    //       height="18"
+    //       rx="0"
+    //       fill={isDark ? "rgba(100,100,120,0.15)" : "rgba(100,100,120,0.06)"}
+    //       stroke={isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}
+    //       strokeWidth="1"
+    //     />
 
-        {/* ── GAZOPROVOD (chap yuqori quvur) ── */}
-        <g
-          onClick={() => handleClick("GAZOPROVOD")}
-          style={{ cursor: "pointer" }}
-          opacity={active && active.id !== "GAZOPROVOD" ? 0.35 : 1}
-        >
-          <path
-            d="M258 70 Q310 55 330 30"
-            fill="none"
-            stroke={stroke("GAZOPROVOD")}
-            strokeWidth={sw("GAZOPROVOD")}
-            strokeDasharray="7,4"
-            strokeLinecap="round"
-          />
-          <circle
-            cx="330"
-            cy="30"
-            r="7"
-            fill={accentFill("GAZOPROVOD")}
-            stroke={stroke("GAZOPROVOD")}
-            strokeWidth="1.5"
-          />
-          <text
-            x="332"
-            y="17"
-            fill={parts.GAZOPROVOD.color}
-            fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
-            opacity="0.85"
-          >
-            GAZ QUVURI
-          </text>
-          {u.holat === "faol" && (
-            <circle
-              cx="295"
-              cy="50"
-              r="3"
-              fill={parts.GAZOPROVOD.color}
-              opacity="0.6"
-            >
-              <animate
-                attributeName="cy"
-                values="50;44;50"
-                dur="2s"
-                repeatCount="indefinite"
-              />
-              <animate
-                attributeName="opacity"
-                values="0.6;0.1;0.6"
-                dur="2s"
-                repeatCount="indefinite"
-              />
-            </circle>
-          )}
-        </g>
+    //     {/* ── GAZOPROVOD (chap yuqori quvur) ── */}
+    //     <g
+    //       onClick={() => handleClick("GAZOPROVOD")}
+    //       style={{ cursor: "pointer" }}
+    //       opacity={active && active.id !== "GAZOPROVOD" ? 0.35 : 1}
+    //     >
+    //       <path
+    //         d="M258 70 Q310 55 330 30"
+    //         fill="none"
+    //         stroke={stroke("GAZOPROVOD")}
+    //         strokeWidth={sw("GAZOPROVOD")}
+    //         strokeDasharray="7,4"
+    //         strokeLinecap="round"
+    //       />
+    //       <circle
+    //         cx="330"
+    //         cy="30"
+    //         r="7"
+    //         fill={accentFill("GAZOPROVOD")}
+    //         stroke={stroke("GAZOPROVOD")}
+    //         strokeWidth="1.5"
+    //       />
+    //       <text
+    //         x="332"
+    //         y="17"
+    //         fill={parts.GAZOPROVOD.color}
+    //         fontSize="6.5"
+    //         fontFamily="'Share Tech Mono',monospace"
+    //         opacity="0.85"
+    //       >
+    //         GAZ QUVURI
+    //       </text>
+    //       {u.holat === "faol" && (
+    //         <circle
+    //           cx="295"
+    //           cy="50"
+    //           r="3"
+    //           fill={parts.GAZOPROVOD.color}
+    //           opacity="0.6"
+    //         >
+    //           <animate
+    //             attributeName="cy"
+    //             values="50;44;50"
+    //             dur="2s"
+    //             repeatCount="indefinite"
+    //           />
+    //           <animate
+    //             attributeName="opacity"
+    //             values="0.6;0.1;0.6"
+    //             dur="2s"
+    //             repeatCount="indefinite"
+    //           />
+    //         </circle>
+    //       )}
+    //     </g>
 
-        {/* ── CHAP LEGEND CHIZIQLAR ── */}
-        <line
-          x1="60"
-          y1="62"
-          x2="122"
-          y2="80"
-          stroke={`${parts.KOLOSHNIK.color}40`}
-          strokeWidth="0.8"
-          strokeDasharray="3,2"
-        />
-        <line
-          x1="50"
-          y1="155"
-          x2="108"
-          y2="155"
-          stroke={`${parts.SHAFT.color}40`}
-          strokeWidth="0.8"
-          strokeDasharray="3,2"
-        />
-        <line
-          x1="40"
-          y1="295"
-          x2="88"
-          y2="300"
-          stroke={`${parts.GORN.color}40`}
-          strokeWidth="0.8"
-          strokeDasharray="3,2"
-        />
+    //     {/* ── CHAP LEGEND CHIZIQLAR ── */}
+    //     <line
+    //       x1="60"
+    //       y1="62"
+    //       x2="122"
+    //       y2="80"
+    //       stroke={`${parts.KOLOSHNIK.color}40`}
+    //       strokeWidth="0.8"
+    //       strokeDasharray="3,2"
+    //     />
+    //     <line
+    //       x1="50"
+    //       y1="155"
+    //       x2="108"
+    //       y2="155"
+    //       stroke={`${parts.SHAFT.color}40`}
+    //       strokeWidth="0.8"
+    //       strokeDasharray="3,2"
+    //     />
+    //     <line
+    //       x1="40"
+    //       y1="295"
+    //       x2="88"
+    //       y2="300"
+    //       stroke={`${parts.GORN.color}40`}
+    //       strokeWidth="0.8"
+    //       strokeDasharray="3,2"
+    //     />
 
-        {/* ── CHAP LEGEND MATNLAR ── */}
-        <text
-          x="55"
-          y="58"
-          fill={parts.KOLOSHNIK.color}
-          fontSize="6.5"
-          fontFamily="'Share Tech Mono',monospace"
-          textAnchor="end"
-          opacity="0.6"
-        >
-          KOLOSHNIK
-        </text>
-        <text
-          x="48"
-          y="150"
-          fill={parts.SHAFT.color}
-          fontSize="6.5"
-          fontFamily="'Share Tech Mono',monospace"
-          textAnchor="end"
-          opacity="0.6"
-        >
-          SHAFT
-        </text>
-        <text
-          x="36"
-          y="290"
-          fill={parts.GORN.color}
-          fontSize="6.5"
-          fontFamily="'Share Tech Mono',monospace"
-          textAnchor="end"
-          opacity="0.6"
-        >
-          GORN
-        </text>
+    //     {/* ── CHAP LEGEND MATNLAR ── */}
+    //     <text
+    //       x="55"
+    //       y="58"
+    //       fill={parts.KOLOSHNIK.color}
+    //       fontSize="6.5"
+    //       fontFamily="'Share Tech Mono',monospace"
+    //       textAnchor="end"
+    //       opacity="0.6"
+    //     >
+    //       KOLOSHNIK
+    //     </text>
+    //     <text
+    //       x="48"
+    //       y="150"
+    //       fill={parts.SHAFT.color}
+    //       fontSize="6.5"
+    //       fontFamily="'Share Tech Mono',monospace"
+    //       textAnchor="end"
+    //       opacity="0.6"
+    //     >
+    //       SHAFT
+    //     </text>
+    //     <text
+    //       x="36"
+    //       y="290"
+    //       fill={parts.GORN.color}
+    //       fontSize="6.5"
+    //       fontFamily="'Share Tech Mono',monospace"
+    //       textAnchor="end"
+    //       opacity="0.6"
+    //     >
+    //       GORN
+    //     </text>
 
-        {/* ── O'LCHOV ko'rsatkich (o'ng tomon) ── */}
-        <line
-          x1="355"
-          y1="102"
-          x2="355"
-          y2="326"
-          stroke={isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}
-          strokeWidth="1"
-          strokeDasharray="4,3"
-        />
-        <text
-          x="370"
-          y="215"
-          fill={isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.2)"}
-          fontSize="6"
-          fontFamily="'Share Tech Mono',monospace"
-          textAnchor="middle"
-          transform="rotate(90, 370, 215)"
-        >
-          UMUMIY BALANDLIK: ~32m
-        </text>
-      </svg>
+    //     {/* ── O'LCHOV ko'rsatkich (o'ng tomon) ── */}
+    //     <line
+    //       x1="355"
+    //       y1="102"
+    //       x2="355"
+    //       y2="326"
+    //       stroke={isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"}
+    //       strokeWidth="1"
+    //       strokeDasharray="4,3"
+    //     />
+    //     <text
+    //       x="370"
+    //       y="215"
+    //       fill={isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.2)"}
+    //       fontSize="6"
+    //       fontFamily="'Share Tech Mono',monospace"
+    //       textAnchor="middle"
+    //       transform="rotate(90, 370, 215)"
+    //     >
+    //       UMUMIY BALANDLIK: ~32m
+    //     </text>
+    //   </svg>
 
-      <PartInfoPanel part={active} onClose={() => setActive(null)} />
+    //   <PartInfoPanel part={active} onClose={() => setActive(null)} />
+    // </Box>
+    <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
+      <img
+        src="/public/images/Electric Arc Furnace in action.png"
+        style={{ objectFit: "contain", width: "100%" }}
+        alt=""
+      />
     </Box>
   );
 }

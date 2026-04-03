@@ -2011,11 +2011,11 @@ export default function Uchastkalar() {
           )}
 
           <FormControl size="small" sx={{ minWidth: 180 }}>
-            <InputLabel>SEX BO'YICHA FILTR</InputLabel>
+            <InputLabel>BO'LINMALAR BO'YICHA FILTR</InputLabel>
             <Select
               value={sexFilter}
               onChange={(e) => setSexFilter(e.target.value)}
-              label="SEX BO'YICHA FILTR"
+              label="BO'LINMALAR BO'YICHA FILTR"
             >
               <MenuItem value="">Barchasi</MenuItem>
               {sx.map((s) => (
@@ -2210,6 +2210,7 @@ export default function Uchastkalar() {
                   "& .MuiDataGrid-columnHeaders": {
                     backgroundColor: "#0b1220",
                     borderBottom: "1px solid rgba(255,255,255,0.1)",
+                    color: isDark ? "#fff" : "#000",
                   },
                   "& .MuiDataGrid-columnHeader": {
                     fontSize: "0.7rem",

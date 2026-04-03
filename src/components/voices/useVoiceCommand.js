@@ -1,7 +1,7 @@
 // hooks/useVoiceCommand.js
 import { useState, useRef, useCallback } from "react";
 
-const VOICE_API = "http://172.16.55.13:8006";
+const VOICE_API = import.meta.env.VITE_VOICE_API || "http://172.16.55.13:8006";
 
 function checkMediaDevices() {
   if (typeof navigator === "undefined") {
@@ -40,11 +40,6 @@ async function getMicStream() {
   });
 }
 
-/**
- * @param {Object} opts
- * @param {Function} opts.onCommand — ({ camera_name, camera_id, action }) => void
- * @param {number}   opts.maxDuration — max recording ms (default 3500)
- */
 export function useVoiceCommand({ onCommand, maxDuration = 3500 }) {
   const [isListening, setIsListening] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -69,7 +64,7 @@ export function useVoiceCommand({ onCommand, maxDuration = 3500 }) {
         const blob = new Blob(chunks, { type: "audio/webm" });
 
         if (blob.size < 1000) {
-          setError("Ovoz yetarli emas, qaytadan urinib ko'ring");
+          setError("Ovoz yetarli emas");
           setIsProcessing(false);
           return;
         }
@@ -99,7 +94,7 @@ export function useVoiceCommand({ onCommand, maxDuration = 3500 }) {
         } else if (data.transcript) {
           setError(`"${data.transcript}" — kamera topilmadi`);
         } else {
-          setError("Ovoz aniqlanmadi, qaytadan urinib ko'ring");
+          setError("Ovoz aniqlanmadi");
         }
       } catch (err) {
         console.error("Voice command error:", err);
@@ -111,13 +106,8 @@ export function useVoiceCommand({ onCommand, maxDuration = 3500 }) {
     [onCommand],
   );
 
-  const startListening = useCallback(async () => {
-    if (isListening && recorderRef.current) {
-      clearTimeout(timeoutRef.current);
-      recorderRef.current.stop();
-      return;
-    }
-
+  // Asosiy recording funksiyasi — tugma yoki wake word orqali chaqiriladi
+  const startRecording = useCallback(async () => {
     setError(null);
     setTranscript("");
 
@@ -155,14 +145,32 @@ export function useVoiceCommand({ onCommand, maxDuration = 3500 }) {
         setError(err.message);
       }
     }
-  }, [isListening, maxDuration, stopAndProcess]);
+  }, [maxDuration, stopAndProcess]);
+
+  // Tugma bosilganda — toggle
+  const startListening = useCallback(async () => {
+    if (isListening && recorderRef.current) {
+      clearTimeout(timeoutRef.current);
+      recorderRef.current.stop();
+      return;
+    }
+    await startRecording();
+  }, [isListening, startRecording]);
+
+  // Wake word dan chaqirish uchun — doim yangi recording boshlaydi
+  const triggerListening = useCallback(async () => {
+    if (isListening || isProcessing) return;
+    console.log("Wake word triggered — recording boshlanmoqda...");
+    await startRecording();
+  }, [isListening, isProcessing, startRecording]);
 
   return {
     isListening,
     isProcessing,
     transcript,
     error,
-    startListening,
+    startListening, // tugma uchun (toggle)
+    triggerListening, // wake word uchun (avtomatik)
     clearError: () => setError(null),
   };
 }

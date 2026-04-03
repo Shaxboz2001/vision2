@@ -51,6 +51,7 @@ import {
   PERIOD_LABELS,
 } from "@/hooks/useProduction";
 import { StatusChip } from "@/components/common";
+import EAFFurnace3D from "../../components/UskunaImages/EafUskuna";
 
 function PartInfoPanel({ part, onClose }) {
   if (!part) return null;
@@ -15805,7 +15806,12 @@ export default function UskunaDetailPage() {
                     minHeight: 400,
                   }}
                 >
-                  <UskunaDiagram u={uskuna} isDark={isDark} />
+                  {/* <UskunaDiagram u={uskuna} isDark={isDark} /> */}
+                  <img
+                    src="/public/images/Electric Arc Furnace in action.png"
+                    alt=""
+                    style={{ objectFit: "contain", width: "100%" }}
+                  />
                 </Box>
               </Paper>
             </Grid>
@@ -15944,6 +15950,7 @@ export default function UskunaDetailPage() {
               </Paper>
             </Grid>
           </Grid>
+          // <EAFFurnace3D height={700} />
         )}
 
         {tab === TAB_KORS && (

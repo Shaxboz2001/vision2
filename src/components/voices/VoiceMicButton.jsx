@@ -1,18 +1,18 @@
 // components/VoiceMicButton.jsx
-import { Box, IconButton, Typography, Fade, CircularProgress } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Typography,
+  Fade,
+  CircularProgress,
+} from "@mui/material";
 import MicIcon from "@mui/icons-material/Mic";
 import MicOffIcon from "@mui/icons-material/MicOff";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import HearingIcon from "@mui/icons-material/Hearing";
 
 /**
- * Ovozli buyruq tugmasi.
- *
- * Props:
- *   isListening  — mikrofon yoqilgan
- *   isProcessing — audio backend ga yuborilmoqda
- *   transcript   — aniqlangan matn
- *   error        — xatolik xabari
- *   onClick      — tugma bosilganda
+ * Ovozli buyruq tugmasi + wake word indikatori.
  */
 export default function VoiceMicButton({
   isListening,
@@ -20,11 +20,44 @@ export default function VoiceMicButton({
   transcript,
   error,
   onClick,
+  wakeWordActive = false,
 }) {
   const showStatus = isListening || isProcessing || transcript || error;
 
   return (
-    <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+      {/* Wake word indicator */}
+      {wakeWordActive && !isListening && !isProcessing && (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 0.5,
+          }}
+        >
+          <HearingIcon
+            sx={{
+              fontSize: 14,
+              color: "#00ff9d",
+              animation: "pulse 2s infinite",
+              "@keyframes pulse": {
+                "0%, 100%": { opacity: 1 },
+                "50%": { opacity: 0.3 },
+              },
+            }}
+          />
+          <Typography
+            sx={{
+              fontFamily: "'Share Tech Mono', monospace",
+              fontSize: "0.58rem",
+              color: "#00ff9d",
+            }}
+          >
+            "Durdona"
+          </Typography>
+        </Box>
+      )}
+
       {/* Status text */}
       <Fade in={!!showStatus} timeout={200}>
         <Box
