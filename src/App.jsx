@@ -11,10 +11,11 @@ import Sexlar from "./pages/Sexlar";
 import Uchastkalar from "@/pages/Uchastkalar";
 import Uskunalar from "@/pages/Uskunalar";
 import Datchiklar from "@/pages/Datchiklar";
-import Kameralar from "@/pages/Kameralar";
+import Kameralar from "@/components/voices/Kameralar";
 import Ogohlantirishlar from "@/pages/Ogohlantirishlar";
 import Analitika from "@/pages/Analitika";
 import UskunaDetail from "./pages/UskunlarDetail";
+import ProkatLivePage from "./components/ProkatLivePage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -45,6 +46,7 @@ export default function App() {
                       path="/ogohlantirishlar"
                       element={<Ogohlantirishlar />}
                     />
+                    <Route path="/armatura" element={<ProkatLivePage />} />
                   </Routes>
                 </Layout>
               </BrowserRouter>
@@ -54,5 +56,19 @@ export default function App() {
         {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
     </Provider>
+  );
+}
+
+function ArmaturaPage() {
+  return (
+    <iframe
+      src="http://172.16.55.13:8000/"
+      style={{
+        width: "100%",
+        height: "calc(100vh - 64px)",
+        border: "none",
+      }}
+      title="Armatura"
+    />
   );
 }

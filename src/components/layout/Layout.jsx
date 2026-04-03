@@ -35,6 +35,7 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { toggleSidebar } from "@/store";
 import { useThemeMode } from "@/theme";
 import { LiveBadge } from "@/components/common";
+import ConstructionIcon from "@mui/icons-material/Construction";
 
 const DRAWER_WIDTH = 225;
 const APPBAR_HEIGHT = 52;
@@ -90,6 +91,12 @@ const navItems = [
     icon: <NotificationsIcon sx={{ fontSize: 18 }} />,
     badge: 3,
     badgeColor: "error",
+  },
+  {
+    path: "/armatura",
+    label: "Prokat LIVE",
+    icon: <ConstructionIcon sx={{ fontSize: 18 }} />,
+    // badge: 3,
   },
 ];
 
@@ -382,211 +389,6 @@ export function Layout({ children }) {
         bgcolor: "background.default",
       }}
     >
-      {/* <AppBar
-        position="fixed"
-        sx={{
-          zIndex: theme.zIndex.drawer + 1,
-          height: APPBAR_HEIGHT,
-          justifyContent: "center",
-          width: {
-            xs: "100%",
-            md: open ? `calc(100% - ${DRAWER_WIDTH}px)` : "100%",
-          },
-          ml: {
-            xs: 0,
-            md: open ? `${DRAWER_WIDTH}px` : 0,
-          },
-          transition: theme.transitions.create(["width", "margin"], {
-            duration: theme.transitions.duration.shorter,
-          }),
-        }}
-      >
-        <Toolbar
-          sx={{
-            minHeight: `${APPBAR_HEIGHT}px !important`,
-            px: { xs: 1, sm: 2 },
-            gap: { xs: 1, sm: 2 },
-          }}
-        >
-          <IconButton
-            size="small"
-            onClick={handleToggleSidebar}
-            sx={{
-              color: "text.secondary",
-              "&:hover": { color: "primary.main" },
-            }}
-          >
-            <MenuIcon fontSize="small" />
-          </IconButton>
-
-          <Box
-            sx={{ display: "flex", alignItems: "center", gap: 1, minWidth: 0 }}
-          >
-            <img src="/images/logo.svg" alt="logo" width={isSmall ? 24 : 30} />
-            <Box sx={{ minWidth: 0 }}>
-              <Typography
-                sx={{
-                  fontFamily: "'Orbitron', monospace",
-                  fontSize: { xs: "0.72rem", sm: "0.85rem" },
-                  fontWeight: 900,
-                  letterSpacing: { xs: "0.08em", sm: "0.2em" },
-                  lineHeight: 1,
-                  color: "text.primary",
-                  textTransform: "uppercase",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                Uzmetkombinat
-              </Typography>
-            </Box>
-          </Box>
-
-          {!isSmall && (
-            <Box
-              sx={{ display: "flex", alignItems: "center", gap: 0.5, ml: 1 }}
-            >
-              <Box
-                sx={{
-                  width: 5,
-                  height: 5,
-                  borderRadius: "50%",
-                  background: isDark ? "#00ff9d" : "#00a85a",
-                  animation: "blink 1.2s step-end infinite",
-                  "@keyframes blink": { "50%": { opacity: 0.2 } },
-                }}
-              />
-            </Box>
-          )}
-
-          {!isMobile && (
-            <Box
-              sx={{
-                position: "absolute",
-                left: "50%",
-                transform: "translateX(-50%)",
-                pointerEvents: "none",
-                maxWidth: "42%",
-              }}
-            >
-              <Typography
-                sx={{
-                  fontFamily: "'Orbitron', monospace",
-                  fontSize: "0.82rem",
-                  fontWeight: 800,
-                  letterSpacing: "0.22em",
-                  textTransform: "uppercase",
-                  color: "primary.main",
-                  textAlign: "center",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  textShadow: `
-                    0 0 5px rgba(0,255,157,0.6),
-                    0 0 10px rgba(0,255,157,0.4),
-                    0 0 20px rgba(0,255,157,0.2)
-                  `,
-                  animation: "glowPulse 3s ease-in-out infinite",
-                  "@keyframes glowPulse": {
-                    "0%": {
-                      textShadow:
-                        "0 0 5px rgba(0,255,157,0.6),0 0 10px rgba(0,255,157,0.4)",
-                    },
-                    "50%": {
-                      textShadow:
-                        "0 0 10px rgba(0,255,157,1),0 0 25px rgba(0,255,157,0.8)",
-                    },
-                    "100%": {
-                      textShadow:
-                        "0 0 5px rgba(0,255,157,0.6),0 0 10px rgba(0,255,157,0.4)",
-                    },
-                  },
-                }}
-              >
-                RAQAMLI • INNOVATSION • XAVFSIZ KOMBINAT
-              </Typography>
-            </Box>
-          )}
-
-          <Box sx={{ flex: 1 }} />
-
-          {!isSmall && <LiveBadge />}
-          {!isSmall && <Clock />}
-
-          <Tooltip title={isDark ? "Kunduzgi rejim" : "Kechki rejim"}>
-            <IconButton
-              size="small"
-              onClick={toggleMode}
-              sx={{
-                color: isDark ? "#ffd60a" : "#0064c8",
-                background: isDark
-                  ? "rgba(255,214,10,0.08)"
-                  : "rgba(0,100,200,0.08)",
-                border: `1px solid ${
-                  isDark ? "rgba(255,214,10,0.2)" : "rgba(0,100,200,0.2)"
-                }`,
-                borderRadius: 1,
-                width: 32,
-                height: 32,
-                transition: "all 0.3s",
-                "&:hover": {
-                  background: isDark
-                    ? "rgba(255,214,10,0.16)"
-                    : "rgba(0,100,200,0.14)",
-                  transform: "rotate(20deg)",
-                },
-              }}
-            >
-              {isDark ? (
-                <LightModeIcon sx={{ fontSize: 16 }} />
-              ) : (
-                <DarkModeIcon sx={{ fontSize: 16 }} />
-              )}
-            </IconButton>
-          </Tooltip>
-
-          <Badge
-            badgeContent={3}
-            color="error"
-            sx={{
-              "& .MuiBadge-badge": {
-                fontFamily: "'Share Tech Mono', monospace",
-                fontSize: "0.55rem",
-              },
-            }}
-          >
-            <IconButton
-              size="small"
-              sx={{
-                color: "text.secondary",
-                "&:hover": { color: "error.main" },
-              }}
-            >
-              <NotificationsIcon fontSize="small" />
-            </IconButton>
-          </Badge>
-
-          {!isSmall && (
-            <Tooltip title="Admin">
-              <Avatar
-                sx={{
-                  width: 28,
-                  height: 28,
-                  bgcolor: "divider",
-                  fontSize: "0.7rem",
-                  fontFamily: "'Orbitron', monospace",
-                  border: "1px solid",
-                  borderColor: "divider",
-                  cursor: "pointer",
-                  color: "text.primary",
-                  "&:hover": { borderColor: "primary.main" },
-                }}
-              >
-                A
-              </Avatar>
-            </Tooltip>
-          )}
-        </Toolbar>
-      </AppBar> */}
       <AppBar
         position="fixed"
         sx={{
@@ -799,7 +601,7 @@ export function Layout({ children }) {
               </IconButton>
             </Tooltip>
 
-            <Badge
+            {/* <Badge
               badgeContent={3}
               color="error"
               sx={{
@@ -818,9 +620,9 @@ export function Layout({ children }) {
               >
                 <NotificationsIcon fontSize="small" />
               </IconButton>
-            </Badge>
+            </Badge> */}
 
-            {!isSmall && (
+            {/* {!isSmall && (
               <Tooltip title="Admin">
                 <Avatar
                   sx={{
@@ -839,7 +641,7 @@ export function Layout({ children }) {
                   A
                 </Avatar>
               </Tooltip>
-            )}
+            )} */}
           </Box>
         </Toolbar>
       </AppBar>

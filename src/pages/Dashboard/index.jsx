@@ -734,7 +734,10 @@ export default function Dashboard() {
     ];
   }, [eafList, lrfList, vodList, tscList]);
 
-  if (isAnyError) {
+  const hasFatalError =
+    eaf?.isError && lrf?.isError && vod?.isError && tsc?.isError;
+
+  if (hasFatalError) {
     return (
       <Box sx={{ p: 3 }}>
         <Paper sx={{ p: 3 }}>
@@ -742,7 +745,7 @@ export default function Dashboard() {
             Dashboard ma'lumotlarini yuklashda xatolik
           </Typography>
           <Typography sx={{ color: "#6b7280", fontSize: "0.9rem" }}>
-            API response formatini va hooklarni tekshirib chiqing.
+            Barcha API larni tekshirib chiqing.
           </Typography>
         </Paper>
       </Box>

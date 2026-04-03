@@ -11989,39 +11989,6 @@ function UskunaCard({ u, onClick }) {
 //  ASOSIY SAHIFA
 // ══════════════════════════════════════════════════════════════════════
 export default function Uskunalar() {
-  // const dispatch = useDispatch();
-  // // const selectedUchastka = useSelector((state) => state.ui.selectedUchastka);
-  // const selectedSex = useSelector((state) => state.ui.selectedSex);
-  // const filter = useSelector((s) => s.uskunalar.filter);
-  // const theme = useTheme();
-  // const isDark = theme.palette.mode === "dark";
-  // const [selectedUsk, setSelectedUsk] = useState(null);
-  // const [view, setView] = useState(0);
-
-  // const { data: sexlar } = useQuery({
-  //   queryKey: ["sexlar"],
-  //   queryFn: getSexlar,
-  // });
-  // const { data, isLoading } = useQuery({
-  //   queryKey: ["uskunalar", filter],
-  //   queryFn: () => getUskunalar({ sexId: filter.sexId || undefined }),
-  // });
-  // const uskunalar = data?.data || [];
-  // const sx = sexlar?.data || [];
-  // let filtered = filter.holat
-  //   ? uskunalar.filter((u) => u.holat === filter.holat)
-  //   : uskunalar;
-
-  // filtered = filter.uchastkId
-  //   ? uskunalar.filter((u) => u.uchastkId === filter.uchastkId)
-  //   : uskunalar;
-
-  // const navigate = useNavigate();
-  // const handleOpen = (u) => {
-  //   dispatch(setUskunaSelected(u.id));
-  //   navigate(`/uskunalar/${u.id}`);
-  // };
-
   const dispatch = useDispatch();
   const selectedSex = useSelector((state) => state.ui.selectedSex);
   const filter = useSelector((s) => s.uskunalar.filter);
@@ -12147,22 +12114,7 @@ export default function Uskunalar() {
         />
       ),
     },
-    // {
-    //   field: "sexId",
-    //   headerName: "BO'LINMA",
-    //   width: 80,
-    //   renderCell: (p) => (
-    //     <Typography
-    //       sx={{
-    //         fontFamily: "'Share Tech Mono',monospace",
-    //         fontSize: "0.68rem",
-    //         color: "secondary.main",
-    //       }}
-    //     >
-    //       {p.value}
-    //     </Typography>
-    //   ),
-    // },
+
     {
       field: "holat",
       headerName: "HOLAT",
@@ -12274,23 +12226,6 @@ export default function Uskunalar() {
           </Typography>
         </Box>
         <Box sx={{ display: "flex", gap: 1.5 }}>
-          {/* <FormControl size="small" sx={{ minWidth: 148 }}>
-            <InputLabel>BO'LINMA</InputLabel>
-            <Select
-              value={selectedSex?.id || filter.sexId || ""}
-              onChange={(e) =>
-                dispatch(setUskunaFilter({ sexId: e.target.value }))
-              }
-              label="BO'LINMA"
-            >
-              <MenuItem value="">Barchasi</MenuItem>
-              {sx.map((s) => (
-                <MenuItem key={s.id} value={s.id}>
-                  {s.nom}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl> */}
           <FormControl size="small" sx={{ minWidth: 180 }}>
             <InputLabel>SEX</InputLabel>
             <Select

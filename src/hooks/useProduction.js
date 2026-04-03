@@ -103,8 +103,8 @@ export const PERIOD_LABELS = {
   last_month: "O'tgan oy",
   quarter: "Bu chorak",
   year: "Bu yil",
-  last_year: "O'tgan yil",
-  custom: "Maxsus",
+  // last_year: "O'tgan yil",
+  // custom: "Maxsus",
 };
 
 export const PERIOD_OPTIONS = [
@@ -115,8 +115,8 @@ export const PERIOD_OPTIONS = [
   { value: "last_month", label: "O'tgan oy", group: "oy" },
   { value: "quarter", label: "Bu chorak", group: "chorak" },
   { value: "year", label: "Bu yil", group: "yil" },
-  { value: "last_year", label: "O'tgan yil", group: "yil" },
-  { value: "custom", label: "Maxsus...", group: "boshqa" },
+  // { value: "last_year", label: "O'tgan yil", group: "yil" },
+  // { value: "custom", label: "Maxsus...", group: "boshqa" },
 ];
 
 // ─── Query key factory ───────────────────────────────────────────
