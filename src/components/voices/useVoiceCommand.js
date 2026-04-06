@@ -160,7 +160,6 @@ export function useVoiceCommand({ onCommand, maxDuration = 3500 }) {
   // Wake word dan chaqirish uchun — doim yangi recording boshlaydi
   const triggerListening = useCallback(async () => {
     if (isListening || isProcessing) return;
-    console.log("Wake word triggered — recording boshlanmoqda...");
     await startRecording();
   }, [isListening, isProcessing, startRecording]);
 

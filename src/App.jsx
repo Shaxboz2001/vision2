@@ -16,6 +16,7 @@ import Ogohlantirishlar from "@/pages/Ogohlantirishlar";
 import Analitika from "@/pages/Analitika";
 import UskunaDetail from "./pages/UskunlarDetail";
 import ProkatLivePage from "./components/ProkatLivePage";
+import VoiceCalibration from "./pages/voiceCalibration/VoiceCalibration";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -47,6 +48,10 @@ export default function App() {
                       element={<Ogohlantirishlar />}
                     />
                     <Route path="/armatura" element={<ProkatLivePage />} />
+                    <Route
+                      path="/voice-calibration"
+                      element={<VoiceCalibration />}
+                    />
                   </Routes>
                 </Layout>
               </BrowserRouter>

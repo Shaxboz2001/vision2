@@ -87,9 +87,7 @@ function TempIndicator({
       {/* Label */}
       <Box
         sx={{
-          background: isDark
-            ? "rgba(0,0,0,0.88)"
-            : "rgba(255,255,255,0.95)",
+          background: isDark ? "rgba(0,0,0,0.88)" : "rgba(255,255,255,0.95)",
           border: `1px solid ${color}35`,
           borderRadius: "4px",
           px: 1,
@@ -189,9 +187,7 @@ function GaugeWidget({ value, size = 140, color = "#ff6b1a", label }) {
               y1={inn.y}
               x2={o.x}
               y2={o.y}
-              stroke={
-                isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"
-              }
+              stroke={isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.12)"}
               strokeWidth="1.5"
             />
           );
@@ -336,7 +332,10 @@ function MiniChart({ data, dataKey, color, title, currentValue, unit }) {
         </Typography>
       </Box>
       <ResponsiveContainer width="100%" height={80}>
-        <AreaChart data={data} margin={{ top: 2, right: 2, bottom: 2, left: 2 }}>
+        <AreaChart
+          data={data}
+          margin={{ top: 2, right: 2, bottom: 2, left: 2 }}
+        >
           <defs>
             <linearGradient id={`mcg-${dataKey}`} x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor={color} stopOpacity={0.25} />
@@ -699,12 +698,7 @@ export default function UskunaImageView({ uskuna }) {
             >
               KIO
             </Typography>
-            <GaugeWidget
-              value={100}
-              size={150}
-              color={c}
-              label=""
-            />
+            <GaugeWidget value={100} size={150} color={c} label="" />
           </Paper>
 
           {/* Ish vaqti */}

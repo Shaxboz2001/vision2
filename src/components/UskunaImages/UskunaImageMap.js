@@ -43,6 +43,19 @@ const ID_IMAGES = {
   // Masalan:
   "USK-001": "/images/uskunalar/klet.png",
   "USK-002": "/images/uskunalar/vakuum.png",
+  "USK-017": "/images/uskunalar/ELK Pechka.png",
+  "USK-018": "/images/uskunalar/ELK Pechka.png",
+  "USK-019": "/images/uskunalar/pech elpk.png",
+  "USK-053": "/images/uskunalar/klet vertikal.png",
+  "USK-051": "/images/uskunalar/klet vertikal.png",
+  "USK-049": "/images/uskunalar/klet vertikal.png",
+  "USK-047": "/images/uskunalar/pech klet gorizontalniy.png",
+  "USK-048": "/images/uskunalar/pech klet gorizontalniy.png",
+  "USK-050": "/images/uskunalar/pech klet gorizontalniy.png",
+  "USK-052": "/images/uskunalar/pech klet gorizontalniy.png",
+  "USK-046": "/images/uskunalar/pech pshb.png",
+  "USK-005": "/images/uskunalar/pech pshb.png",
+  "USK-054": "/images/uskunalar/pech pshb.png",
 };
 
 /**

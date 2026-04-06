@@ -11795,6 +11795,19 @@ function UskunaDiagram({ u, isDark }) {
 const ID_IMAGES = {
   "USK-001": "/images/uskunalar/klet.png",
   "USK-002": "/images/uskunalar/vakuum.png",
+  "USK-017": "/images/uskunalar/ELK Pechka.png",
+  "USK-018": "/images/uskunalar/ELK Pechka.png",
+  "USK-019": "/images/uskunalar/pech elpk.png",
+  "USK-053": "/images/uskunalar/klet vertikal.png",
+  "USK-051": "/images/uskunalar/klet vertikal.png",
+  "USK-049": "/images/uskunalar/klet vertikal.png",
+  "USK-047": "/images/uskunalar/pech klet gorizontalniy.png",
+  "USK-048": "/images/uskunalar/pech klet gorizontalniy.png",
+  "USK-050": "/images/uskunalar/pech klet gorizontalniy.png",
+  "USK-052": "/images/uskunalar/pech klet gorizontalniy.png",
+  "USK-046": "/images/uskunalar/pech pshb.png",
+  "USK-005": "/images/uskunalar/pech pshb.png",
+  "USK-054": "/images/uskunalar/pech pshb.png",
 };
 function UskunaImage({ u }) {
   const src = ID_IMAGES[u.id] || "/images/Electric Arc Furnace in action.png";
@@ -11810,7 +11823,7 @@ function UskunaImage({ u }) {
         width: "100%",
         height: "100%",
         objectFit: "contain",
-        filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.6))",
+        // filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.6))",
       }}
     />
   );
@@ -11885,7 +11898,7 @@ function UskunaCard({ u, onClick }) {
       {/* SVG MINI PREVIEW */}
       <Box
         sx={{
-          height: 110,
+          height: 200,
           background: isDark ? `${c}06` : `${c}04`,
           borderBottom: "1px solid",
           borderColor: `${c}20`,
@@ -11895,11 +11908,15 @@ function UskunaCard({ u, onClick }) {
       >
         <Box
           sx={{
-            transform: "scale(0.38)",
+            // transform: "scale(0.38)",
             transformOrigin: "top center",
-            height: "265%",
+            // height: "265%",
             pointerEvents: "none",
-            opacity: 0.85,
+            // opacity: 0.85,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100%",
           }}
         >
           <UskunaDiagram u={u} isDark={isDark} />
@@ -11927,7 +11944,7 @@ function UskunaCard({ u, onClick }) {
             py: 0.2,
           }}
         >
-          <Typography
+          {/* <Typography
             sx={{
               fontFamily: "'Share Tech Mono',monospace",
               fontSize: "0.55rem",
@@ -11935,7 +11952,7 @@ function UskunaCard({ u, onClick }) {
             }}
           >
             {u.id}
-          </Typography>
+          </Typography> */}
         </Box>
         <Box sx={{ position: "absolute", top: 6, right: 6 }}>
           <StatusChip holat={u.holat} />
@@ -11947,14 +11964,15 @@ function UskunaCard({ u, onClick }) {
         <Typography
           sx={{
             fontWeight: 700,
-            fontSize: "0.82rem",
+            fontSize: "1.2rem",
             color: "text.primary",
             mb: 0.4,
+            textAlign: "center",
           }}
         >
           {u.nom}
         </Typography>
-        <Box sx={{ display: "flex", gap: 0.5, mb: 0.9 }}>
+        {/* <Box sx={{ display: "flex", gap: 0.5, mb: 0.9 }}>
           <Chip
             label={u.tur}
             size="small"
@@ -11969,17 +11987,7 @@ function UskunaCard({ u, onClick }) {
               "& .MuiChip-label": { px: 0.7 },
             }}
           />
-          {/* <Typography
-            sx={{
-              fontFamily: "'Share Tech Mono',monospace",
-              fontSize: "0.58rem",
-              color: "text.secondary",
-              alignSelf: "center",
-            }}
-          >
-            {u.sexId}
-          </Typography> */}
-        </Box>
+        </Box> */}
         <Grid container spacing={0.5} sx={{ mb: 0.9 }}>
           {[
             {
@@ -12134,20 +12142,23 @@ export default function Uskunalar() {
 
   const columns = [
     {
-      field: "id",
+      field: "rowNumber",
       headerName: "ID",
       width: 90,
-      renderCell: (p) => (
-        <Typography
-          sx={{
-            fontFamily: "'Share Tech Mono',monospace",
-            fontSize: "0.68rem",
-            color: "primary.main",
-          }}
-        >
-          {p.value}
-        </Typography>
-      ),
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <Typography
+            sx={{
+              fontFamily: "'Share Tech Mono',monospace",
+              fontSize: "0.68rem",
+              color: "primary.main",
+            }}
+          >
+            {params.api.getRowIndexRelativeToVisibleRows(params.id) + 1}
+          </Typography>
+        );
+      },
     },
     {
       field: "nom",
@@ -12295,7 +12306,7 @@ export default function Uskunalar() {
             <InputLabel>BO'LIM</InputLabel>
             <Select
               value={effectiveSexId}
-              label="SEX"
+              label="BO'LIM"
               onChange={(e) =>
                 dispatch(
                   setUskunaFilter({

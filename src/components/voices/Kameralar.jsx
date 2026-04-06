@@ -415,8 +415,6 @@ export default function Kameralar() {
   // ─── Voice command handler ─────────────────────────
   const handleVoiceCommand = useCallback(
     ({ camera_name, camera_id, action }) => {
-      console.log("Voice command:", { camera_name, camera_id, action });
-
       let cam = null;
 
       if (camera_id) {
