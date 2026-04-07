@@ -11795,6 +11795,7 @@ function UskunaDiagram({ u, isDark }) {
 const ID_IMAGES = {
   "USK-001": "/images/uskunalar/klet.png",
   "USK-002": "/images/uskunalar/vakuum.png",
+  "USK-003": "/images/uskunalar/rolikli pech.png",
   "USK-017": "/images/uskunalar/ELK Pechka.png",
   "USK-018": "/images/uskunalar/ELK Pechka.png",
   "USK-019": "/images/uskunalar/pech elpk.png",
@@ -11808,6 +11809,32 @@ const ID_IMAGES = {
   "USK-046": "/images/uskunalar/pech pshb.png",
   "USK-005": "/images/uskunalar/pech pshb.png",
   "USK-054": "/images/uskunalar/pech pshb.png",
+  "USK-004": "/images/uskunalar/klet gorizontalniy.png",
+  "USK-067": "/images/uskunalar/klet gorizontalniy.png",
+  "USK-055": "/images/uskunalar/klet gorizontalniy.png",
+  "USK-056": "/images/uskunalar/klet gorizontalniy.png",
+  "USK-057": "/images/uskunalar/klet gorizontalniy.png",
+  "USK-058": "/images/uskunalar/klet gorizontalniy.png",
+  "USK-059": "/images/uskunalar/klet gorizontalniy.png",
+  "USK-060": "/images/uskunalar/klet gorizontalniy.png",
+  "USK-061": "/images/uskunalar/klet gorizontalniy.png",
+  "USK-062": "/images/uskunalar/klet gorizontalniy.png",
+  "USK-063": "/images/uskunalar/klet gorizontalniy.png",
+  "USK-064": "/images/uskunalar/klet gorizontalniy.png",
+  "USK-065": "/images/uskunalar/klet gorizontalniy.png",
+  "USK-066": "/images/uskunalar/klet gorizontalniy.png",
+  "USK-068": "/images/uskunalar/yakuni guruh klet.png",
+  "USK-069": "/images/uskunalar/yakuni guruh klet.png",
+  "USK-070": "/images/uskunalar/yakuni guruh klet.png",
+  "USK-071": "/images/uskunalar/yakuni guruh klet.png",
+  "USK-072": "/images/uskunalar/yakuni guruh klet.png",
+  "USK-073": "/images/uskunalar/yakuni guruh klet.png",
+  "USK-074": "/images/uskunalar/yakuni guruh klet.png",
+  "USK-075": "/images/uskunalar/yakuni guruh klet.png",
+  "USK-076": "/images/uskunalar/yakuni guruh klet.png",
+  "USK-077": "/images/uskunalar/yakuni guruh klet.png",
+  "USK-078": "/images/uskunalar/yakuni guruh klet.png",
+  "USK-079": "/images/uskunalar/yakuni guruh klet.png",
 };
 function UskunaImage({ u }) {
   const src = ID_IMAGES[u.id] || "/images/Electric Arc Furnace in action.png";
@@ -11926,9 +11953,9 @@ function UskunaCard({ u, onClick }) {
           sx={{
             position: "absolute",
             inset: 0,
-            background: isDark
-              ? `linear-gradient(to bottom, transparent 60%, #0d1220 100%)`
-              : `linear-gradient(to bottom, transparent 60%, #fff 100%)`,
+            // background: isDark
+            //   ? `linear-gradient(to bottom, transparent 60%, #0d1220 100%)`
+            //   : `linear-gradient(to bottom, transparent 60%, #fff 100%)`,
           }}
         />
         {/* badges */}

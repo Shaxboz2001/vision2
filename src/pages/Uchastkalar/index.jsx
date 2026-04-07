@@ -1602,7 +1602,7 @@ function UchastkCard({ u, onClick }) {
         }}
       >
         <Box sx={{ minWidth: 0 }}>
-          <Typography
+          {/* <Typography
             sx={{
               fontFamily: "'Share Tech Mono',monospace",
               fontSize: "0.58rem",
@@ -1611,10 +1611,10 @@ function UchastkCard({ u, onClick }) {
             }}
           >
             {u.id}
-          </Typography>
+          </Typography> */}
 
           <Typography
-            sx={{ fontWeight: 700, fontSize: "0.82rem", color: "text.primary" }}
+            sx={{ fontWeight: 700, fontSize: "1rem", color: "text.primary" }}
           >
             {u.nom}
           </Typography>
@@ -1623,8 +1623,8 @@ function UchastkCard({ u, onClick }) {
             <Typography
               sx={{
                 fontFamily: "'Share Tech Mono',monospace",
-                fontSize: "0.52rem",
-                color: "text.secondary",
+                fontSize: "0.7rem",
+                color: "#ccc",
                 mt: 0.2,
               }}
             >
@@ -1695,7 +1695,7 @@ function UchastkCard({ u, onClick }) {
                 sx={{
                   fontFamily: "'Share Tech Mono',monospace",
                   fontSize: "0.45rem",
-                  color: "text.disabled",
+                  color: isDark ? "#ccc" : "#000",
                   letterSpacing: "0.06em",
                 }}
               >
@@ -1726,7 +1726,7 @@ function UchastkCard({ u, onClick }) {
           sx={{
             fontFamily: "'Share Tech Mono',monospace",
             fontSize: "0.52rem",
-            color: "text.disabled",
+            color: isDark ? "#ccc" : "#000",
             mt: 0.3,
           }}
         >
@@ -2127,7 +2127,7 @@ export default function Uchastkalar() {
                       mb: 1.5,
                     }}
                   >
-                    <Typography
+                    {/* <Typography
                       sx={{
                         fontFamily: "'Share Tech Mono',monospace",
                         fontSize: "0.65rem",
@@ -2136,12 +2136,12 @@ export default function Uchastkalar() {
                       }}
                     >
                       {sexId}
-                    </Typography>
+                    </Typography> */}
 
                     <Typography
                       sx={{
                         fontWeight: 700,
-                        fontSize: "0.88rem",
+                        fontSize: "1rem",
                         color: "text.primary",
                       }}
                     >

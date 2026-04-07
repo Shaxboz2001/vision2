@@ -510,7 +510,7 @@ export default function UskunaImageView({ uskuna }) {
           />
 
           {/* Glowing ring */}
-          <Box
+          {/* <Box
             sx={{
               position: "absolute",
               bottom: "5%",
@@ -555,7 +555,7 @@ export default function UskunaImageView({ uskuna }) {
                 />
               </ellipse>
             </svg>
-          </Box>
+          </Box> */}
 
           {/* Glow shadow */}
           <Box
@@ -575,8 +575,8 @@ export default function UskunaImageView({ uskuna }) {
           <Box
             sx={{
               position: "relative",
-              width: "75%",
-              maxWidth: 450,
+              width: "70%",
+              // maxWidth: 450,
               zIndex: 3,
               filter: isDark
                 ? "drop-shadow(0 20px 60px rgba(0,0,0,0.6))"
