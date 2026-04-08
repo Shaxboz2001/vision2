@@ -46,7 +46,7 @@ export default function VoiceMicButton({
               },
             }}
           />
-          <Typography
+          {/* <Typography
             sx={{
               fontFamily: "'Share Tech Mono', monospace",
               fontSize: "0.58rem",
@@ -54,7 +54,7 @@ export default function VoiceMicButton({
             }}
           >
             "Durdona"
-          </Typography>
+          </Typography> */}
         </Box>
       )}
 

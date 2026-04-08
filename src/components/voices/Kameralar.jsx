@@ -579,7 +579,7 @@ export default function Kameralar() {
         </SectionHeader>
         <Box sx={{ p: 2 }}>
           <Grid container spacing={3} justifyContent="center">
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <Box
                 sx={{
                   width: "100%",
@@ -599,7 +599,7 @@ export default function Kameralar() {
                   sx={{ width: "100%", objectFit: "cover" }}
                 />
               </Box>
-            </Grid>
+            </Grid> */}
 
             {filtered.map((cam) => (
               <Grid item xs={12} sm={6} md={3} key={cam.id}>

@@ -194,7 +194,7 @@ export default function ProkatLivePage() {
           </Button>
         </Box>
 
-        <Typography
+        {/* <Typography
           variant="h4"
           sx={{
             textAlign: "center",
@@ -223,7 +223,7 @@ export default function ProkatLivePage() {
           <StatusChip label="GPU Mem(GB)" value={statusData.gm} />
           <StatusChip label="Total(m)" value={statusData.tl} />
           <StatusChip label="DB Save" value={statusData.db} />
-        </Stack>
+        </Stack> */}
 
         <Card
           ref={boxRef}

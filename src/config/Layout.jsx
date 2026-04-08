@@ -56,6 +56,12 @@ const navItems = [
     badge: null,
   },
   {
+    path: "/monitoring",
+    label: "Monitoring",
+    icon: <FactoryIcon sx={{ fontSize: 18 }} />,
+    badge: null,
+  },
+  {
     path: "/uchastkalar",
     label: "Uchastkalar",
     icon: <GrainIcon sx={{ fontSize: 18 }} />,

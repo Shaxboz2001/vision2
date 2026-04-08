@@ -2,7 +2,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { ThemeProvider as MuiThemeProvider, CssBaseline } from "@mui/material";
+import {
+  ThemeProvider as MuiThemeProvider,
+  CssBaseline,
+  Box,
+} from "@mui/material";
 import { ThemeModeProvider } from "@/theme";
 import { store } from "@/store";
 import { Layout } from "@/components/layout/Layout";
@@ -17,6 +21,7 @@ import Analitika from "@/pages/Analitika";
 import UskunaDetail from "./pages/UskunlarDetail";
 import ProkatLivePage from "./components/ProkatLivePage";
 import VoiceCalibration from "./pages/voiceCalibration/VoiceCalibration";
+import MonitoringDashboard from "./pages/MonitoringDashboard";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -37,7 +42,14 @@ export default function App() {
                   <Routes>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/bo'linmalar" element={<Sexlar />} />
-                    <Route path="/uchastkalar" element={<Uchastkalar />} />
+                    {/* <Route
+                      path="/monitoring"
+                      element={<MonitoringDashboard />}
+                    /> */}
+                    <Route
+                      path="/uchastkalar"
+                      element={<MonitoringDashboard />}
+                    />
                     <Route path="/uskunalar" element={<Uskunalar />} />
                     <Route path="/uskunalar/:id" element={<UskunaDetail />} />
                     <Route path="/datchiklar" element={<Datchiklar />} />
@@ -52,6 +64,8 @@ export default function App() {
                       path="/voice-calibration"
                       element={<VoiceCalibration />}
                     />
+                    <Route path="/ppe" element={<PPEPage />} />
+                    {/* <Route path="/metal-zasolyonnost" element={<MetalZasolyonnostPage />} /> */}
                   </Routes>
                 </Layout>
               </BrowserRouter>
@@ -64,16 +78,51 @@ export default function App() {
   );
 }
 
-function ArmaturaPage() {
+import { useState, useEffect } from "react";
+
+function PPEPage() {
+  const [streamKey, setStreamKey] = useState(Date.now());
+
+  // Har safar sahifa mount bo'lganda yangi key = yangi connection
+  useEffect(() => {
+    setStreamKey(Date.now());
+  }, []);
+
   return (
-    <iframe
-      src="http://172.16.55.13:8000/"
-      style={{
+    <Box
+      sx={{
         width: "100%",
-        height: "calc(100vh - 64px)",
-        border: "none",
+        maxWidth: "1200px",
+        margin: "0 auto",
+        marginTop: "50px",
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gridTemplateRows: "1fr 1fr",
+        gap: "4px",
+        background: "#070a12",
+        border: "1px solid #1e2a3d",
+        borderRadius: 2,
+        overflow: "hidden",
       }}
-      title="Armatura"
-    />
+    >
+      {[1, 2, 3, 4].map((id) => (
+        <Box
+          key={`${id}-${streamKey}`}
+          component="img"
+          src={`http://172.16.55.12:8006/video/${id}?t=${streamKey}`}
+          alt={`camera-${id}`}
+          sx={{
+            width: "100%",
+            aspectRatio: "16/9",
+            objectFit: "cover",
+            display: "block",
+          }}
+        />
+      ))}
+    </Box>
   );
+}
+
+function MetalZasolyonnostPage() {
+  return <div>Metal Zasolyonnost Page</div>;
 }
