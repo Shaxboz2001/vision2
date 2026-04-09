@@ -102,7 +102,7 @@ const navItems = [
   },
   {
     path: "/armatura",
-    label: "Prokat LIVE",
+    label: "AI Prokat",
     icon: <ConstructionIcon sx={{ fontSize: 18 }} />,
   },
 ];

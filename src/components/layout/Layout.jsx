@@ -1497,18 +1497,18 @@ const manageNavItems = [
 const aiNavItems = [
   {
     path: "/armatura",
-    label: "Prokat LIVE",
+    label: "AI Prokat",
     icon: <ConstructionIcon sx={{ fontSize: 18 }} />,
-    live: true,
+    // live: true,
   },
   {
     path: "/ppe",
-    label: "PPE",
+    label: "AI TB",
     icon: <SecurityRoundedIcon sx={{ fontSize: 18 }} />,
   },
   {
     path: "/metal-zasolyonnost",
-    label: "Metal Zasolyonnost",
+    label: "AI LOM",
     icon: <ScienceRoundedIcon sx={{ fontSize: 18 }} />,
   },
 ];

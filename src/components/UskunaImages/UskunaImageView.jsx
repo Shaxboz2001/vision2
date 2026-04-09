@@ -575,7 +575,7 @@ export default function UskunaImageView({ uskuna }) {
           <Box
             sx={{
               position: "relative",
-              width: "70%",
+              width: "80%",
               // maxWidth: 450,
               zIndex: 3,
               filter: isDark

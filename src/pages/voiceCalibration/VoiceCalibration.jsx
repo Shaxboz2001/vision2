@@ -29,7 +29,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import SchoolIcon from "@mui/icons-material/School";
 
-const API = import.meta.env.VITE_VOICE_API || "http://172.16.55.13:8006";
+const API = import.meta.env.VITE_VOICE_API || "/voice-api";
 
 export default function VoiceCalibration() {
   const [routes, setRoutes] = useState({ navigation: [], cameras: [] });

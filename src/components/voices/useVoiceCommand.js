@@ -1,7 +1,7 @@
 // hooks/useVoiceCommand.js
 import { useState, useRef, useCallback } from "react";
 
-const VOICE_API = import.meta.env.VITE_VOICE_API || "http://172.16.55.13:8006";
+const VOICE_API = import.meta.env.VITE_VOICE_API || "/voice-api";
 
 function checkMediaDevices() {
   if (typeof navigator === "undefined") {

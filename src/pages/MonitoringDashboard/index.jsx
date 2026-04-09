@@ -12,7 +12,6 @@ import {
   FormControl,
   InputLabel,
   LinearProgress,
-  Divider,
   IconButton,
   Chip,
   CircularProgress,
@@ -32,6 +31,7 @@ import ThermostatRoundedIcon from "@mui/icons-material/ThermostatRounded";
 import SpeedRoundedIcon from "@mui/icons-material/SpeedRounded";
 import RadioButtonCheckedRoundedIcon from "@mui/icons-material/RadioButtonCheckedRounded";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 
 import {
   getSexlarHybrid,
@@ -56,28 +56,45 @@ const useTokens = () => {
 
   return {
     isDark,
-    pageBg: isDark ? "#0a101b" : "#eef3f8",
-    paper: isDark ? "#0f1728" : "#ffffff",
-    paperSoft: isDark ? "#121c31" : "#f8fbff",
-    paperHover: isDark ? "#16233d" : "#f4f8fc",
-    border: isDark ? "rgba(148,163,184,0.14)" : "rgba(15,23,42,0.08)",
-    borderStrong: isDark ? "rgba(148,163,184,0.22)" : "rgba(15,23,42,0.14)",
-    text: isDark ? "#e6edf8" : "#182235",
-    textSoft: isDark ? "#9fb0c8" : "#526179",
-    textMuted: isDark ? "#7887a0" : "#7b879d",
+
+    pageBg: isDark ? "#0a111d" : "#edf3f8",
+
+    heroBg: isDark
+      ? "linear-gradient(135deg, #0f172a 0%, #16253c 100%)"
+      : "linear-gradient(135deg, #ffffff 0%, #f3f8fd 100%)",
+
+    paper: isDark ? "#111b2f" : "#ffffff",
+    paperSoft: isDark ? "#162338" : "#f7fbff",
+    paperSoft2: isDark ? "#1a2941" : "#eef5fb",
+    paperHover: isDark ? "#1b2b45" : "#f1f7fd",
+
+    border: isDark ? "rgba(148,163,184,0.16)" : "rgba(15,23,42,0.10)",
+    borderStrong: isDark ? "rgba(148,163,184,0.26)" : "rgba(15,23,42,0.16)",
+
+    text: isDark ? "#e8eef9" : "#182235",
+    textSoft: isDark ? "#a7b4c8" : "#4f5f79",
+    textMuted: isDark ? "#7d8aa0" : "#71809a",
+
     accent: isDark ? "#38bdf8" : "#2563eb",
-    accentSoft: isDark ? "rgba(56,189,248,0.12)" : "rgba(37,99,235,0.08)",
-    green: isDark ? "#00ff9d" : "#00a85a",
-    yellow: "#f5b301",
+    accentSoft: isDark ? "rgba(56,189,248,0.12)" : "rgba(37,99,235,0.09)",
+
+    green: isDark ? "#00ff9d" : "#0b9f63",
+    yellow: isDark ? "#f5b301" : "#d99100",
     red: "#ef4444",
     orange: "#f97316",
     cyan: "#06b6d4",
     purple: "#8b5cf6",
+
     mono: "'Share Tech Mono', monospace",
     display: "'Orbitron', monospace",
+
     shadow: isDark
-      ? "0 18px 42px rgba(0,0,0,0.32)"
-      : "0 14px 28px rgba(15,23,42,0.08)",
+      ? "0 20px 50px rgba(0,0,0,0.34)"
+      : "0 16px 36px rgba(15,23,42,0.10)",
+
+    softShadow: isDark
+      ? "0 12px 28px rgba(0,0,0,0.22)"
+      : "0 10px 22px rgba(15,23,42,0.07)",
   };
 };
 
@@ -122,6 +139,10 @@ const getEffColor = (v, t) => {
 const getUskunaType = (u) =>
   u?.tur || u?.type || u?.category || u?.modelType || "Uskuna";
 
+/* =========================================================
+   IMAGE MAP
+========================================================= */
+
 const ID_IMAGES = {
   "USK-001": "/images/uskunalar/klet.png",
   "USK-002": "/images/uskunalar/vakuum.png",
@@ -165,6 +186,7 @@ const ID_IMAGES = {
   "USK-077": "/images/uskunalar/yakuni guruh klet.png",
   "USK-078": "/images/uskunalar/yakuni guruh klet.png",
   "USK-079": "/images/uskunalar/yakuni guruh klet.png",
+  "USK-017": "/images/uskunalar/lpk pech.png",
 };
 
 const TUR_IMAGES = {
@@ -184,26 +206,40 @@ const TUR_IMAGES = {
   Qadoqlash: "/images/uskunalar/qadoqlash.png",
 };
 
+// function getUskunaImage(u) {
+//   if (ID_IMAGES[u?.id]) return ID_IMAGES[u.id];
+
+//   const tur = getUskunaType(u);
+//   if (TUR_IMAGES[tur]) return TUR_IMAGES[tur];
+
+//   const model = (u?.model || "").toLowerCase();
+//   const nom = (u?.nom || "").toLowerCase();
+
+//   if (model.startsWith("clm") || nom.includes("ingichka")) {
+//     return "/images/uskunalar/klet.png";
+//   }
+//   if (model.startsWith("rw") || nom.includes("rulo")) {
+//     return "/images/uskunalar/prokat.png";
+//   }
+//   if (nom.includes("pech")) return "/images/uskunalar/pech.png";
+//   if (nom.includes("kran")) return "/images/uskunalar/kran.png";
+//   if (nom.includes("nasos")) return "/images/uskunalar/nasos.png";
+
+//   return "/images/uskunalar/lpk pech.png";
+// }
+
+const DEFAULT_USKUNA_IMAGE = "/images/uskunalar/lpk pech.png";
+
 function getUskunaImage(u) {
-  if (ID_IMAGES[u?.id]) return ID_IMAGES[u.id];
+  const id = u?.id?.trim();
 
-  const tur = getUskunaType(u);
-  if (TUR_IMAGES[tur]) return TUR_IMAGES[tur];
-
-  const model = (u?.model || "").toLowerCase();
-  const nom = (u?.nom || "").toLowerCase();
-
-  if (model.startsWith("clm") || nom.includes("ingichka")) {
-    return "/images/uskunalar/klet.png";
+  // faqat ID_IMAGES dan oladi
+  if (id && ID_IMAGES[id]) {
+    return ID_IMAGES[id];
   }
-  if (model.startsWith("rw") || nom.includes("rulo")) {
-    return "/images/uskunalar/prokat.png";
-  }
-  if (nom.includes("pech")) return "/images/uskunalar/pech.png";
-  if (nom.includes("kran")) return "/images/uskunalar/kran.png";
-  if (nom.includes("nasos")) return "/images/uskunalar/nasos.png";
 
-  return "/images/uskunalar/default.png";
+  // agar topilmasa default
+  return DEFAULT_USKUNA_IMAGE;
 }
 
 const getImageBg = (u, t) => {
@@ -214,7 +250,7 @@ const getImageBg = (u, t) => {
   if (tur === "Elektr Pech") return alpha(t.purple, 0.1);
   if (tur === "Prokat") return alpha(t.green, 0.1);
   if (tur === "Nasos") return alpha(t.accent, 0.1);
-  if (tur === "Kran") return alpha(t.yellow, 0.1);
+  if (tur === "Kran") return alpha(t.yellow, 0.12);
 
   return alpha(t.accent, 0.08);
 };
@@ -228,20 +264,22 @@ function StatCard({ label, value, color, tokens }) {
     <Paper
       elevation={0}
       sx={{
-        p: 1.5,
-        borderRadius: 2.5,
-        bgcolor: tokens.paperSoft,
+        p: 1.65,
+        borderRadius: 3,
+        bgcolor: tokens.paperSoft2,
         border: `1px solid ${tokens.border}`,
+        boxShadow: tokens.isDark ? "none" : "0 2px 10px rgba(15,23,42,0.03)",
         height: "100%",
       }}
     >
       <Typography
         sx={{
           fontFamily: tokens.mono,
-          fontSize: "0.62rem",
+          fontSize: "0.64rem",
           color: tokens.textSoft,
-          letterSpacing: "0.08em",
-          mb: 0.55,
+          letterSpacing: "0.1em",
+          mb: 0.65,
+          fontWeight: 700,
         }}
       >
         {label}
@@ -250,7 +288,7 @@ function StatCard({ label, value, color, tokens }) {
       <Typography
         sx={{
           fontFamily: tokens.display,
-          fontSize: "1.05rem",
+          fontSize: "1.12rem",
           fontWeight: 800,
           color: color || tokens.text,
           lineHeight: 1.1,
@@ -272,25 +310,41 @@ function UskunaCard({ u, tokens, onClick }) {
       elevation={0}
       onClick={() => onClick(u)}
       sx={{
-        p: 1.4,
-        borderRadius: 3,
+        p: 1.55,
+        borderRadius: 3.2,
         bgcolor: tokens.paper,
         border: `1px solid ${tokens.border}`,
         transition: "all .22s ease",
         cursor: "pointer",
         height: "100%",
+        overflow: "hidden",
+        position: "relative",
+        boxShadow: tokens.isDark ? "none" : "0 3px 12px rgba(15,23,42,0.04)",
         "&:hover": {
-          transform: "translateY(-4px)",
-          borderColor: alpha(statusColor, 0.38),
+          transform: "translateY(-5px)",
+          borderColor: alpha(statusColor, 0.4),
           boxShadow: tokens.shadow,
         },
       }}
     >
       <Box
         sx={{
-          height: 138,
-          mb: 1.2,
-          borderRadius: 2.5,
+          position: "absolute",
+          top: 12,
+          right: 12,
+          width: 10,
+          height: 10,
+          borderRadius: "50%",
+          bgcolor: statusColor,
+          boxShadow: `0 0 12px ${alpha(statusColor, 0.55)}`,
+        }}
+      />
+
+      <Box
+        sx={{
+          height: 145,
+          mb: 1.3,
+          borderRadius: 3,
           bgcolor: getImageBg(u, tokens),
           border: `1px solid ${alpha(statusColor, 0.14)}`,
           display: "flex",
@@ -307,70 +361,53 @@ function UskunaCard({ u, tokens, onClick }) {
             e.currentTarget.src = "/images/uskunalar/default.png";
           }}
           sx={{
-            width: "84%",
-            height: "84%",
+            width: "82%",
+            height: "82%",
             objectFit: "contain",
             display: "block",
           }}
         />
       </Box>
 
-      <Box
+      <Typography
         sx={{
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          gap: 1,
+          fontSize: "0.96rem",
+          fontWeight: 800,
+          color: tokens.text,
+          lineHeight: 1.22,
+          mb: 0.34,
+          pr: 2,
         }}
       >
-        <Box sx={{ minWidth: 0 }}>
-          <Typography
-            sx={{
-              fontSize: "0.92rem",
-              fontWeight: 800,
-              color: tokens.text,
-              lineHeight: 1.2,
-              mb: 0.28,
-            }}
-          >
-            {u.nom}
-          </Typography>
+        {u.nom}
+      </Typography>
 
-          <Typography
-            sx={{
-              fontFamily: tokens.mono,
-              fontSize: "0.66rem",
-              color: tokens.textMuted,
-            }}
-          >
-            {u.id} · {getUskunaType(u)}
-          </Typography>
-        </Box>
-
-        <Box
-          sx={{
-            width: 10,
-            height: 10,
-            borderRadius: "50%",
-            bgcolor: statusColor,
-            boxShadow: `0 0 10px ${alpha(statusColor, 0.65)}`,
-            mt: 0.2,
-            flexShrink: 0,
-          }}
-        />
-      </Box>
-
-      <Box
-        sx={{ mt: 1.05, display: "flex", flexDirection: "column", gap: 0.75 }}
+      <Typography
+        sx={{
+          fontFamily: tokens.mono,
+          fontSize: "0.68rem",
+          color: tokens.textMuted,
+          mb: 1.12,
+        }}
       >
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography sx={{ fontSize: "0.72rem", color: tokens.textSoft }}>
+        {u.id} · {getUskunaType(u)}
+      </Typography>
+
+      <Stack spacing={0.9}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1 }}>
+          <Typography
+            sx={{
+              fontSize: "0.75rem",
+              color: tokens.textSoft,
+              fontWeight: 500,
+            }}
+          >
             Harorat
           </Typography>
           <Typography
             sx={{
               fontFamily: tokens.mono,
-              fontSize: "0.76rem",
+              fontSize: "0.78rem",
               fontWeight: 800,
               color: tempColor,
             }}
@@ -379,14 +416,20 @@ function UskunaCard({ u, tokens, onClick }) {
           </Typography>
         </Box>
 
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography sx={{ fontSize: "0.72rem", color: tokens.textSoft }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1 }}>
+          <Typography
+            sx={{
+              fontSize: "0.75rem",
+              color: tokens.textSoft,
+              fontWeight: 500,
+            }}
+          >
             Samaradorlik
           </Typography>
           <Typography
             sx={{
               fontFamily: tokens.mono,
-              fontSize: "0.76rem",
+              fontSize: "0.78rem",
               fontWeight: 800,
               color: effColor,
             }}
@@ -399,7 +442,7 @@ function UskunaCard({ u, tokens, onClick }) {
           variant="determinate"
           value={Math.min(100, Number(u.samaradorlik || 0))}
           sx={{
-            height: 6,
+            height: 7,
             borderRadius: 999,
             bgcolor: alpha(tokens.textMuted, 0.15),
             "& .MuiLinearProgress-bar": {
@@ -408,6 +451,26 @@ function UskunaCard({ u, tokens, onClick }) {
             },
           }}
         />
+      </Stack>
+
+      <Box
+        sx={{
+          mt: 1.15,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography
+          sx={{
+            color: tokens.accent,
+            fontSize: "0.74rem",
+            fontWeight: 700,
+          }}
+        >
+          Batafsil
+        </Typography>
+        <ChevronRightRoundedIcon sx={{ fontSize: 18, color: tokens.accent }} />
       </Box>
     </Paper>
   );
@@ -424,29 +487,30 @@ function UchastkaCard({ u, tokens, open, onToggle, children }) {
         elevation={0}
         onClick={onToggle}
         sx={{
-          p: 1.6,
-          borderRadius: 3,
+          p: 1.75,
+          borderRadius: 3.2,
           bgcolor: tokens.paper,
-          border: `1px solid ${open ? alpha(tokens.accent, 0.28) : tokens.border}`,
+          border: `1px solid ${open ? alpha(tokens.accent, 0.3) : tokens.border}`,
           transition: "all .2s ease",
           cursor: "pointer",
+          boxShadow: tokens.isDark ? "none" : "0 3px 12px rgba(15,23,42,0.04)",
           "&:hover": {
-            borderColor: alpha(statusColor, 0.28),
-            bgcolor: tokens.paperSoft,
+            borderColor: alpha(statusColor, 0.3),
+            bgcolor: tokens.paperHover,
           },
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1.3 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1.35 }}>
           <Avatar
             sx={{
-              width: 44,
-              height: 44,
+              width: 50,
+              height: 50,
               bgcolor: alpha(statusColor, 0.1),
               color: statusColor,
               border: `1px solid ${alpha(statusColor, 0.16)}`,
             }}
           >
-            <PrecisionManufacturingRoundedIcon sx={{ fontSize: 22 }} />
+            <PrecisionManufacturingRoundedIcon sx={{ fontSize: 24 }} />
           </Avatar>
 
           <Box sx={{ flex: 1, minWidth: 0 }}>
@@ -460,9 +524,10 @@ function UchastkaCard({ u, tokens, open, onToggle, children }) {
             >
               <Typography
                 sx={{
-                  fontSize: "1rem",
+                  fontSize: "1.03rem",
                   fontWeight: 800,
                   color: tokens.text,
+                  lineHeight: 1.2,
                 }}
               >
                 {u.nom}
@@ -472,9 +537,9 @@ function UchastkaCard({ u, tokens, open, onToggle, children }) {
 
             <Typography
               sx={{
-                mt: 0.3,
+                mt: 0.34,
                 fontFamily: tokens.mono,
-                fontSize: "0.66rem",
+                fontSize: "0.68rem",
                 color: tokens.textMuted,
               }}
             >
@@ -485,7 +550,7 @@ function UchastkaCard({ u, tokens, open, onToggle, children }) {
           <Stack
             direction="row"
             spacing={1}
-            sx={{ display: { xs: "none", md: "flex" }, mr: 0.4 }}
+            sx={{ display: { xs: "none", md: "flex" }, mr: 0.45 }}
           >
             <Chip
               size="small"
@@ -537,8 +602,8 @@ function UchastkaCard({ u, tokens, open, onToggle, children }) {
         </Box>
       </Paper>
 
-      <Collapse in={open} timeout={260}>
-        <Box sx={{ mt: 1.15 }}>{children}</Box>
+      <Collapse in={open} timeout={280}>
+        <Box sx={{ mt: 1.2 }}>{children}</Box>
       </Collapse>
     </Box>
   );
@@ -567,13 +632,14 @@ function UskunalarSection({ uchastka, tokens, onUskunaClick }) {
     <Paper
       elevation={0}
       sx={{
-        p: { xs: 1.2, md: 1.6 },
-        borderRadius: 3,
+        p: { xs: 1.3, md: 1.75 },
+        borderRadius: 3.2,
         bgcolor: tokens.paperSoft,
         border: `1px solid ${tokens.border}`,
+        boxShadow: tokens.softShadow,
       }}
     >
-      <Grid container spacing={1.4} sx={{ mb: 1.6 }}>
+      <Grid container spacing={1.5} sx={{ mb: 1.7 }}>
         <Grid item xs={6} md={3}>
           <StatCard
             label="USKUNALAR"
@@ -613,16 +679,17 @@ function UskunalarSection({ uchastka, tokens, onUskunaClick }) {
           display: "flex",
           alignItems: "center",
           gap: 1,
-          mb: 1.4,
+          mb: 1.5,
         }}
       >
         <BuildRoundedIcon sx={{ fontSize: 17, color: tokens.accent }} />
         <Typography
           sx={{
             fontFamily: tokens.mono,
-            fontSize: "0.68rem",
+            fontSize: "0.69rem",
             color: tokens.textSoft,
             letterSpacing: "0.08em",
+            fontWeight: 700,
           }}
         >
           USKUNALAR RO‘YXATI
@@ -632,7 +699,7 @@ function UskunalarSection({ uchastka, tokens, onUskunaClick }) {
       </Box>
 
       {isLoading ? (
-        <Grid container spacing={1.4}>
+        <Grid container spacing={1.5}>
           {Array.from({ length: 4 }).map((_, i) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
               <CardSkeleton />
@@ -643,9 +710,9 @@ function UskunalarSection({ uchastka, tokens, onUskunaClick }) {
         <Paper
           elevation={0}
           sx={{
-            p: 3,
+            p: 3.2,
             textAlign: "center",
-            borderRadius: 2.5,
+            borderRadius: 2.8,
             bgcolor: alpha(tokens.textMuted, 0.06),
             border: `1px dashed ${tokens.borderStrong}`,
           }}
@@ -653,7 +720,7 @@ function UskunalarSection({ uchastka, tokens, onUskunaClick }) {
           <Typography
             sx={{
               color: tokens.textSoft,
-              fontSize: "0.92rem",
+              fontSize: "0.94rem",
               fontWeight: 600,
             }}
           >
@@ -661,7 +728,7 @@ function UskunalarSection({ uchastka, tokens, onUskunaClick }) {
           </Typography>
         </Paper>
       ) : (
-        <Grid container spacing={1.4}>
+        <Grid container spacing={1.5}>
           {uskunalar.map((u) => (
             <Grid item xs={12} sm={6} md={4} xl={3} key={u.id}>
               <UskunaCard u={u} tokens={tokens} onClick={onUskunaClick} />
@@ -775,11 +842,11 @@ export default function MonitoringPage() {
       totalEquip,
     };
   }, [uchastkalar]);
+
   useEffect(() => {
     if (uchastkalar.length > 0) {
       setExpandedUchastka((prev) => {
         if (prev === null) return uchastkalar[0].id;
-
         const exists = uchastkalar.some((u) => u.id === prev);
         return exists ? prev : uchastkalar[0].id;
       });
@@ -822,9 +889,9 @@ export default function MonitoringPage() {
       <Paper
         elevation={0}
         sx={{
-          p: { xs: 1.7, md: 2.2 },
-          borderRadius: 3,
-          bgcolor: tokens.paper,
+          p: { xs: 1.85, md: 2.4 },
+          borderRadius: 3.5,
+          bgcolor: tokens.heroBg,
           border: `1px solid ${tokens.border}`,
           boxShadow: tokens.shadow,
         }}
@@ -842,7 +909,7 @@ export default function MonitoringPage() {
             <Typography
               sx={{
                 fontFamily: tokens.display,
-                fontSize: { xs: "1rem", md: "1.14rem" },
+                fontSize: { xs: "1.02rem", md: "1.18rem" },
                 fontWeight: 900,
                 letterSpacing: "0.08em",
                 color: tokens.accent,
@@ -854,11 +921,12 @@ export default function MonitoringPage() {
 
             <Typography
               sx={{
-                mt: 0.55,
+                mt: 0.62,
                 color: tokens.textSoft,
-                fontSize: "0.92rem",
-                lineHeight: 1.55,
-                maxWidth: 880,
+                fontSize: "0.96rem",
+                lineHeight: 1.65,
+                maxWidth: 920,
+                fontWeight: 500,
               }}
             >
               Har bir sex ichidagi uchastkalarni ochib, ularning uskunalarini
@@ -866,13 +934,13 @@ export default function MonitoringPage() {
             </Typography>
           </Box>
 
-          <Stack direction="row" spacing={1}>
+          <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
             <Chip
               icon={<FactoryRoundedIcon sx={{ fontSize: "16px !important" }} />}
               label={`Sexlar: ${sexlar.length}`}
               sx={{
                 fontWeight: 700,
-                bgcolor: alpha(tokens.accent, 0.06),
+                bgcolor: alpha(tokens.accent, 0.08),
                 border: `1px solid ${tokens.border}`,
                 color: tokens.text,
               }}
@@ -894,7 +962,7 @@ export default function MonitoringPage() {
             <IconButton
               onClick={handleRefresh}
               sx={{
-                borderRadius: 2,
+                borderRadius: 2.2,
                 border: `1px solid ${tokens.border}`,
                 color: tokens.accent,
                 bgcolor: alpha(tokens.accent, 0.06),
@@ -909,10 +977,11 @@ export default function MonitoringPage() {
       <Paper
         elevation={0}
         sx={{
-          p: 1.6,
-          borderRadius: 3,
+          p: 1.7,
+          borderRadius: 3.2,
           bgcolor: tokens.paper,
           border: `1px solid ${tokens.border}`,
+          boxShadow: tokens.softShadow,
         }}
       >
         <Box
@@ -924,7 +993,7 @@ export default function MonitoringPage() {
             flexWrap: "wrap",
           }}
         >
-          <FormControl size="small" sx={{ minWidth: 240 }}>
+          <FormControl size="small" sx={{ minWidth: 250 }}>
             <InputLabel id="sex-filter-label">Sex bo‘yicha filter</InputLabel>
             <Select
               labelId="sex-filter-label"
@@ -934,7 +1003,7 @@ export default function MonitoringPage() {
                 setSexFilter(e.target.value);
                 setExpandedUchastka(null);
               }}
-              sx={{ borderRadius: 2.2 }}
+              sx={{ borderRadius: 2.3 }}
             >
               <MenuItem value="">Barcha sexlar</MenuItem>
               {sexlar.map((s) => (
@@ -986,8 +1055,8 @@ export default function MonitoringPage() {
                   label="Sex"
                   sx={{
                     fontFamily: tokens.mono,
-                    fontSize: "0.52rem",
-                    height: 20,
+                    fontSize: "0.54rem",
+                    height: 21,
                     color: tokens.accent,
                     bgcolor: alpha(tokens.accent, 0.08),
                     border: `1px solid ${alpha(tokens.accent, 0.18)}`,
@@ -995,7 +1064,7 @@ export default function MonitoringPage() {
                 />
               </SectionHeader>
 
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.25 }}>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.3 }}>
                 {items.map((u) => (
                   <UchastkaCard
                     key={u.id}
@@ -1019,7 +1088,7 @@ export default function MonitoringPage() {
       <Paper
         elevation={0}
         sx={{
-          p: 1.4,
+          p: 1.5,
           borderRadius: 3,
           bgcolor: tokens.paper,
           border: `1px solid ${tokens.border}`,
@@ -1031,13 +1100,14 @@ export default function MonitoringPage() {
         <InfoOutlinedIcon sx={{ fontSize: 18, color: tokens.accent }} />
         <Typography
           sx={{
-            fontSize: "0.84rem",
+            fontSize: "0.86rem",
             color: tokens.textSoft,
-            lineHeight: 1.5,
+            lineHeight: 1.55,
+            fontWeight: 500,
           }}
         >
           Uskuna kartasini bossangiz, uskunaning alohida sahifasiga o‘tasiz.
-          Rasm yo‘q turlar uchun `default.png` ishlatiladi.
+          Rasm topilmasa avtomatik `default.png` ishlatiladi.
         </Typography>
       </Paper>
     </Box>

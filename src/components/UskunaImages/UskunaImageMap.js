@@ -83,6 +83,7 @@ const ID_IMAGES = {
   "USK-078": "/images/uskunalar/yakuni guruh klet.png",
   "USK-079": "/images/uskunalar/yakuni guruh klet.png",
   "USK-003": "/images/uskunalar/rolikli pech.png",
+  "USK-017": "/images/uskunalar/lpk pech.png",
 };
 
 /**

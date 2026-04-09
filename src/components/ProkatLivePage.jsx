@@ -14,7 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 
 // const API_BASE = "";
 // Agar backend boshqa host/portda bo'lsa:
-const API_BASE = "http://172.16.55.13:8000";
+const API_BASE = "https://ai.uzbeksteel.uz:8000";
 
 function StatusChip({ label, value }) {
   return (

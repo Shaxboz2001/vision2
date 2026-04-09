@@ -65,6 +65,7 @@ export default function App() {
                       element={<VoiceCalibration />}
                     />
                     <Route path="/ppe" element={<PPEPage />} />
+                    <Route path="/metal-zasolyonnost" element={<AILom />} />
                     {/* <Route path="/metal-zasolyonnost" element={<MetalZasolyonnostPage />} /> */}
                   </Routes>
                 </Layout>
@@ -81,48 +82,43 @@ export default function App() {
 import { useState, useEffect } from "react";
 
 function PPEPage() {
-  const [streamKey, setStreamKey] = useState(Date.now());
-
-  // Har safar sahifa mount bo'lganda yangi key = yangi connection
-  useEffect(() => {
-    setStreamKey(Date.now());
-  }, []);
-
   return (
-    <Box
-      sx={{
-        width: "100%",
-        maxWidth: "1200px",
-        margin: "0 auto",
-        marginTop: "50px",
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gridTemplateRows: "1fr 1fr",
-        gap: "4px",
-        background: "#070a12",
-        border: "1px solid #1e2a3d",
-        borderRadius: 2,
-        overflow: "hidden",
+    <div
+      style={{
+        width: "80%",
+        margin: "50px auto",
+        border: "2px solid #333",
       }}
     >
-      {[1, 2, 3, 4].map((id) => (
-        <Box
-          key={`${id}-${streamKey}`}
-          component="img"
-          src={`http://172.16.55.12:8006/video/${id}?t=${streamKey}`}
-          alt={`camera-${id}`}
-          sx={{
-            width: "100%",
-            aspectRatio: "16/9",
-            objectFit: "cover",
-            display: "block",
-          }}
-        />
-      ))}
-    </Box>
+      <img
+        src="http://172.16.55.12:8005/video"
+        alt="camera"
+        style={{
+          width: "100%",
+          display: "block",
+        }}
+      />
+    </div>
   );
 }
 
-function MetalZasolyonnostPage() {
-  return <div>Metal Zasolyonnost Page</div>;
+function AILom() {
+  return (
+    <div
+      style={{
+        width: "80%",
+        margin: "50px auto",
+        border: "2px solid #333",
+      }}
+    >
+      <img
+        src="http://172.16.55.12:8006/video"
+        alt="camera"
+        style={{
+          width: "100%",
+          display: "block",
+        }}
+      />
+    </div>
+  );
 }

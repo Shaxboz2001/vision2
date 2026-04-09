@@ -369,10 +369,26 @@ export function CameraFeed({
 }) {
   const [streamUrl, setStreamUrl] = useState(null);
 
+  // useEffect(() => {
+  //   fetch(`http://172.16.55.12:8000/camera/${cam.channel}`)
+  //     .then((res) => res.json())
+  //     .then((data) => setStreamUrl(data.stream));
+  // }, [cam.channel]);
   useEffect(() => {
     fetch(`http://172.16.55.12:8000/camera/${cam.channel}`)
       .then((res) => res.json())
-      .then((data) => setStreamUrl(data.stream));
+      .then((data) => {
+        let url = data.stream;
+
+        // 🔥 eng muhim joy
+        if (url.startsWith("ws://")) {
+          const u = new URL(url);
+
+          url = `wss://ai.uzbeksteel.uz:8003/camera-ws${u.search}`;
+        }
+
+        setStreamUrl(url);
+      });
   }, [cam.channel]);
 
   return (
