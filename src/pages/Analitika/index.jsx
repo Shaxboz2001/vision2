@@ -632,7 +632,7 @@
 //   );
 // }
 
-import { useMemo, useState } from "react";
+import { memo, useMemo, useState, useCallback } from "react";
 import dayjs from "dayjs";
 import { useQueries } from "@tanstack/react-query";
 import {
@@ -657,6 +657,8 @@ import {
   TableHead,
   TableRow,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -665,10 +667,11 @@ import RestartAltRoundedIcon from "@mui/icons-material/RestartAltRounded";
 import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
 import PrecisionManufacturingRoundedIcon from "@mui/icons-material/PrecisionManufacturingRounded";
 import TrendingUpRoundedIcon from "@mui/icons-material/TrendingUpRounded";
-import TrendingDownRoundedIcon from "@mui/icons-material/TrendingDownRounded";
 import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
-import InsightsRoundedIcon from "@mui/icons-material/InsightsRounded";
 import WaterfallChartRoundedIcon from "@mui/icons-material/WaterfallChartRounded";
+import TimelineRoundedIcon from "@mui/icons-material/TimelineRounded";
+import BoltRoundedIcon from "@mui/icons-material/BoltRounded";
+import SpeedRoundedIcon from "@mui/icons-material/SpeedRounded";
 import {
   ResponsiveContainer,
   CartesianGrid,
@@ -686,8 +689,14 @@ import {
   Radar,
   PolarGrid,
   PolarAngleAxis,
+  PieChart,
+  Pie,
+  Cell,
+  ScatterChart,
+  Scatter,
+  ComposedChart,
+  ReferenceLine,
 } from "recharts";
-
 import {
   getEAFHeatReport,
   getLRFHeatReport,
@@ -695,64 +704,132 @@ import {
   getVODHeatReport,
 } from "@/api/production";
 
-/* ═══════════════════════════════════════════════════════════════
-   HELPERS
-═══════════════════════════════════════════════════════════════ */
+/* ═══ THRESHOLDS ═══ */
+const T = Object.freeze({
+  EAF: {
+    kwhPerTon: { warn: 470, crit: 520 },
+    delay: { warn: 8, crit: 15 },
+    ratio: { min: 2, max: 4 },
+    duration: { crit: 95 },
+    sw: {
+      energy: 18,
+      energyMild: 8,
+      delay: 15,
+      delayMild: 7,
+      ratio: 8,
+      duration: 10,
+    },
+  },
+  LRF: {
+    kwhPerTon: { warn: 40, crit: 55 },
+    delay: { crit: 12 },
+    temp: { min: 1500, warnFrom: 1520 },
+    sw: { energy: 15, energyMild: 7, delay: 10, temp: 8 },
+  },
+  TSC: {
+    castSpeed: { crit: 0.75, warn: 1.0, anomaly: 0.8 },
+    superheat: { crit: 15, warn: 20 },
+    delay: { crit: 10 },
+    sw: { speed: 18, speedMild: 8, superheat: 12, delay: 8 },
+  },
+  VOD: {
+    yieldLoss: { warn: 1.5, crit: 2.5, anomaly: 2 },
+    vacuum: { warn: 3, crit: 5 },
+    delay: { crit: 10 },
+    sw: { yld: 16, yldMild: 8, vacuum: 12, vacuumMild: 6, delay: 8 },
+  },
+});
+const CC = Object.freeze({
+  EAF: "#f97316",
+  LRF: "#facc15",
+  TSC: "#22c55e",
+  VOD: "#38bdf8",
+});
+const CC_SOFT = Object.freeze({
+  EAF: "#f9731633",
+  LRF: "#facc1533",
+  TSC: "#22c55e33",
+  VOD: "#38bdf833",
+});
+const STALE_MS = 60_000;
+const DAMP = 0.35;
+const DELAY_COLORS = [
+  "#f97316",
+  "#38bdf8",
+  "#22c55e",
+  "#facc15",
+  "#a78bfa",
+  "#f472b6",
+  "#34d399",
+  "#fb923c",
+  "#818cf8",
+  "#fbbf24",
+];
+const FP = [
+  { label: "7 kun", value: 7 },
+  { label: "14 kun", value: 14 },
+  { label: "30 kun", value: 30 },
+  { label: "90 kun", value: 90 },
+];
 
+/* ═══ HELPERS ═══ */
 const safeArr = (v) => (Array.isArray(v) ? v : []);
-
-const safeText = (v, fallback = "-") => {
-  if (v === null || v === undefined) return fallback;
+const safeText = (v, fb = "-") => {
+  if (v == null) return fb;
   const s = String(v).trim();
-  return s ? s : fallback;
+  return s || fb;
 };
-
 const safeShift = (v) => safeText(v, "Noma'lum smena");
 const safeTeam = (v) => safeText(v, "Noma'lum brigada");
 const safePerson = (v) => safeText(v, "Kiritilmagan");
-
-const fmtN = (n, d = 0) =>
-  Number(n || 0).toLocaleString("ru-RU", {
-    minimumFractionDigits: d,
-    maximumFractionDigits: d,
-  });
-
-const sum = (arr = [], getter = (x) => x) =>
-  safeArr(arr).reduce((a, b) => a + Number(getter(b) || 0), 0);
-
-const avg = (arr = [], getter = (x) => x) => {
-  const vals = safeArr(arr)
-    .map((x) => Number(getter(x)))
-    .filter((x) => Number.isFinite(x));
-  return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
+const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+const _fc = new Map();
+const fmtN = (n, d = 0) => {
+  if (!_fc.has(d))
+    _fc.set(
+      d,
+      new Intl.NumberFormat("ru-RU", {
+        minimumFractionDigits: d,
+        maximumFractionDigits: d,
+      }),
+    );
+  return _fc.get(d).format(Number(n || 0));
 };
-
+const sum = (a, g = (x) => x) =>
+  safeArr(a).reduce((s, b) => s + Number(g(b) || 0), 0);
+const avg = (a, g = (x) => x) => {
+  const v = safeArr(a)
+    .map((x) => Number(g(x)))
+    .filter(Number.isFinite);
+  return v.length ? v.reduce((s, b) => s + b, 0) / v.length : 0;
+};
+const stddev = (a, g = (x) => x) => {
+  const v = safeArr(a)
+    .map((x) => Number(g(x)))
+    .filter(Number.isFinite);
+  if (v.length < 2) return 0;
+  const m = v.reduce((s, b) => s + b, 0) / v.length;
+  return Math.sqrt(v.reduce((s, b) => s + (b - m) ** 2, 0) / v.length);
+};
 const kgToTon = (kg) => Number(kg || 0) / 1000;
-
-const minutesBetween = (start, stop) => {
-  if (!start || !stop) return 0;
-  const ms = new Date(stop).getTime() - new Date(start).getTime();
+const minBtw = (s, e) => {
+  if (!s || !e) return 0;
+  const ms = new Date(e) - new Date(s);
   return ms > 0 ? Math.round(ms / 60000) : 0;
 };
-
-const formatDateTime = (v) => {
+const fmtDT = (v) => {
   if (!v) return "—";
   const d = dayjs(v);
-  if (!d.isValid()) return "—";
-  return d.format("DD.MM.YYYY HH:mm");
+  return d.isValid() ? d.format("DD.MM.YYYY HH:mm") : "—";
 };
-
-const toDateTimeLocal = (d) => dayjs(d).format("YYYY-MM-DDTHH:mm");
-
-const formatApiDate = (v) => {
+const toDTL = (d) => dayjs(d).format("YYYY-MM-DDTHH:mm");
+const fmtApi = (v) => {
   if (!v) return "";
   const d = dayjs(v);
-  if (!d.isValid()) return "";
-  return d.format("YYYY-MM-DDTHH:mm:ss");
+  return d.isValid() ? d.format("YYYY-MM-DDTHH:mm:ss") : "";
 };
-
-const getTemps = (heat) =>
-  safeArr(heat?.temperatures)
+const getTemps = (h) =>
+  safeArr(h?.temperatures)
     .map((t) => ({
       value: Number(t?.temperature || 0),
       o2: Number(t?.o2 || 0),
@@ -760,165 +837,149 @@ const getTemps = (heat) =>
       time: t?.dateTime || null,
     }))
     .filter((x) => Number.isFinite(x.value));
-
-const getAvgTemp = (heat) => avg(getTemps(heat), (x) => x.value);
-
-const getLastTemp = (heat) => {
-  const arr = getTemps(heat);
-  return arr.length ? arr[arr.length - 1].value : 0;
+const getAvgTemp = (h) => avg(getTemps(h), (x) => x.value);
+const getLastTemp = (h) => {
+  const a = getTemps(h);
+  return a.length ? a[a.length - 1].value : 0;
 };
-
-const getDelayMinutes = (heat) =>
-  sum(heat?.delays, (d) => minutesBetween(d?.startTime, d?.stopTime));
-
-const calcKwhPerTon = (energy, weightKg) => {
-  const ton = kgToTon(weightKg);
-  return ton > 0 ? Number(energy || 0) / ton : 0;
+const getDelayMin = (h) =>
+  sum(h?.delays, (d) => minBtw(d?.startTime, d?.stopTime));
+const calcKwh = (e, w) => {
+  const t = kgToTon(w);
+  return t > 0 ? Number(e || 0) / t : 0;
 };
-
-const pickLatest = (arr, startField = "startTime") => {
-  const list = safeArr(arr);
-  if (!list.length) return null;
-
-  return [...list].sort((a, b) => {
-    const ta = new Date(a?.[startField] || 0).getTime();
-    const tb = new Date(b?.[startField] || 0).getTime();
-    return tb - ta;
-  })[0];
-};
-
-const groupByDay = (items, dateField, valueFn) => {
-  const map = {};
-
-  safeArr(items).forEach((item) => {
-    const d = item?.[dateField];
-    if (!d) return;
-    const key = dayjs(d).format("DD.MM");
-    if (!map[key]) map[key] = [];
-    map[key].push(item);
-  });
-
-  return Object.entries(map).map(([kun, arr]) => ({
-    kun,
-    value: valueFn(arr),
-  }));
-};
-
-const mergeSeriesByDay = ({ eaf, lrf, tsc, vod }) => {
-  const keys = new Set([
-    ...safeArr(eaf).map((x) => x.kun),
-    ...safeArr(lrf).map((x) => x.kun),
-    ...safeArr(tsc).map((x) => x.kun),
-    ...safeArr(vod).map((x) => x.kun),
-  ]);
-
-  return [...keys]
-    .map((kun) => ({
-      kun,
-      eaf: eaf.find((x) => x.kun === kun)?.value || 0,
-      lrf: lrf.find((x) => x.kun === kun)?.value || 0,
-      tsc: tsc.find((x) => x.kun === kun)?.value || 0,
-      vod: vod.find((x) => x.kun === kun)?.value || 0,
-    }))
-    .sort((a, b) => {
-      const [ad, am] = a.kun.split(".").map(Number);
-      const [bd, bm] = b.kun.split(".").map(Number);
-      return am === bm ? ad - bd : am - bm;
-    });
-};
-
-const mergeTempSeries = (seriesMap) => {
-  const bucket = new Map();
-
-  Object.entries(seriesMap).forEach(([key, arr]) => {
-    safeArr(arr).forEach((p, idx) => {
-      const label = p.time ? dayjs(p.time).format("HH:mm") : `${idx + 1}`;
-      const old = bucket.get(label) || { time: label };
-      old[key] = p.value;
-      bucket.set(label, old);
-    });
-  });
-
-  return [...bucket.values()].sort((a, b) => a.time.localeCompare(b.time));
-};
-
-const getLastChemValue = (steelAnalysis = [], code) => {
-  const list = safeArr(steelAnalysis);
-  if (!list.length) return 0;
-
-  const latest = [...list].sort(
-    (a, b) =>
-      new Date(b?.sampleTime || 0).getTime() -
-      new Date(a?.sampleTime || 0).getTime(),
-  )[0];
-
-  const found = safeArr(latest?.chemicalAnalysis).find(
-    (x) => String(x?.code || "").toLowerCase() === String(code).toLowerCase(),
-  );
-
-  return Number(found?.value || 0);
-};
-
-const trendForecast = (data = [], key) => {
-  const clean = safeArr(data)
-    .map((x) => Number(x?.[key]) || 0)
-    .filter((x) => Number.isFinite(x));
-
-  if (clean.length < 3) {
-    return { trend: "stable", delta: 0, message: "Prognoz uchun ma'lumot kam" };
+const pickLatest = (arr, f = "startTime") => {
+  const l = safeArr(arr);
+  if (!l.length) return null;
+  let b = l[0],
+    bt = new Date(b?.[f] || 0).getTime();
+  for (let i = 1; i < l.length; i++) {
+    const t = new Date(l[i]?.[f] || 0).getTime();
+    if (t > bt) {
+      b = l[i];
+      bt = t;
+    }
   }
-
-  const split = Math.max(1, Math.floor(clean.length * 0.7));
-  const prev = clean.slice(0, split);
-  const last = clean.slice(split);
-
-  const prevAvg = avg(prev);
-  const lastAvg = avg(last);
-  const delta = prevAvg ? ((lastAvg - prevAvg) / prevAvg) * 100 : 0;
-
-  if (delta > 3) {
+  return b;
+};
+const groupByDay = (items, df, fn) => {
+  const m = new Map();
+  for (const it of safeArr(items)) {
+    const d = it?.[df];
+    if (!d) continue;
+    const k = dayjs(d).format("DD.MM");
+    const e = m.get(k);
+    e ? e.push(it) : m.set(k, [it]);
+  }
+  const r = [];
+  for (const [k, a] of m)
+    r.push({ kun: k, value: fn(a), count: a.length, items: a });
+  return r;
+};
+const sortDK = (arr) =>
+  [...arr].sort((a, b) => {
+    const [ad, am] = a.kun.split(".").map(Number);
+    const [bd, bm] = b.kun.split(".").map(Number);
+    return am === bm ? ad - bd : am - bm;
+  });
+const mergeByDay = ({ eaf, lrf, tsc, vod }) => {
+  const m = new Map();
+  const fill = (a, k) => {
+    for (const it of safeArr(a)) {
+      const e = m.get(it.kun);
+      if (e) e[k] = it.value;
+      else
+        m.set(it.kun, {
+          kun: it.kun,
+          eaf: 0,
+          lrf: 0,
+          tsc: 0,
+          vod: 0,
+          [k]: it.value,
+        });
+    }
+  };
+  fill(eaf, "eaf");
+  fill(lrf, "lrf");
+  fill(tsc, "tsc");
+  fill(vod, "vod");
+  return sortDK([...m.values()]);
+};
+const mergeTempS = (sm) => {
+  const b = new Map();
+  for (const [k, a] of Object.entries(sm))
+    for (let i = 0; i < safeArr(a).length; i++) {
+      const p = a[i];
+      const lb = p.time ? dayjs(p.time).format("HH:mm") : `${i + 1}`;
+      const o = b.get(lb) || { time: lb };
+      o[k] = p.value;
+      b.set(lb, o);
+    }
+  return [...b.values()].sort((a, c) => a.time.localeCompare(c.time));
+};
+const getLastChem = (an = [], code) => {
+  const l = safeArr(an);
+  if (!l.length) return 0;
+  let lt = l[0],
+    ltt = new Date(lt?.sampleTime || 0).getTime();
+  for (let i = 1; i < l.length; i++) {
+    const t = new Date(l[i]?.sampleTime || 0).getTime();
+    if (t > ltt) {
+      lt = l[i];
+      ltt = t;
+    }
+  }
+  const cl = String(code).toLowerCase();
+  const f = safeArr(lt?.chemicalAnalysis).find(
+    (x) => String(x?.code || "").toLowerCase() === cl,
+  );
+  return Number(f?.value || 0);
+};
+const trendCalc = (data, key) => {
+  const cl = safeArr(data)
+    .map((x) => Number(x?.[key]) || 0)
+    .filter(Number.isFinite);
+  if (cl.length < 3)
+    return { trend: "stable", delta: 0, message: "Prognoz uchun ma'lumot kam" };
+  const sp = Math.max(1, Math.floor(cl.length * 0.7));
+  const pA = avg(cl.slice(0, sp)),
+    lA = avg(cl.slice(sp));
+  const d = pA ? ((lA - pA) / pA) * 100 : 0;
+  if (d > 3)
     return {
       trend: "up",
-      delta,
-      message: `So‘nggi davrda +${fmtN(Math.abs(delta), 1)}% o‘sish`,
+      delta: d,
+      message: `+${fmtN(Math.abs(d), 1)}% o'sish`,
     };
-  }
-  if (delta < -3) {
+  if (d < -3)
     return {
       trend: "down",
-      delta,
-      message: `So‘nggi davrda -${fmtN(Math.abs(delta), 1)}% pasayish`,
+      delta: d,
+      message: `-${fmtN(Math.abs(d), 1)}% pasayish`,
     };
-  }
-
-  return { trend: "stable", delta, message: "Ko‘rsatkich barqaror" };
+  return { trend: "stable", delta: d, message: "Barqaror" };
 };
-
-const getStatusMeta = (score) => {
-  if (score >= 85) return { label: "Yaxshi", color: "#22c55e" };
-  if (score >= 65) return { label: "O'rtacha", color: "#f59e0b" };
-  return { label: "Xavfli", color: "#ef4444" };
-};
-
-const riskLevel = (value, yellowFrom, redFrom, smallerIsWorse = false) => {
-  if (smallerIsWorse) {
-    if (value <= redFrom) return { label: "Yuqori", color: "#ef4444" };
-    if (value <= yellowFrom) return { label: "O'rta", color: "#f59e0b" };
-    return { label: "Past", color: "#22c55e" };
-  }
-
-  if (value >= redFrom) return { label: "Yuqori", color: "#ef4444" };
-  if (value >= yellowFrom) return { label: "O'rta", color: "#f59e0b" };
-  return { label: "Past", color: "#22c55e" };
-};
-
-const getSeverityColor = (v) => {
-  if (v === "kritik") return "#ef4444";
-  if (v === "ogohlantirish") return "#f59e0b";
-  return "#0ea5e9";
-};
-
-const normalizeHeat = (h) => ({
+const statusMeta = (s) =>
+  s >= 85
+    ? { label: "Yaxshi", color: "#22c55e" }
+    : s >= 65
+      ? { label: "O'rtacha", color: "#f59e0b" }
+      : { label: "Xavfli", color: "#ef4444" };
+const riskLvl = (v, y, r, inv = false) =>
+  inv
+    ? v <= r
+      ? { label: "Yuqori", color: "#ef4444" }
+      : v <= y
+        ? { label: "O'rta", color: "#f59e0b" }
+        : { label: "Past", color: "#22c55e" }
+    : v >= r
+      ? { label: "Yuqori", color: "#ef4444" }
+      : v >= y
+        ? { label: "O'rta", color: "#f59e0b" }
+        : { label: "Past", color: "#22c55e" };
+const sevColor = (v) =>
+  v === "kritik" ? "#ef4444" : v === "ogohlantirish" ? "#f59e0b" : "#0ea5e9";
+const normHeat = (h) => ({
   ...h,
   shift: safeShift(h?.shift),
   team: safeTeam(h?.team),
@@ -926,504 +987,539 @@ const normalizeHeat = (h) => ({
   superintendent: safePerson(h?.superintendent),
 });
 
-const daysInMonth = (dateLike) => {
-  const d = dayjs(dateLike);
-  return d.daysInMonth();
-};
-
-const dayOfYear = (dateLike) => {
-  const d = dayjs(dateLike);
-  return d.diff(dayjs(d).startOf("year"), "day") + 1;
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   FORECAST HELPERS
-═══════════════════════════════════════════════════════════════ */
-
-function buildSimpleForecast(rows = [], dateField, valueGetter) {
-  const daily = groupByDay(rows, dateField, (arr) => sum(arr, valueGetter));
-  const values = daily.map((x) => Number(x.value || 0)).filter((x) => x >= 0);
-
-  if (!values.length) {
-    return {
-      tomorrow: 0,
-      monthEnd: 0,
-      yearEnd: 0,
-      avgPerDay: 0,
-      chart: [],
-      insight: "Prognoz uchun ma'lumot yetarli emas",
-    };
+/* ═══ FORECAST ═══ */
+function buildForecast(rows, dateField, valueGetter, days = 30) {
+  const daily = groupByDay(rows, dateField, (a) => sum(a, valueGetter));
+  const vals = daily.map((x) => Number(x.value || 0)).filter((x) => x >= 0);
+  const empty = {
+    tomorrow: 0,
+    periodEnd: 0,
+    monthEnd: 0,
+    yearEnd: 0,
+    avgPerDay: 0,
+    stdPerDay: 0,
+    confidence: { upper: 0, lower: 0 },
+    dailyChart: [],
+    cumulativeChart: [],
+    trendLine: [],
+    insight: "Ma'lumot yetarli emas",
+    forecastDays: days,
+    trendPct: 0,
+  };
+  if (!vals.length) return empty;
+  const l7 = vals.slice(-7),
+    l14 = vals.slice(-14);
+  const a7 = avg(l7),
+    a14 = avg(l14.length ? l14 : vals),
+    s7 = stddev(l7);
+  const tp = a14 ? ((a7 - a14) / a14) * 100 : 0;
+  const tom = Math.max(0, a7 + a7 * (tp / 100) * DAMP);
+  const now = dayjs(),
+    pm = Math.max(1, now.date());
+  const mAct = sum(vals),
+    mEnd = mAct + Math.max(0, now.daysInMonth() - pm) * tom;
+  const yEnd = (mAct / pm) * 365,
+    pEnd = tom * days;
+  const uB = Math.max(0, tom + s7 * 1.5),
+    lB = Math.max(0, tom - s7 * 1.5);
+  const dc = daily.map((d) => ({
+    kun: d.kun,
+    actual: d.value,
+    forecast: null,
+    upper: null,
+    lower: null,
+  }));
+  for (let i = 1; i <= Math.min(days, 60); i++) {
+    const fd = now.add(i, "day"),
+      decay = 1 + (tp / 100) * DAMP * (i / days);
+    const df = Math.max(0, a7 * decay);
+    dc.push({
+      kun: fd.format("DD.MM"),
+      actual: null,
+      forecast: df,
+      upper: df + s7 * 1.5,
+      lower: Math.max(0, df - s7 * 1.5),
+    });
   }
-
-  const last7 = values.slice(-7);
-  const last14 = values.slice(-14);
-
-  const avg7 = avg(last7);
-  const avg14 = avg(last14.length ? last14 : values);
-
-  const trendPct = avg14 ? ((avg7 - avg14) / avg14) * 100 : 0;
-  const tomorrow = Math.max(0, avg7 + avg7 * (trendPct / 100) * 0.35);
-
-  const now = dayjs();
-  const passedDaysMonth = Math.max(1, now.date());
-  const monthActual = sum(values);
-  const monthForecast =
-    monthActual + Math.max(0, daysInMonth(now) - passedDaysMonth) * tomorrow;
-
-  const passedDaysYear = Math.max(1, dayOfYear(now));
-  const yearForecast = (monthActual / passedDaysMonth) * 365;
-
-  const chart = [
-    { name: "Ertaga", value: tomorrow },
-    { name: "Oy yakuni", value: monthForecast },
-    { name: "Yil yakuni", value: yearForecast },
-  ];
-
-  let insight = "Ko‘rsatkich barqaror";
-  if (trendPct > 5) insight = "Ijobiy trend kuzatilmoqda";
-  else if (trendPct < -5) insight = "Pasayish trendi kuzatilmoqda";
-
+  let cA = 0,
+    cF = 0;
+  const cc = dc.map((d) => {
+    if (d.actual != null) cA += d.actual;
+    if (d.forecast != null) cF += d.forecast;
+    return {
+      kun: d.kun,
+      actual: d.actual != null ? cA : null,
+      forecast: d.forecast != null ? cA + cF : null,
+    };
+  });
+  const tl = [];
+  for (let i = 0; i < vals.length; i++) {
+    const w = vals.slice(Math.max(0, i - 4), i + 1);
+    tl.push({ kun: daily[i]?.kun || `${i}`, ma5: avg(w), value: vals[i] });
+  }
+  let insight = `Barqaror. Kunlik: ${fmtN(a7, 1)} t`;
+  if (tp > 5)
+    insight = `Ijobiy: +${fmtN(tp, 1)}%. ${days} kun: ${fmtN(pEnd, 1)} t`;
+  else if (tp < -5) insight = `Pasayish: ${fmtN(tp, 1)}%`;
   return {
-    tomorrow,
-    monthEnd: monthForecast,
-    yearEnd: yearForecast,
-    avgPerDay: avg7,
-    chart,
+    tomorrow: tom,
+    periodEnd: pEnd,
+    monthEnd: mEnd,
+    yearEnd: yEnd,
+    avgPerDay: a7,
+    stdPerDay: s7,
+    confidence: { upper: uB, lower: lB },
+    dailyChart: dc,
+    cumulativeChart: cc,
+    trendLine: tl,
     insight,
+    forecastDays: days,
+    trendPct: tp,
   };
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   ANALYTICS BUILDERS
-═══════════════════════════════════════════════════════════════ */
+/* ═══ EXTRA CHARTS ═══ */
+function buildEnergyTrend(eR, lR) {
+  const eD = groupByDay(eR, "productionDate", (a) =>
+    avg(a, (x) => x.kwhPerTon),
+  );
+  const lD = groupByDay(lR, "productionDate", (a) =>
+    avg(a, (x) => x.kwhPerTon),
+  );
+  const m = new Map();
+  for (const d of eD) m.set(d.kun, { kun: d.kun, eafKwh: d.value, lrfKwh: 0 });
+  for (const d of lD) {
+    const e = m.get(d.kun);
+    if (e) e.lrfKwh = d.value;
+    else m.set(d.kun, { kun: d.kun, eafKwh: 0, lrfKwh: d.value });
+  }
+  return sortDK([...m.values()]);
+}
+function buildDelayAnalysis(all) {
+  const m = new Map();
+  for (const h of all)
+    for (const d of safeArr(h?.delays)) {
+      const r = safeText(d?.delayReason, safeText(d?.delayType, "Noma'lum"));
+      const dur = minBtw(d?.startTime, d?.stopTime);
+      if (dur <= 0) continue;
+      const e = m.get(r);
+      if (e) {
+        e.totalMin += dur;
+        e.count++;
+      } else m.set(r, { reason: r, totalMin: dur, count: 1 });
+    }
+  return [...m.values()].sort((a, b) => b.totalMin - a.totalMin).slice(0, 10);
+}
+function buildShiftAnalysis(all) {
+  const m = new Map();
+  for (const h of all) {
+    const s = h.shift || "Noma'lum";
+    const e = m.get(s);
+    if (e) {
+      e.heats++;
+      e.delaySum += h.delayMin || 0;
+    } else m.set(s, { shift: s, heats: 1, delaySum: h.delayMin || 0 });
+  }
+  return [...m.values()].map((s) => ({
+    shift: s.shift,
+    heats: s.heats,
+    avgDelay: s.heats ? s.delaySum / s.heats : 0,
+  }));
+}
+function buildScatter(eR) {
+  return eR
+    .filter((h) => h.kwhPerTon > 0 && h.tappingWeight > 0)
+    .map((h) => ({
+      x: kgToTon(h.tappingWeight),
+      y: h.kwhPerTon,
+      heatId: h.heatId,
+      bad: h.kwhPerTon > T.EAF.kwhPerTon.crit,
+    }));
+}
+function buildHeatCount(all, df = "productionDate") {
+  const m = new Map();
+  for (const h of all) {
+    const d = h?.[df];
+    if (!d) continue;
+    const k = dayjs(d).format("DD.MM");
+    m.set(k, (m.get(k) || 0) + 1);
+  }
+  return sortDK([...m.entries()].map(([kun, count]) => ({ kun, count })));
+}
 
-function buildEAFAnalytics(rows) {
-  const enriched = safeArr(rows).map((h) => {
-    const x = normalizeHeat(h);
-    const tappingWeight = Number(x?.tappingWeight) || 0;
-    const energy = Number(x?.electricalEnergy) || 0;
-    const o2 = Number(x?.injectedO2) || 0;
+/* ═══ ANALYTICS BUILDERS ═══ */
+function buildEAF(rows, fd = 30) {
+  const en = safeArr(rows).map((h) => {
+    const x = normHeat(h);
+    const tw = Number(x?.tappingWeight) || 0;
+    const e = Number(x?.electricalEnergy) || 0;
     const scrap = Number(x?.totalScrap) || 0;
     const hbi = Number(x?.totalHBI) || 0;
-    const ratio = hbi > 0 ? scrap / hbi : 0;
-
     return {
       ...x,
-      tappingWeight,
-      energy,
-      o2,
+      tappingWeight: tw,
+      energy: e,
+      o2: Number(x?.injectedO2) || 0,
       scrap,
       hbi,
-      ratio,
+      ratio: hbi > 0 ? scrap / hbi : 0,
       latestTemp: getLastTemp(x),
       avgTemp: getAvgTemp(x),
-      delayMin: getDelayMinutes(x),
-      durationMin: minutesBetween(x?.startTime, x?.stopTime),
-      carbon: getLastChemValue(x?.steelAnalysis, "C"),
-      kwhPerTon: calcKwhPerTon(energy, tappingWeight),
+      delayMin: getDelayMin(x),
+      durationMin: minBtw(x?.startTime, x?.stopTime),
+      carbon: getLastChem(x?.steelAnalysis, "C"),
+      kwhPerTon: calcKwh(e, tw),
     };
   });
-
-  const totalTons = kgToTon(sum(enriched, (x) => x.tappingWeight));
-  const totalEnergy = sum(enriched, (x) => x.energy);
-  const avgKwhPerTon = avg(enriched, (x) => x.kwhPerTon);
-  const avgDelay = avg(enriched, (x) => x.delayMin);
-  const avgDuration = avg(enriched, (x) => x.durationMin);
-  const avgRatio = avg(enriched, (x) => x.ratio);
-  const avgTemp = avg(enriched, (x) => x.avgTemp);
-
-  let score = 100;
-  if (avgKwhPerTon > 520) score -= 18;
-  else if (avgKwhPerTon > 470) score -= 8;
-  if (avgDelay > 15) score -= 15;
-  else if (avgDelay > 8) score -= 7;
-  if (avgRatio < 2 || avgRatio > 4) score -= 8;
-  if (avgDuration > 95) score -= 10;
-
-  const forecast = buildSimpleForecast(enriched, "productionDate", (x) =>
-    kgToTon(x.tappingWeight),
-  );
-
+  const w = T.EAF.sw;
+  const aK = avg(en, (x) => x.kwhPerTon);
+  const aD = avg(en, (x) => x.delayMin);
+  const aDu = avg(en, (x) => x.durationMin);
+  const aR = avg(en, (x) => x.ratio);
+  let s = 100;
+  if (aK > T.EAF.kwhPerTon.crit) s -= w.energy;
+  else if (aK > T.EAF.kwhPerTon.warn) s -= w.energyMild;
+  if (aD > T.EAF.delay.crit) s -= w.delay;
+  else if (aD > T.EAF.delay.warn) s -= w.delayMild;
+  if (aR < T.EAF.ratio.min || aR > T.EAF.ratio.max) s -= w.ratio;
+  if (aDu > T.EAF.duration.crit) s -= w.duration;
   return {
     name: "EAF",
-    rows: enriched,
-    totalHeats: enriched.length,
-    totalTons,
-    totalEnergy,
-    avgKwhPerTon,
-    avgDelay,
-    avgDuration,
-    avgRatio,
-    avgTemp,
-    score: Math.max(30, Math.min(100, score)),
-    trend: trendForecast(enriched, "kwhPerTon"),
-    forecast,
+    rows: en,
+    totalHeats: en.length,
+    totalTons: kgToTon(sum(en, (x) => x.tappingWeight)),
+    totalEnergy: sum(en, (x) => x.energy),
+    avgKwhPerTon: aK,
+    avgDelay: aD,
+    avgDuration: aDu,
+    avgRatio: aR,
+    avgTemp: avg(en, (x) => x.avgTemp),
+    score: clamp(s, 30, 100),
+    trend: trendCalc(en, "kwhPerTon"),
+    forecast: buildForecast(
+      en,
+      "productionDate",
+      (x) => kgToTon(x.tappingWeight),
+      fd,
+    ),
   };
 }
-
-function buildLRFAnalytics(rows) {
-  const enriched = safeArr(rows).map((h) => {
-    const x = normalizeHeat(h);
-    const steel =
-      Number(x?.finalSteelWeight) || Number(x?.startSteelWeight) || 0;
-    const energy = Number(x?.electricalEnergy) || 0;
-
+function buildLRF(rows, fd = 30) {
+  const en = safeArr(rows).map((h) => {
+    const x = normHeat(h);
+    const st = Number(x?.finalSteelWeight) || Number(x?.startSteelWeight) || 0;
+    const e = Number(x?.electricalEnergy) || 0;
     return {
       ...x,
-      steel,
-      energy,
+      steel: st,
+      energy: e,
       avgTemp: getAvgTemp(x),
       latestTemp: getLastTemp(x),
-      delayMin: getDelayMinutes(x),
-      durationMin: minutesBetween(x?.startTime, x?.stopTime),
-      kwhPerTon: calcKwhPerTon(energy, steel),
-      arPerTon:
-        steel > 0 ? Number(x?.totalArConsumption || 0) / kgToTon(steel) : 0,
-      n2PerTon:
-        steel > 0 ? Number(x?.totalN2Consumption || 0) / kgToTon(steel) : 0,
+      delayMin: getDelayMin(x),
+      durationMin: minBtw(x?.startTime, x?.stopTime),
+      kwhPerTon: calcKwh(e, st),
+      arPerTon: st > 0 ? Number(x?.totalArConsumption || 0) / kgToTon(st) : 0,
+      n2PerTon: st > 0 ? Number(x?.totalN2Consumption || 0) / kgToTon(st) : 0,
     };
   });
-
-  const totalTons = kgToTon(sum(enriched, (x) => x.steel));
-  const avgKwhPerTon = avg(enriched, (x) => x.kwhPerTon);
-  const avgTemp = avg(enriched, (x) => x.avgTemp);
-  const avgDelay = avg(enriched, (x) => x.delayMin);
-
-  let score = 100;
-  if (avgKwhPerTon > 55) score -= 15;
-  else if (avgKwhPerTon > 40) score -= 7;
-  if (avgDelay > 12) score -= 10;
-  if (avgTemp < 1500) score -= 8;
-
-  const forecast = buildSimpleForecast(enriched, "productionDate", (x) =>
-    kgToTon(x.steel),
-  );
-
+  const w = T.LRF.sw;
+  const aK = avg(en, (x) => x.kwhPerTon);
+  const aD = avg(en, (x) => x.delayMin);
+  const aT = avg(en, (x) => x.avgTemp);
+  let s = 100;
+  if (aK > T.LRF.kwhPerTon.crit) s -= w.energy;
+  else if (aK > T.LRF.kwhPerTon.warn) s -= w.energyMild;
+  if (aD > T.LRF.delay.crit) s -= w.delay;
+  if (aT < T.LRF.temp.min) s -= w.temp;
   return {
     name: "LRF",
-    rows: enriched,
-    totalHeats: enriched.length,
-    totalTons,
-    avgKwhPerTon,
-    avgTemp,
-    avgDelay,
-    score: Math.max(30, Math.min(100, score)),
-    trend: trendForecast(enriched, "kwhPerTon"),
-    forecast,
+    rows: en,
+    totalHeats: en.length,
+    totalTons: kgToTon(sum(en, (x) => x.steel)),
+    avgKwhPerTon: aK,
+    avgTemp: aT,
+    avgDelay: aD,
+    score: clamp(s, 30, 100),
+    trend: trendCalc(en, "kwhPerTon"),
+    forecast: buildForecast(en, "productionDate", (x) => kgToTon(x.steel), fd),
   };
 }
-
-function buildTSCAnalytics(rows) {
-  const enriched = safeArr(rows).map((h) => {
-    const x = normalizeHeat(h);
-    const steel =
-      Number(x?.finalSteelWeight) || Number(x?.startSteelWeight) || 0;
-    const strands = safeArr(x?.tscStrands);
-    const slabs = safeArr(x?.tscProducts).filter(
+function buildTSC(rows, fd = 30) {
+  const en = safeArr(rows).map((h) => {
+    const x = normHeat(h);
+    const st = Number(x?.finalSteelWeight) || Number(x?.startSteelWeight) || 0;
+    const str = safeArr(x?.tscStrands);
+    const sl = safeArr(x?.tscProducts).filter(
       (p) => Number(p?.productType) === 1,
     );
-    const avgTemp = getAvgTemp(x);
-    const liquidus = Number(x?.liquidusTemperature || 0);
-
+    const at = getAvgTemp(x),
+      liq = Number(x?.liquidusTemperature || 0);
     return {
       ...x,
-      steel,
-      avgTemp,
-      liquidus,
-      delta: avgTemp && liquidus ? avgTemp - liquidus : 0,
-      delayMin: getDelayMinutes(x),
-      castLength: sum(strands, (s) => s?.castLength),
-      castSpeedAvg: avg(strands, (s) => s?.castSpeedAvg),
-      slabCount: slabs.length,
-      slabWeight: sum(slabs, (s) => s?.productWeight),
+      steel: st,
+      avgTemp: at,
+      liquidus: liq,
+      delta: at && liq ? at - liq : 0,
+      delayMin: getDelayMin(x),
+      castLength: sum(str, (s) => s?.castLength),
+      castSpeedAvg: avg(str, (s) => s?.castSpeedAvg),
+      slabCount: sl.length,
+      slabWeight: sum(sl, (s) => s?.productWeight),
     };
   });
-
-  const totalTons = kgToTon(sum(enriched, (x) => x.slabWeight || x.steel));
-  const totalSlabs = sum(enriched, (x) => x.slabCount);
-  const avgCastSpeed = avg(enriched, (x) => x.castSpeedAvg);
-  const avgDelta = avg(enriched, (x) => x.delta);
-  const avgDelay = avg(enriched, (x) => x.delayMin);
-
-  let score = 100;
-  if (avgCastSpeed < 0.75) score -= 18;
-  else if (avgCastSpeed < 1.0) score -= 8;
-  if (avgDelta < 15) score -= 12;
-  if (avgDelay > 10) score -= 8;
-
-  const forecast = buildSimpleForecast(enriched, "productionDate", (x) =>
-    kgToTon(x.slabWeight || x.steel),
-  );
-
+  const w = T.TSC.sw;
+  const aCS = avg(en, (x) => x.castSpeedAvg);
+  const aDl = avg(en, (x) => x.delta);
+  const aD = avg(en, (x) => x.delayMin);
+  let s = 100;
+  if (aCS < T.TSC.castSpeed.crit) s -= w.speed;
+  else if (aCS < T.TSC.castSpeed.warn) s -= w.speedMild;
+  if (aDl < T.TSC.superheat.crit) s -= w.superheat;
+  if (aD > T.TSC.delay.crit) s -= w.delay;
   return {
     name: "TSC",
-    rows: enriched,
-    totalHeats: enriched.length,
-    totalTons,
-    totalSlabs,
-    avgCastSpeed,
-    avgDelta,
-    avgDelay,
-    score: Math.max(30, Math.min(100, score)),
-    trend: trendForecast(enriched, "castSpeedAvg"),
-    forecast,
+    rows: en,
+    totalHeats: en.length,
+    totalTons: kgToTon(sum(en, (x) => x.slabWeight || x.steel)),
+    totalSlabs: sum(en, (x) => x.slabCount),
+    avgCastSpeed: aCS,
+    avgDelta: aDl,
+    avgDelay: aD,
+    score: clamp(s, 30, 100),
+    trend: trendCalc(en, "castSpeedAvg"),
+    forecast: buildForecast(
+      en,
+      "productionDate",
+      (x) => kgToTon(x.slabWeight || x.steel),
+      fd,
+    ),
   };
 }
-
-function buildVODAnalytics(rows) {
-  const enriched = safeArr(rows).map((h) => {
-    const x = normalizeHeat(h);
-    const startSteel = Number(x?.startSteelWeight) || 0;
-    const finalSteel = Number(x?.finalSteelWeight) || 0;
-
+function buildVOD(rows, fd = 30) {
+  const en = safeArr(rows).map((h) => {
+    const x = normHeat(h);
+    const ss = Number(x?.startSteelWeight) || 0,
+      fs = Number(x?.finalSteelWeight) || 0;
     return {
       ...x,
-      startSteel,
-      finalSteel,
+      startSteel: ss,
+      finalSteel: fs,
       avgTemp: getAvgTemp(x),
       latestTemp: getLastTemp(x),
-      delayMin: getDelayMinutes(x),
+      delayMin: getDelayMin(x),
       oxygenPerTon:
-        kgToTon(finalSteel) > 0
-          ? Number(x?.totalOxygen || 0) / kgToTon(finalSteel)
-          : 0,
-      yieldLossPct:
-        startSteel > 0 ? ((startSteel - finalSteel) / startSteel) * 100 : 0,
+        kgToTon(fs) > 0 ? Number(x?.totalOxygen || 0) / kgToTon(fs) : 0,
+      yieldLossPct: ss > 0 ? ((ss - fs) / ss) * 100 : 0,
     };
   });
-
-  const totalTons = kgToTon(sum(enriched, (x) => x.finalSteel));
-  const avgYieldLoss = avg(enriched, (x) => x.yieldLossPct);
-  const avgMinVac = avg(enriched, (x) => x?.minVacuumPressure || 0);
-  const avgDelay = avg(enriched, (x) => x.delayMin);
-
-  let score = 100;
-  if (avgYieldLoss > 2.5) score -= 16;
-  else if (avgYieldLoss > 1.5) score -= 8;
-  if (avgMinVac > 5) score -= 12;
-  else if (avgMinVac > 3) score -= 6;
-  if (avgDelay > 10) score -= 8;
-
-  const forecast = buildSimpleForecast(enriched, "productionDate", (x) =>
-    kgToTon(x.finalSteel),
-  );
-
+  const w = T.VOD.sw;
+  const aY = avg(en, (x) => x.yieldLossPct);
+  const aV = avg(en, (x) => x?.minVacuumPressure || 0);
+  const aD = avg(en, (x) => x.delayMin);
+  let s = 100;
+  if (aY > T.VOD.yieldLoss.crit) s -= w.yld;
+  else if (aY > T.VOD.yieldLoss.warn) s -= w.yldMild;
+  if (aV > T.VOD.vacuum.crit) s -= w.vacuum;
+  else if (aV > T.VOD.vacuum.warn) s -= w.vacuumMild;
+  if (aD > T.VOD.delay.crit) s -= w.delay;
   return {
     name: "VOD",
-    rows: enriched,
-    totalHeats: enriched.length,
-    totalTons,
-    avgYieldLoss,
-    avgMinVac,
-    avgDelay,
-    score: Math.max(30, Math.min(100, score)),
-    trend: trendForecast(enriched, "yieldLossPct"),
-    forecast,
+    rows: en,
+    totalHeats: en.length,
+    totalTons: kgToTon(sum(en, (x) => x.finalSteel)),
+    avgYieldLoss: aY,
+    avgMinVac: aV,
+    avgDelay: aD,
+    score: clamp(s, 30, 100),
+    trend: trendCalc(en, "yieldLossPct"),
+    forecast: buildForecast(
+      en,
+      "productionDate",
+      (x) => kgToTon(x.finalSteel),
+      fd,
+    ),
   };
 }
-
-function buildExecutiveSummary(eaf, lrf, tsc, vod) {
-  const units = [eaf, lrf, tsc, vod];
-  const totalHeats = sum(units, (x) => x.totalHeats);
-  const totalTons = sum(units, (x) => x.totalTons);
-  const avgScore = avg(units, (x) => x.score);
-  const status = getStatusMeta(avgScore);
-
-  const strongest = [...units].sort((a, b) => b.score - a.score)[0];
-  const weakest = [...units].sort((a, b) => a.score - b.score)[0];
-
-  const risks = [];
-  if (eaf.avgKwhPerTon > 500) risks.push("EAF energiya sarfi yuqori");
-  if (eaf.avgDelay > 10) risks.push("EAF kechikishlari me’yordan yuqori");
-  if (lrf.avgTemp < 1500)
-    risks.push("LRF harorat nazorati kuchaytirilishi kerak");
-  if (tsc.avgDelta < 15) risks.push("TSC superheat past");
-  if (vod.totalHeats > 0 && vod.avgYieldLoss > 2)
-    risks.push("VOD metall yo‘qotishi yuqori");
-
-  const recommendations = [];
-  if (eaf.avgKwhPerTon > 500) {
-    recommendations.push(
-      "EAF da charge mix va power-on rejimini optimallashtirish",
+function buildExec(eaf, lrf, tsc, vod) {
+  const u = [eaf, lrf, tsc, vod];
+  const tH = sum(u, (x) => x.totalHeats);
+  const tT = sum(u, (x) => x.totalTons);
+  const aS = avg(u, (x) => x.score);
+  const st = statusMeta(aS);
+  let strong = u[0],
+    weak = u[0];
+  for (const x of u) {
+    if (x.score > strong.score) strong = x;
+    if (x.score < weak.score) weak = x;
+  }
+  const risks = [],
+    rec = [];
+  if (eaf.avgKwhPerTon > T.EAF.kwhPerTon.crit - 20) {
+    risks.push("EAF energiya sarfi yuqori");
+    rec.push("EAF charge mix va power-on optimallashtirish");
+  }
+  if (eaf.avgDelay > T.EAF.delay.warn + 2)
+    risks.push("EAF kechikishlari yuqori");
+  if (eaf.avgRatio < T.EAF.ratio.min || eaf.avgRatio > T.EAF.ratio.max)
+    rec.push(
+      "LOM/HBI nisbatini " +
+        T.EAF.ratio.min +
+        "–" +
+        T.EAF.ratio.max +
+        " da ushlash",
     );
+  if (lrf.avgTemp < T.LRF.temp.min) risks.push("LRF harorat nazorati kerak");
+  if (lrf.avgDelay > T.LRF.delay.crit - 2)
+    rec.push("LRF material addition standartlashtirish");
+  if (tsc.avgDelta < T.TSC.superheat.crit) {
+    risks.push("TSC superheat past");
+    rec.push("TSC superheat zaxirasini oshirish");
   }
-  if (eaf.avgRatio < 2 || eaf.avgRatio > 4) {
-    recommendations.push("LOM/HBI nisbatini 2–4 oralig‘ida ushlash");
+  if (vod.totalHeats > 0 && vod.avgYieldLoss > T.VOD.yieldLoss.anomaly) {
+    risks.push("VOD yield loss yuqori");
+    rec.push("VOD vacuum parametrlarini sozlash");
   }
-  if (lrf.avgDelay > 10) {
-    recommendations.push(
-      "LRF da material addition ketma-ketligini standartlashtirish",
-    );
-  }
-  if (tsc.avgDelta < 15) {
-    recommendations.push(
-      "TSC da liquidusdan yuqori harorat zaxirasini oshirish",
-    );
-  }
-  if (vod.totalHeats > 0 && vod.avgYieldLoss > 2) {
-    recommendations.push("VOD vacuum va blow parametrlarini qayta sozlash");
-  }
-  if (!recommendations.length) {
-    recommendations.push(
-      "Jarayonlar barqaror, nuqtaviy optimizatsiya tavsiya etiladi",
-    );
-  }
-
+  if (!rec.length) rec.push("Barqaror, nuqtaviy optimizatsiya tavsiya etiladi");
   return {
-    totalHeats,
-    totalTons,
-    avgScore,
-    status,
-    strongest,
-    weakest,
+    totalHeats: tH,
+    totalTons: tT,
+    avgScore: aS,
+    status: st,
+    strongest: strong,
+    weakest: weak,
     risks,
-    recommendations,
+    recommendations: rec,
   };
 }
-
-function buildAnomalies(eaf, lrf, tsc, vod) {
-  const list = [];
-
-  eaf.rows.forEach((h) => {
-    if (h.kwhPerTon > 520) {
-      list.push({
+function buildAnoms(eaf, lrf, tsc, vod) {
+  const L = [];
+  for (const h of eaf.rows) {
+    if (h.kwhPerTon > T.EAF.kwhPerTon.crit)
+      L.push({
         process: "EAF",
         heatId: h.heatId,
-        type: "Yuqori energiya sarfi",
-        value: `${fmtN(h.kwhPerTon, 1)} kWh/t`,
-        risk: riskLevel(h.kwhPerTon, 470, 520),
-        reason:
-          "Elektr energiya sarfi yuqori. Charge mix yoki power-on time qayta ko‘rilishi kerak.",
+        type: "Yuqori energiya",
+        value: fmtN(h.kwhPerTon, 1) + " kWh/t",
+        risk: riskLvl(h.kwhPerTon, T.EAF.kwhPerTon.warn, T.EAF.kwhPerTon.crit),
+        reason: "Charge mix / power-on qayta ko'rish kerak.",
         raw: h,
       });
-    }
-    if (h.delayMin > 15) {
-      list.push({
+    if (h.delayMin > T.EAF.delay.crit)
+      L.push({
         process: "EAF",
         heatId: h.heatId,
         type: "Katta kechikish",
-        value: `${fmtN(h.delayMin, 0)} min`,
-        risk: riskLevel(h.delayMin, 8, 15),
-        reason: "Delay sabablarini alohida ko‘rib chiqish kerak.",
+        value: fmtN(h.delayMin, 0) + " min",
+        risk: riskLvl(h.delayMin, T.EAF.delay.warn, T.EAF.delay.crit),
+        reason: "Delay sabablarini ko'rish kerak.",
         raw: h,
       });
-    }
-  });
-
-  lrf.rows.forEach((h) => {
-    if (h.latestTemp > 0 && h.latestTemp < 1500) {
-      list.push({
+  }
+  for (const h of lrf.rows) {
+    if (h.latestTemp > 0 && h.latestTemp < T.LRF.temp.min)
+      L.push({
         process: "LRF",
         heatId: h.heatId,
-        type: "Past yakuniy harorat",
-        value: `${fmtN(h.latestTemp, 0)} °C`,
-        risk: riskLevel(h.latestTemp, 1520, 1500, true),
-        reason: "Yakuniy termik rejim sifatga ta’sir qilishi mumkin.",
+        type: "Past harorat",
+        value: fmtN(h.latestTemp, 0) + " °C",
+        risk: riskLvl(h.latestTemp, T.LRF.temp.warnFrom, T.LRF.temp.min, true),
+        reason: "Termik rejim sifatga ta'sir qilishi mumkin.",
         raw: h,
       });
-    }
-  });
-
-  tsc.rows.forEach((h) => {
-    if (h.delta < 15) {
-      list.push({
+  }
+  for (const h of tsc.rows) {
+    if (h.delta < T.TSC.superheat.crit)
+      L.push({
         process: "TSC",
         heatId: h.heatId,
         type: "Superheat past",
-        value: `${fmtN(h.delta, 1)} °C`,
-        risk: riskLevel(h.delta, 20, 15, true),
-        reason:
-          "Liquidusga yaqin temperatura quyish barqarorligiga xavf tug‘diradi.",
+        value: fmtN(h.delta, 1) + " °C",
+        risk: riskLvl(
+          h.delta,
+          T.TSC.superheat.warn,
+          T.TSC.superheat.crit,
+          true,
+        ),
+        reason: "Quyish barqarorligiga xavf.",
         raw: h,
       });
-    }
-    if (h.castSpeedAvg > 0 && h.castSpeedAvg < 0.8) {
-      list.push({
+    if (h.castSpeedAvg > 0 && h.castSpeedAvg < T.TSC.castSpeed.anomaly)
+      L.push({
         process: "TSC",
         heatId: h.heatId,
-        type: "Quyish tezligi past",
-        value: `${fmtN(h.castSpeedAvg, 2)} m/min`,
-        risk: riskLevel(h.castSpeedAvg, 1.0, 0.8, true),
-        reason: "Quyish tezligi pastligi unumdorlikka ta’sir qiladi.",
+        type: "Tezlik past",
+        value: fmtN(h.castSpeedAvg, 2) + " m/min",
+        risk: riskLvl(
+          h.castSpeedAvg,
+          T.TSC.castSpeed.warn,
+          T.TSC.castSpeed.anomaly,
+          true,
+        ),
+        reason: "Unumdorlikka ta'sir.",
         raw: h,
       });
-    }
-  });
-
-  vod.rows.forEach((h) => {
-    if (h.yieldLossPct > 2) {
-      list.push({
+  }
+  for (const h of vod.rows) {
+    if (h.yieldLossPct > T.VOD.yieldLoss.anomaly)
+      L.push({
         process: "VOD",
         heatId: h.heatId,
-        type: "Metall yo‘qotish yuqori",
-        value: `${fmtN(h.yieldLossPct, 2)} %`,
-        risk: riskLevel(h.yieldLossPct, 1.5, 2),
-        reason: "Yakuniy chiqish foizi pasaygan.",
+        type: "Yield loss",
+        value: fmtN(h.yieldLossPct, 2) + " %",
+        risk: riskLvl(
+          h.yieldLossPct,
+          T.VOD.yieldLoss.warn,
+          T.VOD.yieldLoss.anomaly,
+        ),
+        reason: "Chiqish foizi pasaygan.",
         raw: h,
       });
-    }
-  });
-
-  const weight = { Yuqori: 3, "O'rta": 2, Past: 1 };
-  return list.sort((a, b) => weight[b.risk.label] - weight[a.risk.label]);
+  }
+  const wt = { Yuqori: 3, "O'rta": 2, Past: 1 };
+  L.sort((a, b) => (wt[b.risk.label] || 0) - (wt[a.risk.label] || 0));
+  return L;
+}
+function dirMsg(ex, eaf, lrf, tsc, vod, w) {
+  const p = [
+    "Holat: " + ex.status.label.toLowerCase() + ".",
+    "Kuchli: " + ex.strongest?.name + ", zaif: " + ex.weakest?.name + ".",
+  ];
+  if (eaf.avgKwhPerTon > T.EAF.kwhPerTon.crit - 20)
+    p.push("EAF energiya sarfi yuqori.");
+  if (tsc.avgDelta < T.TSC.superheat.crit && tsc.totalHeats > 0)
+    p.push("TSC superheat past.");
+  if (vod.totalHeats > 0 && vod.avgYieldLoss > T.VOD.yieldLoss.anomaly)
+    p.push("VOD yield loss oshgan.");
+  if (w.length) p.push("API: " + w.join(", ") + ".");
+  p.push("Tavsiya: " + ex.recommendations[0] + ".");
+  return p.join(" ");
 }
 
-function buildDirectorMessage(executive, eaf, lrf, tsc, vod, warnings = []) {
-  const parts = [];
-
-  parts.push(
-    `Tizim joriy ishlab chiqarish holatini ${executive.status.label.toLowerCase()} deb baholadi.`,
-  );
-  parts.push(
-    `Eng kuchli blok ${executive.strongest?.name}, eng ko‘p e’tibor talab qiladigan blok ${executive.weakest?.name}.`,
-  );
-
-  if (eaf.avgKwhPerTon > 500) {
-    parts.push("EAF bo‘yicha energiya sarfi yuqori.");
-  }
-  if (tsc.avgDelta < 15 && tsc.totalHeats > 0) {
-    parts.push("TSC bo‘yicha superheat pastligi kuzatilmoqda.");
-  }
-  if (vod.totalHeats > 0 && vod.avgYieldLoss > 2) {
-    parts.push("VOD bo‘yicha metall yo‘qotish darajasi oshgan.");
-  }
-  if (warnings.length) {
-    parts.push(
-      `Ayrim endpointlarda ma’lumot olishda cheklov kuzatildi: ${warnings.join(", ")}.`,
-    );
-  }
-
-  parts.push(`AI tavsiyasi: ${executive.recommendations[0]}.`);
-
-  return parts.join(" ");
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   UI HELPERS
-═══════════════════════════════════════════════════════════════ */
-
+/* ═══ UI ═══ */
 function useUi() {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === "dark";
-
-  return {
-    isDark,
-    paperSoft: isDark
-      ? "linear-gradient(180deg, rgba(15,23,42,0.94), rgba(12,18,32,0.98))"
-      : "linear-gradient(180deg, #ffffff, #f8fbff)",
-    border: isDark ? "rgba(148,163,184,0.16)" : "rgba(15,23,42,0.08)",
-    borderStrong: isDark ? "rgba(148,163,184,0.24)" : "rgba(15,23,42,0.12)",
-    textMain: isDark ? "#e5eef9" : "#0f172a",
-    textSoft: isDark ? "#a8b3c7" : "#475569",
-    textMuted: isDark ? "#7c8aa5" : "#64748b",
-    grid: isDark ? "rgba(148,163,184,0.18)" : "rgba(15,23,42,0.10)",
-    shadow: isDark
-      ? "0 10px 28px rgba(0,0,0,0.24)"
-      : "0 10px 24px rgba(15,23,42,0.06)",
-  };
+  const t = useTheme();
+  const dk = t.palette.mode === "dark";
+  return useMemo(
+    () => ({
+      isDark: dk,
+      paperSoft: dk
+        ? "linear-gradient(180deg,rgba(15,23,42,.94),rgba(12,18,32,.98))"
+        : "linear-gradient(180deg,#fff,#f8fbff)",
+      border: dk ? "rgba(148,163,184,.16)" : "rgba(15,23,42,.08)",
+      borderStrong: dk ? "rgba(148,163,184,.24)" : "rgba(15,23,42,.12)",
+      textMain: dk ? "#e5eef9" : "#0f172a",
+      textSoft: dk ? "#a8b3c7" : "#475569",
+      textMuted: dk ? "#7c8aa5" : "#64748b",
+      grid: dk ? "rgba(148,163,184,.18)" : "rgba(15,23,42,.10)",
+      shadow: dk
+        ? "0 10px 28px rgba(0,0,0,.24)"
+        : "0 10px 24px rgba(15,23,42,.06)",
+    }),
+    [dk],
+  );
 }
 
-function DashboardPaper({ children, sx = {} }) {
+const DP = memo(function DP({ children, sx = {} }) {
   const ui = useUi();
   return (
     <Paper
@@ -1439,16 +1535,15 @@ function DashboardPaper({ children, sx = {} }) {
       {children}
     </Paper>
   );
-}
+});
 
-function CustomTooltip({ active, payload, label }) {
+const CT = memo(function CT({ active, payload, label }) {
   const ui = useUi();
   if (!active || !payload?.length) return null;
-
   return (
     <Box
       sx={{
-        background: ui.isDark ? "#0f172a" : "#ffffff",
+        background: ui.isDark ? "#0f172a" : "#fff",
         border: `1px solid ${ui.borderStrong}`,
         p: 1.5,
         borderRadius: 2,
@@ -1465,26 +1560,28 @@ function CustomTooltip({ active, payload, label }) {
       >
         {label}
       </Typography>
-      {payload.map((p) => (
-        <Typography
-          key={`${p.name}-${p.dataKey}`}
-          sx={{
-            fontSize: "0.82rem",
-            color: p.color,
-            lineHeight: 1.7,
-            fontWeight: 700,
-          }}
-        >
-          {p.name}: {fmtN(p.value, 1)}
-        </Typography>
-      ))}
+      {payload
+        .filter((p) => p.value != null)
+        .map((p) => (
+          <Typography
+            key={`${p.name}-${p.dataKey}`}
+            sx={{
+              fontSize: "0.82rem",
+              color: p.color || p.stroke,
+              lineHeight: 1.7,
+              fontWeight: 700,
+            }}
+          >
+            {p.name}: {fmtN(p.value, 1)}
+          </Typography>
+        ))}
     </Box>
   );
-}
+});
 
-function KPI({ title, value, subtitle, color, icon }) {
+const KPI = memo(function KPI({ title, value, subtitle, color, icon }) {
   return (
-    <DashboardPaper sx={{ p: 2.1, height: "100%" }}>
+    <DP sx={{ p: 2.1, height: "100%" }}>
       <Stack
         direction="row"
         justifyContent="space-between"
@@ -1507,33 +1604,30 @@ function KPI({ title, value, subtitle, color, icon }) {
         </Box>
         <Box sx={{ color }}>{icon}</Box>
       </Stack>
-    </DashboardPaper>
+    </DP>
   );
-}
+});
 
-function UnitScoreCard({ unit }) {
-  const status = getStatusMeta(unit.score);
-
+const USC = memo(function USC({ unit }) {
+  const st = statusMeta(unit.score);
   return (
-    <DashboardPaper sx={{ p: 2 }}>
+    <DP sx={{ p: 2 }}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Typography sx={{ fontWeight: 800 }}>{unit.name}</Typography>
         <Chip
           size="small"
-          label={status.label}
+          label={st.label}
           sx={{
-            background: `${status.color}22`,
-            color: status.color,
-            border: `1px solid ${status.color}55`,
+            background: `${st.color}22`,
+            color: st.color,
+            border: `1px solid ${st.color}55`,
             fontWeight: 700,
           }}
         />
       </Stack>
-
       <Typography sx={{ mt: 1, fontSize: "2rem", fontWeight: 900 }}>
         {fmtN(unit.score, 0)}
       </Typography>
-
       <LinearProgress
         variant="determinate"
         value={unit.score}
@@ -1542,12 +1636,11 @@ function UnitScoreCard({ unit }) {
           height: 8,
           borderRadius: 999,
           "& .MuiLinearProgress-bar": {
-            backgroundColor: status.color,
+            backgroundColor: st.color,
             borderRadius: 999,
           },
         }}
       />
-
       <Stack spacing={0.6} sx={{ mt: 1.4 }}>
         <Typography sx={{ fontSize: "0.78rem", color: "text.secondary" }}>
           Heatlar: <b>{fmtN(unit.totalHeats, 0)}</b>
@@ -1559,18 +1652,18 @@ function UnitScoreCard({ unit }) {
           Trend: <b>{unit.trend.message}</b>
         </Typography>
       </Stack>
-    </DashboardPaper>
+    </DP>
   );
-}
+});
 
-function MiniInfoCard({ title, rows = [] }) {
+const MIC = memo(function MIC({ title, rows = [] }) {
   return (
-    <DashboardPaper sx={{ p: 2.1, height: "100%" }}>
+    <DP sx={{ p: 2.1, height: "100%" }}>
       <Typography sx={{ fontSize: "1rem", fontWeight: 800, mb: 1.4 }}>
         {title}
       </Typography>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1.05 }}>
-        {rows.map((r, idx) => (
+        {rows.map((r, i) => (
           <Box key={r.label}>
             <Box
               sx={{
@@ -1592,54 +1685,63 @@ function MiniInfoCard({ title, rows = [] }) {
                 {r.value}
               </Typography>
             </Box>
-            {idx < rows.length - 1 && <Divider sx={{ mt: 0.95 }} />}
+            {i < rows.length - 1 && <Divider sx={{ mt: 0.95 }} />}
           </Box>
         ))}
       </Box>
-    </DashboardPaper>
+    </DP>
   );
-}
+});
 
-function ForecastCard({ title, forecast, color = "#0ea5e9" }) {
+const FC = memo(function FC({ title, forecast, color = "#0ea5e9" }) {
   return (
-    <DashboardPaper sx={{ p: 2.1, height: "100%" }}>
+    <DP sx={{ p: 2.1, height: "100%" }}>
       <Typography sx={{ fontSize: "1rem", fontWeight: 800, mb: 1.4 }}>
         {title}
       </Typography>
-
-      <Stack spacing={1}>
+      <Stack spacing={0.8}>
         <Typography sx={{ fontSize: "0.84rem", color: "text.secondary" }}>
           Ertangi kun: <b style={{ color }}>{fmtN(forecast.tomorrow, 1)} t</b>
         </Typography>
         <Typography sx={{ fontSize: "0.84rem", color: "text.secondary" }}>
-          Oy yakuni: <b style={{ color }}>{fmtN(forecast.monthEnd, 1)} t</b>
+          {forecast.forecastDays} kunlik:{" "}
+          <b style={{ color }}>{fmtN(forecast.periodEnd, 1)} t</b>
         </Typography>
         <Typography sx={{ fontSize: "0.84rem", color: "text.secondary" }}>
-          Yil prognozi: <b style={{ color }}>{fmtN(forecast.yearEnd, 1)} t</b>
+          Oy: <b style={{ color }}>{fmtN(forecast.monthEnd, 1)} t</b>
+        </Typography>
+        <Typography sx={{ fontSize: "0.84rem", color: "text.secondary" }}>
+          Yil: <b style={{ color }}>{fmtN(forecast.yearEnd, 1)} t</b>
+        </Typography>
+        <Divider />
+        <Typography sx={{ fontSize: "0.78rem", color: "text.secondary" }}>
+          Kunlik:{" "}
+          <b>
+            {fmtN(forecast.avgPerDay, 1)} ± {fmtN(forecast.stdPerDay, 1)} t
+          </b>
         </Typography>
         <Typography
-          sx={{ fontSize: "0.8rem", color: "text.secondary", mt: 0.6 }}
+          sx={{
+            fontSize: "0.8rem",
+            color: "text.secondary",
+            fontStyle: "italic",
+          }}
         >
           {forecast.insight}
         </Typography>
       </Stack>
-    </DashboardPaper>
+    </DP>
   );
-}
+});
 
-function HeatDetailDrawer({ open, onClose, item }) {
+const HDD = memo(function HDD({ open, onClose, item }) {
   const raw = item?.raw;
   const temps = safeArr(raw?.temperatures);
   const delays = safeArr(raw?.delays);
-
-  const latestSteel = safeArr(raw?.steelAnalysis).length
-    ? [...safeArr(raw?.steelAnalysis)].sort(
-        (a, b) =>
-          new Date(b?.sampleTime || 0).getTime() -
-          new Date(a?.sampleTime || 0).getTime(),
-      )[0]
-    : null;
-
+  const latSteel = useMemo(() => {
+    const l = safeArr(raw?.steelAnalysis);
+    return l.length ? pickLatest(l, "sampleTime") : null;
+  }, [raw?.steelAnalysis]);
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
       <Box
@@ -1654,49 +1756,31 @@ function HeatDetailDrawer({ open, onClose, item }) {
         <Typography sx={{ fontSize: "1rem", fontWeight: 800, mb: 1 }}>
           Heat tafsiloti
         </Typography>
-
-        <DashboardPaper sx={{ p: 2, mb: 2 }}>
+        <DP sx={{ p: 2, mb: 2 }}>
           <Stack spacing={0.8}>
-            <Typography>
-              <b>Jarayon:</b> {item?.process}
-            </Typography>
-            <Typography>
-              <b>Heat ID:</b> {safeText(raw?.heatId)}
-            </Typography>
-            <Typography>
-              <b>Po‘lat:</b> {safeText(raw?.steelGradeName)}
-            </Typography>
-            <Typography>
-              <b>Practice:</b> {safeText(raw?.practiceName)}
-            </Typography>
-            <Typography>
-              <b>Shift:</b> {safeShift(raw?.shift)}
-            </Typography>
-            <Typography>
-              <b>Team:</b> {safeTeam(raw?.team)}
-            </Typography>
-            <Typography>
-              <b>Foreman:</b> {safePerson(raw?.foreman)}
-            </Typography>
-            <Typography>
-              <b>Superintendent:</b> {safePerson(raw?.superintendent)}
-            </Typography>
-            <Typography>
-              <b>Ladle ID:</b> {safeText(raw?.ladleId)}
-            </Typography>
+            {[
+              ["Jarayon", item?.process],
+              ["Heat ID", safeText(raw?.heatId)],
+              ["Po'lat", safeText(raw?.steelGradeName)],
+              ["Shift", safeShift(raw?.shift)],
+              ["Team", safeTeam(raw?.team)],
+              ["Foreman", safePerson(raw?.foreman)],
+            ].map(([k, v]) => (
+              <Typography key={k}>
+                <b>{k}:</b> {v}
+              </Typography>
+            ))}
           </Stack>
-        </DashboardPaper>
-
-        <DashboardPaper sx={{ p: 2, mb: 2 }}>
+        </DP>
+        <DP sx={{ p: 2, mb: 2 }}>
           <Typography sx={{ fontWeight: 700, mb: 1 }}>AI izoh</Typography>
           <Typography
             sx={{ fontSize: "0.84rem", color: "#94a3b8", lineHeight: 1.7 }}
           >
             {item?.reason}
           </Typography>
-        </DashboardPaper>
-
-        <DashboardPaper sx={{ p: 2, mb: 2 }}>
+        </DP>
+        <DP sx={{ p: 2, mb: 2 }}>
           <Typography sx={{ fontWeight: 700, mb: 1 }}>
             Temperaturalar
           </Typography>
@@ -1707,46 +1791,21 @@ function HeatDetailDrawer({ open, onClose, item }) {
                   key={i}
                   sx={{ fontSize: "0.82rem", color: "#94a3b8" }}
                 >
-                  {formatDateTime(t?.dateTime)} — {fmtN(t?.temperature, 1)} °C
+                  {fmtDT(t?.dateTime)} — {fmtN(t?.temperature, 1)} °C
                 </Typography>
               ))
             ) : (
               <Typography sx={{ fontSize: "0.8rem", color: "#94a3b8" }}>
-                Temperatura ma'lumoti yo‘q
+                Ma'lumot yo'q
               </Typography>
             )}
           </Stack>
-        </DashboardPaper>
-
-        <DashboardPaper sx={{ p: 2, mb: 2 }}>
-          <Typography sx={{ fontWeight: 700, mb: 1 }}>Delaylar</Typography>
-          <Stack spacing={0.9}>
-            {delays.length ? (
-              delays.map((d, i) => (
-                <Box key={i}>
-                  <Typography sx={{ fontSize: "0.84rem" }}>
-                    {safeText(d?.delayType, "Delay")} /{" "}
-                    {safeText(d?.delayReason)}
-                  </Typography>
-                  <Typography sx={{ fontSize: "0.76rem", color: "#94a3b8" }}>
-                    {formatDateTime(d?.startTime)} —{" "}
-                    {formatDateTime(d?.stopTime)}
-                  </Typography>
-                </Box>
-              ))
-            ) : (
-              <Typography sx={{ fontSize: "0.8rem", color: "#94a3b8" }}>
-                Delay ma'lumoti yo‘q
-              </Typography>
-            )}
-          </Stack>
-        </DashboardPaper>
-
-        <DashboardPaper sx={{ p: 2 }}>
+        </DP>
+        <DP sx={{ p: 2 }}>
           <Typography sx={{ fontWeight: 700, mb: 1 }}>
             Kimyoviy tahlil
           </Typography>
-          {latestSteel?.chemicalAnalysis?.length ? (
+          {latSteel?.chemicalAnalysis?.length ? (
             <TableContainer>
               <Table size="small">
                 <TableHead>
@@ -1756,7 +1815,7 @@ function HeatDetailDrawer({ open, onClose, item }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {latestSteel.chemicalAnalysis.map((c, i) => (
+                  {latSteel.chemicalAnalysis.map((c, i) => (
                     <TableRow key={i}>
                       <TableCell sx={{ color: "#e2e8f0" }}>{c?.code}</TableCell>
                       <TableCell sx={{ color: "#e2e8f0" }}>
@@ -1769,314 +1828,262 @@ function HeatDetailDrawer({ open, onClose, item }) {
             </TableContainer>
           ) : (
             <Typography sx={{ fontSize: "0.8rem", color: "#94a3b8" }}>
-              Kimyoviy tahlil mavjud emas
+              Mavjud emas
             </Typography>
           )}
-        </DashboardPaper>
+        </DP>
       </Box>
     </Drawer>
   );
-}
+});
 
 /* ═══════════════════════════════════════════════════════════════
-   MAIN
+   MAIN — Boshliq sahifani ochganda darhol grafiklar ko'radi
 ═══════════════════════════════════════════════════════════════ */
-
 export default function Analitika() {
   const ui = useUi();
   const [tab, setTab] = useState(0);
-  const [selectedAnomaly, setSelectedAnomaly] = useState(null);
+  const [selAnom, setSelAnom] = useState(null);
+  const [fcDays, setFcDays] = useState(30);
+  const [fcUnit, setFcUnit] = useState("ALL");
+  const [showFilters, setShowFilters] = useState(false);
 
-  const now = dayjs();
-  const before30 = now.subtract(30, "day");
-
+  const now = dayjs(),
+    b30 = now.subtract(30, "day");
   const [filters, setFilters] = useState({
     heatId: "",
-    startDate: toDateTimeLocal(before30),
-    endDate: toDateTimeLocal(now),
+    startDate: toDTL(b30),
+    endDate: toDTL(now),
     process: "ALL",
   });
-
-  const [appliedFilters, setAppliedFilters] = useState({
+  const [applied, setApplied] = useState({
     heatId: "",
-    startDate: formatApiDate(before30),
-    endDate: formatApiDate(now),
+    startDate: fmtApi(b30),
+    endDate: fmtApi(now),
     process: "ALL",
   });
 
-  const buildParams = () => {
-    const params = {};
-    if (appliedFilters.heatId) params.heatId = appliedFilters.heatId;
-    if (appliedFilters.startDate) params.startDate = appliedFilters.startDate;
-    if (appliedFilters.endDate) params.endDate = appliedFilters.endDate;
-    return params;
-  };
-
-  const safeQuery = async (fn, name) => {
+  const qp = useMemo(() => {
+    const p = {};
+    if (applied.heatId) p.heatId = applied.heatId;
+    if (applied.startDate) p.startDate = applied.startDate;
+    if (applied.endDate) p.endDate = applied.endDate;
+    return p;
+  }, [applied.heatId, applied.startDate, applied.endDate]);
+  const shouldRun = useCallback(
+    (n) => applied.process === "ALL" || applied.process === n,
+    [applied.process],
+  );
+  const sq = useCallback(async (fn, name) => {
     try {
-      const data = await fn();
-      return { ok: true, data: safeArr(data), warning: null, name };
-    } catch (err) {
+      const d = await fn();
+      return { ok: true, data: safeArr(d), warning: null, name };
+    } catch {
       return {
         ok: false,
         data: [],
-        warning: `${name} ma'lumotlari vaqtincha olinmadi`,
-        error: err,
+        warning: `${name} vaqtincha olinmadi`,
         name,
       };
     }
+  }, []);
+  const apiFns = {
+    EAF: getEAFHeatReport,
+    LRF: getLRFHeatReport,
+    TSC: getTSCHeatReport,
+    VOD: getVODHeatReport,
   };
-
-  const queryParams = useMemo(buildParams, [appliedFilters]);
-
-  const shouldRun = (name) =>
-    appliedFilters.process === "ALL" || appliedFilters.process === name;
-
-  const results = useQueries({
-    queries: [
-      {
-        queryKey: ["analytics", "EAF", queryParams, appliedFilters.process],
-        enabled: shouldRun("EAF"),
-        queryFn: () => safeQuery(() => getEAFHeatReport(queryParams), "EAF"),
-        staleTime: 60_000,
-      },
-      {
-        queryKey: ["analytics", "LRF", queryParams, appliedFilters.process],
-        enabled: shouldRun("LRF"),
-        queryFn: () => safeQuery(() => getLRFHeatReport(queryParams), "LRF"),
-        staleTime: 60_000,
-      },
-      {
-        queryKey: ["analytics", "TSC", queryParams, appliedFilters.process],
-        enabled: shouldRun("TSC"),
-        queryFn: () => safeQuery(() => getTSCHeatReport(queryParams), "TSC"),
-        staleTime: 60_000,
-      },
-      {
-        queryKey: ["analytics", "VOD", queryParams, appliedFilters.process],
-        enabled: shouldRun("VOD"),
-        queryFn: () => safeQuery(() => getVODHeatReport(queryParams), "VOD"),
-        staleTime: 60_000,
-      },
-    ],
+  const res = useQueries({
+    queries: ["EAF", "LRF", "TSC", "VOD"].map((n) => ({
+      queryKey: ["analytics", n, qp],
+      enabled: shouldRun(n),
+      queryFn: () => sq(() => apiFns[n](qp), n),
+      staleTime: STALE_MS,
+    })),
   });
+  const loading = res.some((q) => q.isLoading);
+  const eD = res[0]?.data?.data ?? [],
+    lD = res[1]?.data?.data ?? [],
+    tD = res[2]?.data?.data ?? [],
+    vD = res[3]?.data?.data ?? [];
+  const wKey = [
+    res[0]?.data?.warning,
+    res[1]?.data?.warning,
+    res[2]?.data?.warning,
+    res[3]?.data?.warning,
+  ]
+    .filter(Boolean)
+    .join("|");
 
-  const loading = results.some((q) => q.isLoading);
-
-  const eafRes = results[0]?.data || {
-    ok: true,
-    data: [],
-    warning: null,
-    name: "EAF",
-  };
-  const lrfRes = results[1]?.data || {
-    ok: true,
-    data: [],
-    warning: null,
-    name: "LRF",
-  };
-  const tscRes = results[2]?.data || {
-    ok: true,
-    data: [],
-    warning: null,
-    name: "TSC",
-  };
-  const vodRes = results[3]?.data || {
-    ok: true,
-    data: [],
-    warning: null,
-    name: "VOD",
-  };
-
-  const warnings = [
-    eafRes.warning,
-    lrfRes.warning,
-    tscRes.warning,
-    vodRes.warning,
-  ].filter(Boolean);
-
-  const analytics = useMemo(() => {
-    const eaf = buildEAFAnalytics(eafRes.data);
-    const lrf = buildLRFAnalytics(lrfRes.data);
-    const tsc = buildTSCAnalytics(tscRes.data);
-    const vod = buildVODAnalytics(vodRes.data);
-
-    const executive = buildExecutiveSummary(eaf, lrf, tsc, vod);
-    const anomalies = buildAnomalies(eaf, lrf, tsc, vod);
-    const directorMessage = buildDirectorMessage(
-      executive,
-      eaf,
-      lrf,
-      tsc,
-      vod,
-      warnings,
-    );
-
-    const latestEAF = pickLatest(eaf.rows, "startTime");
-    const latestLRF = pickLatest(lrf.rows, "startTime");
-    const latestTSC = pickLatest(tsc.rows, "ladleOpeningDate");
-    const latestVOD = pickLatest(vod.rows, "startTime");
-
-    const tempChartData = mergeTempSeries({
-      eaf: getTemps(latestEAF),
-      lrf: getTemps(latestLRF),
-      tsc: getTemps(latestTSC),
-      vod: getTemps(latestVOD),
+  const A = useMemo(() => {
+    const w = wKey ? wKey.split("|") : [];
+    const eaf = buildEAF(eD, fcDays),
+      lrf = buildLRF(lD, fcDays),
+      tsc = buildTSC(tD, fcDays),
+      vod = buildVOD(vD, fcDays);
+    const exec = buildExec(eaf, lrf, tsc, vod),
+      anoms = buildAnoms(eaf, lrf, tsc, vod),
+      dm = dirMsg(exec, eaf, lrf, tsc, vod, w);
+    const lE = pickLatest(eaf.rows, "startTime"),
+      lL = pickLatest(lrf.rows, "startTime"),
+      lT = pickLatest(tsc.rows, "ladleOpeningDate"),
+      lV = pickLatest(vod.rows, "startTime");
+    const tempData = mergeTempS({
+      eaf: getTemps(lE),
+      lrf: getTemps(lL),
+      tsc: getTemps(lT),
+      vod: getTemps(lV),
     });
-
-    const productionChartData = mergeSeriesByDay({
-      eaf: groupByDay(eaf.rows, "productionDate", (arr) =>
-        kgToTon(sum(arr, (x) => x.tappingWeight)),
+    const prodData = mergeByDay({
+      eaf: groupByDay(eaf.rows, "productionDate", (a) =>
+        kgToTon(sum(a, (x) => x.tappingWeight)),
       ),
-      lrf: groupByDay(lrf.rows, "productionDate", (arr) =>
-        kgToTon(sum(arr, (x) => x.steel)),
+      lrf: groupByDay(lrf.rows, "productionDate", (a) =>
+        kgToTon(sum(a, (x) => x.steel)),
       ),
-      tsc: groupByDay(tsc.rows, "productionDate", (arr) =>
-        kgToTon(sum(arr, (x) => x.slabWeight || x.steel)),
+      tsc: groupByDay(tsc.rows, "productionDate", (a) =>
+        kgToTon(sum(a, (x) => x.slabWeight || x.steel)),
       ),
-      vod: groupByDay(vod.rows, "productionDate", (arr) =>
-        kgToTon(sum(arr, (x) => x.finalSteel)),
+      vod: groupByDay(vod.rows, "productionDate", (a) =>
+        kgToTon(sum(a, (x) => x.finalSteel)),
       ),
     });
-
-    const scoreChart = [
-      { name: "EAF", score: eaf.score },
-      { name: "LRF", score: lrf.score },
-      { name: "TSC", score: tsc.score },
-      { name: "VOD", score: vod.score },
-    ];
-
-    const unknownShiftCount = [
-      ...eaf.rows,
-      ...lrf.rows,
-      ...tsc.rows,
-      ...vod.rows,
-    ].filter((x) => safeShift(x.shift) === "Noma'lum smena").length;
-
+    const scoreC = [eaf, lrf, tsc, vod].map((u) => ({
+      name: u.name,
+      score: u.score,
+    }));
+    const all = [...eaf.rows, ...lrf.rows, ...tsc.rows, ...vod.rows];
+    const unkShift = all.filter(
+      (x) => safeShift(x.shift) === "Noma'lum smena",
+    ).length;
+    const eTrend = buildEnergyTrend(eaf.rows, lrf.rows),
+      delayA = buildDelayAnalysis(all),
+      shiftA = buildShiftAnalysis(all),
+      scatter = buildScatter(eaf.rows),
+      heatCnt = buildHeatCount(all);
     const alerts = [];
-
-    if (eaf.totalHeats && eaf.avgKwhPerTon > 500) {
+    if (eaf.totalHeats && eaf.avgKwhPerTon > T.EAF.kwhPerTon.crit - 20)
       alerts.push({
-        id: "eaf-energy",
-        xabar: `EAF energiya sarfi yuqori: ${fmtN(eaf.avgKwhPerTon, 1)} kWh/t`,
+        id: "e",
+        xabar: `EAF energiya: ${fmtN(eaf.avgKwhPerTon, 1)} kWh/t`,
         daraja: "kritik",
       });
-    }
-    if (tsc.totalHeats && tsc.avgDelta < 15) {
+    if (tsc.totalHeats && tsc.avgDelta < T.TSC.superheat.crit)
       alerts.push({
-        id: "tsc-superheat",
-        xabar: `TSC superheat past: ${fmtN(tsc.avgDelta, 1)} °C`,
+        id: "t",
+        xabar: `TSC superheat: ${fmtN(tsc.avgDelta, 1)} °C`,
         daraja: "ogohlantirish",
       });
-    }
-    if (vod.totalHeats && vod.avgYieldLoss > 2) {
+    if (vod.totalHeats && vod.avgYieldLoss > T.VOD.yieldLoss.anomaly)
       alerts.push({
-        id: "vod-loss",
-        xabar: `VOD metall yo‘qotish yuqori: ${fmtN(vod.avgYieldLoss, 2)} %`,
+        id: "v",
+        xabar: `VOD yield loss: ${fmtN(vod.avgYieldLoss, 2)} %`,
         daraja: "kritik",
       });
-    }
-    if (warnings.length) {
+    if (w.length)
+      alerts.push({ id: "api", xabar: w.join(", "), daraja: "info" });
+    if (unkShift > 0)
       alerts.push({
-        id: "api-warn",
-        xabar: warnings.join(", "),
+        id: "sh",
+        xabar: `${unkShift} smena yo'q`,
         daraja: "info",
       });
-    }
-    if (unknownShiftCount > 0) {
-      alerts.push({
-        id: "shift-null",
-        xabar: `${unknownShiftCount} ta yozuvda smena kiritilmagan`,
-        daraja: "info",
-      });
-    }
-    if (!alerts.length) {
-      alerts.push({
-        id: "normal",
-        xabar: "Muhim ogohlantirish aniqlanmadi",
-        daraja: "info",
-      });
-    }
-
+    if (!alerts.length)
+      alerts.push({ id: "ok", xabar: "Ogohlantirish yo'q", daraja: "info" });
     return {
       eaf,
       lrf,
       tsc,
       vod,
-      executive,
-      anomalies,
-      directorMessage,
-      tempChartData,
-      productionChartData,
-      scoreChart,
-      latestEAF,
-      latestLRF,
-      latestTSC,
-      latestVOD,
+      exec,
+      anoms,
+      dm,
+      tempData,
+      prodData,
+      scoreC,
+      lE,
+      lL,
+      lT,
+      lV,
       alerts,
-      unknownShiftCount,
+      unkShift,
+      w,
+      eTrend,
+      delayA,
+      shiftA,
+      scatter,
+      heatCnt,
     };
-  }, [eafRes.data, lrfRes.data, tscRes.data, vodRes.data, warnings]);
+  }, [eD, lD, tD, vD, wKey, fcDays]);
 
-  const applyFilters = () => {
-    setAppliedFilters({
-      heatId: filters.heatId.trim(),
-      startDate: formatApiDate(filters.startDate),
-      endDate: formatApiDate(filters.endDate),
-      process: filters.process,
-    });
-  };
-
-  const resetFilters = () => {
-    const now2 = dayjs();
-    const before302 = now2.subtract(30, "day");
-
+  const doApply = useCallback(
+    () =>
+      setApplied({
+        heatId: filters.heatId.trim(),
+        startDate: fmtApi(filters.startDate),
+        endDate: fmtApi(filters.endDate),
+        process: filters.process,
+      }),
+    [filters],
+  );
+  const doReset = useCallback(() => {
+    const n = dayjs(),
+      b = n.subtract(30, "day");
     setFilters({
       heatId: "",
-      startDate: toDateTimeLocal(before302),
-      endDate: toDateTimeLocal(now2),
+      startDate: toDTL(b),
+      endDate: toDTL(n),
       process: "ALL",
     });
-
-    setAppliedFilters({
+    setApplied({
       heatId: "",
-      startDate: formatApiDate(before302),
-      endDate: formatApiDate(now2),
+      startDate: fmtApi(b),
+      endDate: fmtApi(n),
       process: "ALL",
     });
-  };
+  }, []);
+  const closeAnom = useCallback(() => setSelAnom(null), []);
 
-  if (loading) {
+  if (loading)
     return (
       <Box sx={{ p: 3, minHeight: 420, display: "grid", placeItems: "center" }}>
         <Stack spacing={2} alignItems="center">
-          <CircularProgress />
-          <Typography sx={{ color: "text.secondary" }}>
-            AI analitika ma'lumotlari yuklanmoqda...
+          <CircularProgress size={48} />
+          <Typography sx={{ color: "text.secondary", fontSize: "0.9rem" }}>
+            AI analitika yuklanmoqda...
           </Typography>
         </Stack>
       </Box>
     );
-  }
 
   const {
     eaf,
     lrf,
     tsc,
     vod,
-    executive,
-    anomalies,
-    directorMessage,
-    tempChartData,
-    productionChartData,
-    scoreChart,
-    latestEAF,
-    latestLRF,
-    latestTSC,
-    latestVOD,
+    exec,
+    anoms,
+    dm,
+    tempData,
+    prodData,
+    scoreC,
+    lE,
+    lL,
+    lT,
+    lV,
     alerts,
-    unknownShiftCount,
-  } = analytics;
+    unkShift,
+    w,
+    eTrend,
+    delayA,
+    shiftA,
+    scatter,
+    heatCnt,
+  } = A;
+  const fcUnits =
+    fcUnit === "ALL"
+      ? [eaf, lrf, tsc, vod]
+      : [{ EAF: eaf, LRF: lrf, TSC: tsc, VOD: vod }[fcUnit]];
 
   return (
     <Box
@@ -2087,204 +2094,322 @@ export default function Analitika() {
         gap: 2,
       }}
     >
-      <DashboardPaper sx={{ p: 2.3 }}>
+      {/* ═══ HERO: Score + AI xulosa + KPIs — DOIM ko'rinadi ═══ */}
+      <DP sx={{ p: 2.3 }}>
         <Stack
           direction={{ xs: "column", md: "row" }}
           justifyContent="space-between"
           spacing={2}
         >
           <Box>
-            <Typography
-              sx={{ fontSize: "1.25rem", fontWeight: 900, color: ui.textMain }}
-            >
-              AI ANALITIKA VA ISHLAB CHIQARISH TAHLILCHISI
-            </Typography>
+            <Stack direction="row" spacing={1.5} alignItems="center">
+              <SpeedRoundedIcon
+                sx={{ color: exec.status.color, fontSize: 28 }}
+              />
+              <Typography
+                sx={{
+                  fontSize: "1.25rem",
+                  fontWeight: 900,
+                  color: ui.textMain,
+                }}
+              >
+                AI ANALITIKA
+              </Typography>
+            </Stack>
             <Typography
               sx={{ color: ui.textSoft, mt: 0.6, fontSize: "0.84rem" }}
             >
-              EAF • LRF • TSC • VOD bo‘yicha KPI, risk, prognoz va rahbariyat
-              uchun tezkor xulosa
+              EAF • LRF • TSC • VOD — tezkor xulosa
             </Typography>
           </Box>
-
-          <Stack alignItems={{ xs: "flex-start", md: "flex-end" }} spacing={1}>
+          <Stack
+            alignItems={{ xs: "flex-start", md: "flex-end" }}
+            spacing={0.5}
+          >
             <Chip
-              label={`Umumiy holat: ${executive.status.label}`}
+              label={`${exec.status.label}`}
               sx={{
-                background: `${executive.status.color}22`,
-                color: executive.status.color,
-                border: `1px solid ${executive.status.color}55`,
+                background: `${exec.status.color}22`,
+                color: exec.status.color,
+                border: `1px solid ${exec.status.color}55`,
                 fontWeight: 800,
+                fontSize: "0.85rem",
               }}
             />
             <Typography
-              sx={{ color: ui.textMain, fontWeight: 900, fontSize: "2rem" }}
+              sx={{
+                color: ui.textMain,
+                fontWeight: 900,
+                fontSize: "2.2rem",
+                lineHeight: 1,
+              }}
             >
-              {fmtN(executive.avgScore, 0)}
+              {fmtN(exec.avgScore, 0)}
             </Typography>
           </Stack>
         </Stack>
+      </DP>
 
-        <DashboardPaper
-          sx={{
-            mt: 2,
-            p: 2,
-            background:
-              "linear-gradient(135deg, rgba(14,165,233,0.12), rgba(34,197,94,0.10))",
-            border: "1px solid rgba(14,165,233,0.22)",
-          }}
-        >
-          <Stack
-            direction="row"
-            spacing={1.2}
-            alignItems="center"
-            sx={{ mb: 1 }}
-          >
-            <AutoAwesomeRoundedIcon sx={{ color: "#0ea5e9" }} />
-            <Typography sx={{ color: ui.textMain, fontWeight: 800 }}>
-              Direktor uchun AI xulosa
-            </Typography>
-          </Stack>
-          <Typography
-            sx={{ color: ui.textSoft, lineHeight: 1.8, fontSize: "0.86rem" }}
-          >
-            {directorMessage}
-          </Typography>
-        </DashboardPaper>
-      </DashboardPaper>
-
-      {warnings.length > 0 && (
-        <Alert severity="warning">
-          Ayrim endpointlar vaqtincha ma’lumot qaytarmadi. Sahifa ishlashda
-          davom etadi: {warnings.join(", ")}
+      {w.length > 0 && (
+        <Alert severity="warning" sx={{ borderRadius: 3 }}>
+          API: {w.join(", ")}
         </Alert>
       )}
 
-      <DashboardPaper sx={{ p: 2 }}>
-        <Typography sx={{ fontWeight: 800, mb: 2, color: ui.textMain }}>
-          Filterlar
-        </Typography>
+      {/* ═══ DASHBOARD OVERVIEW — darhol ko'rinadi, tabsiz ═══ */}
 
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={3}>
-            <TextField
-              fullWidth
-              size="small"
-              label="Heat ID"
-              value={filters.heatId}
-              onChange={(e) =>
-                setFilters((s) => ({ ...s, heatId: e.target.value }))
-              }
-            />
-          </Grid>
-
-          <Grid item xs={12} md={3}>
-            <TextField
-              fullWidth
-              size="small"
-              type="datetime-local"
-              label="Boshlanish sanasi"
-              value={filters.startDate}
-              onChange={(e) =>
-                setFilters((s) => ({ ...s, startDate: e.target.value }))
-              }
-              InputLabelProps={{ shrink: true }}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={3}>
-            <TextField
-              fullWidth
-              size="small"
-              type="datetime-local"
-              label="Tugash sanasi"
-              value={filters.endDate}
-              onChange={(e) =>
-                setFilters((s) => ({ ...s, endDate: e.target.value }))
-              }
-              InputLabelProps={{ shrink: true }}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={3}>
-            <TextField
-              select
-              fullWidth
-              size="small"
-              label="Jarayon"
-              value={filters.process}
-              onChange={(e) =>
-                setFilters((s) => ({ ...s, process: e.target.value }))
-              }
-            >
-              <MenuItem value="ALL">Barchasi</MenuItem>
-              <MenuItem value="EAF">EAF</MenuItem>
-              <MenuItem value="LRF">LRF</MenuItem>
-              <MenuItem value="TSC">TSC</MenuItem>
-              <MenuItem value="VOD">VOD</MenuItem>
-            </TextField>
-          </Grid>
-
-          <Grid item xs={12}>
-            <Stack direction="row" spacing={1.2}>
-              <Button
-                variant="contained"
-                startIcon={<SearchRoundedIcon />}
-                onClick={applyFilters}
-              >
-                Tahlil qilish
-              </Button>
-              <Button
-                variant="outlined"
-                startIcon={<RestartAltRoundedIcon />}
-                onClick={resetFilters}
-              >
-                Tozalash
-              </Button>
-            </Stack>
-          </Grid>
-        </Grid>
-      </DashboardPaper>
-
+      {/* 4 KPI cards */}
       <Grid container spacing={1.5}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={6} sm={3}>
           <KPI
             title="Jami heatlar"
-            value={fmtN(executive.totalHeats, 0)}
-            subtitle="Tanlangan filtr bo‘yicha"
+            value={fmtN(exec.totalHeats, 0)}
+            subtitle="Filtr bo'yicha"
             color="#0ea5e9"
             icon={<PrecisionManufacturingRoundedIcon />}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={6} sm={3}>
           <KPI
             title="Jami hajm"
-            value={`${fmtN(executive.totalTons, 1)} t`}
-            subtitle="Barcha jarayonlar yig‘indisi"
+            value={`${fmtN(exec.totalTons, 1)} t`}
+            subtitle="Barcha jarayonlar"
             color="#22c55e"
             icon={<WaterfallChartRoundedIcon />}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={6} sm={3}>
           <KPI
-            title="Eng kuchli blok"
-            value={safeText(executive.strongest?.name)}
-            subtitle={`Ball: ${fmtN(executive.strongest?.score, 0)}`}
+            title="Eng kuchli"
+            value={safeText(exec.strongest?.name)}
+            subtitle={`Ball: ${fmtN(exec.strongest?.score, 0)}`}
             color="#f59e0b"
             icon={<TrendingUpRoundedIcon />}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={6} sm={3}>
           <KPI
             title="Noma'lum smena"
-            value={fmtN(unknownShiftCount, 0)}
-            subtitle="Smena kiritilmagan yozuvlar"
+            value={fmtN(unkShift, 0)}
+            subtitle="Kiritilmagan"
             color="#ef4444"
             icon={<WarningAmberRoundedIcon />}
           />
         </Grid>
       </Grid>
 
+      {/* 4 Score cards + 2 Charts — BIRINCHI EKRANDA GRAFIKLAR! */}
+      <Grid container spacing={1.5}>
+        {[eaf, lrf, tsc, vod].map((u) => (
+          <Grid item xs={6} md={3} key={u.name}>
+            <USC unit={u} />
+          </Grid>
+        ))}
+      </Grid>
+
+      <Grid container spacing={1.5}>
+        {/* Ishlab chiqarish trendi */}
+        <Grid item xs={12} md={7}>
+          <DP>
+            <Box sx={{ p: 2 }}>
+              <Typography sx={{ fontWeight: 800, mb: 1 }}>
+                Ishlab chiqarish trendi (tonnada)
+              </Typography>
+              <Box sx={{ height: 260 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={prodData}>
+                    <defs>
+                      {Object.entries(CC).map(([k, c]) => (
+                        <linearGradient
+                          key={k}
+                          id={`g_${k}`}
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop offset="5%" stopColor={c} stopOpacity={0.3} />
+                          <stop offset="95%" stopColor={c} stopOpacity={0.02} />
+                        </linearGradient>
+                      ))}
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke={ui.grid} />
+                    <XAxis
+                      dataKey="kun"
+                      tick={{ fill: ui.textMuted, fontSize: 10 }}
+                    />
+                    <YAxis tick={{ fill: ui.textMuted, fontSize: 10 }} />
+                    <Tooltip content={<CT />} />
+                    <Legend />
+                    {Object.entries(CC).map(([k, c]) => (
+                      <Area
+                        key={k}
+                        type="monotone"
+                        dataKey={k.toLowerCase()}
+                        name={k}
+                        stroke={c}
+                        fill={`url(#g_${k})`}
+                        strokeWidth={2}
+                      />
+                    ))}
+                  </AreaChart>
+                </ResponsiveContainer>
+              </Box>
+            </Box>
+          </DP>
+        </Grid>
+
+        {/* Score bar + AI xulosa */}
+        <Grid item xs={12} md={5}>
+          <DP>
+            <Box sx={{ p: 2 }}>
+              <Typography sx={{ fontWeight: 800, mb: 1 }}>
+                Blok baholari
+              </Typography>
+              <Box sx={{ height: 160 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={scoreC}>
+                    <CartesianGrid strokeDasharray="3 3" stroke={ui.grid} />
+                    <XAxis
+                      dataKey="name"
+                      tick={{ fill: ui.textMuted, fontSize: 11 }}
+                    />
+                    <YAxis
+                      domain={[0, 100]}
+                      tick={{ fill: ui.textMuted, fontSize: 10 }}
+                    />
+                    <Tooltip content={<CT />} />
+                    <Bar dataKey="score" name="Ball" radius={[6, 6, 0, 0]}>
+                      {scoreC.map((e) => (
+                        <Cell key={e.name} fill={statusMeta(e.score).color} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </Box>
+              <Divider sx={{ my: 1.5 }} />
+              <Stack
+                direction="row"
+                spacing={1}
+                alignItems="center"
+                sx={{ mb: 0.5 }}
+              >
+                <AutoAwesomeRoundedIcon
+                  sx={{ color: "#0ea5e9", fontSize: 18 }}
+                />
+                <Typography
+                  sx={{
+                    fontWeight: 800,
+                    fontSize: "0.84rem",
+                    color: ui.textMain,
+                  }}
+                >
+                  AI xulosa
+                </Typography>
+              </Stack>
+              <Typography
+                sx={{ color: ui.textSoft, fontSize: "0.8rem", lineHeight: 1.6 }}
+              >
+                {dm}
+              </Typography>
+            </Box>
+          </DP>
+        </Grid>
+      </Grid>
+
+      {/* Filters (yashirin, toggle) */}
+      <Box>
+        <Button
+          size="small"
+          onClick={() => setShowFilters(!showFilters)}
+          sx={{ textTransform: "none", color: ui.textMuted, fontWeight: 700 }}
+        >
+          {showFilters ? "Filterlarni yashirish ▲" : "Filterlar ▼"}
+        </Button>
+        {showFilters && (
+          <DP sx={{ p: 2, mt: 1 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={3}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  label="Heat ID"
+                  value={filters.heatId}
+                  onChange={(e) =>
+                    setFilters((s) => ({ ...s, heatId: e.target.value }))
+                  }
+                />
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  type="datetime-local"
+                  label="Boshlanish"
+                  value={filters.startDate}
+                  onChange={(e) =>
+                    setFilters((s) => ({ ...s, startDate: e.target.value }))
+                  }
+                  InputLabelProps={{ shrink: true }}
+                />
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <TextField
+                  fullWidth
+                  size="small"
+                  type="datetime-local"
+                  label="Tugash"
+                  value={filters.endDate}
+                  onChange={(e) =>
+                    setFilters((s) => ({ ...s, endDate: e.target.value }))
+                  }
+                  InputLabelProps={{ shrink: true }}
+                />
+              </Grid>
+              <Grid item xs={12} md={3}>
+                <TextField
+                  select
+                  fullWidth
+                  size="small"
+                  label="Jarayon"
+                  value={filters.process}
+                  onChange={(e) =>
+                    setFilters((s) => ({ ...s, process: e.target.value }))
+                  }
+                >
+                  <MenuItem value="ALL">Barchasi</MenuItem>
+                  <MenuItem value="EAF">EAF</MenuItem>
+                  <MenuItem value="LRF">LRF</MenuItem>
+                  <MenuItem value="TSC">TSC</MenuItem>
+                  <MenuItem value="VOD">VOD</MenuItem>
+                </TextField>
+              </Grid>
+              <Grid item xs={12}>
+                <Stack direction="row" spacing={1.2}>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    startIcon={<SearchRoundedIcon />}
+                    onClick={doApply}
+                  >
+                    Tahlil
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={<RestartAltRoundedIcon />}
+                    onClick={doReset}
+                  >
+                    Tozalash
+                  </Button>
+                </Stack>
+              </Grid>
+            </Grid>
+          </DP>
+        )}
+      </Box>
+
+      {/* ═══ TABS — chuqurroq tahlil ═══ */}
       <Tabs
         value={tab}
         onChange={(_, v) => setTab(v)}
@@ -2296,9 +2421,8 @@ export default function Analitika() {
         }}
       >
         {[
-          "AI Xulosa",
-          "KPI",
-          "Grafiklar",
+          "Harorat & Energiya",
+          "Delay & Smena",
           "Prognoz",
           "Og'ishlar",
           "Tafsilot",
@@ -2316,136 +2440,373 @@ export default function Analitika() {
         ))}
       </Tabs>
 
+      {/* TAB 0: Harorat & Energiya */}
       {tab === 0 && (
         <Grid container spacing={2}>
-          <Grid item xs={12} md={8}>
-            <DashboardPaper sx={{ height: "100%" }}>
+          <Grid item xs={12} md={7}>
+            <DP>
               <Box sx={{ p: 2 }}>
-                <Typography sx={{ fontWeight: 800, mb: 1.4 }}>
-                  Asosiy risklar
+                <Typography sx={{ fontWeight: 800, mb: 1.5 }}>
+                  Harorat dinamikasi
                 </Typography>
-                <Stack spacing={1}>
-                  {(executive.risks.length
-                    ? executive.risks
-                    : ["Jiddiy xavf indikatorlari aniqlanmadi"]
-                  ).map((r, i) => (
-                    <Typography
-                      key={i}
-                      sx={{ color: ui.textSoft, fontSize: "0.84rem" }}
-                    >
-                      • {r}
-                    </Typography>
-                  ))}
-                </Stack>
-
-                <Divider sx={{ my: 2 }} />
-
-                <Typography sx={{ fontWeight: 800, mb: 1.4 }}>
-                  AI tavsiyalar
-                </Typography>
-                <Stack spacing={1}>
-                  {executive.recommendations.map((r, i) => (
-                    <Typography
-                      key={i}
-                      sx={{ color: ui.textSoft, fontSize: "0.84rem" }}
-                    >
-                      • {r}
-                    </Typography>
-                  ))}
-                </Stack>
+                <Box sx={{ height: 300 }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={tempData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke={ui.grid} />
+                      <XAxis
+                        dataKey="time"
+                        tick={{ fill: ui.textMuted, fontSize: 11 }}
+                      />
+                      <YAxis tick={{ fill: ui.textMuted, fontSize: 11 }} />
+                      <Tooltip content={<CT />} />
+                      <Legend />
+                      {Object.entries(CC).map(([k, c]) => (
+                        <Line
+                          key={k}
+                          dataKey={k.toLowerCase()}
+                          name={k}
+                          stroke={c}
+                          strokeWidth={2.4}
+                          dot={false}
+                        />
+                      ))}
+                    </LineChart>
+                  </ResponsiveContainer>
+                </Box>
               </Box>
-            </DashboardPaper>
+            </DP>
           </Grid>
-
-          <Grid item xs={12} md={4}>
-            <DashboardPaper sx={{ height: "100%" }}>
+          <Grid item xs={12} md={5}>
+            <DP>
               <Box sx={{ p: 2 }}>
-                <Typography sx={{ fontWeight: 800, mb: 1.4 }}>
-                  Ogohlantirishlar
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  alignItems="center"
+                  sx={{ mb: 1.5 }}
+                >
+                  <BoltRoundedIcon sx={{ color: "#f59e0b" }} />
+                  <Typography sx={{ fontWeight: 800 }}>
+                    Energiya trendi (kWh/t)
+                  </Typography>
+                </Stack>
+                <Box sx={{ height: 300 }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <ComposedChart data={eTrend}>
+                      <CartesianGrid strokeDasharray="3 3" stroke={ui.grid} />
+                      <XAxis
+                        dataKey="kun"
+                        tick={{ fill: ui.textMuted, fontSize: 10 }}
+                      />
+                      <YAxis tick={{ fill: ui.textMuted, fontSize: 10 }} />
+                      <Tooltip content={<CT />} />
+                      <Legend />
+                      <ReferenceLine
+                        y={T.EAF.kwhPerTon.crit}
+                        stroke="#ef4444"
+                        strokeDasharray="5 5"
+                      />
+                      <ReferenceLine
+                        y={T.EAF.kwhPerTon.warn}
+                        stroke="#f59e0b"
+                        strokeDasharray="5 5"
+                      />
+                      <Bar
+                        dataKey="eafKwh"
+                        name="EAF"
+                        fill={CC.EAF}
+                        opacity={0.8}
+                        radius={[3, 3, 0, 0]}
+                      />
+                      <Line
+                        dataKey="lrfKwh"
+                        name="LRF"
+                        stroke={CC.LRF}
+                        strokeWidth={2.4}
+                        dot={false}
+                      />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                </Box>
+              </Box>
+            </DP>
+          </Grid>
+          <Grid item xs={12} md={5}>
+            <DP>
+              <Box sx={{ p: 2 }}>
+                <Typography sx={{ fontWeight: 800, mb: 1.5 }}>
+                  EAF: kWh/t vs Tonnaj
                 </Typography>
-                <Stack spacing={1.1}>
-                  {alerts.map((o) => (
-                    <Box
-                      key={o.id}
-                      sx={{
-                        display: "flex",
-                        gap: 1.2,
-                        alignItems: "flex-start",
-                        p: 1.1,
-                        borderRadius: 2,
-                        background: "rgba(255,255,255,0.02)",
-                        border: `1px solid ${ui.border}`,
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          width: 8,
-                          height: 8,
-                          mt: 0.7,
-                          borderRadius: "50%",
-                          background: getSeverityColor(o.daraja),
-                          flexShrink: 0,
+                <Box sx={{ height: 280 }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <ScatterChart>
+                      <CartesianGrid strokeDasharray="3 3" stroke={ui.grid} />
+                      <XAxis
+                        type="number"
+                        dataKey="x"
+                        name="Tonnaj"
+                        tick={{ fill: ui.textMuted, fontSize: 10 }}
+                      />
+                      <YAxis
+                        type="number"
+                        dataKey="y"
+                        name="kWh/t"
+                        tick={{ fill: ui.textMuted, fontSize: 10 }}
+                      />
+                      <Tooltip
+                        cursor={{ strokeDasharray: "3 3" }}
+                        content={({ active, payload }) => {
+                          if (!active || !payload?.length) return null;
+                          const d = payload[0]?.payload;
+                          return (
+                            <Box
+                              sx={{
+                                background: ui.isDark ? "#0f172a" : "#fff",
+                                border: `1px solid ${ui.borderStrong}`,
+                                p: 1.5,
+                                borderRadius: 2,
+                              }}
+                            >
+                              <Typography
+                                sx={{
+                                  fontSize: "0.78rem",
+                                  fontWeight: 700,
+                                  color: ui.textMain,
+                                }}
+                              >
+                                Heat: {d?.heatId}
+                              </Typography>
+                              <Typography
+                                sx={{ fontSize: "0.78rem", color: ui.textSoft }}
+                              >
+                                {fmtN(d?.x, 1)} t / {fmtN(d?.y, 1)} kWh/t
+                              </Typography>
+                            </Box>
+                          );
                         }}
                       />
-                      <Box>
-                        <Typography
-                          sx={{ fontSize: "0.84rem", color: ui.textMain }}
-                        >
-                          {o.xabar}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: "0.72rem",
-                            color: ui.textMuted,
-                            mt: 0.3,
-                          }}
-                        >
-                          {o.daraja}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  ))}
-                </Stack>
+                      <ReferenceLine
+                        y={T.EAF.kwhPerTon.crit}
+                        stroke="#ef4444"
+                        strokeDasharray="4 4"
+                      />
+                      <Scatter
+                        name="Normal"
+                        data={scatter.filter((d) => !d.bad)}
+                        fill={CC.EAF}
+                        fillOpacity={0.7}
+                      />
+                      <Scatter
+                        name="Anomaliya"
+                        data={scatter.filter((d) => d.bad)}
+                        fill="#ef4444"
+                        fillOpacity={0.9}
+                      />
+                    </ScatterChart>
+                  </ResponsiveContainer>
+                </Box>
               </Box>
-            </DashboardPaper>
-          </Grid>
-        </Grid>
-      )}
-
-      {tab === 1 && (
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={3}>
-            <UnitScoreCard unit={eaf} />
+            </DP>
           </Grid>
           <Grid item xs={12} md={3}>
-            <UnitScoreCard unit={lrf} />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <UnitScoreCard unit={tsc} />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <UnitScoreCard unit={vod} />
-          </Grid>
-
-          <Grid item xs={12} md={3}>
-            <MiniInfoCard
+            <MIC
               title="EAF"
               rows={[
                 { label: "Heatlar", value: fmtN(eaf.totalHeats, 0) },
                 {
-                  label: "Jami energiya",
-                  value: `${fmtN(eaf.totalEnergy, 0)} kWh`,
+                  label: "Energiya",
+                  value: fmtN(eaf.totalEnergy, 0) + " kWh",
                   color: "#f59e0b",
                 },
                 { label: "kWh/t", value: fmtN(eaf.avgKwhPerTon, 1) },
-                { label: "Delay", value: `${fmtN(eaf.avgDelay, 0)} min` },
+                { label: "Delay", value: fmtN(eaf.avgDelay, 0) + " min" },
                 { label: "LOM/HBI", value: fmtN(eaf.avgRatio, 2) },
               ]}
             />
           </Grid>
+          <Grid item xs={12} md={4}>
+            <DP>
+              <Box sx={{ p: 2 }}>
+                <Typography sx={{ fontWeight: 800, mb: 1.5 }}>Radar</Typography>
+                <Box sx={{ height: 240 }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RadarChart
+                      data={[
+                        {
+                          s: "Hajm",
+                          ...Object.fromEntries(
+                            [eaf, lrf, tsc, vod].map((u) => [
+                              u.name,
+                              u.totalTons,
+                            ]),
+                          ),
+                        },
+                        {
+                          s: "Ball",
+                          ...Object.fromEntries(
+                            [eaf, lrf, tsc, vod].map((u) => [u.name, u.score]),
+                          ),
+                        },
+                        {
+                          s: "Heat",
+                          ...Object.fromEntries(
+                            [eaf, lrf, tsc, vod].map((u) => [
+                              u.name,
+                              u.totalHeats,
+                            ]),
+                          ),
+                        },
+                      ]}
+                    >
+                      <PolarGrid stroke={ui.grid} />
+                      <PolarAngleAxis
+                        dataKey="s"
+                        tick={{ fill: ui.textMuted, fontSize: 10 }}
+                      />
+                      {Object.entries(CC).map(([k, c]) => (
+                        <Radar
+                          key={k}
+                          name={k}
+                          dataKey={k}
+                          stroke={c}
+                          fill={c}
+                          fillOpacity={0.12}
+                        />
+                      ))}
+                      <Legend />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                </Box>
+              </Box>
+            </DP>
+          </Grid>
+        </Grid>
+      )}
 
+      {/* TAB 1: Delay & Smena */}
+      {tab === 1 && (
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={7}>
+            <DP>
+              <Box sx={{ p: 2 }}>
+                <Typography sx={{ fontWeight: 800, mb: 1.5 }}>
+                  Delay sabablari (top 10)
+                </Typography>
+                <Box sx={{ height: 300 }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={delayA} layout="vertical">
+                      <CartesianGrid strokeDasharray="3 3" stroke={ui.grid} />
+                      <XAxis
+                        type="number"
+                        tick={{ fill: ui.textMuted, fontSize: 10 }}
+                      />
+                      <YAxis
+                        dataKey="reason"
+                        type="category"
+                        width={140}
+                        tick={{ fill: ui.textMuted, fontSize: 9 }}
+                      />
+                      <Tooltip content={<CT />} />
+                      <Bar
+                        dataKey="totalMin"
+                        name="Jami (min)"
+                        radius={[0, 4, 4, 0]}
+                      >
+                        {delayA.map((_, i) => (
+                          <Cell
+                            key={i}
+                            fill={DELAY_COLORS[i % DELAY_COLORS.length]}
+                            opacity={0.85}
+                          />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </Box>
+              </Box>
+            </DP>
+          </Grid>
+          <Grid item xs={12} md={5}>
+            <DP>
+              <Box sx={{ p: 2 }}>
+                <Typography sx={{ fontWeight: 800, mb: 1.5 }}>
+                  Smena samaradorligi
+                </Typography>
+                <Box sx={{ height: 300 }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <ComposedChart data={shiftA}>
+                      <CartesianGrid strokeDasharray="3 3" stroke={ui.grid} />
+                      <XAxis
+                        dataKey="shift"
+                        tick={{ fill: ui.textMuted, fontSize: 10 }}
+                      />
+                      <YAxis
+                        yAxisId="left"
+                        tick={{ fill: ui.textMuted, fontSize: 10 }}
+                      />
+                      <YAxis
+                        yAxisId="right"
+                        orientation="right"
+                        tick={{ fill: ui.textMuted, fontSize: 10 }}
+                      />
+                      <Tooltip content={<CT />} />
+                      <Legend />
+                      <Bar
+                        yAxisId="left"
+                        dataKey="heats"
+                        name="Heatlar"
+                        fill="#0ea5e9"
+                        radius={[4, 4, 0, 0]}
+                        opacity={0.8}
+                      />
+                      <Line
+                        yAxisId="right"
+                        dataKey="avgDelay"
+                        name="Delay (min)"
+                        stroke="#ef4444"
+                        strokeWidth={2.5}
+                        dot={{ r: 4 }}
+                      />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                </Box>
+              </Box>
+            </DP>
+          </Grid>
+          <Grid item xs={12} md={5}>
+            <DP>
+              <Box sx={{ p: 2 }}>
+                <Typography sx={{ fontWeight: 800, mb: 1.5 }}>
+                  Kunlik heat soni
+                </Typography>
+                <Box sx={{ height: 220 }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={heatCnt}>
+                      <CartesianGrid strokeDasharray="3 3" stroke={ui.grid} />
+                      <XAxis
+                        dataKey="kun"
+                        tick={{ fill: ui.textMuted, fontSize: 10 }}
+                      />
+                      <YAxis
+                        tick={{ fill: ui.textMuted, fontSize: 10 }}
+                        allowDecimals={false}
+                      />
+                      <Tooltip content={<CT />} />
+                      <Bar
+                        dataKey="count"
+                        name="Heatlar"
+                        fill="#0ea5e9"
+                        radius={[4, 4, 0, 0]}
+                        opacity={0.85}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </Box>
+              </Box>
+            </DP>
+          </Grid>
           <Grid item xs={12} md={3}>
-            <MiniInfoCard
+            <MIC
               title="LRF"
               rows={[
                 { label: "Heatlar", value: fmtN(lrf.totalHeats, 0) },
@@ -2454,330 +2815,281 @@ export default function Analitika() {
                   value: fmtN(lrf.avgKwhPerTon, 1),
                   color: "#f59e0b",
                 },
-                { label: "Harorat", value: `${fmtN(lrf.avgTemp, 0)} °C` },
-                { label: "Delay", value: `${fmtN(lrf.avgDelay, 0)} min` },
+                { label: "Harorat", value: fmtN(lrf.avgTemp, 0) + " °C" },
+                { label: "Delay", value: fmtN(lrf.avgDelay, 0) + " min" },
               ]}
             />
           </Grid>
-
-          <Grid item xs={12} md={3}>
-            <MiniInfoCard
-              title="TSC"
-              rows={[
-                { label: "Heatlar", value: fmtN(tsc.totalHeats, 0) },
-                { label: "Slablar", value: fmtN(tsc.totalSlabs, 0) },
-                {
-                  label: "Cast speed",
-                  value: `${fmtN(tsc.avgCastSpeed, 2)} m/min`,
-                  color: "#22c55e",
-                },
-                { label: "Superheat", value: `${fmtN(tsc.avgDelta, 1)} °C` },
-              ]}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={3}>
-            <MiniInfoCard
-              title="VOD"
-              rows={[
-                { label: "Heatlar", value: fmtN(vod.totalHeats, 0) },
-                {
-                  label: "Yield loss",
-                  value: `${fmtN(vod.avgYieldLoss, 2)} %`,
-                  color: "#ef4444",
-                },
-                { label: "Min vacuum", value: fmtN(vod.avgMinVac, 2) },
-                { label: "Delay", value: `${fmtN(vod.avgDelay, 0)} min` },
-              ]}
-            />
+          <Grid item xs={12} md={4}>
+            <Stack spacing={1.5}>
+              <MIC
+                title="TSC"
+                rows={[
+                  { label: "Heatlar", value: fmtN(tsc.totalHeats, 0) },
+                  {
+                    label: "Cast speed",
+                    value: fmtN(tsc.avgCastSpeed, 2) + " m/min",
+                    color: "#22c55e",
+                  },
+                  { label: "Superheat", value: fmtN(tsc.avgDelta, 1) + " °C" },
+                ]}
+              />
+              <MIC
+                title="VOD"
+                rows={[
+                  { label: "Heatlar", value: fmtN(vod.totalHeats, 0) },
+                  {
+                    label: "Yield loss",
+                    value: fmtN(vod.avgYieldLoss, 2) + " %",
+                    color: "#ef4444",
+                  },
+                  { label: "Min vacuum", value: fmtN(vod.avgMinVac, 2) },
+                ]}
+              />
+            </Stack>
           </Grid>
         </Grid>
       )}
 
+      {/* TAB 2: Prognoz */}
       {tab === 2 && (
         <Grid container spacing={2}>
-          <Grid item xs={12} md={7}>
-            <DashboardPaper>
-              <Box sx={{ p: 2 }}>
-                <Typography sx={{ fontWeight: 800, mb: 1.5 }}>
-                  Harorat dinamikasi
-                </Typography>
-                <Box sx={{ height: 300 }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={tempChartData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke={ui.grid} />
-                      <XAxis
-                        dataKey="time"
-                        tick={{ fill: ui.textMuted, fontSize: 11 }}
-                      />
-                      <YAxis tick={{ fill: ui.textMuted, fontSize: 11 }} />
-                      <Tooltip content={<CustomTooltip />} />
-                      <Legend />
-                      <Line
-                        dataKey="eaf"
-                        name="EAF"
-                        stroke="#f97316"
-                        strokeWidth={2.4}
-                        dot={false}
-                      />
-                      <Line
-                        dataKey="lrf"
-                        name="LRF"
-                        stroke="#facc15"
-                        strokeWidth={2.4}
-                        dot={false}
-                      />
-                      <Line
-                        dataKey="tsc"
-                        name="TSC"
-                        stroke="#22c55e"
-                        strokeWidth={2.4}
-                        dot={false}
-                      />
-                      <Line
-                        dataKey="vod"
-                        name="VOD"
-                        stroke="#38bdf8"
-                        strokeWidth={2.4}
-                        dot={false}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </Box>
-              </Box>
-            </DashboardPaper>
-          </Grid>
-
-          <Grid item xs={12} md={5}>
-            <DashboardPaper>
-              <Box sx={{ p: 2 }}>
-                <Typography sx={{ fontWeight: 800, mb: 1.5 }}>
-                  Ishlab chiqarish dinamikasi
-                </Typography>
-                <Box sx={{ height: 300 }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={productionChartData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke={ui.grid} />
-                      <XAxis
-                        dataKey="kun"
-                        tick={{ fill: ui.textMuted, fontSize: 11 }}
-                      />
-                      <YAxis tick={{ fill: ui.textMuted, fontSize: 11 }} />
-                      <Tooltip content={<CustomTooltip />} />
-                      <Legend />
-                      <Bar
-                        dataKey="eaf"
-                        name="EAF"
-                        fill="#f97316"
-                        radius={[4, 4, 0, 0]}
-                      />
-                      <Bar
-                        dataKey="lrf"
-                        name="LRF"
-                        fill="#facc15"
-                        radius={[4, 4, 0, 0]}
-                      />
-                      <Bar
-                        dataKey="tsc"
-                        name="TSC"
-                        fill="#22c55e"
-                        radius={[4, 4, 0, 0]}
-                      />
-                      <Bar
-                        dataKey="vod"
-                        name="VOD"
-                        fill="#38bdf8"
-                        radius={[4, 4, 0, 0]}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </Box>
-              </Box>
-            </DashboardPaper>
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <DashboardPaper>
-              <Box sx={{ p: 2 }}>
-                <Typography sx={{ fontWeight: 800, mb: 1.5 }}>
-                  Samaradorlik ballari
-                </Typography>
-                <Box sx={{ height: 300 }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={scoreChart}>
-                      <CartesianGrid strokeDasharray="3 3" stroke={ui.grid} />
-                      <XAxis
-                        dataKey="name"
-                        tick={{ fill: ui.textMuted, fontSize: 11 }}
-                      />
-                      <YAxis
-                        tick={{ fill: ui.textMuted, fontSize: 11 }}
-                        domain={[0, 100]}
-                      />
-                      <Tooltip content={<CustomTooltip />} />
-                      <Legend />
-                      <Area
-                        dataKey="score"
-                        name="Ball"
-                        stroke="#0ea5e9"
-                        fill="#0ea5e9"
-                        fillOpacity={0.18}
-                        strokeWidth={2.4}
-                      />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </Box>
-              </Box>
-            </DashboardPaper>
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <DashboardPaper>
-              <Box sx={{ p: 2 }}>
-                <Typography sx={{ fontWeight: 800, mb: 1.5 }}>
-                  Jarayonlar taqqoslanishi
-                </Typography>
-                <Box sx={{ height: 300 }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart
-                      data={[
-                        {
-                          subject: "Barqarorlik",
-                          EAF: eaf.score,
-                          LRF: lrf.score,
-                          TSC: tsc.score,
-                          VOD: vod.score,
-                        },
-                        {
-                          subject: "Kechikish",
-                          EAF: Math.max(0, 100 - eaf.avgDelay * 5),
-                          LRF: Math.max(0, 100 - lrf.avgDelay * 6),
-                          TSC: Math.max(0, 100 - tsc.avgDelay * 7),
-                          VOD: Math.max(0, 100 - vod.avgDelay * 7),
-                        },
-                        {
-                          subject: "Hajm",
-                          EAF: Math.min(100, eaf.totalTons / 3),
-                          LRF: Math.min(100, lrf.totalTons / 3),
-                          TSC: Math.min(100, tsc.totalTons / 3),
-                          VOD: Math.min(100, vod.totalTons / 3),
-                        },
-                        {
-                          subject: "Sifat",
-                          EAF: 78,
-                          LRF: 82,
-                          TSC: Math.max(
-                            0,
-                            Math.min(100, 50 + tsc.avgDelta * 2),
-                          ),
-                          VOD: Math.max(0, 100 - vod.avgYieldLoss * 18),
-                        },
-                      ]}
-                    >
-                      <PolarGrid stroke={ui.grid} />
-                      <PolarAngleAxis
-                        dataKey="subject"
-                        tick={{ fill: ui.textMuted, fontSize: 11 }}
-                      />
-                      <Radar
-                        name="EAF"
-                        dataKey="EAF"
-                        stroke="#f97316"
-                        fill="#f97316"
-                        fillOpacity={0.12}
-                      />
-                      <Radar
-                        name="LRF"
-                        dataKey="LRF"
-                        stroke="#facc15"
-                        fill="#facc15"
-                        fillOpacity={0.12}
-                      />
-                      <Radar
-                        name="TSC"
-                        dataKey="TSC"
-                        stroke="#22c55e"
-                        fill="#22c55e"
-                        fillOpacity={0.12}
-                      />
-                      <Radar
-                        name="VOD"
-                        dataKey="VOD"
-                        stroke="#38bdf8"
-                        fill="#38bdf8"
-                        fillOpacity={0.12}
-                      />
-                      <Legend />
-                    </RadarChart>
-                  </ResponsiveContainer>
-                </Box>
-              </Box>
-            </DashboardPaper>
-          </Grid>
-        </Grid>
-      )}
-
-      {tab === 3 && (
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={3}>
-            <ForecastCard
-              title="EAF prognozi"
-              forecast={eaf.forecast}
-              color="#f97316"
-            />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <ForecastCard
-              title="LRF prognozi"
-              forecast={lrf.forecast}
-              color="#facc15"
-            />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <ForecastCard
-              title="TSC prognozi"
-              forecast={tsc.forecast}
-              color="#22c55e"
-            />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <ForecastCard
-              title="VOD prognozi"
-              forecast={vod.forecast}
-              color="#38bdf8"
-            />
-          </Grid>
-
           <Grid item xs={12}>
-            <DashboardPaper>
+            <DP sx={{ p: 2 }}>
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                spacing={2}
+                alignItems={{ sm: "center" }}
+              >
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <TimelineRoundedIcon sx={{ color: "#0ea5e9" }} />
+                  <Typography sx={{ fontWeight: 800 }}>Davr:</Typography>
+                </Stack>
+                <ToggleButtonGroup
+                  value={fcDays}
+                  exclusive
+                  onChange={(_, v) => v && setFcDays(v)}
+                  size="small"
+                >
+                  {FP.map((p) => (
+                    <ToggleButton
+                      key={p.value}
+                      value={p.value}
+                      sx={{ fontWeight: 700, textTransform: "none" }}
+                    >
+                      {p.label}
+                    </ToggleButton>
+                  ))}
+                </ToggleButtonGroup>
+                <Divider orientation="vertical" flexItem />
+                <ToggleButtonGroup
+                  value={fcUnit}
+                  exclusive
+                  onChange={(_, v) => v && setFcUnit(v)}
+                  size="small"
+                >
+                  <ToggleButton
+                    value="ALL"
+                    sx={{ fontWeight: 700, textTransform: "none" }}
+                  >
+                    Barchasi
+                  </ToggleButton>
+                  {Object.keys(CC).map((k) => (
+                    <ToggleButton
+                      key={k}
+                      value={k}
+                      sx={{
+                        fontWeight: 700,
+                        textTransform: "none",
+                        color: CC[k],
+                      }}
+                    >
+                      {k}
+                    </ToggleButton>
+                  ))}
+                </ToggleButtonGroup>
+              </Stack>
+            </DP>
+          </Grid>
+          {fcUnits.map((u) => (
+            <Grid item xs={12} md={fcUnits.length === 1 ? 4 : 3} key={u.name}>
+              <FC
+                title={`${u.name}`}
+                forecast={u.forecast}
+                color={CC[u.name]}
+              />
+            </Grid>
+          ))}
+          {fcUnits.map((u) => (
+            <Grid
+              item
+              xs={12}
+              md={fcUnits.length === 1 ? 8 : 6}
+              key={`fc-${u.name}`}
+            >
+              <DP>
+                <Box sx={{ p: 2 }}>
+                  <Typography sx={{ fontWeight: 800, mb: 1 }}>
+                    {u.name}: {fcDays} kun prognoz
+                  </Typography>
+                  <Box sx={{ height: 280 }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <ComposedChart data={u.forecast.dailyChart}>
+                        <defs>
+                          <linearGradient
+                            id={`fg_${u.name}`}
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1"
+                          >
+                            <stop
+                              offset="5%"
+                              stopColor={CC[u.name]}
+                              stopOpacity={0.25}
+                            />
+                            <stop
+                              offset="95%"
+                              stopColor={CC[u.name]}
+                              stopOpacity={0.02}
+                            />
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" stroke={ui.grid} />
+                        <XAxis
+                          dataKey="kun"
+                          tick={{ fill: ui.textMuted, fontSize: 9 }}
+                          interval={Math.max(
+                            0,
+                            Math.floor(u.forecast.dailyChart.length / 15),
+                          )}
+                        />
+                        <YAxis tick={{ fill: ui.textMuted, fontSize: 10 }} />
+                        <Tooltip content={<CT />} />
+                        <Legend />
+                        <Area
+                          type="monotone"
+                          dataKey="upper"
+                          stroke="none"
+                          fill={CC_SOFT[u.name]}
+                          name="Yuqori chegara"
+                        />
+                        <Area
+                          type="monotone"
+                          dataKey="lower"
+                          stroke="none"
+                          fill="transparent"
+                          name="Pastki"
+                        />
+                        <Bar
+                          dataKey="actual"
+                          name="Haqiqiy (t)"
+                          fill={CC[u.name]}
+                          radius={[3, 3, 0, 0]}
+                          opacity={0.85}
+                        />
+                        <Line
+                          dataKey="forecast"
+                          name="Prognoz (t)"
+                          stroke={CC[u.name]}
+                          strokeWidth={2.5}
+                          strokeDasharray="6 3"
+                          dot={false}
+                        />
+                      </ComposedChart>
+                    </ResponsiveContainer>
+                  </Box>
+                </Box>
+              </DP>
+            </Grid>
+          ))}
+          {fcUnits.length <= 2 &&
+            fcUnits.map((u) => (
+              <Grid item xs={12} md={6} key={`tr-${u.name}`}>
+                <DP>
+                  <Box sx={{ p: 2 }}>
+                    <Typography sx={{ fontWeight: 800, mb: 1 }}>
+                      {u.name}: MA-5
+                    </Typography>
+                    <Box sx={{ height: 240 }}>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <ComposedChart data={u.forecast.trendLine}>
+                          <CartesianGrid
+                            strokeDasharray="3 3"
+                            stroke={ui.grid}
+                          />
+                          <XAxis
+                            dataKey="kun"
+                            tick={{ fill: ui.textMuted, fontSize: 9 }}
+                          />
+                          <YAxis tick={{ fill: ui.textMuted, fontSize: 10 }} />
+                          <Tooltip content={<CT />} />
+                          <Legend />
+                          <Bar
+                            dataKey="value"
+                            name="Kunlik"
+                            fill={CC_SOFT[u.name]}
+                            radius={[3, 3, 0, 0]}
+                          />
+                          <Line
+                            dataKey="ma5"
+                            name="MA-5"
+                            stroke={CC[u.name]}
+                            strokeWidth={2.8}
+                            dot={false}
+                          />
+                        </ComposedChart>
+                      </ResponsiveContainer>
+                    </Box>
+                  </Box>
+                </DP>
+              </Grid>
+            ))}
+          <Grid item xs={12}>
+            <DP>
               <Box sx={{ p: 2 }}>
                 <Typography sx={{ fontWeight: 800, mb: 1.5 }}>
-                  Prognozlar taqqoslanishi
+                  Prognoz taqqosi
                 </Typography>
-                <Box sx={{ height: 320 }}>
+                <Box sx={{ height: 300 }}>
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                       data={[
                         {
                           name: "Ertaga",
-                          EAF: eaf.forecast.tomorrow,
-                          LRF: lrf.forecast.tomorrow,
-                          TSC: tsc.forecast.tomorrow,
-                          VOD: vod.forecast.tomorrow,
+                          ...Object.fromEntries(
+                            [eaf, lrf, tsc, vod].map((u) => [
+                              u.name,
+                              u.forecast.tomorrow,
+                            ]),
+                          ),
                         },
                         {
-                          name: "Oy yakuni",
-                          EAF: eaf.forecast.monthEnd,
-                          LRF: lrf.forecast.monthEnd,
-                          TSC: tsc.forecast.monthEnd,
-                          VOD: vod.forecast.monthEnd,
+                          name: fcDays + " kun",
+                          ...Object.fromEntries(
+                            [eaf, lrf, tsc, vod].map((u) => [
+                              u.name,
+                              u.forecast.periodEnd,
+                            ]),
+                          ),
                         },
                         {
-                          name: "Yil yakuni",
-                          EAF: eaf.forecast.yearEnd,
-                          LRF: lrf.forecast.yearEnd,
-                          TSC: tsc.forecast.yearEnd,
-                          VOD: vod.forecast.yearEnd,
+                          name: "Oy",
+                          ...Object.fromEntries(
+                            [eaf, lrf, tsc, vod].map((u) => [
+                              u.name,
+                              u.forecast.monthEnd,
+                            ]),
+                          ),
+                        },
+                        {
+                          name: "Yil",
+                          ...Object.fromEntries(
+                            [eaf, lrf, tsc, vod].map((u) => [
+                              u.name,
+                              u.forecast.yearEnd,
+                            ]),
+                          ),
                         },
                       ]}
                     >
@@ -2787,33 +3099,37 @@ export default function Analitika() {
                         tick={{ fill: ui.textMuted, fontSize: 11 }}
                       />
                       <YAxis tick={{ fill: ui.textMuted, fontSize: 11 }} />
-                      <Tooltip content={<CustomTooltip />} />
+                      <Tooltip content={<CT />} />
                       <Legend />
-                      <Bar dataKey="EAF" fill="#f97316" radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="LRF" fill="#facc15" radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="TSC" fill="#22c55e" radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="VOD" fill="#38bdf8" radius={[4, 4, 0, 0]} />
+                      {Object.entries(CC).map(([k, c]) => (
+                        <Bar
+                          key={k}
+                          dataKey={k}
+                          fill={c}
+                          radius={[4, 4, 0, 0]}
+                        />
+                      ))}
                     </BarChart>
                   </ResponsiveContainer>
                 </Box>
               </Box>
-            </DashboardPaper>
+            </DP>
           </Grid>
         </Grid>
       )}
 
-      {tab === 4 && (
-        <DashboardPaper sx={{ p: 2 }}>
+      {/* TAB 3: Og'ishlar */}
+      {tab === 3 && (
+        <DP sx={{ p: 2 }}>
           <Typography sx={{ fontWeight: 800, mb: 2 }}>
-            AI aniqlagan muhim og‘ishlar
+            AI aniqlagan og'ishlar
           </Typography>
-
           <TableContainer>
             <Table>
               <TableHead>
                 <TableRow>
                   <TableCell>Jarayon</TableCell>
-                  <TableCell>Heat ID</TableCell>
+                  <TableCell>Heat</TableCell>
                   <TableCell>Muammo</TableCell>
                   <TableCell>Qiymat</TableCell>
                   <TableCell>Risk</TableCell>
@@ -2821,9 +3137,9 @@ export default function Analitika() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {anomalies.length ? (
-                  anomalies.slice(0, 20).map((a, i) => (
-                    <TableRow key={i} hover>
+                {anoms.length ? (
+                  anoms.slice(0, 20).map((a, i) => (
+                    <TableRow key={`${a.process}-${a.heatId}-${i}`} hover>
                       <TableCell>{a.process}</TableCell>
                       <TableCell>{a.heatId}</TableCell>
                       <TableCell>{a.type}</TableCell>
@@ -2844,9 +3160,9 @@ export default function Analitika() {
                         <Button
                           size="small"
                           variant="outlined"
-                          onClick={() => setSelectedAnomaly(a)}
+                          onClick={() => setSelAnom(a)}
                         >
-                          Ko‘rish
+                          Ko'rish
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -2854,94 +3170,85 @@ export default function Analitika() {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={6} align="center">
-                      Muammo topilmadi
+                      Muammo yo'q
                     </TableCell>
                   </TableRow>
                 )}
               </TableBody>
             </Table>
           </TableContainer>
-
-          <HeatDetailDrawer
-            open={!!selectedAnomaly}
-            onClose={() => setSelectedAnomaly(null)}
-            item={selectedAnomaly}
-          />
-        </DashboardPaper>
+          <HDD open={!!selAnom} onClose={closeAnom} item={selAnom} />
+        </DP>
       )}
 
-      {tab === 5 && (
+      {/* TAB 4: Tafsilot */}
+      {tab === 4 && (
         <Grid container spacing={2}>
-          <Grid item xs={12} md={3}>
-            <MiniInfoCard
-              title="Oxirgi EAF"
-              rows={
-                latestEAF
-                  ? [
-                      ["Heat ID", `#${latestEAF.heatId}`],
-                      ["Steel", safeText(latestEAF.steelGradeName)],
-                      ["Boshlanish", formatDateTime(latestEAF.startTime)],
-                      ["Shift", safeShift(latestEAF.shift)],
-                      ["kWh/t", fmtN(latestEAF.kwhPerTon, 1)],
-                    ].map(([label, value]) => ({ label, value }))
-                  : [{ label: "Holat", value: "Ma'lumot yo'q" }]
-              }
-            />
-          </Grid>
-
-          <Grid item xs={12} md={3}>
-            <MiniInfoCard
-              title="Oxirgi LRF"
-              rows={
-                latestLRF
-                  ? [
-                      ["Heat ID", `#${latestLRF.heatId}`],
-                      ["Steel", safeText(latestLRF.steelGradeName)],
-                      ["Boshlanish", formatDateTime(latestLRF.startTime)],
-                      ["Shift", safeShift(latestLRF.shift)],
-                      ["Harorat", `${fmtN(latestLRF.latestTemp, 0)} °C`],
-                    ].map(([label, value]) => ({ label, value }))
-                  : [{ label: "Holat", value: "Ma'lumot yo'q" }]
-              }
-            />
-          </Grid>
-
-          <Grid item xs={12} md={3}>
-            <MiniInfoCard
-              title="Oxirgi TSC"
-              rows={
-                latestTSC
-                  ? [
-                      ["Heat ID", `#${latestTSC.heatId}`],
-                      ["Steel", safeText(latestTSC.steelGradeName)],
-                      ["Opening", formatDateTime(latestTSC.ladleOpeningDate)],
-                      ["Shift", safeShift(latestTSC.shift)],
-                      [
-                        "Cast speed",
-                        `${fmtN(latestTSC.castSpeedAvg, 2)} m/min`,
-                      ],
-                    ].map(([label, value]) => ({ label, value }))
-                  : [{ label: "Holat", value: "Ma'lumot yo'q" }]
-              }
-            />
-          </Grid>
-
-          <Grid item xs={12} md={3}>
-            <MiniInfoCard
-              title="Oxirgi VOD"
-              rows={
-                latestVOD
-                  ? [
-                      ["Heat ID", `#${latestVOD.heatId}`],
-                      ["Steel", safeText(latestVOD.steelGradeName)],
-                      ["Boshlanish", formatDateTime(latestVOD.startTime)],
-                      ["Shift", safeShift(latestVOD.shift)],
-                      ["Yield loss", `${fmtN(latestVOD.yieldLossPct, 2)} %`],
-                    ].map(([label, value]) => ({ label, value }))
-                  : [{ label: "Holat", value: "Ma'lumot yo'q" }]
-              }
-            />
-          </Grid>
+          {[
+            {
+              t: "Oxirgi EAF",
+              d: lE,
+              r: lE
+                ? [
+                    ["Heat", "#" + lE.heatId],
+                    ["Steel", safeText(lE.steelGradeName)],
+                    ["Boshlanish", fmtDT(lE.startTime)],
+                    ["Shift", safeShift(lE.shift)],
+                    ["kWh/t", fmtN(lE.kwhPerTon, 1)],
+                  ]
+                : null,
+            },
+            {
+              t: "Oxirgi LRF",
+              d: lL,
+              r: lL
+                ? [
+                    ["Heat", "#" + lL.heatId],
+                    ["Steel", safeText(lL.steelGradeName)],
+                    ["Boshlanish", fmtDT(lL.startTime)],
+                    ["Shift", safeShift(lL.shift)],
+                    ["Harorat", fmtN(lL.latestTemp, 0) + " °C"],
+                  ]
+                : null,
+            },
+            {
+              t: "Oxirgi TSC",
+              d: lT,
+              r: lT
+                ? [
+                    ["Heat", "#" + lT.heatId],
+                    ["Steel", safeText(lT.steelGradeName)],
+                    ["Opening", fmtDT(lT.ladleOpeningDate)],
+                    ["Shift", safeShift(lT.shift)],
+                    ["Speed", fmtN(lT.castSpeedAvg, 2) + " m/min"],
+                  ]
+                : null,
+            },
+            {
+              t: "Oxirgi VOD",
+              d: lV,
+              r: lV
+                ? [
+                    ["Heat", "#" + lV.heatId],
+                    ["Steel", safeText(lV.steelGradeName)],
+                    ["Boshlanish", fmtDT(lV.startTime)],
+                    ["Shift", safeShift(lV.shift)],
+                    ["Yield", fmtN(lV.yieldLossPct, 2) + " %"],
+                  ]
+                : null,
+            },
+          ].map((c) => (
+            <Grid item xs={12} md={3} key={c.t}>
+              <MIC
+                title={c.t}
+                rows={
+                  c.r
+                    ? c.r.map(([l, v]) => ({ label: l, value: v }))
+                    : [{ label: "Holat", value: "Yo'q" }]
+                }
+              />
+            </Grid>
+          ))}
         </Grid>
       )}
     </Box>

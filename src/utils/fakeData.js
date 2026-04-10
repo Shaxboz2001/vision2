@@ -178,7 +178,7 @@ export const uchastkalarData = [
   },
   {
     id: "UCH-02A",
-    nom: "Pechlar uchastkasi",
+    nom: "Pechlar hududi",
     sexId: "SEX-02",
     holat: "faol",
     uskunalar: 10,
@@ -189,7 +189,7 @@ export const uchastkalarData = [
   },
   {
     id: "UCH-02B",
-    nom: "Stan uchastkasi",
+    nom: "Stan hududi",
     sexId: "SEX-02",
     holat: "faol",
     uskunalar: 30,
@@ -200,7 +200,7 @@ export const uchastkalarData = [
   },
   {
     id: "UCH-02C",
-    nom: "Sovutish uchastkasi",
+    nom: "Sovutish hududi",
     sexId: "SEX-02",
     holat: "faol",
     uskunalar: 2,
@@ -211,7 +211,7 @@ export const uchastkalarData = [
   },
   {
     id: "UCH-02D",
-    nom: "Yakuniy ishlov berish uchastkasi (Adyustaj)",
+    nom: "Yakuniy ishlov berish hududi (Adyustaj)",
     sexId: "SEX-02",
     holat: "faol",
     uskunalar: 3,
@@ -399,7 +399,7 @@ export const uchastkalarData = [
 
   {
     id: "UCH-07B",
-    nom: "Elektrda Eritish Pechi uchastkasi",
+    nom: "Elektrda Eritish Pechi hududi",
     sexId: "SEX-07",
     holat: "faol",
     uskunalar: 3,
@@ -410,7 +410,7 @@ export const uchastkalarData = [
   },
   {
     id: "UCH-07D",
-    nom: "Pech Kovsh Uchastkasi",
+    nom: "Pech Kovsh hududi",
     sexId: "SEX-07",
     holat: "faol",
     uskunalar: 3,
@@ -422,7 +422,7 @@ export const uchastkalarData = [
 
   {
     id: "UCH-07C",
-    nom: "Vakuumator Uchastkasi",
+    nom: "Vakuumator hududi",
     sexId: "SEX-07",
     holat: "faol",
     uskunalar: 4,
@@ -434,7 +434,7 @@ export const uchastkalarData = [
 
   {
     id: "UCH-07E",
-    nom: "MNLZ (Unrez) Uchastkasi",
+    nom: "MNLZ (Unrez) hududi",
     sexId: "SEX-07",
     holat: "faol",
     uskunalar: 2,
@@ -445,7 +445,7 @@ export const uchastkalarData = [
   },
   {
     id: "UCH-07F",
-    nom: "Rollikli Pech Uchastkasi",
+    nom: "Rollikli Pech hududi",
     sexId: "SEX-07",
     holat: "faol",
     uskunalar: 2,
@@ -456,7 +456,7 @@ export const uchastkalarData = [
   },
   {
     id: "UCH-07G",
-    nom: "Stan Uchastkasi",
+    nom: "Stan hududi",
     sexId: "SEX-07",
     holat: "faol",
     uskunalar: 2,
@@ -467,7 +467,7 @@ export const uchastkalarData = [
   },
   {
     id: "UCH-07K",
-    nom: "List O'rash Uchastkasi",
+    nom: "List O'rash hududi",
     sexId: "SEX-07",
     holat: "faol",
     uskunalar: 2,
@@ -478,7 +478,7 @@ export const uchastkalarData = [
   },
   {
     id: "UCH-07I",
-    nom: "Tayyor Mahsulot Uchastkasi (Adyustaj)",
+    nom: "Tayyor Mahsulot hududi (Adyustaj)",
     sexId: "SEX-07",
     holat: "faol",
     uskunalar: 2,
@@ -489,7 +489,7 @@ export const uchastkalarData = [
   },
   {
     id: "UCH-07A",
-    nom: "Shixta(Koproviy) uchastkasi",
+    nom: "Shixta(Koproviy) hududi",
     sexId: "SEX-07",
     holat: "faol",
     uskunalar: 4,

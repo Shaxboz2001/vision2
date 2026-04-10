@@ -28,7 +28,7 @@ export const VOICE_ROUTES = [
   },
   {
     path: "/uchastkalar",
-    label: "Uchastkalar",
+    label: "Hududlar",
     aliases: ["участки", "участок"],
   },
   {

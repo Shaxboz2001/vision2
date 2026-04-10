@@ -15913,7 +15913,7 @@ export default function UskunaDetailPage() {
                   { l: "Nom", v: uskuna.nom },
                   { l: "Model", v: uskuna.model },
                   { l: "Tur", v: uskuna.tur },
-                  { l: "Uchastka", v: uskuna.uchastkId },
+                  { l: "Hudud", v: uskuna.uchastkId },
                   { l: "Ishlab yil", v: uskuna.ishlab },
                 ].map((r) => (
                   <Box

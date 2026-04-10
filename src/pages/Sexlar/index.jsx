@@ -3063,7 +3063,7 @@ function SexDetailPanel({ sex }) {
               mb: 1,
             }}
           >
-            UCHASTKALAR
+            HUDUDLAR
           </Typography>
           {/* {uchastkalar.map((u) => (
             <Box
@@ -3161,7 +3161,7 @@ function SexDetailPanel({ sex }) {
               </Box>
 
               <Box sx={{ display: "flex", alignItems: "center", gap: 1.2 }}>
-                <Typography
+                {/* <Typography
                   sx={{
                     fontFamily: "'Arial',san-serif",
                     fontSize: "0.72rem",
@@ -3176,7 +3176,7 @@ function SexDetailPanel({ sex }) {
                   }}
                 >
                   {u.harorat}°C
-                </Typography>
+                </Typography> */}
 
                 <Typography
                   sx={{
@@ -3424,7 +3424,7 @@ function SexCard({ s, selected, onClick }) {
             gap: 1,
           }}
         >
-          {s.live && (
+          {/* {s.live && (
             <Typography
               sx={{
                 fontFamily: "'Arial', san-serif",
@@ -3442,7 +3442,7 @@ function SexCard({ s, selected, onClick }) {
             >
               ● LIVE
             </Typography>
-          )}
+          )} */}
           <Box
             sx={{
               width: 12,
@@ -3488,7 +3488,7 @@ function SexCard({ s, selected, onClick }) {
         {/* STATS ROW */}
         <Grid container spacing={1} sx={{ mb: 2 }}>
           {[
-            { l: "UCHASTKA", v: s.uchastkalar, c: color },
+            { l: "HUDUD", v: s.uchastkalar, c: color },
             {
               l: "USKUNA",
               v: `${s.faolUskunalar}/${s.uskunalar}`,
@@ -3589,7 +3589,7 @@ function SexCard({ s, selected, onClick }) {
           </Box>
 
           {/* Harorat */}
-          <Box
+          {/* <Box
             sx={{
               textAlign: "center",
               background: isDark
@@ -3636,7 +3636,7 @@ function SexCard({ s, selected, onClick }) {
             >
               HARORAT
             </Typography>
-          </Box>
+          </Box> */}
         </Box>
       </Box>
     </Paper>
@@ -3775,10 +3775,10 @@ export default function Sexlar() {
             <TableRow>
               <TableCell>BO'LINMALAR</TableCell>
               <TableCell>HOLAT</TableCell>
-              <TableCell>UCHASTKALAR</TableCell>
+              <TableCell>HUDUDLAR</TableCell>
               <TableCell>USKUNALAR</TableCell>
               <TableCell>YUK</TableCell>
-              <TableCell>HARORAT</TableCell>
+              {/* <TableCell>HARORAT</TableCell> */}
               <TableCell>ISHCHILAR</TableCell>
             </TableRow>
           </TableHead>
@@ -3882,7 +3882,7 @@ export default function Sexlar() {
                     </Typography>
                   </Box>
                 </TableCell>
-                <TableCell>
+                {/* <TableCell>
                   <Typography
                     sx={{
                       fontFamily: "'Arial',san-serif",
@@ -3897,7 +3897,7 @@ export default function Sexlar() {
                   >
                     {s.harorat}°C
                   </Typography>
-                </TableCell>
+                </TableCell> */}
                 <TableCell>
                   <Typography
                     sx={{

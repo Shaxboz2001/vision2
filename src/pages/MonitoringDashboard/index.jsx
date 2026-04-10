@@ -399,7 +399,7 @@ function UskunaCard({ u, tokens, onClick }) {
 
       <Stack spacing={0.9}>
         <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1 }}>
-          <Typography
+          {/* <Typography
             sx={{
               fontSize: "0.75rem",
               color: tokens.textSoft,
@@ -407,8 +407,8 @@ function UskunaCard({ u, tokens, onClick }) {
             }}
           >
             Harorat
-          </Typography>
-          <Typography
+          </Typography> */}
+          {/* <Typography
             sx={{
               fontFamily: tokens.mono,
               fontSize: "0.78rem",
@@ -417,7 +417,7 @@ function UskunaCard({ u, tokens, onClick }) {
             }}
           >
             {u.harorat ? `${u.harorat}°C` : "—"}
-          </Typography>
+          </Typography> */}
         </Box>
 
         <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1 }}>
@@ -556,7 +556,7 @@ function UchastkaCard({ u, tokens, open, onToggle, children }) {
             spacing={1}
             sx={{ display: { xs: "none", md: "flex" }, mr: 0.45 }}
           >
-            <Chip
+            {/* <Chip
               size="small"
               icon={
                 <ThermostatRoundedIcon sx={{ fontSize: "15px !important" }} />
@@ -568,7 +568,7 @@ function UchastkaCard({ u, tokens, open, onToggle, children }) {
                 border: `1px solid ${alpha(tempColor, 0.16)}`,
                 fontWeight: 700,
               }}
-            />
+            /> */}
             <Chip
               size="small"
               icon={<SpeedRoundedIcon sx={{ fontSize: "15px !important" }} />}
@@ -660,14 +660,14 @@ function UskunalarSection({ uchastka, tokens, onUskunaClick }) {
             tokens={tokens}
           />
         </Grid>
-        <Grid item xs={6} md={3}>
+        {/* <Grid item xs={6} md={3}>
           <StatCard
             label="O'RTA HARORAT"
             value={`${fmtN(avgTemp, 0)}°C`}
             color={getTempColor(avgTemp, tokens)}
             tokens={tokens}
           />
-        </Grid>
+        </Grid> */}
         <Grid item xs={6} md={3}>
           <StatCard
             label="O'RTA SAMARADORLIK"
@@ -1029,7 +1029,7 @@ export default function MonitoringPage() {
               }}
             />
             <Chip label={`Uskunalar: ${pageStats.totalEquip}`} />
-            <Chip label={`O'rtacha harorat: ${fmtN(pageStats.avgTemp, 0)}°C`} />
+            {/* <Chip label={`O'rtacha harorat: ${fmtN(pageStats.avgTemp, 0)}°C`} /> */}
             <Chip
               label={`O'rtacha samaradorlik: ${fmtN(pageStats.avgEff, 0)}%`}
             />

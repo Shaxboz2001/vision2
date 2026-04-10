@@ -63,7 +63,7 @@ const navItems = [
   },
   {
     path: "/uchastkalar",
-    label: "Uchastkalar",
+    label: "Hududlar",
     icon: <GrainIcon sx={{ fontSize: 18 }} />,
     badge: null,
   },

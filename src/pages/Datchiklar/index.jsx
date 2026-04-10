@@ -223,7 +223,7 @@ export default function Datchiklar() {
     },
     {
       field: "uchastkId",
-      headerName: "UCHASTKA",
+      headerName: "HUDUD",
       width: 120,
       renderCell: (p) => (
         <Typography

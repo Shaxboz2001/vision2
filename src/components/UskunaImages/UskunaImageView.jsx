@@ -800,7 +800,7 @@ export default function UskunaImageView({ uskuna }) {
               </Typography>
             </Box>
             <StatRow label="Model" value={u.model || "—"} />
-            <StatRow label="Uchastka" value={u.uchastkId || "—"} />
+            <StatRow label="Hudud" value={u.uchastkId || "—"} />
             <StatRow label="Ishlab" value={u.ishlab || "—"} />
           </Paper>
         </Box>

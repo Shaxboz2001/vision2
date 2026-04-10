@@ -2011,8 +2011,8 @@ export default function Dashboard() {
   );
 
   const complexInfo = {
-    short: "QPK",
-    title: "Quyuv Prokatlash Kompleksi",
+    short: "",
+    title: "Quyuv Prokatlash Kompleksi Ishlab Chiqarish Jarayoni",
     subtitle:
       "LPK bo‘yicha real vaqt statistikasi, jarayonlar holati va ishlab chiqarish ko‘rsatkichlari",
   };
@@ -2050,29 +2050,29 @@ export default function Dashboard() {
 
     return [
       {
-        label: "ISHLAB CHIQARISH",
+        label: "KOMPLEKS ISHLAB CHIQARISH QUVVATI",
         value: fmtN(totalProductionTon, 1),
         unit: "t",
         trend: `${periodLabel} bo'yicha jami`,
         trendUp: true,
         color: ui.orange,
       },
-      // {
-      //   label: "LPK JARAYONLARI",
-      //   value: `${activeUnits}/${totalUnits}`,
-      //   unit: "",
-      //   trend: "EAF / LRF / VOD / TSC",
-      //   trendUp: true,
-      //   color: ui.blue,
-      // },
-      // {
-      //   label: "LPK O'RTA HARORATI",
-      //   value: fmtN(avgTemp, 0),
-      //   unit: "°C",
-      //   trend: "Kompleks bo‘yicha o‘rtacha",
-      //   trendUp: false,
-      //   color: ui.red,
-      // },
+      {
+        label: "USKUNALARNING ISHLAB CHIQARISH JARAYONLARI",
+        value: `${activeUnits}/${totalUnits}`,
+        unit: "",
+        trend: "EAF / LRF / VOD / TSC",
+        trendUp: true,
+        color: ui.blue,
+      },
+      {
+        label: "MAJMUADAGI PECHLARNING O'RTA HARORATI",
+        value: fmtN(avgTemp, 0),
+        unit: "°C",
+        trend: "Kompleks bo‘yicha o‘rtacha",
+        trendUp: false,
+        color: ui.red,
+      },
       // {
       //   label: "LPK DATCHIK NUQTALARI",
       //   value: fmtN(totalTempPoints, 0),
@@ -2082,7 +2082,7 @@ export default function Dashboard() {
       //   color: ui.green,
       // },
       {
-        label: "LPK ENERGIYA SARFI",
+        label: "MAJMUADAGI UMUMIY ENERGIYA SARFI",
         value: fmtN(totalEnergy, 0),
         unit: "kWh",
         trend: "EAF + LRF bo‘yicha",
@@ -2124,7 +2124,7 @@ export default function Dashboard() {
       {
         id: "EAF",
         emoji: "🔥",
-        nom: "EAF Eritish",
+        nom: "Elektrda Metallni Eritish",
         holat: getStatusByProcess(latestEAF, "EAF"),
         uchastkalar: 1,
         faolUskunalar: latestEAF ? 1 : 0,
@@ -2138,7 +2138,7 @@ export default function Dashboard() {
       {
         id: "LRF",
         emoji: "⚡",
-        nom: "LRF Qayta Ishlov",
+        nom: "Po‘latni pechda qayta ishlash",
         holat: getStatusByProcess(latestLRF, "LRF"),
         uchastkalar: 1,
         faolUskunalar: latestLRF ? 1 : 0,
@@ -2152,7 +2152,7 @@ export default function Dashboard() {
       {
         id: "VOD",
         emoji: "🫧",
-        nom: "VOD Vakuum",
+        nom: "Vakuum ostida qayta ishlash",
         holat: getStatusByProcess(latestVOD, "VOD"),
         uchastkalar: 1,
         faolUskunalar: latestVOD ? 1 : 0,
@@ -2166,7 +2166,7 @@ export default function Dashboard() {
       {
         id: "TSC",
         emoji: "🏭",
-        nom: "TSC Quyish",
+        nom: "Uzluksiz quyish",
         holat: getStatusByProcess(latestTSC, "TSC"),
         uchastkalar: 1,
         faolUskunalar: latestTSC ? 1 : 0,
@@ -2390,25 +2390,25 @@ export default function Dashboard() {
   const planItems = useMemo(() => {
     return [
       {
-        nom: "EAF Eritish",
+        nom: "Elektrda Metallni Eritish",
         plan: 900,
         haqiqiy: kgToTon(sum(eafList.map((x) => x.tappingWeight))),
         color: ui.orange,
       },
       {
-        nom: "LRF Qayta Ishlov",
+        nom: "Po‘latni pechda qayta ishlash",
         plan: 900,
         haqiqiy: kgToTon(sum(lrfList.map((x) => x.finalSteelWeight))),
         color: ui.yellow,
       },
       {
-        nom: "VOD Vakuum",
+        nom: "Vakuum ostida qayta ishlash",
         plan: 700,
         haqiqiy: kgToTon(sum(vodList.map((x) => x.finalSteelWeight))),
         color: ui.blue,
       },
       {
-        nom: "TSC Quyish",
+        nom: "Uzluksiz quyish",
         plan: 850,
         haqiqiy: kgToTon(sum(tscList.map((x) => x.finalSteelWeight))),
         color: ui.green,
@@ -2474,7 +2474,7 @@ export default function Dashboard() {
                 textAlign: "center",
               }}
             >
-              {complexInfo.title} ({complexInfo.short})
+              {complexInfo.title}
             </Typography>
 
             {/* <Typography
@@ -2547,7 +2547,7 @@ export default function Dashboard() {
 
       <Grid container spacing={1.5}>
         {kpiItems.map((item) => (
-          <Grid item xs={12} sm={6} md={2.4} key={item.label}>
+          <Grid item xs={12} sm={6} md={3} key={item.label}>
             <KpiCard {...item} loading={isAnyLoading} />
           </Grid>
         ))}
@@ -2557,7 +2557,7 @@ export default function Dashboard() {
         <Grid item xs={12} lg={8}>
           <DashboardPaper>
             <SectionHeader
-              title="LPK Jarayonlari Holati"
+              title="Quyuv Prokatlash Kompleksi Jarayonlari Holati"
               action="JARAYONLAR →"
             ></SectionHeader>
 
@@ -2580,7 +2580,7 @@ export default function Dashboard() {
                   >
                     <TableCell>JARAYON NOMI</TableCell>
                     <TableCell>HOLAT</TableCell>
-                    <TableCell>UCHASTKA</TableCell>
+                    <TableCell>HUDUD</TableCell>
                     <TableCell>USKUNALAR</TableCell>
                     <TableCell>YUK</TableCell>
                     <TableCell>HARORAT</TableCell>
@@ -2635,7 +2635,7 @@ export default function Dashboard() {
                               {s.nom}
                             </Typography>
 
-                            <Typography
+                            {/* <Typography
                               sx={{
                                 fontFamily: "'Arial', san-serif",
                                 fontSize: "0.72rem",
@@ -2644,7 +2644,7 @@ export default function Dashboard() {
                               }}
                             >
                               {s.meta}
-                            </Typography>
+                            </Typography> */}
                           </Box>
                         </Box>
                       </TableCell>
@@ -2749,7 +2749,7 @@ export default function Dashboard() {
         <Grid item xs={12} lg={4}>
           <DashboardPaper sx={{ height: "100%" }}>
             <SectionHeader
-              title="LPK Ogohlantirishlari"
+              title="MAJMUADAGI FAOL DATCHIKLAR TEXNIK HOLATI"
               dot={ui.red}
               action="HAMMASI →"
             />
@@ -2815,7 +2815,7 @@ export default function Dashboard() {
       <Grid container spacing={2}>
         <Grid item xs={12} md={7}>
           <DashboardPaper>
-            <SectionHeader title="LPK Harorat Grafigi" dot={ui.orange}>
+            <SectionHeader title="Harorat Grafigi" dot={ui.orange}>
               <Box sx={{ display: "flex", gap: 2.2, flexWrap: "wrap" }}>
                 {[
                   ["EAF", ui.red],
@@ -2922,10 +2922,7 @@ export default function Dashboard() {
 
         <Grid item xs={12} md={5}>
           <DashboardPaper>
-            <SectionHeader
-              title="LPK Ishlab Chiqarish Dinamikasi"
-              dot={ui.green}
-            />
+            <SectionHeader title="Ishlab Chiqarish Dinamikasi" dot={ui.green} />
             <Box sx={{ p: 2, height: 290 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
@@ -2964,25 +2961,25 @@ export default function Dashboard() {
 
                   <Bar
                     dataKey="eaf"
-                    name="EAF"
+                    name="Eritish"
                     fill={ui.orange}
                     radius={[4, 4, 0, 0]}
                   />
                   <Bar
                     dataKey="lrf"
-                    name="LRF"
+                    name="Qayta ishlash"
                     fill={ui.yellow}
                     radius={[4, 4, 0, 0]}
                   />
                   <Bar
                     dataKey="vod"
-                    name="VOD"
+                    name="Vakuum"
                     fill={ui.blue}
                     radius={[4, 4, 0, 0]}
                   />
                   <Bar
                     dataKey="tsc"
-                    name="TSC"
+                    name="Quyish"
                     fill={ui.green}
                     radius={[4, 4, 0, 0]}
                   />

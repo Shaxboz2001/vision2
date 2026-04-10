@@ -295,7 +295,7 @@ function UchastkadDetail({ u, onClose }) {
 
             {[
               { l: "Sex", v: u.sexId },
-              { l: "Uchastka ID", v: u.id },
+              { l: "Hudud ID", v: u.id },
               { l: "Holat", v: u.holat },
               { l: "Harorat", v: `${u.harorat}°C` },
               { l: "Bosim", v: `${u.bosim} bar` },
@@ -908,7 +908,7 @@ export default function Uchastkalar() {
               color: "text.primary",
             }}
           >
-            UCHASTKALAR
+            HUDUDLAR
           </Typography>
           <Typography
             sx={{
@@ -917,7 +917,7 @@ export default function Uchastkalar() {
               color: "text.secondary",
             }}
           >
-            Barcha uchastkalar holati · Kartani bosib uskunalarga o'ting
+            Barcha hududlar holati · Kartani bosib uskunalarga o'ting
           </Typography>
         </Box>
 
@@ -1024,7 +1024,7 @@ export default function Uchastkalar() {
               color: "text.secondary",
             }}
           >
-            {uchastkalar.length} ta uchastka
+            {uchastkalar.length} ta hudud
           </Typography>
         </Box>
 

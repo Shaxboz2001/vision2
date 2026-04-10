@@ -1481,7 +1481,7 @@ const mainNavItems = [
 const manageNavItems = [
   {
     path: "/analitika",
-    label: "Analitika",
+    label: "AI Tahlil",
     icon: <BarChartIcon sx={{ fontSize: 18 }} />,
     badge: null,
   },
