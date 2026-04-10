@@ -396,17 +396,7 @@ export const uchastkalarData = [
     bosim: 0.0,
     samaradorlik: 0,
   },
-  {
-    id: "UCH-07A",
-    nom: "Shixta(Koproviy) uchastkasi",
-    sexId: "SEX-07",
-    holat: "faol",
-    uskunalar: 4,
-    ishchilar: 120,
-    harorat: 28,
-    bosim: 0,
-    samaradorlik: 0,
-  },
+
   {
     id: "UCH-07B",
     nom: "Elektrda Eritish Pechi uchastkasi",
@@ -495,6 +485,17 @@ export const uchastkalarData = [
     ishchilar: 76,
     harorat: 35,
     bosim: 0.4,
+    samaradorlik: 0,
+  },
+  {
+    id: "UCH-07A",
+    nom: "Shixta(Koproviy) uchastkasi",
+    sexId: "SEX-07",
+    holat: "faol",
+    uskunalar: 4,
+    ishchilar: 120,
+    harorat: 28,
+    bosim: 0,
     samaradorlik: 0,
   },
   {
@@ -908,10 +909,10 @@ export const uskunalarData = [
 
   {
     id: "USK-020",
-    nom: "Roughing mill stani №1",
+    nom: "Dozator",
     tur: "Prokat",
     sexId: "SEX-07",
-    uchastkId: "UCH-07C",
+    uchastkId: "UCH-07B",
     holat: "faol",
     samaradorlik: 94,
     harorat: 120,
@@ -924,7 +925,7 @@ export const uskunalarData = [
   },
   {
     id: "USK-021",
-    nom: "Roughing mill stani №2",
+    nom: "Vakuumator",
     tur: "Prokat",
     sexId: "SEX-07",
     uchastkId: "UCH-07C",
@@ -973,7 +974,7 @@ export const uskunalarData = [
 
   {
     id: "USK-024",
-    nom: "Finishing mill stani №1",
+    nom: "Gorizontal Kovsh",
     tur: "Prokat",
     sexId: "SEX-07",
     uchastkId: "UCH-07D",
@@ -989,7 +990,7 @@ export const uskunalarData = [
   },
   {
     id: "USK-025",
-    nom: "Finishing mill stani №2",
+    nom: "Vertikal Kovsh",
     tur: "Prokat",
     sexId: "SEX-07",
     uchastkId: "UCH-07D",

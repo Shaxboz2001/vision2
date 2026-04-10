@@ -155,7 +155,7 @@
 //         <Box>
 //           <Typography
 //             sx={{
-//               fontFamily: "'Orbitron',monospace",
+//               fontFamily: "'Arial',san-serif",
 //               fontSize: "1.1rem",
 //               fontWeight: 700,
 //               letterSpacing: "0.15em",
@@ -165,7 +165,7 @@
 //           </Typography>
 //           <Typography
 //             sx={{
-//               fontFamily: "'Share Tech Mono',monospace",
+//               fontFamily: "'Arial',san-serif",
 //               fontSize: "0.65rem",
 //               color: "#6b7280",
 //             }}
@@ -188,7 +188,7 @@
 //               value={filter}
 //               onChange={(e) => setFilter(e.target.value)}
 //               sx={{
-//                 fontFamily: "'Share Tech Mono',monospace",
+//                 fontFamily: "'Arial',san-serif",
 //                 fontSize: "0.75rem",
 //               }}
 //             >
@@ -214,7 +214,7 @@
 //             <Paper sx={{ p: 1.5, textAlign: "center" }}>
 //               <Typography
 //                 sx={{
-//                   fontFamily: "'Orbitron',monospace",
+//                   fontFamily: "'Arial',san-serif",
 //                   fontSize: "1.8rem",
 //                   fontWeight: 700,
 //                   color: s.c,
@@ -224,7 +224,7 @@
 //               </Typography>
 //               <Typography
 //                 sx={{
-//                   fontFamily: "'Share Tech Mono',monospace",
+//                   fontFamily: "'Arial',san-serif",
 //                   fontSize: "0.58rem",
 //                   color: "#6b7280",
 //                   letterSpacing: "0.1em",
@@ -306,7 +306,7 @@
 //               <Box>
 //                 <Typography
 //                   sx={{
-//                     fontFamily: "'Share Tech Mono',monospace",
+//                     fontFamily: "'Arial',san-serif",
 //                     fontSize: "0.75rem",
 //                     color: "#00d4ff",
 //                   }}
@@ -315,7 +315,7 @@
 //                 </Typography>
 //                 <Typography
 //                   sx={{
-//                     fontFamily: "'Share Tech Mono',monospace",
+//                     fontFamily: "'Arial',san-serif",
 //                     fontSize: "0.6rem",
 //                     color: "#6b7280",
 //                   }}
@@ -361,35 +361,56 @@ import { useVoiceCommand } from "./useVoiceCommand";
 import { useWakeWord } from "./useWakeWord";
 import VoiceMicButton from "./VoiceMicButton";
 
+// export function CameraFeed({
+//   cam,
+//   onClick,
+//   large = false,
+//   highlighted = false,
+// }) {
+//   const [streamUrl, setStreamUrl] = useState(null);
+
+//   // useEffect(() => {
+//   //   fetch(`http://172.16.55.12:8000/camera/${cam.channel}`)
+//   //     .then((res) => res.json())
+//   //     .then((data) => setStreamUrl(data.stream));
+//   // }, [cam.channel]);
+//   useEffect(() => {
+//     setStreamUrl(`/cam-player/stream.html?src=${cam.channel}`);
+//   }, [cam.channel]);
+
+//   return (
+//     <Box
+//       sx={{
+//         aspectRatio: large ? "16/9" : "16/10",
+//         background: "#070a12",
+//         border: highlighted ? "2px solid #00ff9d" : "1px solid #1e2a3d",
+//         borderRadius: 1,
+//         overflow: "hidden",
+//         transition: "border-color 0.3s, box-shadow 0.3s",
+//         boxShadow: highlighted ? "0 0 20px rgba(0, 255, 157, 0.15)" : "none",
+//         cursor: cam.holat === "jonli" ? "pointer" : "default",
+//       }}
+//       onClick={() => cam.holat === "jonli" && onClick?.(cam)}
+//     >
+//       {streamUrl && (
+//         <iframe
+//           // src={streamUrl}
+//           src={`/cam-player/stream.html?src=${cam.channel}`}
+//           style={{ width: "100%", height: "100%", border: "none" }}
+//           allowFullScreen
+//         />
+//       )}
+//     </Box>
+//   );
+// }
+
 export function CameraFeed({
   cam,
   onClick,
   large = false,
   highlighted = false,
 }) {
-  const [streamUrl, setStreamUrl] = useState(null);
-
-  // useEffect(() => {
-  //   fetch(`http://172.16.55.12:8000/camera/${cam.channel}`)
-  //     .then((res) => res.json())
-  //     .then((data) => setStreamUrl(data.stream));
-  // }, [cam.channel]);
-  useEffect(() => {
-    fetch(`http://172.16.55.12:8000/camera/${cam.channel}`)
-      .then((res) => res.json())
-      .then((data) => {
-        let url = data.stream;
-
-        // 🔥 eng muhim joy
-        if (url.startsWith("ws://")) {
-          const u = new URL(url);
-
-          url = `wss://ai.uzbeksteel.uz:8003/camera-ws${u.search}`;
-        }
-
-        setStreamUrl(url);
-      });
-  }, [cam.channel]);
+  const streamUrl = `/cam-player/stream.html?src=${cam.channel}`;
 
   return (
     <Box
@@ -405,13 +426,12 @@ export function CameraFeed({
       }}
       onClick={() => cam.holat === "jonli" && onClick?.(cam)}
     >
-      {streamUrl && (
-        <iframe
-          src={streamUrl}
-          style={{ width: "100%", height: "100%", border: "none" }}
-          allowFullScreen
-        />
-      )}
+      <iframe
+        src={streamUrl}
+        style={{ width: "100%", height: "100%", border: "none" }}
+        allowFullScreen
+        title={`camera-${cam.id}`}
+      />
     </Box>
   );
 }
@@ -505,7 +525,7 @@ export default function Kameralar() {
         <Box>
           <Typography
             sx={{
-              fontFamily: "'Orbitron',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "1.1rem",
               fontWeight: 700,
               letterSpacing: "0.15em",
@@ -515,7 +535,7 @@ export default function Kameralar() {
           </Typography>
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.65rem",
               color: "#6b7280",
             }}
@@ -539,7 +559,7 @@ export default function Kameralar() {
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.75rem",
               }}
             >
@@ -565,7 +585,7 @@ export default function Kameralar() {
             <Paper sx={{ p: 1.5, textAlign: "center" }}>
               <Typography
                 sx={{
-                  fontFamily: "'Orbitron',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "1.8rem",
                   fontWeight: 700,
                   color: s.c,
@@ -575,7 +595,7 @@ export default function Kameralar() {
               </Typography>
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "0.58rem",
                   color: "#6b7280",
                   letterSpacing: "0.1em",
@@ -657,7 +677,7 @@ export default function Kameralar() {
               <Box>
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.75rem",
                     color: "#00d4ff",
                   }}
@@ -666,7 +686,7 @@ export default function Kameralar() {
                 </Typography>
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.6rem",
                     color: "#6b7280",
                   }}

@@ -98,7 +98,7 @@ function TempIndicator({
       >
         <Typography
           sx={{
-            fontFamily: "'Orbitron', monospace",
+            fontFamily: "'Arial', san-serif",
             fontSize: "0.7rem",
             fontWeight: 700,
             color: color,
@@ -199,7 +199,7 @@ function GaugeWidget({ value, size = 140, color = "#ff6b1a", label }) {
           textAnchor="middle"
           fill={color}
           fontSize={size * 0.22}
-          fontFamily="'Orbitron', monospace"
+          fontFamily="'Arial', san-serif"
           fontWeight="700"
         >
           {typeof value === "number" ? value.toFixed(1) : value}
@@ -210,7 +210,7 @@ function GaugeWidget({ value, size = 140, color = "#ff6b1a", label }) {
           textAnchor="middle"
           fill={isDark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)"}
           fontSize={size * 0.09}
-          fontFamily="'Share Tech Mono', monospace"
+          fontFamily="'Arial', san-serif"
         >
           %
         </text>
@@ -219,7 +219,7 @@ function GaugeWidget({ value, size = 140, color = "#ff6b1a", label }) {
         <Typography
           sx={{
             textAlign: "center",
-            fontFamily: "'Rajdhani', sans-serif",
+            fontFamily: "'san-serif', sans-serif",
             fontWeight: 700,
             fontSize: "0.68rem",
             color: "text.secondary",
@@ -261,7 +261,7 @@ function StatRow({ label, value, unit, valueColor }) {
     >
       <Typography
         sx={{
-          fontFamily: "'Share Tech Mono', monospace",
+          fontFamily: "'Arial', san-serif",
           fontSize: "0.7rem",
           color: "text.secondary",
         }}
@@ -271,7 +271,7 @@ function StatRow({ label, value, unit, valueColor }) {
       <Box sx={{ display: "flex", alignItems: "baseline", gap: 0.5 }}>
         <Typography
           sx={{
-            fontFamily: "'Orbitron', monospace",
+            fontFamily: "'Arial', san-serif",
             fontSize: "0.9rem",
             fontWeight: 700,
             color: valueColor || "text.primary",
@@ -282,7 +282,7 @@ function StatRow({ label, value, unit, valueColor }) {
         {unit && (
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono', monospace",
+              fontFamily: "'Arial', san-serif",
               fontSize: "0.55rem",
               color: "text.disabled",
             }}
@@ -312,7 +312,7 @@ function MiniChart({ data, dataKey, color, title, currentValue, unit }) {
       >
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono', monospace",
+            fontFamily: "'Arial', san-serif",
             fontSize: "0.58rem",
             color: "text.secondary",
             letterSpacing: "0.1em",
@@ -322,7 +322,7 @@ function MiniChart({ data, dataKey, color, title, currentValue, unit }) {
         </Typography>
         <Typography
           sx={{
-            fontFamily: "'Orbitron', monospace",
+            fontFamily: "'Arial', san-serif",
             fontSize: "0.82rem",
             fontWeight: 700,
             color,
@@ -351,7 +351,7 @@ function MiniChart({ data, dataKey, color, title, currentValue, unit }) {
             tick={{
               fontSize: 8,
               fill: isDark ? "#444" : "#bbb",
-              fontFamily: "'Share Tech Mono'",
+              fontFamily: "'Arial'",
             }}
             axisLine={false}
             tickLine={false}
@@ -364,7 +364,7 @@ function MiniChart({ data, dataKey, color, title, currentValue, unit }) {
                 : "rgba(255,255,255,0.95)",
               border: `1px solid ${color}40`,
               borderRadius: 4,
-              fontFamily: "'Share Tech Mono'",
+              fontFamily: "'Arial'",
               fontSize: "0.62rem",
             }}
           />
@@ -436,7 +436,7 @@ export default function UskunaImageView({ uskuna }) {
           >
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: "0.58rem",
                 color: "text.secondary",
                 letterSpacing: "0.12em",
@@ -618,7 +618,7 @@ export default function UskunaImageView({ uskuna }) {
               position: "absolute",
               top: 14,
               left: 18,
-              fontFamily: "'Orbitron', monospace",
+              fontFamily: "'Arial', san-serif",
               fontSize: "0.68rem",
               fontWeight: 600,
               color: "text.secondary",
@@ -660,7 +660,7 @@ export default function UskunaImageView({ uskuna }) {
             />
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: "0.6rem",
                 color: c,
                 fontWeight: 700,
@@ -689,7 +689,7 @@ export default function UskunaImageView({ uskuna }) {
           >
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: "0.58rem",
                 color: "text.secondary",
                 letterSpacing: "0.12em",
@@ -713,7 +713,7 @@ export default function UskunaImageView({ uskuna }) {
             >
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono', monospace",
+                  fontFamily: "'Arial', san-serif",
                   fontSize: "0.58rem",
                   color: "text.secondary",
                   letterSpacing: "0.12em",
@@ -743,7 +743,7 @@ export default function UskunaImageView({ uskuna }) {
             >
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono', monospace",
+                  fontFamily: "'Arial', san-serif",
                   fontSize: "0.58rem",
                   color: "text.secondary",
                   letterSpacing: "0.12em",
@@ -790,7 +790,7 @@ export default function UskunaImageView({ uskuna }) {
             >
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono', monospace",
+                  fontFamily: "'Arial', san-serif",
                   fontSize: "0.58rem",
                   color: "text.secondary",
                   letterSpacing: "0.12em",

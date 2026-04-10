@@ -150,7 +150,7 @@ function UchastkadDetail({ u, onClose }) {
           <Box>
             <Typography
               sx={{
-                fontFamily: "'Orbitron',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.72rem",
                 color: "secondary.main",
                 letterSpacing: "0.15em",
@@ -174,7 +174,7 @@ function UchastkadDetail({ u, onClose }) {
               <StatusChip holat={u.holat} />
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "0.6rem",
                   color: "text.secondary",
                 }}
@@ -184,7 +184,7 @@ function UchastkadDetail({ u, onClose }) {
               {u.live && (
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.55rem",
                     color: "#00e676",
                     px: 0.5,
@@ -256,7 +256,7 @@ function UchastkadDetail({ u, onClose }) {
                       {m.icon}
                       <Typography
                         sx={{
-                          fontFamily: "'Share Tech Mono',monospace",
+                          fontFamily: "'Arial',san-serif",
                           fontSize: "0.58rem",
                           color: "text.secondary",
                           letterSpacing: "0.08em",
@@ -268,7 +268,7 @@ function UchastkadDetail({ u, onClose }) {
 
                     <Typography
                       sx={{
-                        fontFamily: "'Share Tech Mono',monospace",
+                        fontFamily: "'Arial',san-serif",
                         fontSize: "0.88rem",
                         fontWeight: 700,
                         color: m.color,
@@ -317,7 +317,7 @@ function UchastkadDetail({ u, onClose }) {
               >
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.62rem",
                     color: "text.secondary",
                   }}
@@ -326,7 +326,7 @@ function UchastkadDetail({ u, onClose }) {
                 </Typography>
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.7rem",
                     color: "text.primary",
                     textAlign: "right",
@@ -343,7 +343,7 @@ function UchastkadDetail({ u, onClose }) {
           <Box>
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.62rem",
                 color: "text.secondary",
                 mb: 1.5,
@@ -417,7 +417,7 @@ function UchastkadDetail({ u, onClose }) {
                   <Typography
                     key={x}
                     sx={{
-                      fontFamily: "'Share Tech Mono',monospace",
+                      fontFamily: "'Arial',san-serif",
                       fontSize: "0.55rem",
                       color: "text.disabled",
                     }}
@@ -465,7 +465,7 @@ function UchastkadDetail({ u, onClose }) {
                 <Box>
                   <Typography
                     sx={{
-                      fontFamily: "'Share Tech Mono',monospace",
+                      fontFamily: "'Arial',san-serif",
                       fontSize: "0.7rem",
                       color: "text.primary",
                     }}
@@ -474,7 +474,7 @@ function UchastkadDetail({ u, onClose }) {
                   </Typography>
                   <Typography
                     sx={{
-                      fontFamily: "'Share Tech Mono',monospace",
+                      fontFamily: "'Arial',san-serif",
                       fontSize: "0.58rem",
                       color: "text.secondary",
                     }}
@@ -528,7 +528,7 @@ function UchastkCard({ u, onClick }) {
         <Box sx={{ minWidth: 0 }}>
           {/* <Typography
             sx={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.58rem",
               color: "secondary.main",
               mb: 0.2,
@@ -546,7 +546,7 @@ function UchastkCard({ u, onClick }) {
           {u.extraLabel && (
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.7rem",
                 color: "#ccc",
                 mt: 0.2,
@@ -569,7 +569,7 @@ function UchastkCard({ u, onClick }) {
             {u.live && (
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "0.52rem",
                   color: "#00e676",
                 }}
@@ -607,7 +607,7 @@ function UchastkCard({ u, onClick }) {
             >
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "0.7rem",
                   fontWeight: 700,
                   color: s.c,
@@ -617,7 +617,7 @@ function UchastkCard({ u, onClick }) {
               </Typography>
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "0.45rem",
                   color: isDark ? "#ccc" : "#000",
                   letterSpacing: "0.06em",
@@ -648,7 +648,7 @@ function UchastkCard({ u, onClick }) {
         />
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.52rem",
             color: isDark ? "#ccc" : "#000",
             mt: 0.3,
@@ -759,7 +759,7 @@ export default function Uchastkalar() {
           {p.row.live && (
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.52rem",
                 color: "#00e676",
               }}
@@ -787,7 +787,7 @@ export default function Uchastkalar() {
       renderCell: (p) => (
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.75rem",
           }}
         >
@@ -804,7 +804,7 @@ export default function Uchastkalar() {
       renderCell: (p) => (
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.75rem",
             color: "success.main",
           }}
@@ -822,7 +822,7 @@ export default function Uchastkalar() {
       renderCell: (p) => (
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.75rem",
             color: getTempColor(p.value),
           }}
@@ -866,7 +866,7 @@ export default function Uchastkalar() {
           />
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.65rem",
               minWidth: 34,
               textAlign: "right",
@@ -901,7 +901,7 @@ export default function Uchastkalar() {
         <Box>
           <Typography
             sx={{
-              fontFamily: "'Orbitron',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "1.1rem",
               fontWeight: 700,
               letterSpacing: "0.15em",
@@ -912,7 +912,7 @@ export default function Uchastkalar() {
           </Typography>
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.65rem",
               color: "text.secondary",
             }}
@@ -925,7 +925,7 @@ export default function Uchastkalar() {
           {isLiveMode && (
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.58rem",
                 color: uchFetching ? "#00d4ff" : "#00e676",
               }}
@@ -964,7 +964,7 @@ export default function Uchastkalar() {
             <Paper sx={{ p: 2, textAlign: "center" }}>
               <Typography
                 sx={{
-                  fontFamily: "'Orbitron',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "1.8rem",
                   fontWeight: 700,
                   color: s.c,
@@ -974,7 +974,7 @@ export default function Uchastkalar() {
               </Typography>
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "0.58rem",
                   color: "text.secondary",
                   letterSpacing: "0.1em",
@@ -1019,7 +1019,7 @@ export default function Uchastkalar() {
 
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.62rem",
               color: "text.secondary",
             }}
@@ -1053,7 +1053,7 @@ export default function Uchastkalar() {
                   >
                     {/* <Typography
                       sx={{
-                        fontFamily: "'Share Tech Mono',monospace",
+                        fontFamily: "'Arial',san-serif",
                         fontSize: "0.65rem",
                         color: "text.secondary",
                         letterSpacing: "0.12em",
@@ -1075,7 +1075,7 @@ export default function Uchastkalar() {
                     {sex.live && (
                       <Typography
                         sx={{
-                          fontFamily: "'Share Tech Mono',monospace",
+                          fontFamily: "'Arial',san-serif",
                           fontSize: "0.55rem",
                           color: "#00e676",
                         }}
@@ -1095,7 +1095,7 @@ export default function Uchastkalar() {
 
                     <Typography
                       sx={{
-                        fontFamily: "'Share Tech Mono',monospace",
+                        fontFamily: "'Arial',san-serif",
                         fontSize: "0.6rem",
                         color: "text.secondary",
                       }}

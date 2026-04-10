@@ -37,39 +37,41 @@ export default function App() {
           {(muiTheme) => (
             <MuiThemeProvider theme={muiTheme}>
               <CssBaseline />
-              <BrowserRouter>
-                <Layout>
-                  <Routes>
-                    <Route path="/" element={<Dashboard />} />
-                    <Route path="/bo'linmalar" element={<Sexlar />} />
-                    {/* <Route
+              <div style={{ fontFamily: "Arial, sans-serif !important" }}>
+                <BrowserRouter>
+                  <Layout>
+                    <Routes>
+                      <Route path="/" element={<Dashboard />} />
+                      <Route path="/bo'linmalar" element={<Sexlar />} />
+                      {/* <Route
                       path="/monitoring"
                       element={<MonitoringDashboard />}
                     /> */}
-                    <Route
-                      path="/uchastkalar"
-                      element={<MonitoringDashboard />}
-                    />
-                    <Route path="/uskunalar" element={<Uskunalar />} />
-                    <Route path="/uskunalar/:id" element={<UskunaDetail />} />
-                    <Route path="/datchiklar" element={<Datchiklar />} />
-                    <Route path="/kameralar" element={<Kameralar />} />
-                    <Route path="/analitika" element={<Analitika />} />
-                    <Route
-                      path="/ogohlantirishlar"
-                      element={<Ogohlantirishlar />}
-                    />
-                    <Route path="/armatura" element={<ProkatLivePage />} />
-                    <Route
-                      path="/voice-calibration"
-                      element={<VoiceCalibration />}
-                    />
-                    <Route path="/ppe" element={<PPEPage />} />
-                    <Route path="/metal-zasolyonnost" element={<AILom />} />
-                    {/* <Route path="/metal-zasolyonnost" element={<MetalZasolyonnostPage />} /> */}
-                  </Routes>
-                </Layout>
-              </BrowserRouter>
+                      <Route
+                        path="/uchastkalar"
+                        element={<MonitoringDashboard />}
+                      />
+                      <Route path="/uskunalar" element={<Uskunalar />} />
+                      <Route path="/uskunalar/:id" element={<UskunaDetail />} />
+                      <Route path="/datchiklar" element={<Datchiklar />} />
+                      <Route path="/kameralar" element={<Kameralar />} />
+                      <Route path="/analitika" element={<Analitika />} />
+                      <Route
+                        path="/ogohlantirishlar"
+                        element={<Ogohlantirishlar />}
+                      />
+                      <Route path="/armatura" element={<ProkatLivePage />} />
+                      <Route
+                        path="/voice-calibration"
+                        element={<VoiceCalibration />}
+                      />
+                      <Route path="/ppe" element={<PPEPage />} />
+                      <Route path="/metal-zasolyonnost" element={<AILom />} />
+                      {/* <Route path="/metal-zasolyonnost" element={<MetalZasolyonnostPage />} /> */}
+                    </Routes>
+                  </Layout>
+                </BrowserRouter>
+              </div>
             </MuiThemeProvider>
           )}
         </ThemeModeProvider>
@@ -91,7 +93,7 @@ function PPEPage() {
       }}
     >
       <img
-        src="http://172.16.55.12:8005/video"
+        src="https://ai.uzbeksteel.uz:8008/video"
         alt="camera"
         style={{
           width: "100%",
@@ -112,7 +114,7 @@ function AILom() {
       }}
     >
       <img
-        src="http://172.16.55.12:8006/video"
+        src="https://ai.uzbeksteel.uz:8009/video"
         alt="camera"
         style={{
           width: "100%",

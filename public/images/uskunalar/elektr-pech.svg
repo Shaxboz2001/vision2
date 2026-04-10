@@ -281,8 +281,8 @@
 <ellipse cx="454" cy="428" rx="35"  ry="18" fill="#ffaa00" opacity="0.1" filter="url(#e_blur5)"/>
 
 <!-- === MATN === -->
-<text x="240" y="564" text-anchor="middle" font-family="'Courier New',monospace"
+<text x="240" y="564" text-anchor="middle" font-family="'Courier New',san-serif"
   font-size="13" font-weight="bold" fill="#242450" letter-spacing="4">ELEKTR PECH (EAF)</text>
-<text x="240" y="582" text-anchor="middle" font-family="'Courier New',monospace"
+<text x="240" y="582" text-anchor="middle" font-family="'Courier New',san-serif"
   font-size="9" fill="#181838" letter-spacing="3">ELECTRIC ARC FURNACE · EAF-120</text>
 </svg>

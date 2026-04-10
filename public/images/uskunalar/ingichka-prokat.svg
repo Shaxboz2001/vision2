@@ -525,8 +525,8 @@
 <!-- O'lchov ko'rsatgich -->
 <rect x="200" y="346" width="80" height="26" rx="3"
   fill="#040c18" stroke="#0e2030" stroke-width="1.2"/>
-<text x="240" y="358" text-anchor="middle" font-family="monospace" font-size="8" fill="#00d4ff">1.60 mm</text>
-<text x="240" y="368" text-anchor="middle" font-family="monospace" font-size="6" fill="#1a4060">QALINLIK</text>
+<text x="240" y="358" text-anchor="middle" font-family="san-serif" font-size="8" fill="#00d4ff">1.60 mm</text>
+<text x="240" y="368" text-anchor="middle" font-family="san-serif" font-size="6" fill="#1a4060">QALINLIK</text>
 <!-- Ulanish quvuri -->
 <line x1="240" y1="376" x2="240" y2="393" stroke="#162030" stroke-width="3"/>
 
@@ -575,7 +575,7 @@
   fill="#030c14" stroke="#0e2030" stroke-width="1.5"/>
 <rect x="176" y="384" width="96" height="58" rx="2"
   fill="#020810" stroke="#081828" stroke-width="1"/>
-<g font-family="'Courier New',monospace" font-size="6.5" fill="#00cc88">
+<g font-family="'Courier New',san-serif" font-size="6.5" fill="#00cc88">
   <text x="178" y="396">HOLAT  : FAOL</text>
   <text x="178" y="406">BOSIM  : 220 t</text>
   <text x="178" y="416">TEZLIK : 18 m/s</text>
@@ -589,29 +589,29 @@
 <rect x="280" y="382" width="50" height="62" rx="3" fill="#0c1828" stroke="#182030" stroke-width="1"/>
 <g>
   <rect x="282" y="386" width="46" height="11" rx="2" fill="#122a18" stroke="#1e4024" stroke-width="1"/>
-  <text x="305" y="395" text-anchor="middle" font-family="monospace" font-size="6" fill="#44aa55">START</text>
+  <text x="305" y="395" text-anchor="middle" font-family="san-serif" font-size="6" fill="#44aa55">START</text>
   <rect x="282" y="401" width="46" height="11" rx="2" fill="#2a1212" stroke="#401818" stroke-width="1"/>
-  <text x="305" y="410" text-anchor="middle" font-family="monospace" font-size="6" fill="#aa4444">STOP</text>
+  <text x="305" y="410" text-anchor="middle" font-family="san-serif" font-size="6" fill="#aa4444">STOP</text>
   <rect x="282" y="416" width="46" height="11" rx="2" fill="#1a1a10" stroke="#2e2e18" stroke-width="1"/>
-  <text x="305" y="425" text-anchor="middle" font-family="monospace" font-size="6" fill="#aaaa44">RESET</text>
+  <text x="305" y="425" text-anchor="middle" font-family="san-serif" font-size="6" fill="#aaaa44">RESET</text>
   <rect x="282" y="431" width="46" height="11" rx="2" fill="#0e1828" stroke="#182838" stroke-width="1"/>
-  <text x="305" y="440" text-anchor="middle" font-family="monospace" font-size="6" fill="#2a4a60">AUTO</text>
+  <text x="305" y="440" text-anchor="middle" font-family="san-serif" font-size="6" fill="#2a4a60">AUTO</text>
 </g>
 <!-- Qalinlik rostlagich knob -->
 <rect x="174" y="448" width="70" height="26" rx="3" fill="#0c1828" stroke="#182030" stroke-width="1"/>
 <rect x="178" y="452" width="48" height="8" rx="2" fill="#060e18" stroke="#0e1828" stroke-width="0.8"/>
 <rect x="198" y="451" width="12" height="10" rx="2" fill="#1a2e40" stroke="#243848" stroke-width="1"/>
-<text x="209" y="470" text-anchor="middle" font-family="monospace" font-size="5.5" fill="#2a3e52">QALINLIK</text>
+<text x="209" y="470" text-anchor="middle" font-family="san-serif" font-size="5.5" fill="#2a3e52">QALINLIK</text>
 <!-- Chiroqlar -->
 <g>
   <circle cx="254" cy="454" r="5" fill="#00cc00" opacity="0.9" filter="url(#cl_blur2)">
     <animate attributeName="opacity" values="0.9;0.4;0.9" dur="2s" repeatCount="indefinite"/>
   </circle>
-  <text x="264" y="458" font-family="monospace" font-size="5.5" fill="#2a5030">FAOL</text>
+  <text x="264" y="458" font-family="san-serif" font-size="5.5" fill="#2a5030">FAOL</text>
   <circle cx="254" cy="467" r="5" fill="#ff9900" opacity="0.5"/>
-  <text x="264" y="471" font-family="monospace" font-size="5.5" fill="#503020">YUKL.</text>
+  <text x="264" y="471" font-family="san-serif" font-size="5.5" fill="#503020">YUKL.</text>
   <circle cx="254" cy="480" r="5" fill="#cc0000" opacity="0.35"/>
-  <text x="264" y="484" font-family="monospace" font-size="5.5" fill="#402020">XATO</text>
+  <text x="264" y="484" font-family="san-serif" font-size="5.5" fill="#402020">XATO</text>
 </g>
 
 <!-- ============================================================
@@ -630,10 +630,10 @@
 <!-- ============================================================
      MATN
      ============================================================ -->
-<text x="240" y="552" text-anchor="middle" font-family="'Courier New',monospace"
+<text x="240" y="552" text-anchor="middle" font-family="'Courier New',san-serif"
   font-size="13" font-weight="bold" fill="#1e3855" letter-spacing="4">INGICHKA LIST</text>
-<text x="240" y="570" text-anchor="middle" font-family="'Courier New',monospace"
+<text x="240" y="570" text-anchor="middle" font-family="'Courier New',san-serif"
   font-size="13" font-weight="bold" fill="#1e3855" letter-spacing="4">PROKATI</text>
-<text x="240" y="588" text-anchor="middle" font-family="'Courier New',monospace"
+<text x="240" y="588" text-anchor="middle" font-family="'Courier New',san-serif"
   font-size="9" fill="#162a40" letter-spacing="3">COLD ROLLING MILL · CLM-1600</text>
 </svg>

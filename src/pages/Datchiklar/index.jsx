@@ -62,7 +62,7 @@ function DatchikCard({ d, isDark }) {
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.5 }}>
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.55rem",
             color: "#6b7280",
             letterSpacing: "0.1em",
@@ -78,7 +78,7 @@ function DatchikCard({ d, isDark }) {
       <Box sx={{ display: "flex", alignItems: "baseline", gap: 0.5, mb: 0.8 }}>
         <Typography
           sx={{
-            fontFamily: "'Orbitron',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "1.4rem",
             fontWeight: 700,
             color: d.holat === "xato" ? "#ff2d55" : color,
@@ -104,7 +104,7 @@ function DatchikCard({ d, isDark }) {
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         {/* <Typography
           sx={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.55rem",
             color: "#6b7280",
           }}
@@ -113,7 +113,7 @@ function DatchikCard({ d, isDark }) {
         </Typography> */}
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.55rem",
             color: "#6b7280",
           }}
@@ -157,7 +157,7 @@ export default function Datchiklar() {
       renderCell: (p) => (
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.7rem",
             color: "#ff6b1a",
           }}
@@ -173,7 +173,7 @@ export default function Datchiklar() {
       width: 100,
       renderCell: (p) => (
         <Typography
-          sx={{ fontFamily: "'Share Tech Mono',monospace", fontSize: "0.7rem" }}
+          sx={{ fontFamily: "'Arial',san-serif", fontSize: "0.7rem" }}
         >
           {turIcons[p.value]} {p.value}
         </Typography>
@@ -193,7 +193,7 @@ export default function Datchiklar() {
       renderCell: (p) => (
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.75rem",
             color:
               p.row.holat === "xato"
@@ -212,7 +212,7 @@ export default function Datchiklar() {
       renderCell: (p) => (
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.7rem",
             color: "#6b7280",
           }}
@@ -228,7 +228,7 @@ export default function Datchiklar() {
       renderCell: (p) => (
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.65rem",
             color: "#6b7280",
           }}
@@ -253,7 +253,7 @@ export default function Datchiklar() {
         <Box>
           <Typography
             sx={{
-              fontFamily: "'Orbitron',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "1.1rem",
               fontWeight: 700,
               letterSpacing: "0.15em",
@@ -263,7 +263,7 @@ export default function Datchiklar() {
           </Typography>
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.65rem",
               color: "#6b7280",
             }}
@@ -276,7 +276,7 @@ export default function Datchiklar() {
           <FormControl size="small" sx={{ minWidth: 150 }}>
             <InputLabel
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.7rem",
               }}
             >
@@ -289,7 +289,7 @@ export default function Datchiklar() {
               }
               label="BO'LINMA"
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.75rem",
               }}
             >
@@ -301,7 +301,7 @@ export default function Datchiklar() {
                   key={s.id}
                   value={s.id}
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.75rem",
                   }}
                 >
@@ -313,7 +313,7 @@ export default function Datchiklar() {
           <FormControl size="small" sx={{ minWidth: 140 }}>
             <InputLabel
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.7rem",
               }}
             >
@@ -326,7 +326,7 @@ export default function Datchiklar() {
               }
               label="TURI"
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.75rem",
               }}
             >
@@ -338,7 +338,7 @@ export default function Datchiklar() {
                   key={k}
                   value={k}
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.75rem",
                   }}
                 >
@@ -392,7 +392,7 @@ export default function Datchiklar() {
                 <Typography sx={{ fontSize: 22, mb: 0.5 }}>{icon}</Typography>
                 <Typography
                   sx={{
-                    fontFamily: "'Orbitron',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "1.2rem",
                     fontWeight: 700,
                     color: turColors[tur],
@@ -402,7 +402,7 @@ export default function Datchiklar() {
                 </Typography>
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.55rem",
                     color: "#6b7280",
                     textTransform: "uppercase",
@@ -414,7 +414,7 @@ export default function Datchiklar() {
                 {alerts > 0 && (
                   <Typography
                     sx={{
-                      fontFamily: "'Share Tech Mono',monospace",
+                      fontFamily: "'Arial',san-serif",
                       fontSize: "0.55rem",
                       color: "#ff2d55",
                       mt: 0.3,
@@ -441,7 +441,7 @@ export default function Datchiklar() {
           >
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.65rem",
                 color: "#6b7280",
               }}

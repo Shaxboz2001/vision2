@@ -348,8 +348,8 @@
 <ellipse cx="30" cy="261" rx="30" ry="15" fill="#ffcc00" opacity="0.12" filter="url(#p_blur3)"/>
 
 <!-- === MATN === -->
-<text x="240" y="564" text-anchor="middle" font-family="'Courier New',monospace"
+<text x="240" y="564" text-anchor="middle" font-family="'Courier New',san-serif"
   font-size="13" font-weight="bold" fill="#1a3248" letter-spacing="4">PROKAT MASHINASI</text>
-<text x="240" y="582" text-anchor="middle" font-family="'Courier New',monospace"
+<text x="240" y="582" text-anchor="middle" font-family="'Courier New',san-serif"
   font-size="9" fill="#122438" letter-spacing="3">HOT ROLLING MILL · RM-650H</text>
 </svg>

@@ -48,7 +48,7 @@ export default function VoiceMicButton({
           />
           {/* <Typography
             sx={{
-              fontFamily: "'Share Tech Mono', monospace",
+              fontFamily: "'Arial', san-serif",
               fontSize: "0.58rem",
               color: "#00ff9d",
             }}
@@ -73,7 +73,7 @@ export default function VoiceMicButton({
               <ErrorOutlineIcon sx={{ fontSize: 14, color: "#ff2d55" }} />
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono', monospace",
+                  fontFamily: "'Arial', san-serif",
                   fontSize: "0.65rem",
                   color: "#ff2d55",
                   whiteSpace: "nowrap",
@@ -87,7 +87,7 @@ export default function VoiceMicButton({
           ) : isListening ? (
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: "0.65rem",
                 color: "#00ff9d",
                 animation: "blink 1s infinite",
@@ -104,7 +104,7 @@ export default function VoiceMicButton({
               <CircularProgress size={12} sx={{ color: "#00d4ff" }} />
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono', monospace",
+                  fontFamily: "'Arial', san-serif",
                   fontSize: "0.65rem",
                   color: "#00d4ff",
                 }}
@@ -115,7 +115,7 @@ export default function VoiceMicButton({
           ) : transcript ? (
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: "0.65rem",
                 color: "#6b7280",
               }}

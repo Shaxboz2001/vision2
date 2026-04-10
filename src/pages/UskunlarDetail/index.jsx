@@ -89,7 +89,7 @@ function PartInfoPanel({ part, onClose }) {
           />
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.58rem",
               color: part.color,
               letterSpacing: "0.12em",
@@ -103,7 +103,7 @@ function PartInfoPanel({ part, onClose }) {
             sx={{
               height: 16,
               fontSize: "0.5rem",
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               bgcolor: `${part.color}18`,
               color: part.color,
               borderRadius: "2px",
@@ -113,7 +113,7 @@ function PartInfoPanel({ part, onClose }) {
         </Box>
         <Typography
           sx={{
-            fontFamily: "'Rajdhani',sans-serif",
+            fontFamily: "'san-serif',sans-serif",
             fontWeight: 700,
             fontSize: "0.88rem",
             color: "#e8eaf0",
@@ -124,7 +124,7 @@ function PartInfoPanel({ part, onClose }) {
         </Typography>
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.65rem",
             color: "#9ca3af",
             mb: 0.3,
@@ -140,7 +140,7 @@ function PartInfoPanel({ part, onClose }) {
             >
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "0.58rem",
                   color: "#6b7280",
                 }}
@@ -149,7 +149,7 @@ function PartInfoPanel({ part, onClose }) {
               </Typography>
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "0.65rem",
                   color: part.color,
                   fontWeight: 600,
@@ -372,7 +372,7 @@ function DomnaPechiDiagram({ u, isDark }) {
             y="66"
             fill={parts.KOLOSHNIK.color}
             fontSize="8"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -401,7 +401,7 @@ function DomnaPechiDiagram({ u, isDark }) {
             y="93"
             fill={parts.YUKLASH.color}
             fontSize="7"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -426,7 +426,7 @@ function DomnaPechiDiagram({ u, isDark }) {
             y="158"
             fill={parts.SHAFT.color}
             fontSize="9"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
             fontWeight="bold"
@@ -438,7 +438,7 @@ function DomnaPechiDiagram({ u, isDark }) {
             y="172"
             fill={parts.SHAFT.color}
             fontSize="7"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.65"
           >
@@ -463,7 +463,7 @@ function DomnaPechiDiagram({ u, isDark }) {
             y="221"
             fill={parts.ZAPLES.color}
             fontSize="7.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -488,7 +488,7 @@ function DomnaPechiDiagram({ u, isDark }) {
             y="256"
             fill={parts.RASSVAR.color}
             fontSize="7.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -529,7 +529,7 @@ function DomnaPechiDiagram({ u, isDark }) {
             y="248"
             fill={parts.VOZDUSHKA.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -588,7 +588,7 @@ function DomnaPechiDiagram({ u, isDark }) {
             y="300"
             fill={parts.GORN.color}
             fontSize="9"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
             fontWeight="bold"
@@ -600,7 +600,7 @@ function DomnaPechiDiagram({ u, isDark }) {
             y="315"
             fill={parts.GORN.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.65"
           >
@@ -630,7 +630,7 @@ function DomnaPechiDiagram({ u, isDark }) {
             y="310"
             fill={parts.LETKA.color}
             fontSize="6"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -703,7 +703,7 @@ function DomnaPechiDiagram({ u, isDark }) {
             y="17"
             fill={parts.GAZOPROVOD.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             opacity="0.85"
           >
             GAZ QUVURI
@@ -767,7 +767,7 @@ function DomnaPechiDiagram({ u, isDark }) {
           y="58"
           fill={parts.KOLOSHNIK.color}
           fontSize="6.5"
-          fontFamily="'Share Tech Mono',monospace"
+          fontFamily="'Arial',san-serif"
           textAnchor="end"
           opacity="0.6"
         >
@@ -778,7 +778,7 @@ function DomnaPechiDiagram({ u, isDark }) {
           y="150"
           fill={parts.SHAFT.color}
           fontSize="6.5"
-          fontFamily="'Share Tech Mono',monospace"
+          fontFamily="'Arial',san-serif"
           textAnchor="end"
           opacity="0.6"
         >
@@ -789,7 +789,7 @@ function DomnaPechiDiagram({ u, isDark }) {
           y="290"
           fill={parts.GORN.color}
           fontSize="6.5"
-          fontFamily="'Share Tech Mono',monospace"
+          fontFamily="'Arial',san-serif"
           textAnchor="end"
           opacity="0.6"
         >
@@ -811,7 +811,7 @@ function DomnaPechiDiagram({ u, isDark }) {
           y="215"
           fill={isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.2)"}
           fontSize="6"
-          fontFamily="'Share Tech Mono',monospace"
+          fontFamily="'Arial',san-serif"
           textAnchor="middle"
           transform="rotate(90, 370, 215)"
         >
@@ -1028,7 +1028,7 @@ function KonverterDiagram({ u, isDark }) {
             y="55"
             fill={parts.LANCE.color}
             fontSize="7"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             opacity="0.8"
           >
             LANCE
@@ -1077,7 +1077,7 @@ function KonverterDiagram({ u, isDark }) {
             y="78"
             fill={parts.POKRYVALO.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             opacity="0.8"
           >
             GAZ
@@ -1101,7 +1101,7 @@ function KonverterDiagram({ u, isDark }) {
             y="164"
             fill={parts.BOYINTANA.color}
             fontSize="7.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -1126,7 +1126,7 @@ function KonverterDiagram({ u, isDark }) {
             y="248"
             fill={parts.TANA.color}
             fontSize="9"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
             fontWeight="bold"
@@ -1138,7 +1138,7 @@ function KonverterDiagram({ u, isDark }) {
             y="262"
             fill={parts.TANA.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.6"
           >
@@ -1180,7 +1180,7 @@ function KonverterDiagram({ u, isDark }) {
             y="322"
             fill={parts.VANNA.color}
             fontSize="7.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -1219,7 +1219,7 @@ function KonverterDiagram({ u, isDark }) {
             y="246"
             fill={parts.TRUNNION.color}
             fontSize="6"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.8"
           >
@@ -1260,7 +1260,7 @@ function KonverterDiagram({ u, isDark }) {
             y="282"
             fill={parts.CHIQARISH.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             opacity="0.8"
           >
             TAPHOLE
@@ -1284,7 +1284,7 @@ function KonverterDiagram({ u, isDark }) {
             y="380"
             fill={parts.SHLAKKOVSH.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.8"
           >
@@ -1314,7 +1314,7 @@ function KonverterDiagram({ u, isDark }) {
               y={lb.ly + 4}
               fill={parts[lb.key].color}
               fontSize="6.5"
-              fontFamily="'Share Tech Mono',monospace"
+              fontFamily="'Arial',san-serif"
               opacity="0.65"
             >
               {lb.key}
@@ -1534,7 +1534,7 @@ function ElektrPechDiagram({ u, isDark }) {
             y="155"
             fill={parts.TRANSFORMATOR.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -1545,7 +1545,7 @@ function ElektrPechDiagram({ u, isDark }) {
             y="167"
             fill={parts.TRANSFORMATOR.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.65"
           >
@@ -1573,7 +1573,7 @@ function ElektrPechDiagram({ u, isDark }) {
             y="134"
             fill={parts.SVOD.color}
             fontSize="8"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -1608,7 +1608,7 @@ function ElektrPechDiagram({ u, isDark }) {
               y="36"
               fill={parts[el.key].color}
               fontSize="8"
-              fontFamily="'Share Tech Mono',monospace"
+              fontFamily="'Arial',san-serif"
               textAnchor="middle"
               opacity="0.8"
             >
@@ -1658,7 +1658,7 @@ function ElektrPechDiagram({ u, isDark }) {
             y="240"
             fill={parts.STENA.color}
             fontSize="8.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -1669,7 +1669,7 @@ function ElektrPechDiagram({ u, isDark }) {
             y="255"
             fill={parts.STENA.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.6"
           >
@@ -1720,7 +1720,7 @@ function ElektrPechDiagram({ u, isDark }) {
             y="338"
             fill={parts.POD.color}
             fontSize="7.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -1761,7 +1761,7 @@ function ElektrPechDiagram({ u, isDark }) {
             y="282"
             fill={parts.TAPHOLE.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.8"
           >
@@ -1795,7 +1795,7 @@ function ElektrPechDiagram({ u, isDark }) {
             y="112"
             fill={parts.GAZOCHIK.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             opacity="0.8"
           >
             GAZ
@@ -1842,7 +1842,7 @@ function ElektrPechDiagram({ u, isDark }) {
               y="70"
               fill="#ffd60a"
               fontSize="6"
-              fontFamily="'Share Tech Mono',monospace"
+              fontFamily="'Arial',san-serif"
               textAnchor="middle"
               opacity="0.7"
             >
@@ -2036,7 +2036,7 @@ function ProkatDiagram({ u, isDark }) {
             y="246"
             fill={parts.MOTOR.color}
             fontSize="7"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -2047,7 +2047,7 @@ function ProkatDiagram({ u, isDark }) {
             y="258"
             fill={parts.MOTOR.color}
             fontSize="6"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.6"
           >
@@ -2069,7 +2069,7 @@ function ProkatDiagram({ u, isDark }) {
             y="182"
             fill={parts.MOTOR.color}
             fontSize="5.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.75"
           >
@@ -2118,7 +2118,7 @@ function ProkatDiagram({ u, isDark }) {
             y="56"
             fill={parts.PRESS_MEXANIZM.color}
             fontSize="8"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -2129,7 +2129,7 @@ function ProkatDiagram({ u, isDark }) {
             y="70"
             fill={parts.PRESS_MEXANIZM.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.65"
           >
@@ -2158,7 +2158,7 @@ function ProkatDiagram({ u, isDark }) {
             y="146"
             fill={parts.TAYANCHROLIK.color}
             fontSize="7.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -2208,7 +2208,7 @@ function ProkatDiagram({ u, isDark }) {
             y="184"
             fill={parts.USTKI_ROLIK.color}
             fontSize="7.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -2237,7 +2237,7 @@ function ProkatDiagram({ u, isDark }) {
             y="209"
             fill={parts.METALL_TASMA.color}
             fontSize="7.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -2304,7 +2304,7 @@ function ProkatDiagram({ u, isDark }) {
             y="236"
             fill={parts.PASTKI_ROLIK.color}
             fontSize="7.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -2333,7 +2333,7 @@ function ProkatDiagram({ u, isDark }) {
             y="274"
             fill={parts.TAYANCHROLIK.color}
             fontSize="7.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -2366,7 +2366,7 @@ function ProkatDiagram({ u, isDark }) {
             y="205"
             fill={parts.SOVUTISH.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             opacity="0.8"
           >
             SOVUTISH SUV
@@ -2408,7 +2408,7 @@ function ProkatDiagram({ u, isDark }) {
             y="188"
             fill={parts.KESUVCHI.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             opacity="0.8"
           >
             QAYCHI
@@ -2593,7 +2593,7 @@ function NasosDiagram({ u, isDark }) {
             y="195"
             fill={parts.INLET.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.8"
           >
@@ -2604,7 +2604,7 @@ function NasosDiagram({ u, isDark }) {
             y="207"
             fill={parts.INLET.color}
             fontSize="6"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.6"
           >
@@ -2632,7 +2632,7 @@ function NasosDiagram({ u, isDark }) {
             y="235"
             fill={parts.KORPUS.color}
             fontSize="7.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.8"
           >
@@ -2643,7 +2643,7 @@ function NasosDiagram({ u, isDark }) {
             y="248"
             fill={parts.KORPUS.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.6"
           >
@@ -2750,7 +2750,7 @@ function NasosDiagram({ u, isDark }) {
             y="108"
             fill={parts.OUTLET.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             opacity="0.8"
           >
             CHIQISH
@@ -2826,7 +2826,7 @@ function NasosDiagram({ u, isDark }) {
             y="308"
             fill={parts.MUFTA.color}
             fontSize="6"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.7"
           >
@@ -2867,7 +2867,7 @@ function NasosDiagram({ u, isDark }) {
             y="178"
             fill={parts.MOTOR.color}
             fontSize="8.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
             fontWeight="bold"
@@ -2879,7 +2879,7 @@ function NasosDiagram({ u, isDark }) {
             y="193"
             fill={parts.MOTOR.color}
             fontSize="7"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.65"
           >
@@ -2891,7 +2891,7 @@ function NasosDiagram({ u, isDark }) {
               y="222"
               fill="#ff2d55"
               fontSize="8"
-              fontFamily="'Share Tech Mono',monospace"
+              fontFamily="'Arial',san-serif"
               textAnchor="middle"
               opacity="0.7"
             >
@@ -2936,7 +2936,7 @@ function NasosDiagram({ u, isDark }) {
               y="310"
               fill="#ff2d55"
               fontSize="8"
-              fontFamily="'Share Tech Mono',monospace"
+              fontFamily="'Arial',san-serif"
               textAnchor="middle"
               opacity="0.8"
             >
@@ -3129,7 +3129,7 @@ function KranDiagram({ u, isDark }) {
             y="30"
             fill={parts.RELS.color}
             fontSize="7"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.8"
           >
@@ -3181,7 +3181,7 @@ function KranDiagram({ u, isDark }) {
             y="75"
             fill={parts.FERMA.color}
             fontSize="8"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -3192,7 +3192,7 @@ function KranDiagram({ u, isDark }) {
             y="88"
             fill={parts.FERMA.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.6"
           >
@@ -3252,7 +3252,7 @@ function KranDiagram({ u, isDark }) {
             y="108"
             fill={parts.YURISH_MOTOR.color}
             fontSize="5.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.75"
           >
@@ -3263,7 +3263,7 @@ function KranDiagram({ u, isDark }) {
             y="108"
             fill={parts.YURISH_MOTOR.color}
             fontSize="5.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.75"
           >
@@ -3303,7 +3303,7 @@ function KranDiagram({ u, isDark }) {
             y="154"
             fill={parts.KABIN.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.8"
           >
@@ -3355,7 +3355,7 @@ function KranDiagram({ u, isDark }) {
             y="122"
             fill={parts.TELEZKA.color}
             fontSize="7.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -3405,7 +3405,7 @@ function KranDiagram({ u, isDark }) {
             y="173"
             fill={parts.KOTARISH.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -3436,7 +3436,7 @@ function KranDiagram({ u, isDark }) {
             y="250"
             fill={parts.KANAT.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             opacity="0.75"
           >
             KANAT
@@ -3470,7 +3470,7 @@ function KranDiagram({ u, isDark }) {
             y="310"
             fill={parts.KRYUK.color}
             fontSize="7"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -3481,7 +3481,7 @@ function KranDiagram({ u, isDark }) {
             y="374"
             fill={parts.KRYUK.color}
             fontSize="6.5"
-            fontFamily="'Share Tech Mono',monospace"
+            fontFamily="'Arial',san-serif"
             textAnchor="middle"
             opacity="0.65"
           >
@@ -4227,7 +4227,7 @@ function KesishDiagram({ u, isDark }) {
           strokeWidth="1"
         />
         {/* Ekran ma'lumotlari */}
-        <g fontFamily="'Courier New',monospace" fontSize="7.5" fill="#00cc88">
+        <g fontFamily="'Courier New',san-serif" fontSize="7.5" fill="#00cc88">
           <text x="48" y="296">
             HOLAT : FAOL
           </text>
@@ -4269,7 +4269,7 @@ function KesishDiagram({ u, isDark }) {
           x="190"
           y="290"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="6"
           fill="#2a4a60"
         >
@@ -4291,7 +4291,7 @@ function KesishDiagram({ u, isDark }) {
             x="173"
             y="308"
             textAnchor="middle"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             fontSize="6"
             fill="#44aa55"
           >
@@ -4311,7 +4311,7 @@ function KesishDiagram({ u, isDark }) {
             x="203"
             y="308"
             textAnchor="middle"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             fontSize="6"
             fill="#aa4444"
           >
@@ -4331,7 +4331,7 @@ function KesishDiagram({ u, isDark }) {
             x="189"
             y="326"
             textAnchor="middle"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             fontSize="6"
             fill="#aaaa44"
           >
@@ -4373,7 +4373,7 @@ function KesishDiagram({ u, isDark }) {
           x="189"
           y="358"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="5.5"
           fill="#2a3e52"
         >
@@ -4400,7 +4400,7 @@ function KesishDiagram({ u, isDark }) {
           <text
             x="56"
             y="366"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             fontSize="6"
             fill="#2a5030"
           >
@@ -4426,7 +4426,7 @@ function KesishDiagram({ u, isDark }) {
           <text
             x="112"
             y="366"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             fontSize="6"
             fill="#504020"
           >
@@ -4437,7 +4437,7 @@ function KesishDiagram({ u, isDark }) {
           <text
             x="168"
             y="366"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             fontSize="6"
             fill="#402020"
           >
@@ -4460,7 +4460,7 @@ function KesishDiagram({ u, isDark }) {
           x="69"
           y="380"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="6"
           fill="#2a5060"
         >
@@ -4470,7 +4470,7 @@ function KesishDiagram({ u, isDark }) {
           x="69"
           y="389"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="8"
           fill="#00aacc"
           fontWeight="bold"
@@ -4562,7 +4562,7 @@ function KesishDiagram({ u, isDark }) {
           x="240"
           y="470"
           textAnchor="middle"
-          fontFamily="'Courier New',monospace"
+          fontFamily="'Courier New',san-serif"
           fontSize="13"
           fontWeight="bold"
           fill="#1e3855"
@@ -4574,7 +4574,7 @@ function KesishDiagram({ u, isDark }) {
           x="240"
           y="488"
           textAnchor="middle"
-          fontFamily="'Courier New',monospace"
+          fontFamily="'Courier New',san-serif"
           fontSize="9"
           fill="#162a40"
           letterSpacing="3"
@@ -4632,7 +4632,7 @@ function KesishDiagram({ u, isDark }) {
             />
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.48rem",
                 color: active?.id === p.id ? p.color : "#6b7280",
                 letterSpacing: "0.06em",
@@ -5690,7 +5690,7 @@ function RuloDiagram({ u, isDark }) {
           strokeWidth="1"
         />
         {/* Ekran matn */}
-        <g fontFamily="'Courier New',monospace" fontSize="6.5" fill="#00cc88">
+        <g fontFamily="'Courier New',san-serif" fontSize="6.5" fill="#00cc88">
           <text x="32" y="362" textAnchor="middle">
             HOLAT:FAOL
           </text>
@@ -5724,7 +5724,7 @@ function RuloDiagram({ u, isDark }) {
           x="18"
           y="407"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="5.5"
           fill="#44aa55"
         >
@@ -5744,7 +5744,7 @@ function RuloDiagram({ u, isDark }) {
           x="46"
           y="407"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="5.5"
           fill="#aa4444"
         >
@@ -5785,7 +5785,7 @@ function RuloDiagram({ u, isDark }) {
           x="32"
           y="436"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="5"
           fill="#2a3e52"
         >
@@ -5810,7 +5810,7 @@ function RuloDiagram({ u, isDark }) {
         <text
           x="24"
           y="452"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="5.5"
           fill="#2a5030"
         >
@@ -5820,7 +5820,7 @@ function RuloDiagram({ u, isDark }) {
         <text
           x="24"
           y="468"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="5.5"
           fill="#503020"
         >
@@ -5830,7 +5830,7 @@ function RuloDiagram({ u, isDark }) {
         <text
           x="24"
           y="484"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="5.5"
           fill="#402020"
         >
@@ -5922,7 +5922,7 @@ function RuloDiagram({ u, isDark }) {
           x="240"
           y="472"
           textAnchor="middle"
-          fontFamily="'Courier New',monospace"
+          fontFamily="'Courier New',san-serif"
           fontSize="13"
           fontWeight="bold"
           fill="#1e3855"
@@ -5934,7 +5934,7 @@ function RuloDiagram({ u, isDark }) {
           x="240"
           y="490"
           textAnchor="middle"
-          fontFamily="'Courier New',monospace"
+          fontFamily="'Courier New',san-serif"
           fontSize="9"
           fill="#162a40"
           letterSpacing="3"
@@ -5992,7 +5992,7 @@ function RuloDiagram({ u, isDark }) {
             />
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.48rem",
                 color: active?.id === p.id ? p.color : "#6b7280",
                 letterSpacing: "0.06em",
@@ -7420,7 +7420,7 @@ function IngichkaDiagram({ u, isDark }) {
           x="240"
           y="358"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="8"
           fill="#00d4ff"
         >
@@ -7430,7 +7430,7 @@ function IngichkaDiagram({ u, isDark }) {
           x="240"
           y="368"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="6"
           fill="#1a4060"
         >
@@ -7581,7 +7581,7 @@ function IngichkaDiagram({ u, isDark }) {
           stroke="#081828"
           strokeWidth="1"
         />
-        <g fontFamily="'Courier New',monospace" fontSize="6.5" fill="#00cc88">
+        <g fontFamily="'Courier New',san-serif" fontSize="6.5" fill="#00cc88">
           <text x="178" y="396">
             HOLAT : FAOL
           </text>
@@ -7632,7 +7632,7 @@ function IngichkaDiagram({ u, isDark }) {
             x="305"
             y="395"
             textAnchor="middle"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             fontSize="6"
             fill="#44aa55"
           >
@@ -7652,7 +7652,7 @@ function IngichkaDiagram({ u, isDark }) {
             x="305"
             y="410"
             textAnchor="middle"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             fontSize="6"
             fill="#aa4444"
           >
@@ -7672,7 +7672,7 @@ function IngichkaDiagram({ u, isDark }) {
             x="305"
             y="425"
             textAnchor="middle"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             fontSize="6"
             fill="#aaaa44"
           >
@@ -7692,7 +7692,7 @@ function IngichkaDiagram({ u, isDark }) {
             x="305"
             y="440"
             textAnchor="middle"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             fontSize="6"
             fill="#2a4a60"
           >
@@ -7734,7 +7734,7 @@ function IngichkaDiagram({ u, isDark }) {
           x="209"
           y="470"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="5.5"
           fill="#2a3e52"
         >
@@ -7760,7 +7760,7 @@ function IngichkaDiagram({ u, isDark }) {
           <text
             x="264"
             y="458"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             fontSize="5.5"
             fill="#2a5030"
           >
@@ -7770,7 +7770,7 @@ function IngichkaDiagram({ u, isDark }) {
           <text
             x="264"
             y="471"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             fontSize="5.5"
             fill="#503020"
           >
@@ -7780,7 +7780,7 @@ function IngichkaDiagram({ u, isDark }) {
           <text
             x="264"
             y="484"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             fontSize="5.5"
             fill="#402020"
           >
@@ -7826,7 +7826,7 @@ function IngichkaDiagram({ u, isDark }) {
           x="240"
           y="552"
           textAnchor="middle"
-          fontFamily="'Courier New',monospace"
+          fontFamily="'Courier New',san-serif"
           fontSize="13"
           fontWeight="bold"
           fill="#1e3855"
@@ -7838,7 +7838,7 @@ function IngichkaDiagram({ u, isDark }) {
           x="240"
           y="570"
           textAnchor="middle"
-          fontFamily="'Courier New',monospace"
+          fontFamily="'Courier New',san-serif"
           fontSize="13"
           fontWeight="bold"
           fill="#1e3855"
@@ -7850,7 +7850,7 @@ function IngichkaDiagram({ u, isDark }) {
           x="240"
           y="588"
           textAnchor="middle"
-          fontFamily="'Courier New',monospace"
+          fontFamily="'Courier New',san-serif"
           fontSize="9"
           fill="#162a40"
           letterSpacing="3"
@@ -7908,7 +7908,7 @@ function IngichkaDiagram({ u, isDark }) {
             />
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.48rem",
                 color: active?.id === p.id ? p.color : "#6b7280",
                 letterSpacing: "0.06em",
@@ -8203,7 +8203,7 @@ function TransportDiagram({ u, isDark }) {
             y="184"
             fill="#ff9900"
             fontSize="8"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -8242,7 +8242,7 @@ function TransportDiagram({ u, isDark }) {
             y="232"
             fill="#662200"
             fontSize="6"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.7"
           >
@@ -8313,7 +8313,7 @@ function TransportDiagram({ u, isDark }) {
             y="292"
             fill="#00d4ff"
             fontSize="7"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.7"
           >
@@ -8379,7 +8379,7 @@ function TransportDiagram({ u, isDark }) {
             y="162"
             fill={parts.TORMOZ.color}
             fontSize="6.5"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.8"
           >
@@ -8401,7 +8401,7 @@ function TransportDiagram({ u, isDark }) {
           y="132"
           fill="#1a4060"
           fontSize="7"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           opacity="0.8"
         >
           KIRISH
@@ -8419,7 +8419,7 @@ function TransportDiagram({ u, isDark }) {
           y="132"
           fill="#442200"
           fontSize="7"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           opacity="0.8"
         >
           CHIQISH
@@ -8469,7 +8469,7 @@ function TransportDiagram({ u, isDark }) {
           x="240"
           y="322"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="11"
           fontWeight="bold"
           fill="#1e3855"
@@ -8481,7 +8481,7 @@ function TransportDiagram({ u, isDark }) {
           x="240"
           y="336"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="8"
           fill="#162a40"
           letterSpacing="2"
@@ -8732,7 +8732,7 @@ function SensorDiagram({ u, isDark }) {
             y="70"
             fill={parts.SKANER.color}
             fontSize="7"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -8802,7 +8802,7 @@ function SensorDiagram({ u, isDark }) {
             y="186"
             fill={parts.KAMERA.color}
             fontSize="6.5"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.8"
           >
@@ -8870,7 +8870,7 @@ function SensorDiagram({ u, isDark }) {
             y="186"
             fill={parts.MARKALASH.color}
             fontSize="6.5"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.8"
           >
@@ -8946,7 +8946,7 @@ function SensorDiagram({ u, isDark }) {
             y="208"
             fill="#ff9900"
             fontSize="7.5"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.8"
           >
@@ -8981,7 +8981,7 @@ function SensorDiagram({ u, isDark }) {
             strokeWidth="1.2"
           />
           {/* Ekran */}
-          <g fontFamily="monospace" fontSize="6" fill="#00cc88">
+          <g fontFamily="san-serif" fontSize="6" fill="#00cc88">
             <text x="160" y="282">
               HOLAT : FAOL
             </text>
@@ -9031,7 +9031,7 @@ function SensorDiagram({ u, isDark }) {
             y="300"
             fill="#0e2030"
             fontSize="5.5"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
           >
             SIEMENS
@@ -9041,7 +9041,7 @@ function SensorDiagram({ u, isDark }) {
             y="310"
             fill="#00d4ff"
             fontSize="6.5"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
           >
             S7-1500
@@ -9081,7 +9081,7 @@ function SensorDiagram({ u, isDark }) {
           x="240"
           y="358"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="11"
           fontWeight="bold"
           fill="#1e3855"
@@ -9093,7 +9093,7 @@ function SensorDiagram({ u, isDark }) {
           x="240"
           y="372"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="8"
           fill="#162a40"
           letterSpacing="2"
@@ -9275,7 +9275,7 @@ function ManipulatorDiagram({ u, isDark }) {
             y="218"
             fill={parts.STOL.color}
             fontSize="7.5"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -9297,7 +9297,7 @@ function ManipulatorDiagram({ u, isDark }) {
             y="188"
             fill="#ff9900"
             fontSize="6"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.8"
           >
@@ -9332,7 +9332,7 @@ function ManipulatorDiagram({ u, isDark }) {
           y="260"
           fill="#ff4500"
           fontSize="6.5"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           textAnchor="middle"
           opacity="0.8"
           transform="rotate(-90, 291, 200)"
@@ -9409,7 +9409,7 @@ function ManipulatorDiagram({ u, isDark }) {
             y="210"
             fill={parts.SHTANGA.color}
             fontSize="6.5"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.8"
           >
@@ -9495,7 +9495,7 @@ function ManipulatorDiagram({ u, isDark }) {
             y="158"
             fill={parts.GIDROSILINDR.color}
             fontSize="7"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.8"
           >
@@ -9506,7 +9506,7 @@ function ManipulatorDiagram({ u, isDark }) {
             y="170"
             fill={parts.GIDROSILINDR.color}
             fontSize="6"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.6"
           >
@@ -9559,7 +9559,7 @@ function ManipulatorDiagram({ u, isDark }) {
             y="108"
             fill={parts.QISQICH.color}
             fontSize="6.5"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -9570,7 +9570,7 @@ function ManipulatorDiagram({ u, isDark }) {
             y="120"
             fill={parts.QISQICH.color}
             fontSize="5.5"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.6"
           >
@@ -9599,7 +9599,7 @@ function ManipulatorDiagram({ u, isDark }) {
           x="240"
           y="330"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="11"
           fontWeight="bold"
           fill="#1e3855"
@@ -9611,7 +9611,7 @@ function ManipulatorDiagram({ u, isDark }) {
           x="240"
           y="346"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="8"
           fill="#162a40"
           letterSpacing="2"
@@ -9862,7 +9862,7 @@ function PressDiagram({ u, isDark }) {
             y="20"
             fill={parts.SILINDR.color}
             fontSize="7.5"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.7"
           >
@@ -9922,7 +9922,7 @@ function PressDiagram({ u, isDark }) {
             y="162"
             fill={parts.USTKI_BALKA.color}
             fontSize="8"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -10007,7 +10007,7 @@ function PressDiagram({ u, isDark }) {
             y="197"
             fill={parts.USTKI_ZHTAMP.color}
             fontSize="7.5"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.8"
           >
@@ -10080,7 +10080,7 @@ function PressDiagram({ u, isDark }) {
             y="264"
             fill={parts.PASTKI_ZHTAMP.color}
             fontSize="7.5"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -10133,7 +10133,7 @@ function PressDiagram({ u, isDark }) {
             textAnchor="middle"
             fill={parts.GIDROSTANSIYA.color}
             fontSize="6.5"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             opacity="0.7"
           >
             GIDROSTANSIYA: {u.quvvat || 200} kW · 320 BAR · 480 L/MIN
@@ -10161,7 +10161,7 @@ function PressDiagram({ u, isDark }) {
           x="240"
           y="358"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="11"
           fontWeight="bold"
           fill="#1e3855"
@@ -10173,7 +10173,7 @@ function PressDiagram({ u, isDark }) {
           x="240"
           y="372"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="8"
           fill="#162a40"
           letterSpacing="2"
@@ -10339,7 +10339,7 @@ function SovitishDiagram({ u, isDark }) {
             y="204"
             fill={parts.TOKNOS.color}
             fontSize="6.5"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.7"
           >
@@ -10387,7 +10387,7 @@ function SovitishDiagram({ u, isDark }) {
             y="112"
             fill="#ff6600"
             fontSize="7"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             opacity="0.8"
           >
             900°C
@@ -10397,7 +10397,7 @@ function SovitishDiagram({ u, isDark }) {
             y="112"
             fill="#4488aa"
             fontSize="7"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             opacity="0.8"
           >
             80°C
@@ -10549,7 +10549,7 @@ function SovitishDiagram({ u, isDark }) {
                 y="68"
                 fill={parts.HARORAT_SENSOR.color}
                 fontSize="6"
-                fontFamily="monospace"
+                fontFamily="san-serif"
                 textAnchor="middle"
                 opacity="0.75"
               >
@@ -10573,7 +10573,7 @@ function SovitishDiagram({ u, isDark }) {
           y="136"
           fill="#662200"
           fontSize="7"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           opacity="0.8"
         >
           900°C
@@ -10591,7 +10591,7 @@ function SovitishDiagram({ u, isDark }) {
           y="136"
           fill="#224455"
           fontSize="7"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           opacity="0.8"
         >
           ↓80°C
@@ -10639,7 +10639,7 @@ function SovitishDiagram({ u, isDark }) {
           x="240"
           y="302"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="11"
           fontWeight="bold"
           fill="#1e3855"
@@ -10651,7 +10651,7 @@ function SovitishDiagram({ u, isDark }) {
           x="240"
           y="318"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="8"
           fill="#162a40"
           letterSpacing="2"
@@ -11063,7 +11063,7 @@ function TekislashDiagram({ u, isDark }) {
             y="286"
             fill={parts.MOTOR.color}
             fontSize="7"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.8"
           >
@@ -11125,7 +11125,7 @@ function TekislashDiagram({ u, isDark }) {
           y="92"
           fill="#3a5868"
           fontSize="7"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           opacity="0.8"
         >
           → KIRISH
@@ -11135,7 +11135,7 @@ function TekislashDiagram({ u, isDark }) {
           y="92"
           fill="#3a5868"
           fontSize="7"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           opacity="0.8"
         >
           CHIQISH →
@@ -11162,7 +11162,7 @@ function TekislashDiagram({ u, isDark }) {
           x="240"
           y="316"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="11"
           fontWeight="bold"
           fill="#1e3855"
@@ -11174,7 +11174,7 @@ function TekislashDiagram({ u, isDark }) {
           x="240"
           y="330"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="8"
           fill="#162a40"
           letterSpacing="2"
@@ -11338,7 +11338,7 @@ function QadoqlashDiagram({ u, isDark }) {
             y="28"
             fill={parts.KRAN_HOOK.color}
             fontSize="7"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -11424,7 +11424,7 @@ function QadoqlashDiagram({ u, isDark }) {
             y="188"
             fill={parts.PAKET.color}
             fontSize="8"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -11435,7 +11435,7 @@ function QadoqlashDiagram({ u, isDark }) {
             y="200"
             fill={parts.PAKET.color}
             fontSize="6.5"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.6"
           >
@@ -11517,7 +11517,7 @@ function QadoqlashDiagram({ u, isDark }) {
             y="278"
             fill={parts.BOMLASH.color}
             fontSize="6.5"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.8"
           >
@@ -11572,7 +11572,7 @@ function QadoqlashDiagram({ u, isDark }) {
             y="226"
             fill={parts.STOL.color}
             fontSize="7.5"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.85"
           >
@@ -11651,7 +11651,7 @@ function QadoqlashDiagram({ u, isDark }) {
             y="278"
             fill={parts.YORLIQ.color}
             fontSize="6"
-            fontFamily="monospace"
+            fontFamily="san-serif"
             textAnchor="middle"
             opacity="0.8"
           >
@@ -11680,7 +11680,7 @@ function QadoqlashDiagram({ u, isDark }) {
           x="240"
           y="320"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="11"
           fontWeight="bold"
           fill="#1e3855"
@@ -11692,7 +11692,7 @@ function QadoqlashDiagram({ u, isDark }) {
           x="240"
           y="336"
           textAnchor="middle"
-          fontFamily="monospace"
+          fontFamily="san-serif"
           fontSize="8"
           fill="#162a40"
           letterSpacing="2"
@@ -11980,7 +11980,7 @@ function PeriodSelector({ period, onChange, color }) {
         value={period}
         onChange={(e) => onChange(e.target.value)}
         sx={{
-          fontFamily: "'Share Tech Mono', monospace",
+          fontFamily: "'Arial', san-serif",
           fontSize: "0.68rem",
           color,
           "& .MuiOutlinedInput-notchedOutline": { borderColor: `${color}40` },
@@ -11994,7 +11994,7 @@ function PeriodSelector({ period, onChange, color }) {
             key={o.value}
             value={o.value}
             sx={{
-              fontFamily: "'Share Tech Mono', monospace",
+              fontFamily: "'Arial', san-serif",
               fontSize: "0.68rem",
             }}
           >
@@ -12014,7 +12014,7 @@ function HeatSelector({ heats, selectedId, onChange, color }) {
         value={selectedId ?? ""}
         onChange={(e) => onChange(e.target.value)}
         sx={{
-          fontFamily: "'Share Tech Mono', monospace",
+          fontFamily: "'Arial', san-serif",
           fontSize: "0.68rem",
           color,
           "& .MuiOutlinedInput-notchedOutline": { borderColor: `${color}40` },
@@ -12028,7 +12028,7 @@ function HeatSelector({ heats, selectedId, onChange, color }) {
             key={h.heatId}
             value={h.heatId}
             sx={{
-              fontFamily: "'Share Tech Mono', monospace",
+              fontFamily: "'Arial', san-serif",
               fontSize: "0.68rem",
             }}
           >
@@ -12073,7 +12073,7 @@ function StatCard({
         <Typography sx={{ fontSize: "1.1rem" }}>{icon}</Typography>
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono', monospace",
+            fontFamily: "'Arial', san-serif",
             fontSize: "0.6rem",
             color: "#8896a5",
             letterSpacing: "0.1em",
@@ -12086,7 +12086,7 @@ function StatCard({
       <Box sx={{ display: "flex", alignItems: "baseline", gap: 0.5 }}>
         <Typography
           sx={{
-            fontFamily: "'Orbitron', monospace",
+            fontFamily: "'Arial', san-serif",
             fontSize: big ? "1.8rem" : "1.3rem",
             fontWeight: 700,
             color,
@@ -12098,7 +12098,7 @@ function StatCard({
         {unit && (
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono', monospace",
+              fontFamily: "'Arial', san-serif",
               fontSize: "0.65rem",
               color: "#8896a5",
             }}
@@ -12118,7 +12118,7 @@ function SectionTitle({ children, color = "#00d4ff" }) {
       <Box sx={{ width: 3, height: 20, background: color, borderRadius: 2 }} />
       <Typography
         sx={{
-          fontFamily: "'Share Tech Mono', monospace",
+          fontFamily: "'Arial', san-serif",
           fontSize: "0.72rem",
           color,
           letterSpacing: "0.12em",
@@ -12146,7 +12146,7 @@ function InfoRow({ label, value, color = "#c8d8e8" }) {
     >
       <Typography
         sx={{
-          fontFamily: "'Share Tech Mono', monospace",
+          fontFamily: "'Arial', san-serif",
           fontSize: "0.68rem",
           color: "#8896a5",
         }}
@@ -12155,7 +12155,7 @@ function InfoRow({ label, value, color = "#c8d8e8" }) {
       </Typography>
       <Typography
         sx={{
-          fontFamily: "'Share Tech Mono', monospace",
+          fontFamily: "'Arial', san-serif",
           fontSize: "0.72rem",
           fontWeight: 600,
           color,
@@ -12183,7 +12183,7 @@ function ChemCard({ code, value, color }) {
     >
       <Typography
         sx={{
-          fontFamily: "'Share Tech Mono', monospace",
+          fontFamily: "'Arial', san-serif",
           fontSize: "0.62rem",
           color: "#8896a5",
           mb: 0.2,
@@ -12193,7 +12193,7 @@ function ChemCard({ code, value, color }) {
       </Typography>
       <Typography
         sx={{
-          fontFamily: "'Orbitron', monospace",
+          fontFamily: "'Arial', san-serif",
           fontSize: "0.72rem",
           fontWeight: 700,
           color,
@@ -12212,7 +12212,7 @@ function TempChart({ data, c, isDark, extraLines = [] }) {
       <Box sx={{ py: 4, textAlign: "center" }}>
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono', monospace",
+            fontFamily: "'Arial', san-serif",
             fontSize: "0.7rem",
             color: "#4b5563",
           }}
@@ -12239,7 +12239,7 @@ function TempChart({ data, c, isDark, extraLines = [] }) {
             border: `1px solid ${c}50`,
             borderRadius: 8,
             fontSize: 12,
-            fontFamily: "monospace",
+            fontFamily: "san-serif",
           }}
           formatter={(v, n) => [v, n]}
           labelFormatter={(_, p) => p?.[0]?.payload?.t || ""}
@@ -12553,7 +12553,7 @@ function DelaysBlock({ heat }) {
           />
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono', monospace",
+              fontFamily: "'Arial', san-serif",
               fontSize: "0.72rem",
               color: "#ffd60a",
               letterSpacing: "0.12em",
@@ -12575,7 +12575,7 @@ function DelaysBlock({ heat }) {
         >
           <Typography
             sx={{
-              fontFamily: "'Orbitron', monospace",
+              fontFamily: "'Arial', san-serif",
               fontSize: "0.65rem",
               color: "#ffd60a",
             }}
@@ -12602,7 +12602,7 @@ function DelaysBlock({ heat }) {
             <Typography sx={{ fontSize: "0.7rem" }}>⚠️</Typography>
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: "0.62rem",
                 color: "#ff2d55",
               }}
@@ -12633,7 +12633,7 @@ function DelaysBlock({ heat }) {
             <Box>
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono', monospace",
+                  fontFamily: "'Arial', san-serif",
                   fontSize: "0.62rem",
                   color: info.color,
                 }}
@@ -12642,7 +12642,7 @@ function DelaysBlock({ heat }) {
               </Typography>
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono', monospace",
+                  fontFamily: "'Arial', san-serif",
                   fontSize: "0.55rem",
                   color: "#8896a5",
                 }}
@@ -12715,7 +12715,7 @@ function DelaysBlock({ heat }) {
                 >
                   <Typography
                     sx={{
-                      fontFamily: "'Share Tech Mono', monospace",
+                      fontFamily: "'Arial', san-serif",
                       fontSize: "0.72rem",
                       fontWeight: 600,
                       color: info.color,
@@ -12735,7 +12735,7 @@ function DelaysBlock({ heat }) {
                     >
                       <Typography
                         sx={{
-                          fontFamily: "'Share Tech Mono', monospace",
+                          fontFamily: "'Arial', san-serif",
                           fontSize: "0.52rem",
                           color: info.color,
                         }}
@@ -12747,7 +12747,7 @@ function DelaysBlock({ heat }) {
                 </Box>
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono', monospace",
+                    fontFamily: "'Arial', san-serif",
                     fontSize: "0.62rem",
                     color: "#8896a5",
                     mb: 0.3,
@@ -12758,7 +12758,7 @@ function DelaysBlock({ heat }) {
                 {d.delayReason?.trim() && (
                   <Typography
                     sx={{
-                      fontFamily: "'Share Tech Mono', monospace",
+                      fontFamily: "'Arial', san-serif",
                       fontSize: "0.62rem",
                       color: "#c8d8e8",
                     }}
@@ -12772,7 +12772,7 @@ function DelaysBlock({ heat }) {
               <Box sx={{ textAlign: "right", flexShrink: 0 }}>
                 <Typography
                   sx={{
-                    fontFamily: "'Orbitron', monospace",
+                    fontFamily: "'Arial', san-serif",
                     fontSize: "0.75rem",
                     fontWeight: 700,
                     color:
@@ -12787,7 +12787,7 @@ function DelaysBlock({ heat }) {
                 </Typography>
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono', monospace",
+                    fontFamily: "'Arial', san-serif",
                     fontSize: "0.55rem",
                     color: "#8896a5",
                     mt: 0.2,
@@ -12838,7 +12838,7 @@ function MaterialsBlock({ heat, c }) {
           >
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: "0.65rem",
                 color: "#8896a5",
                 mb: 0.3,
@@ -12848,7 +12848,7 @@ function MaterialsBlock({ heat, c }) {
             </Typography>
             <Typography
               sx={{
-                fontFamily: "'Orbitron', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: "0.78rem",
                 fontWeight: 700,
                 color: c,
@@ -12882,7 +12882,7 @@ function HeatsTable({ heats, c, isDark, columns }) {
               >
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono', monospace",
+                    fontFamily: "'Arial', san-serif",
                     fontSize: "0.65rem",
                     color: "#8896a5",
                     whiteSpace: "nowrap",
@@ -12919,8 +12919,8 @@ function HeatsTable({ heats, c, isDark, columns }) {
                   <Typography
                     sx={{
                       fontFamily: col.mono
-                        ? "'Share Tech Mono', monospace"
-                        : "'Orbitron', monospace",
+                        ? "'Arial', san-serif"
+                        : "'Arial', san-serif",
                       fontSize: "0.72rem",
                       color: col.color ?? "#c8d8e8",
                       fontWeight: col.bold ? 700 : 400,
@@ -13137,7 +13137,7 @@ function EAFStatsTab({ uskuna, c, isDark }) {
         <Typography sx={{ fontSize: "2rem", mb: 1 }}>⚠️</Typography>
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.75rem",
             color: "#ff2d55",
           }}
@@ -13172,7 +13172,7 @@ function EAFStatsTab({ uskuna, c, isDark }) {
           />
           <Typography
             sx={{
-              fontFamily: "'Orbitron',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.85rem",
               color: c,
               letterSpacing: "0.15em",
@@ -13191,7 +13191,7 @@ function EAFStatsTab({ uskuna, c, isDark }) {
           >
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.65rem",
                 color: c,
               }}
@@ -13293,7 +13293,7 @@ function EAFStatsTab({ uskuna, c, isDark }) {
               />
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "0.72rem",
                   color: c,
                   letterSpacing: "0.12em",
@@ -13310,7 +13310,7 @@ function EAFStatsTab({ uskuna, c, isDark }) {
             />
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.62rem",
                 color: "#8896a5",
               }}
@@ -13392,7 +13392,7 @@ function EAFStatsTab({ uskuna, c, isDark }) {
               >
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.65rem",
                     color: "#8896a5",
                     mb: 2,
@@ -13859,7 +13859,7 @@ function LRFStatsTab({ c, isDark }) {
         <Typography sx={{ fontSize: "2rem", mb: 1 }}>⚠️</Typography>
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.75rem",
             color: "#ff2d55",
           }}
@@ -13893,7 +13893,7 @@ function LRFStatsTab({ c, isDark }) {
           />
           <Typography
             sx={{
-              fontFamily: "'Orbitron',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.85rem",
               color: c,
               letterSpacing: "0.15em",
@@ -13912,7 +13912,7 @@ function LRFStatsTab({ c, isDark }) {
           >
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.65rem",
                 color: c,
               }}
@@ -14010,7 +14010,7 @@ function LRFStatsTab({ c, isDark }) {
               />
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "0.72rem",
                   color: c,
                   letterSpacing: "0.12em",
@@ -14092,7 +14092,7 @@ function LRFStatsTab({ c, isDark }) {
               >
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.65rem",
                     color: "#8896a5",
                     mb: 2,
@@ -14442,7 +14442,7 @@ function TSCStatsTab({ c, isDark }) {
         <Typography sx={{ fontSize: "2rem", mb: 1 }}>⚠️</Typography>
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.75rem",
             color: "#ff2d55",
           }}
@@ -14476,7 +14476,7 @@ function TSCStatsTab({ c, isDark }) {
           />
           <Typography
             sx={{
-              fontFamily: "'Orbitron',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.85rem",
               color: c,
               letterSpacing: "0.15em",
@@ -14495,7 +14495,7 @@ function TSCStatsTab({ c, isDark }) {
           >
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.65rem",
                 color: c,
               }}
@@ -14592,7 +14592,7 @@ function TSCStatsTab({ c, isDark }) {
               />
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "0.72rem",
                   color: c,
                   letterSpacing: "0.12em",
@@ -14691,7 +14691,7 @@ function TSCStatsTab({ c, isDark }) {
               >
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.65rem",
                     color: "#8896a5",
                     mb: 2,
@@ -14754,7 +14754,7 @@ function TSCStatsTab({ c, isDark }) {
                     >
                       <Typography
                         sx={{
-                          fontFamily: "'Share Tech Mono',monospace",
+                          fontFamily: "'Arial',san-serif",
                           fontSize: "0.65rem",
                           color: "#8896a5",
                           whiteSpace: "nowrap",
@@ -14782,7 +14782,7 @@ function TSCStatsTab({ c, isDark }) {
                       >
                         <Typography
                           sx={{
-                            fontFamily: "'Orbitron',monospace",
+                            fontFamily: "'Arial',san-serif",
                             fontSize: "0.72rem",
                             color: c,
                             fontWeight: 700,
@@ -14799,7 +14799,7 @@ function TSCStatsTab({ c, isDark }) {
                       >
                         <Typography
                           sx={{
-                            fontFamily: "'Share Tech Mono',monospace",
+                            fontFamily: "'Arial',san-serif",
                             fontSize: "0.72rem",
                             color: "#c8d8e8",
                           }}
@@ -14815,7 +14815,7 @@ function TSCStatsTab({ c, isDark }) {
                       >
                         <Typography
                           sx={{
-                            fontFamily: "'Share Tech Mono',monospace",
+                            fontFamily: "'Arial',san-serif",
                             fontSize: "0.72rem",
                             color: "#8896a5",
                           }}
@@ -14831,7 +14831,7 @@ function TSCStatsTab({ c, isDark }) {
                       >
                         <Typography
                           sx={{
-                            fontFamily: "'Orbitron',monospace",
+                            fontFamily: "'Arial',san-serif",
                             fontSize: "0.72rem",
                             color: "#00e676",
                             fontWeight: 700,
@@ -14848,7 +14848,7 @@ function TSCStatsTab({ c, isDark }) {
                       >
                         <Typography
                           sx={{
-                            fontFamily: "'Share Tech Mono',monospace",
+                            fontFamily: "'Arial',san-serif",
                             fontSize: "0.68rem",
                             color: "#8896a5",
                             whiteSpace: "nowrap",
@@ -15088,7 +15088,7 @@ function VODStatsTab({ c, isDark }) {
         <Typography sx={{ fontSize: "2rem", mb: 1 }}>⚠️</Typography>
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.75rem",
             color: "#ff2d55",
           }}
@@ -15122,7 +15122,7 @@ function VODStatsTab({ c, isDark }) {
           />
           <Typography
             sx={{
-              fontFamily: "'Orbitron',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.85rem",
               color: c,
               letterSpacing: "0.15em",
@@ -15141,7 +15141,7 @@ function VODStatsTab({ c, isDark }) {
           >
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.65rem",
                 color: c,
               }}
@@ -15230,7 +15230,7 @@ function VODStatsTab({ c, isDark }) {
             <Typography
               component="span"
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.62rem",
                 color: "#8896a5",
                 ml: 1,
@@ -15324,7 +15324,7 @@ function VODStatsTab({ c, isDark }) {
               >
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.65rem",
                     color: "#8896a5",
                     mb: 2,
@@ -15573,7 +15573,7 @@ export default function UskunaDetailPage() {
       <Box sx={{ p: 4, textAlign: "center" }}>
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             color: "text.secondary",
           }}
         >
@@ -15652,7 +15652,7 @@ export default function UskunaDetailPage() {
 
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.62rem",
             color: "text.secondary",
           }}
@@ -15662,7 +15662,7 @@ export default function UskunaDetailPage() {
 
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.62rem",
             color: "divider",
           }}
@@ -15672,7 +15672,7 @@ export default function UskunaDetailPage() {
 
         <Typography
           sx={{
-            fontFamily: "'Orbitron',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.65rem",
             color: c,
             letterSpacing: "0.1em",
@@ -15683,7 +15683,7 @@ export default function UskunaDetailPage() {
 
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.62rem",
             color: "text.primary",
             ml: 0.5,
@@ -15702,7 +15702,7 @@ export default function UskunaDetailPage() {
           sx={{
             height: 20,
             fontSize: "0.58rem",
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             bgcolor: `${c}18`,
             color: c,
             border: `1px solid ${c}40`,
@@ -15719,7 +15719,7 @@ export default function UskunaDetailPage() {
               fontSize: "0.58rem",
               bgcolor: `${c}20`,
               color: c,
-              fontFamily: "monospace",
+              fontFamily: "san-serif",
             }}
           />
         )}
@@ -15739,7 +15739,7 @@ export default function UskunaDetailPage() {
           "& .MuiTab-root": {
             fontSize: "1rem",
             minHeight: 40,
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             letterSpacing: "0.06em",
           },
         }}
@@ -15783,7 +15783,7 @@ export default function UskunaDetailPage() {
                   >
                     <Typography
                       sx={{
-                        fontFamily: "'Share Tech Mono',monospace",
+                        fontFamily: "'Arial',san-serif",
                         fontSize: "0.6rem",
                         color: "text.secondary",
                         letterSpacing: "0.1em",
@@ -15793,7 +15793,7 @@ export default function UskunaDetailPage() {
                     </Typography>
                     <Typography
                       sx={{
-                        fontFamily: "'Orbitron',monospace",
+                        fontFamily: "'Arial',san-serif",
                         fontSize: "1.5rem",
                         fontWeight: 700,
                         color: samColor,
@@ -15868,7 +15868,7 @@ export default function UskunaDetailPage() {
                         </Typography>
                         <Typography
                           sx={{
-                            fontFamily: "'Share Tech Mono',monospace",
+                            fontFamily: "'Arial',san-serif",
                             fontSize: "1rem",
                             fontWeight: 700,
                             color: m.c,
@@ -15878,7 +15878,7 @@ export default function UskunaDetailPage() {
                         </Typography>
                         <Typography
                           sx={{
-                            fontFamily: "'Share Tech Mono',monospace",
+                            fontFamily: "'Arial',san-serif",
                             fontSize: "0.5rem",
                             color: "text.disabled",
                             letterSpacing: "0.08em",
@@ -15898,7 +15898,7 @@ export default function UskunaDetailPage() {
               <Paper sx={{ p: 2, border: `1px solid ${c}25`, height: "100%" }}>
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.6rem",
                     color: "#6b7280",
                     mb: 1.5,
@@ -15933,7 +15933,7 @@ export default function UskunaDetailPage() {
                   >
                     <Typography
                       sx={{
-                        fontFamily: "'Share Tech Mono',monospace",
+                        fontFamily: "'Arial',san-serif",
                         fontSize: "0.65rem",
                         color: "text.secondary",
                         minWidth: 100,
@@ -15943,7 +15943,7 @@ export default function UskunaDetailPage() {
                     </Typography>
                     <Typography
                       sx={{
-                        fontFamily: "'Share Tech Mono',monospace",
+                        fontFamily: "'Arial',san-serif",
                         fontSize: "0.65rem",
                         color: c,
                         fontWeight: 600,
@@ -15969,7 +15969,7 @@ export default function UskunaDetailPage() {
           <Paper sx={{ p: 2.5, maxWidth: 800, border: `1px solid ${c}25` }}>
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.62rem",
                 color: "text.secondary",
                 mb: 2,
@@ -16066,7 +16066,7 @@ export default function UskunaDetailPage() {
                   </Typography>
                   <Typography
                     sx={{
-                      fontFamily: "'Share Tech Mono',monospace",
+                      fontFamily: "'Arial',san-serif",
                       fontSize: "0.6rem",
                       color: "text.secondary",
                     }}

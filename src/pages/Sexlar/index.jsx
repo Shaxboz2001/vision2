@@ -976,7 +976,7 @@
 //         strokeLinecap="round"
 //         markerEnd="url(#arr07c)"
 //       />
-//       <text x="1" y="42" fontSize="3.5" fill="#a0aec0" fontFamily="monospace">
+//       <text x="1" y="42" fontSize="3.5" fill="#a0aec0" fontFamily="san-serif">
 //         IN
 //       </text>
 //       <path
@@ -986,7 +986,7 @@
 //         strokeLinecap="round"
 //         markerEnd="url(#arr07c)"
 //       />
-//       <text x="95" y="42" fontSize="3.5" fill="#a0aec0" fontFamily="monospace">
+//       <text x="95" y="42" fontSize="3.5" fill="#a0aec0" fontFamily="san-serif">
 //         OUT
 //       </text>
 
@@ -1102,7 +1102,7 @@
 //             >
 //               <Typography
 //                 sx={{
-//                   fontFamily: "'Share Tech Mono',monospace",
+//                   fontFamily: "'Arial',san-serif",
 //                   fontSize: "0.55rem",
 //                   color: "text.secondary",
 //                   letterSpacing: "0.1em",
@@ -1114,7 +1114,7 @@
 //               {typeof s.v === "string" || typeof s.v === "number" ? (
 //                 <Typography
 //                   sx={{
-//                     fontFamily: "'Share Tech Mono',monospace",
+//                     fontFamily: "'Arial',san-serif",
 //                     fontSize: "0.9rem",
 //                     color: s.c || "text.primary",
 //                   }}
@@ -1133,7 +1133,7 @@
 //         <Grid item xs={12} md={6}>
 //           <Typography
 //             sx={{
-//               fontFamily: "'Share Tech Mono',monospace",
+//               fontFamily: "'Arial',san-serif",
 //               fontSize: "0.6rem",
 //               color: "text.secondary",
 //               letterSpacing: "0.15em",
@@ -1156,7 +1156,7 @@
 //             >
 //               <Typography
 //                 sx={{
-//                   fontFamily: "'Share Tech Mono',monospace",
+//                   fontFamily: "'Arial',san-serif",
 //                   fontSize: "0.65rem",
 //                   color: "secondary.main",
 //                   minWidth: 70,
@@ -1172,7 +1172,7 @@
 //               <StatusChip holat={u.holat} />
 //               <Typography
 //                 sx={{
-//                   fontFamily: "'Share Tech Mono',monospace",
+//                   fontFamily: "'Arial',san-serif",
 //                   fontSize: "0.65rem",
 //                   color: "text.secondary",
 //                 }}
@@ -1209,7 +1209,7 @@
 //                   {u.live && (
 //                     <Typography
 //                       sx={{
-//                         fontFamily: "'Share Tech Mono',monospace",
+//                         fontFamily: "'Arial',san-serif",
 //                         fontSize: "0.55rem",
 //                         color: "#00e676",
 //                         px: 0.5,
@@ -1226,7 +1226,7 @@
 
 //                 <Typography
 //                   sx={{
-//                     fontFamily: "'Share Tech Mono',monospace",
+//                     fontFamily: "'Arial',san-serif",
 //                     fontSize: "0.62rem",
 //                     color: "text.secondary",
 //                     mt: 0.2,
@@ -1240,7 +1240,7 @@
 //               <Box sx={{ display: "flex", alignItems: "center", gap: 1.2 }}>
 //                 <Typography
 //                   sx={{
-//                     fontFamily: "'Share Tech Mono',monospace",
+//                     fontFamily: "'Arial',san-serif",
 //                     fontSize: "0.72rem",
 //                     color:
 //                       u.harorat > 1200
@@ -1257,7 +1257,7 @@
 
 //                 <Typography
 //                   sx={{
-//                     fontFamily: "'Share Tech Mono',monospace",
+//                     fontFamily: "'Arial',san-serif",
 //                     fontSize: "0.72rem",
 //                     color:
 //                       u.samaradorlik >= 90
@@ -1280,7 +1280,7 @@
 //         <Grid item xs={12} md={6}>
 //           <Typography
 //             sx={{
-//               fontFamily: "'Share Tech Mono',monospace",
+//               fontFamily: "'Arial',san-serif",
 //               fontSize: "0.6rem",
 //               color: "text.secondary",
 //               letterSpacing: "0.15em",
@@ -1303,7 +1303,7 @@
 //             >
 //               <Typography
 //                 sx={{
-//                   fontFamily: "'Share Tech Mono',monospace",
+//                   fontFamily: "'Arial',san-serif",
 //                   fontSize: "0.65rem",
 //                   color: "primary.main",
 //                   minWidth: 70,
@@ -1319,7 +1319,7 @@
 //               <StatusChip holat={u.holat} />
 //               <Typography
 //                 sx={{
-//                   fontFamily: "'Share Tech Mono',monospace",
+//                   fontFamily: "'Arial',san-serif",
 //                   fontSize: "0.65rem",
 //                   color: u.samaradorlik > 80 ? "success.main" : "warning.main",
 //                 }}
@@ -1489,7 +1489,7 @@
 //             {s.live && (
 //               <Typography
 //                 sx={{
-//                   fontFamily: "'Share Tech Mono',monospace",
+//                   fontFamily: "'Arial',san-serif",
 //                   fontSize: "0.58rem",
 //                   color: "#00e676",
 //                   px: 0.6,
@@ -1531,7 +1531,7 @@
 //               >
 //                 <Typography
 //                   sx={{
-//                     fontFamily: "'Share Tech Mono',monospace",
+//                     fontFamily: "'Arial',san-serif",
 //                     fontSize: "0.78rem",
 //                     fontWeight: 700,
 //                     color: st.c,
@@ -1541,7 +1541,7 @@
 //                 </Typography>
 //                 <Typography
 //                   sx={{
-//                     fontFamily: "'Share Tech Mono',monospace",
+//                     fontFamily: "'Arial',san-serif",
 //                     fontSize: "0.47rem",
 //                     color: isDark ? "#fff" : "#000",
 //                     letterSpacing: "0.08em",
@@ -1561,7 +1561,7 @@
 //           >
 //             <Typography
 //               sx={{
-//                 fontFamily: "'Share Tech Mono',monospace",
+//                 fontFamily: "'Arial',san-serif",
 //                 fontSize: "0.58rem",
 //                 color: isDark ? "#fff" : "#000",
 //               }}
@@ -1570,7 +1570,7 @@
 //             </Typography>
 //             <Typography
 //               sx={{
-//                 fontFamily: "'Share Tech Mono',monospace",
+//                 fontFamily: "'Arial',san-serif",
 //                 fontSize: "0.62rem",
 //                 color: s.yuk > 90 ? "warning.main" : color,
 //               }}
@@ -1599,7 +1599,7 @@
 //           >
 //             <Typography
 //               sx={{
-//                 fontFamily: "'Share Tech Mono',monospace",
+//                 fontFamily: "'Arial',san-serif",
 //                 fontSize: "0.58rem",
 //                 color: isDark ? "#fff" : "#000",
 //               }}
@@ -1608,7 +1608,7 @@
 //             </Typography>
 //             <Typography
 //               sx={{
-//                 fontFamily: "'Share Tech Mono',monospace",
+//                 fontFamily: "'Arial',san-serif",
 //                 fontSize: "0.68rem",
 //                 color:
 //                   s.harorat > 1400
@@ -1660,7 +1660,7 @@
 //         <Box>
 //           <Typography
 //             sx={{
-//               fontFamily: "'Orbitron',monospace",
+//               fontFamily: "'Arial',san-serif",
 //               fontSize: "1.1rem",
 //               fontWeight: 700,
 //               letterSpacing: "0.15em",
@@ -1671,7 +1671,7 @@
 //           </Typography>
 //           <Typography
 //             sx={{
-//               fontFamily: "'Share Tech Mono',monospace",
+//               fontFamily: "'Arial',san-serif",
 //               fontSize: "0.65rem",
 //               color: "text.secondary",
 //             }}
@@ -1686,7 +1686,7 @@
 //           {isFetching && (
 //             <Typography
 //               sx={{
-//                 fontFamily: "'Share Tech Mono',monospace",
+//                 fontFamily: "'Arial',san-serif",
 //                 fontSize: "0.6rem",
 //                 color: "#00d4ff",
 //               }}
@@ -1712,7 +1712,7 @@
 //                 />
 //                 <Typography
 //                   sx={{
-//                     fontFamily: "'Share Tech Mono',monospace",
+//                     fontFamily: "'Arial',san-serif",
 //                     fontSize: "0.6rem",
 //                     color: "text.secondary",
 //                     textTransform: "capitalize",
@@ -1795,7 +1795,7 @@
 //                       </Typography>
 //                       {/* <Typography
 //                         sx={{
-//                           fontFamily: "'Share Tech Mono',monospace",
+//                           fontFamily: "'Arial',san-serif",
 //                           fontSize: "0.58rem",
 //                           color: "text.secondary",
 //                         }}
@@ -1811,7 +1811,7 @@
 //                 <TableCell>
 //                   <Typography
 //                     sx={{
-//                       fontFamily: "'Share Tech Mono',monospace",
+//                       fontFamily: "'Arial',san-serif",
 //                       fontSize: "0.72rem",
 //                       color: "text.secondary",
 //                     }}
@@ -1822,7 +1822,7 @@
 //                 <TableCell>
 //                   <Typography
 //                     sx={{
-//                       fontFamily: "'Share Tech Mono',monospace",
+//                       fontFamily: "'Arial',san-serif",
 //                       fontSize: "0.75rem",
 //                       color: "text.primary",
 //                     }}
@@ -1856,7 +1856,7 @@
 //                     />
 //                     <Typography
 //                       sx={{
-//                         fontFamily: "'Share Tech Mono',monospace",
+//                         fontFamily: "'Arial',san-serif",
 //                         fontSize: "0.65rem",
 //                         color: "text.secondary",
 //                         minWidth: 28,
@@ -1869,7 +1869,7 @@
 //                 <TableCell>
 //                   <Typography
 //                     sx={{
-//                       fontFamily: "'Share Tech Mono',monospace",
+//                       fontFamily: "'Arial',san-serif",
 //                       fontSize: "0.75rem",
 //                       color:
 //                         s.harorat > 1400
@@ -1885,7 +1885,7 @@
 //                 <TableCell>
 //                   <Typography
 //                     sx={{
-//                       fontFamily: "'Share Tech Mono',monospace",
+//                       fontFamily: "'Arial',san-serif",
 //                       fontSize: "0.75rem",
 //                       color: "success.main",
 //                     }}
@@ -2899,7 +2899,7 @@ const SexSVG = {
         strokeLinecap="round"
         markerEnd="url(#arr07c)"
       />
-      <text x="1" y="42" fontSize="3.5" fill="#a0aec0" fontFamily="monospace">
+      <text x="1" y="42" fontSize="3.5" fill="#a0aec0" fontFamily="san-serif">
         IN
       </text>
       <path
@@ -2909,7 +2909,7 @@ const SexSVG = {
         strokeLinecap="round"
         markerEnd="url(#arr07c)"
       />
-      <text x="95" y="42" fontSize="3.5" fill="#a0aec0" fontFamily="monospace">
+      <text x="95" y="42" fontSize="3.5" fill="#a0aec0" fontFamily="san-serif">
         OUT
       </text>
 
@@ -3025,7 +3025,7 @@ function SexDetailPanel({ sex }) {
             >
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "0.55rem",
                   color: "text.secondary",
                   letterSpacing: "0.1em",
@@ -3037,7 +3037,7 @@ function SexDetailPanel({ sex }) {
               {typeof s.v === "string" || typeof s.v === "number" ? (
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.9rem",
                     color: s.c || "text.primary",
                   }}
@@ -3056,7 +3056,7 @@ function SexDetailPanel({ sex }) {
         <Grid item xs={12} md={6}>
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.6rem",
               color: "text.secondary",
               letterSpacing: "0.15em",
@@ -3079,7 +3079,7 @@ function SexDetailPanel({ sex }) {
             >
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "0.65rem",
                   color: "secondary.main",
                   minWidth: 70,
@@ -3095,7 +3095,7 @@ function SexDetailPanel({ sex }) {
               <StatusChip holat={u.holat} />
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "0.65rem",
                   color: "text.secondary",
                 }}
@@ -3132,7 +3132,7 @@ function SexDetailPanel({ sex }) {
                   {u.live && (
                     <Typography
                       sx={{
-                        fontFamily: "'Share Tech Mono',monospace",
+                        fontFamily: "'Arial',san-serif",
                         fontSize: "0.55rem",
                         color: "#00e676",
                         px: 0.5,
@@ -3149,7 +3149,7 @@ function SexDetailPanel({ sex }) {
 
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.62rem",
                     color: "text.secondary",
                     mt: 0.2,
@@ -3163,7 +3163,7 @@ function SexDetailPanel({ sex }) {
               <Box sx={{ display: "flex", alignItems: "center", gap: 1.2 }}>
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.72rem",
                     color:
                       u.harorat > 1200
@@ -3180,7 +3180,7 @@ function SexDetailPanel({ sex }) {
 
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.72rem",
                     color:
                       u.samaradorlik >= 90
@@ -3203,7 +3203,7 @@ function SexDetailPanel({ sex }) {
         <Grid item xs={12} md={6}>
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.6rem",
               color: "text.secondary",
               letterSpacing: "0.15em",
@@ -3226,7 +3226,7 @@ function SexDetailPanel({ sex }) {
             >
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "0.65rem",
                   color: "primary.main",
                   minWidth: 70,
@@ -3242,7 +3242,7 @@ function SexDetailPanel({ sex }) {
               <StatusChip holat={u.holat} />
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "0.65rem",
                   color: u.samaradorlik > 80 ? "success.main" : "warning.main",
                 }}
@@ -3427,7 +3427,7 @@ function SexCard({ s, selected, onClick }) {
           {s.live && (
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: "0.65rem",
                 fontWeight: 600,
                 color: "#00e676",
@@ -3514,7 +3514,7 @@ function SexCard({ s, selected, onClick }) {
               >
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono', monospace",
+                    fontFamily: "'Arial', san-serif",
                     fontSize: "1rem",
                     fontWeight: 700,
                     color: st.c,
@@ -3525,7 +3525,7 @@ function SexCard({ s, selected, onClick }) {
                 </Typography>
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono', monospace",
+                    fontFamily: "'Arial', san-serif",
                     fontSize: "0.55rem",
                     color: "text.secondary",
                     letterSpacing: "0.08em",
@@ -3547,7 +3547,7 @@ function SexCard({ s, selected, onClick }) {
             >
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono', monospace",
+                  fontFamily: "'Arial', san-serif",
                   fontSize: "0.65rem",
                   color: "text.secondary",
                   letterSpacing: "0.05em",
@@ -3557,7 +3557,7 @@ function SexCard({ s, selected, onClick }) {
               </Typography>
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono', monospace",
+                  fontFamily: "'Arial', san-serif",
                   fontSize: "0.75rem",
                   fontWeight: 700,
                   color: s.yuk > 90 ? "warning.main" : color,
@@ -3612,7 +3612,7 @@ function SexCard({ s, selected, onClick }) {
           >
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: "1rem",
                 fontWeight: 700,
                 color:
@@ -3628,7 +3628,7 @@ function SexCard({ s, selected, onClick }) {
             </Typography>
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: "0.48rem",
                 color: "text.secondary",
                 mt: 0.2,
@@ -3676,7 +3676,7 @@ export default function Sexlar() {
         <Box>
           <Typography
             sx={{
-              fontFamily: "'Orbitron',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "1.1rem",
               fontWeight: 700,
               letterSpacing: "0.15em",
@@ -3687,7 +3687,7 @@ export default function Sexlar() {
           </Typography>
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.65rem",
               color: "text.secondary",
             }}
@@ -3702,7 +3702,7 @@ export default function Sexlar() {
           {isFetching && (
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.6rem",
                 color: "#00d4ff",
               }}
@@ -3728,7 +3728,7 @@ export default function Sexlar() {
                 />
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.6rem",
                     color: "text.secondary",
                     textTransform: "capitalize",
@@ -3811,7 +3811,7 @@ export default function Sexlar() {
                       </Typography>
                       {/* <Typography
                         sx={{
-                          fontFamily: "'Share Tech Mono',monospace",
+                          fontFamily: "'Arial',san-serif",
                           fontSize: "0.58rem",
                           color: "text.secondary",
                         }}
@@ -3827,7 +3827,7 @@ export default function Sexlar() {
                 <TableCell>
                   <Typography
                     sx={{
-                      fontFamily: "'Share Tech Mono',monospace",
+                      fontFamily: "'Arial',san-serif",
                       fontSize: "0.72rem",
                       color: "text.secondary",
                     }}
@@ -3838,7 +3838,7 @@ export default function Sexlar() {
                 <TableCell>
                   <Typography
                     sx={{
-                      fontFamily: "'Share Tech Mono',monospace",
+                      fontFamily: "'Arial',san-serif",
                       fontSize: "0.75rem",
                       color: "text.primary",
                     }}
@@ -3872,7 +3872,7 @@ export default function Sexlar() {
                     />
                     <Typography
                       sx={{
-                        fontFamily: "'Share Tech Mono',monospace",
+                        fontFamily: "'Arial',san-serif",
                         fontSize: "0.65rem",
                         color: "text.secondary",
                         minWidth: 28,
@@ -3885,7 +3885,7 @@ export default function Sexlar() {
                 <TableCell>
                   <Typography
                     sx={{
-                      fontFamily: "'Share Tech Mono',monospace",
+                      fontFamily: "'Arial',san-serif",
                       fontSize: "0.75rem",
                       color:
                         s.harorat > 1400
@@ -3901,7 +3901,7 @@ export default function Sexlar() {
                 <TableCell>
                   <Typography
                     sx={{
-                      fontFamily: "'Share Tech Mono',monospace",
+                      fontFamily: "'Arial',san-serif",
                       fontSize: "0.75rem",
                       color: "success.main",
                     }}

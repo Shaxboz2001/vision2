@@ -211,7 +211,7 @@ export function CameraFeed({ cam, onClick, large = false }) {
 //           )}
 //           <Typography
 //             sx={{
-//               fontFamily: "'Share Tech Mono',monospace",
+//               fontFamily: "'Arial',san-serif",
 //               fontSize: "0.6rem",
 //               color: "#6b7280",
 //               letterSpacing: "0.1em",
@@ -271,7 +271,7 @@ export function CameraFeed({ cam, onClick, large = false }) {
 //       <Box sx={{ position: "absolute", top: 8, left: 8 }}>
 //         <Typography
 //           sx={{
-//             fontFamily: "'Share Tech Mono',monospace",
+//             fontFamily: "'Arial',san-serif",
 //             fontSize: "0.55rem",
 //             color: "rgba(255,255,255,0.2)",
 //           }}
@@ -314,7 +314,7 @@ export function CameraFeed({ cam, onClick, large = false }) {
 //         {visible && (
 //           <Typography
 //             sx={{
-//               fontFamily: "'Share Tech Mono',monospace",
+//               fontFamily: "'Arial',san-serif",
 //               fontSize: "0.5rem",
 //               color: "#ff2d55",
 //               fontWeight: 700,
@@ -337,7 +337,7 @@ export function CameraFeed({ cam, onClick, large = false }) {
 //       >
 //         <Typography
 //           sx={{
-//             fontFamily: "'Share Tech Mono',monospace",
+//             fontFamily: "'Arial',san-serif",
 //             fontSize: "0.6rem",
 //             color: "rgba(0,212,255,0.75)",
 //             letterSpacing: "0.08em",
@@ -347,7 +347,7 @@ export function CameraFeed({ cam, onClick, large = false }) {
 //         </Typography>
 //         <Typography
 //           sx={{
-//             fontFamily: "'Share Tech Mono',monospace",
+//             fontFamily: "'Arial',san-serif",
 //             fontSize: "0.55rem",
 //             color: "#6b7280",
 //           }}
@@ -414,7 +414,7 @@ export default function Kameralar() {
         <Box>
           <Typography
             sx={{
-              fontFamily: "'Orbitron',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "1.1rem",
               fontWeight: 700,
               letterSpacing: "0.15em",
@@ -424,7 +424,7 @@ export default function Kameralar() {
           </Typography>
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.65rem",
               color: "#6b7280",
             }}
@@ -439,7 +439,7 @@ export default function Kameralar() {
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.75rem",
               }}
             >
@@ -465,7 +465,7 @@ export default function Kameralar() {
             <Paper sx={{ p: 1.5, textAlign: "center" }}>
               <Typography
                 sx={{
-                  fontFamily: "'Orbitron',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "1.8rem",
                   fontWeight: 700,
                   color: s.c,
@@ -475,7 +475,7 @@ export default function Kameralar() {
               </Typography>
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "0.58rem",
                   color: "#6b7280",
                   letterSpacing: "0.1em",
@@ -558,7 +558,7 @@ export default function Kameralar() {
               <Box>
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.75rem",
                     color: "#00d4ff",
                   }}
@@ -567,7 +567,7 @@ export default function Kameralar() {
                 </Typography>
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.6rem",
                     color: "#6b7280",
                   }}

@@ -96,25 +96,25 @@ export function useDateRange(period = "today", customStart, customEnd) {
 
 // ─── Period nomlari (UI uchun) ───────────────────────────────────
 export const PERIOD_LABELS = {
-  today: "Bugun",
-  yesterday: "Kecha",
-  week: "Oxirgi 7 kun",
-  month: "Bu oy",
-  last_month: "O'tgan oy",
-  quarter: "Bu chorak",
-  year: "Bu yil",
+  today: "Joriy ish kuni",
+  yesterday: "Bir kun avval",
+  week: "Hafta davomida",
+  month: "Oy davomida",
+  last_month: "O'tgan oy davomida",
+  quarter: "Chorak davomida",
+  year: "Joriy yil davomida",
   // last_year: "O'tgan yil",
   // custom: "Maxsus",
 };
 
 export const PERIOD_OPTIONS = [
-  { value: "today", label: "Bugun", group: "kun" },
-  { value: "yesterday", label: "Kecha", group: "kun" },
-  { value: "week", label: "Oxirgi 7 kun", group: "hafta" },
-  { value: "month", label: "Bu oy", group: "oy" },
-  { value: "last_month", label: "O'tgan oy", group: "oy" },
-  { value: "quarter", label: "Bu chorak", group: "chorak" },
-  { value: "year", label: "Bu yil", group: "yil" },
+  { value: "today", label: "Joriy ish kuni", group: "kun" },
+  { value: "yesterday", label: "Bir kun avval", group: "kun" },
+  { value: "week", label: "Hafta davomida", group: "hafta" },
+  { value: "month", label: "Oy davomida", group: "oy" },
+  { value: "last_month", label: "O'tgan oy davomida", group: "oy" },
+  { value: "quarter", label: "Chorak davomida", group: "chorak" },
+  { value: "year", label: "Joriy yil davomida", group: "yil" },
   // { value: "last_year", label: "O'tgan yil", group: "yil" },
   // { value: "custom", label: "Maxsus...", group: "boshqa" },
 ];

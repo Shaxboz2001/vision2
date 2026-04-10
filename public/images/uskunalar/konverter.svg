@@ -249,8 +249,8 @@
 <ellipse cx="430" cy="396" rx="40"  ry="18" fill="#ffaa00" opacity="0.12" filter="url(#k_blur8)"/>
 
 <!-- === MATN === -->
-<text x="240" y="592" text-anchor="middle" font-family="'Courier New',monospace"
+<text x="240" y="592" text-anchor="middle" font-family="'Courier New',san-serif"
   font-size="13" font-weight="bold" fill="#1e3850" letter-spacing="4">KONVERTER (BOF)</text>
-<text x="240" y="610" text-anchor="middle" font-family="'Courier New',monospace"
+<text x="240" y="610" text-anchor="middle" font-family="'Courier New',san-serif"
   font-size="9" fill="#162a3e" letter-spacing="3">BASIC OXYGEN FURNACE · LD-300T</text>
 </svg>

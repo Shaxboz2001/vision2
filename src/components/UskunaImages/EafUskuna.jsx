@@ -144,7 +144,7 @@ function TempLabel({ point, style }) {
             fontSize: 13,
             lineHeight: 1.1,
             fontWeight: 700,
-            fontFamily: "'JetBrains Mono', monospace",
+            fontFamily: "'JetBrains Mono', san-serif",
             textShadow: `0 0 8px ${point.color}55`,
             whiteSpace: "nowrap",
           }}
@@ -836,7 +836,7 @@ export default function EAFFurnace3D({
             color: "#e7edf5",
             fontSize: 16,
             fontWeight: 700,
-            fontFamily: "'JetBrains Mono', monospace",
+            fontFamily: "'JetBrains Mono', san-serif",
           }}
         >
           {title}

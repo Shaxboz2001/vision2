@@ -85,8 +85,8 @@ const useTokens = () => {
     cyan: "#06b6d4",
     purple: "#8b5cf6",
 
-    mono: "'Share Tech Mono', monospace",
-    display: "'Orbitron', monospace",
+    mono: "'Arial', san-serif",
+    display: "'Arial', san-serif",
 
     shadow: isDark
       ? "0 20px 50px rgba(0,0,0,0.34)"
@@ -187,6 +187,10 @@ const ID_IMAGES = {
   "USK-078": "/images/uskunalar/yakuni guruh klet.png",
   "USK-079": "/images/uskunalar/yakuni guruh klet.png",
   "USK-017": "/images/uskunalar/lpk pech.png",
+  "USK-024": "/images/uskunalar/Gorizontal kovsh.png",
+  "USK-025": "/images/uskunalar/Vertikal kovsh.png",
+  "USK-020": "/images/uskunalar/Dozator.png",
+  "USK-021": "/images/uskunalar/Vakuumator.png",
 };
 
 const TUR_IMAGES = {

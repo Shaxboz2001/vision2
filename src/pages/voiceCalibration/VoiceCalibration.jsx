@@ -158,7 +158,7 @@ export default function VoiceCalibration() {
         <Box>
           <Typography
             sx={{
-              fontFamily: "'Orbitron', monospace",
+              fontFamily: "'Arial', san-serif",
               fontSize: "1.1rem",
               fontWeight: 700,
               letterSpacing: "0.1em",
@@ -168,7 +168,7 @@ export default function VoiceCalibration() {
           </Typography>
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono', monospace",
+              fontFamily: "'Arial', san-serif",
               fontSize: "0.65rem",
               color: "#6b7280",
             }}
@@ -185,7 +185,7 @@ export default function VoiceCalibration() {
           <Paper sx={{ p: 2 }}>
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: "0.7rem",
                 color: "#6b7280",
                 letterSpacing: "0.1em",
@@ -212,7 +212,7 @@ export default function VoiceCalibration() {
                   color={selected?.target === r.path ? "primary" : "default"}
                   variant={selected?.target === r.path ? "filled" : "outlined"}
                   sx={{
-                    fontFamily: "'Share Tech Mono', monospace",
+                    fontFamily: "'Arial', san-serif",
                     fontSize: "0.72rem",
                   }}
                 />
@@ -239,7 +239,7 @@ export default function VoiceCalibration() {
                   color={selected?.target === c.name ? "secondary" : "default"}
                   variant={selected?.target === c.name ? "filled" : "outlined"}
                   sx={{
-                    fontFamily: "'Share Tech Mono', monospace",
+                    fontFamily: "'Arial', san-serif",
                     fontSize: "0.72rem",
                   }}
                 />
@@ -251,7 +251,7 @@ export default function VoiceCalibration() {
           <Paper sx={{ p: 2, mt: 2 }}>
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: "0.7rem",
                 color: "#6b7280",
                 letterSpacing: "0.1em",
@@ -268,7 +268,7 @@ export default function VoiceCalibration() {
                     fontSize: "0.75rem",
                     mb: 1.5,
                     color: "#94a3b8",
-                    fontFamily: "'Share Tech Mono', monospace",
+                    fontFamily: "'Arial', san-serif",
                   }}
                 >
                   Tanlangan:{" "}
@@ -310,7 +310,7 @@ export default function VoiceCalibration() {
                     fontSize: "0.6rem",
                     mt: 1,
                     color: "#6b7280",
-                    fontFamily: "'Share Tech Mono', monospace",
+                    fontFamily: "'Arial', san-serif",
                   }}
                 >
                   {isRecording
@@ -361,7 +361,7 @@ export default function VoiceCalibration() {
           <Paper sx={{ p: 2 }}>
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: "0.7rem",
                 color: "#6b7280",
                 letterSpacing: "0.1em",
@@ -401,7 +401,7 @@ export default function VoiceCalibration() {
                     <Box sx={{ flex: 1, minWidth: 0 }}>
                       <Typography
                         sx={{
-                          fontFamily: "'Share Tech Mono', monospace",
+                          fontFamily: "'Arial', san-serif",
                           fontSize: "0.72rem",
                           color: "#e2e8f0",
                         }}

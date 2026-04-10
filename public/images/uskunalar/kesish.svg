@@ -308,7 +308,7 @@
 <rect x="44" y="280" width="106" height="66" rx="2"
   fill="#020a10" stroke="#081828" stroke-width="1"/>
 <!-- Ekran ma'lumotlari -->
-<g font-family="'Courier New',monospace" font-size="7.5" fill="#00cc88">
+<g font-family="'Courier New',san-serif" font-size="7.5" fill="#00cc88">
   <text x="48" y="296">HOLAT   : FAOL</text>
   <text x="48" y="308">BOSIM   : 180 bar</text>
   <text x="48" y="320">TEZLIK  : 12 mm/s</text>
@@ -322,42 +322,42 @@
 
 <!-- Tugmalar bloki -->
 <rect x="158" y="278" width="64" height="16" rx="3" fill="#0c1828" stroke="#182030" stroke-width="1"/>
-<text x="190" y="290" text-anchor="middle" font-family="monospace" font-size="6" fill="#2a4a60">NAZORAT</text>
+<text x="190" y="290" text-anchor="middle" font-family="san-serif" font-size="6" fill="#2a4a60">NAZORAT</text>
 <!-- START/STOP/RESET tugmalari -->
 <g>
   <rect x="160" y="298" width="26" height="14" rx="3" fill="#122a18" stroke="#1e4024" stroke-width="1"/>
-  <text x="173" y="308" text-anchor="middle" font-family="monospace" font-size="6" fill="#44aa55">START</text>
+  <text x="173" y="308" text-anchor="middle" font-family="san-serif" font-size="6" fill="#44aa55">START</text>
   <rect x="190" y="298" width="26" height="14" rx="3" fill="#2a1212" stroke="#40181a" stroke-width="1"/>
-  <text x="203" y="308" text-anchor="middle" font-family="monospace" font-size="6" fill="#aa4444">STOP</text>
+  <text x="203" y="308" text-anchor="middle" font-family="san-serif" font-size="6" fill="#aa4444">STOP</text>
   <rect x="160" y="316" width="58" height="14" rx="3" fill="#1a1a10" stroke="#2e2e18" stroke-width="1"/>
-  <text x="189" y="326" text-anchor="middle" font-family="monospace" font-size="6" fill="#aaaa44">RESET</text>
+  <text x="189" y="326" text-anchor="middle" font-family="san-serif" font-size="6" fill="#aaaa44">RESET</text>
 </g>
 <!-- Reostat (qalinlik tanlash) -->
 <rect x="160" y="334" width="58" height="16" rx="3" fill="#0c1828" stroke="#182030" stroke-width="1"/>
 <rect x="164" y="338" width="42" height="8" rx="2" fill="#060e18" stroke="#0e1828" stroke-width="0.8"/>
 <rect x="180" y="337" width="12" height="10" rx="2" fill="#1a2e40" stroke="#243848" stroke-width="1"/>
-<text x="189" y="358" text-anchor="middle" font-family="monospace" font-size="5.5" fill="#2a3e52">QALINLIK</text>
+<text x="189" y="358" text-anchor="middle" font-family="san-serif" font-size="5.5" fill="#2a3e52">QALINLIK</text>
 
 <!-- Indikator chiroqlar -->
 <g>
   <circle cx="44"  cy="362" r="6" fill="#00cc00" opacity="0.9" filter="url(#ks_blur3)">
     <animate attributeName="opacity" values="0.9;0.4;0.9" dur="2s" repeatCount="indefinite"/>
   </circle>
-  <text x="56" y="366" font-family="monospace" font-size="6" fill="#2a5030">TAYYOR</text>
+  <text x="56" y="366" font-family="san-serif" font-size="6" fill="#2a5030">TAYYOR</text>
 
   <circle cx="100" cy="362" r="6" fill="#ff9900" opacity="0.8" filter="url(#ks_blur3)">
     <animate attributeName="opacity" values="0.8;0.2;0.8" dur="2.5s" begin="0.5s" repeatCount="indefinite"/>
   </circle>
-  <text x="112" y="366" font-family="monospace" font-size="6" fill="#504020">BOSIM</text>
+  <text x="112" y="366" font-family="san-serif" font-size="6" fill="#504020">BOSIM</text>
 
   <circle cx="156" cy="362" r="6" fill="#cc2200" opacity="0.4"/>
-  <text x="168" y="366" font-family="monospace" font-size="6" fill="#402020">AVARIA</text>
+  <text x="168" y="366" font-family="san-serif" font-size="6" fill="#402020">AVARIA</text>
 </g>
 
 <!-- Metall hisoblagich -->
 <rect x="42" y="372" width="54" height="20" rx="3" fill="#060e18" stroke="#0e2030" stroke-width="1.2"/>
-<text x="69" y="380" text-anchor="middle" font-family="monospace" font-size="6" fill="#2a5060">HISOB</text>
-<text x="69" y="389" text-anchor="middle" font-family="monospace" font-size="8" fill="#00aacc" font-weight="bold">001248</text>
+<text x="69" y="380" text-anchor="middle" font-family="san-serif" font-size="6" fill="#2a5060">HISOB</text>
+<text x="69" y="389" text-anchor="middle" font-family="san-serif" font-size="8" fill="#00aacc" font-weight="bold">001248</text>
 
 <!-- ============================================================
      KESISH STOLICHA (o'rta oraliq)
@@ -397,8 +397,8 @@
 <!-- ============================================================
      MATN
      ============================================================ -->
-<text x="240" y="470" text-anchor="middle" font-family="'Courier New',monospace"
+<text x="240" y="470" text-anchor="middle" font-family="'Courier New',san-serif"
   font-size="13" font-weight="bold" fill="#1e3855" letter-spacing="4">KESISH STANOGI</text>
-<text x="240" y="488" text-anchor="middle" font-family="'Courier New',monospace"
+<text x="240" y="488" text-anchor="middle" font-family="'Courier New',san-serif"
   font-size="9" fill="#162a40" letter-spacing="3">HYDRAULIC SHEAR · CS-1200</text>
 </svg>

@@ -31,6 +31,12 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      "/camera-stream": {
+        target: "http://172.16.55.12:1984",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/camera-stream/, ""),
+      },
       "/camera-ws": {
         target: "ws://172.16.55.12:1984",
         ws: true,

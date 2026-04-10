@@ -118,7 +118,7 @@ function Clock() {
   return (
     <Typography
       sx={{
-        fontFamily: "'Share Tech Mono', monospace",
+        fontFamily: "'Arial', san-serif",
         fontSize: "0.75rem",
         color: "primary.main",
         letterSpacing: "0.1em",
@@ -180,14 +180,14 @@ export function Layout({ children }) {
               sx={{
                 fontSize: "0.65rem",
                 color: "text.secondary",
-                fontFamily: "'Share Tech Mono', monospace",
+                fontFamily: "'Arial', san-serif",
               }}
             >
               {s.l}
             </Typography>
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: "0.72rem",
                 color: s.c,
               }}
@@ -202,7 +202,7 @@ export function Layout({ children }) {
         <Box sx={{ px: 2, pt: 1.5, pb: 0.5 }}>
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono', monospace",
+              fontFamily: "'Arial', san-serif",
               fontSize: "0.55rem",
               letterSpacing: "0.2em",
               color: "text.disabled",
@@ -263,7 +263,7 @@ export function Layout({ children }) {
         <Box sx={{ px: 2, pb: 0.5 }}>
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono', monospace",
+              fontFamily: "'Arial', san-serif",
               fontSize: "0.55rem",
               letterSpacing: "0.2em",
               color: "text.disabled",
@@ -346,7 +346,7 @@ export function Layout({ children }) {
         />
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono', monospace",
+            fontFamily: "'Arial', san-serif",
             fontSize: "0.6rem",
             color: "text.secondary",
           }}
@@ -356,7 +356,7 @@ export function Layout({ children }) {
         <Box sx={{ flex: 1 }} />
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono', monospace",
+            fontFamily: "'Arial', san-serif",
             fontSize: "0.6rem",
             color: "text.secondary",
           }}
@@ -466,7 +466,7 @@ export function Layout({ children }) {
 
               <Typography
                 sx={{
-                  fontFamily: "'Orbitron', monospace",
+                  fontFamily: "'Arial', san-serif",
                   fontSize: { xs: "0.72rem", sm: "0.85rem" },
                   fontWeight: 900,
                   letterSpacing: { xs: "0.06em", sm: "0.14em" },
@@ -524,7 +524,7 @@ export function Layout({ children }) {
                 <Typography
                   ref={sloganTextRef}
                   sx={{
-                    fontFamily: "'Orbitron', monospace",
+                    fontFamily: "'Arial', san-serif",
                     fontSize: {
                       md: open ? "0.66rem" : "0.76rem",
                       lg: open ? "0.76rem" : "0.88rem",
@@ -563,7 +563,7 @@ export function Layout({ children }) {
                     },
                   }}
                 >
-                  RAQAMLI • INNOVATSION • XAVFSIZ KOMBINAT
+                  RAQAMLI INNOVATSION XAVFSIZ KOMBINAT
                 </Typography>
               </Box>
             </Box>

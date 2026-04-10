@@ -73,7 +73,7 @@ function OgohlanirishCard({ o }) {
           <StatusChip holat={o.holat} />
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.6rem",
               color: "#6b7280",
               ml: "auto",
@@ -88,7 +88,7 @@ function OgohlanirishCard({ o }) {
         <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
           {/* <Typography
             sx={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.62rem",
               color: "#ff6b1a",
             }}
@@ -98,7 +98,7 @@ function OgohlanirishCard({ o }) {
           {/* {o.uchastka && (
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.62rem",
                 color: "#6b7280",
               }}
@@ -109,7 +109,7 @@ function OgohlanirishCard({ o }) {
           {/* {o.uskuna && (
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.62rem",
                 color: "#6b7280",
               }}
@@ -120,7 +120,7 @@ function OgohlanirishCard({ o }) {
           {o.operator && (
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.62rem",
                 color: "#00ff9d",
               }}
@@ -143,7 +143,7 @@ function OgohlanirishCard({ o }) {
           variant="outlined"
           sx={{
             fontSize: "0.6rem",
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             py: 0.3,
             px: 1,
             minWidth: "auto",
@@ -161,7 +161,7 @@ function OgohlanirishCard({ o }) {
             color="error"
             sx={{
               fontSize: "0.6rem",
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               py: 0.3,
               px: 1,
               minWidth: "auto",
@@ -209,7 +209,7 @@ export default function Ogohlantirishlar() {
         <Box>
           <Typography
             sx={{
-              fontFamily: "'Orbitron',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "1.1rem",
               fontWeight: 700,
               letterSpacing: "0.15em",
@@ -219,7 +219,7 @@ export default function Ogohlantirishlar() {
           </Typography>
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.65rem",
               color: "#6b7280",
             }}
@@ -231,7 +231,7 @@ export default function Ogohlantirishlar() {
           <FormControl size="small" sx={{ minWidth: 130 }}>
             <InputLabel
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.7rem",
               }}
             >
@@ -242,7 +242,7 @@ export default function Ogohlantirishlar() {
               onChange={(e) => dispatch(setFilter({ daraja: e.target.value }))}
               label="DARAJA"
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.75rem",
               }}
             >
@@ -255,7 +255,7 @@ export default function Ogohlantirishlar() {
           <FormControl size="small" sx={{ minWidth: 130 }}>
             <InputLabel
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.7rem",
               }}
             >
@@ -266,7 +266,7 @@ export default function Ogohlantirishlar() {
               onChange={(e) => dispatch(setFilter({ holat: e.target.value }))}
               label="HOLAT"
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.75rem",
               }}
             >
@@ -281,7 +281,7 @@ export default function Ogohlantirishlar() {
               size="small"
               onClick={() => dispatch(clearFilter())}
               sx={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.65rem",
                 color: "#6b7280",
               }}
@@ -327,7 +327,7 @@ export default function Ogohlantirishlar() {
               <Typography sx={{ fontSize: 18, mb: 0.3 }}>{s.icon}</Typography>
               <Typography
                 sx={{
-                  fontFamily: "'Orbitron',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "1.5rem",
                   fontWeight: 700,
                   color: s.c,
@@ -337,7 +337,7 @@ export default function Ogohlantirishlar() {
               </Typography>
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "0.55rem",
                   color: "#6b7280",
                   letterSpacing: "0.08em",
@@ -376,7 +376,7 @@ export default function Ogohlantirishlar() {
           />
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.72rem",
               color: "#ff2d55",
               letterSpacing: "0.1em",
@@ -450,7 +450,7 @@ export default function Ogohlantirishlar() {
               <Paper sx={{ p: 4, textAlign: "center" }}>
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.75rem",
                     color: "#6b7280",
                   }}

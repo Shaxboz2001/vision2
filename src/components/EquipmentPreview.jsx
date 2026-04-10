@@ -88,7 +88,7 @@ function Gauge({ value, size = 150, color = "#ff6b1a", label }) {
           textAnchor="middle"
           fill={color}
           fontSize={size * 0.22}
-          fontFamily="'Orbitron',monospace"
+          fontFamily="'Arial',san-serif"
           fontWeight="700"
         >
           {value.toFixed(1)}
@@ -99,7 +99,7 @@ function Gauge({ value, size = 150, color = "#ff6b1a", label }) {
           textAnchor="middle"
           fill="rgba(255,255,255,0.4)"
           fontSize={size * 0.09}
-          fontFamily="'Share Tech Mono',monospace"
+          fontFamily="'Arial',san-serif"
         >
           %
         </text>
@@ -108,7 +108,7 @@ function Gauge({ value, size = 150, color = "#ff6b1a", label }) {
         <div
           style={{
             textAlign: "center",
-            fontFamily: "'Rajdhani',sans-serif",
+            fontFamily: "'san-serif',sans-serif",
             fontWeight: 700,
             fontSize: "0.7rem",
             color: "#6b7280",
@@ -169,7 +169,7 @@ function TempBadge({ temp, x, y, side = "right", color = "#00e676", pulse }) {
       >
         <span
           style={{
-            fontFamily: "'Orbitron',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.72rem",
             fontWeight: 700,
             color,
@@ -202,7 +202,7 @@ function StatRow({ label, value, unit, vColor }) {
     >
       <span
         style={{
-          fontFamily: "'Share Tech Mono',monospace",
+          fontFamily: "'Arial',san-serif",
           fontSize: "0.72rem",
           color: "#9ca3af",
         }}
@@ -212,7 +212,7 @@ function StatRow({ label, value, unit, vColor }) {
       <span style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
         <span
           style={{
-            fontFamily: "'Orbitron',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.95rem",
             fontWeight: 700,
             color: vColor || "#e5e7eb",
@@ -223,7 +223,7 @@ function StatRow({ label, value, unit, vColor }) {
         {unit && (
           <span
             style={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.58rem",
               color: "#4b5563",
             }}
@@ -356,7 +356,7 @@ export default function EquipmentDashboard() {
     >
       <span
         style={{
-          fontFamily: "'Share Tech Mono',monospace",
+          fontFamily: "'Arial',san-serif",
           fontSize: "0.6rem",
           color: "#6b7280",
           letterSpacing: "0.12em",
@@ -373,12 +373,12 @@ export default function EquipmentDashboard() {
         minHeight: "100vh",
         background: "linear-gradient(180deg, #060a14 0%, #0a0e1a 100%)",
         padding: 16,
-        fontFamily: "'Rajdhani',sans-serif",
+        fontFamily: "'san-serif',sans-serif",
         color: "#e5e7eb",
       }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Arial:wght@400;500;600;700&family=san-serif:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
         @keyframes tpulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.4);opacity:.6} }
         @keyframes statusPulse { 0%,100%{box-shadow:0 0 12px #00e67680} 50%{box-shadow:0 0 24px #00e676} }
         @keyframes ringRotate { from{stroke-dashoffset:0} to{stroke-dashoffset:-40} }
@@ -413,7 +413,7 @@ export default function EquipmentDashboard() {
           <div>
             <div
               style={{
-                fontFamily: "'Orbitron',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "1.05rem",
                 fontWeight: 700,
                 letterSpacing: "0.1em",
@@ -423,7 +423,7 @@ export default function EquipmentDashboard() {
             </div>
             <div
               style={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.58rem",
                 color: "#6b7280",
               }}
@@ -434,7 +434,7 @@ export default function EquipmentDashboard() {
         </div>
         <div
           style={{
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.6rem",
             fontWeight: 700,
             background: `${c}15`,
@@ -472,7 +472,7 @@ export default function EquipmentDashboard() {
           >
             <div
               style={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.58rem",
                 color: "#6b7280",
                 letterSpacing: "0.12em",
@@ -506,7 +506,7 @@ export default function EquipmentDashboard() {
             >
               <span
                 style={{
-                  fontFamily: "'Share Tech Mono',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "0.58rem",
                   color: "#6b7280",
                   letterSpacing: "0.1em",
@@ -517,7 +517,7 @@ export default function EquipmentDashboard() {
             </div>
             <div
               style={{
-                fontFamily: "'Orbitron',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "1.3rem",
                 fontWeight: 700,
                 color: "#00e676",
@@ -547,7 +547,7 @@ export default function EquipmentDashboard() {
             >
               <span
                 style={{
-                  fontFamily: "'Share Tech Mono',monospace",
+                  fontFamily: "'Arial',san-serif",
                   fontSize: "0.58rem",
                   color: "#6b7280",
                   letterSpacing: "0.1em",
@@ -558,7 +558,7 @@ export default function EquipmentDashboard() {
             </div>
             <div
               style={{
-                fontFamily: "'Orbitron',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "1.1rem",
                 fontWeight: 700,
                 color: "#a78bfa",
@@ -677,7 +677,7 @@ export default function EquipmentDashboard() {
               position: "absolute",
               top: 14,
               left: 18,
-              fontFamily: "'Orbitron',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.72rem",
               fontWeight: 600,
               color: "#6b7280",
@@ -698,7 +698,7 @@ export default function EquipmentDashboard() {
           >
             <div
               style={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.52rem",
                 color: "#6b7280",
                 letterSpacing: "0.1em",
@@ -708,7 +708,7 @@ export default function EquipmentDashboard() {
             </div>
             <div
               style={{
-                fontFamily: "'Orbitron',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "1.4rem",
                 fontWeight: 700,
                 color: "#00e676",
@@ -733,7 +733,7 @@ export default function EquipmentDashboard() {
           >
             <div
               style={{
-                fontFamily: "'Share Tech Mono',monospace",
+                fontFamily: "'Arial',san-serif",
                 fontSize: "0.58rem",
                 color: "#6b7280",
                 letterSpacing: "0.12em",
@@ -827,7 +827,7 @@ export default function EquipmentDashboard() {
           />
           <span
             style={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.65rem",
               color: "#6b7280",
             }}
@@ -838,7 +838,7 @@ export default function EquipmentDashboard() {
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <span
             style={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.58rem",
               color: "#4b5563",
             }}
@@ -847,7 +847,7 @@ export default function EquipmentDashboard() {
           </span>
           <span
             style={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.52rem",
               background: "#00e67612",
               color: "#00e676",

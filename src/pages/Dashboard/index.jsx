@@ -293,7 +293,7 @@
 //     >
 //       <Typography
 //         sx={{
-//           fontFamily: "'Share Tech Mono', monospace",
+//           fontFamily: "'Arial', san-serif",
 //           fontSize: "0.72rem",
 //           color: ui.textSoft,
 //           mb: 0.8,
@@ -307,7 +307,7 @@
 //         <Typography
 //           key={`${p.name}-${p.dataKey}`}
 //           sx={{
-//             fontFamily: "'Share Tech Mono', monospace",
+//             fontFamily: "'Arial', san-serif",
 //             fontSize: "0.82rem",
 //             color: p.color,
 //             lineHeight: 1.7,
@@ -366,7 +366,7 @@
 //                 sx={{
 //                   fontSize: "0.88rem",
 //                   fontWeight: 800,
-//                   fontFamily: "'Share Tech Mono', monospace",
+//                   fontFamily: "'Arial', san-serif",
 //                   color: r.color || ui.textMain,
 //                   textAlign: "right",
 //                 }}
@@ -913,7 +913,7 @@
 //                             </Typography>
 //                             <Typography
 //                               sx={{
-//                                 fontFamily: "'Share Tech Mono', monospace",
+//                                 fontFamily: "'Arial', san-serif",
 //                                 fontSize: "0.72rem",
 //                                 color: ui.textMuted,
 //                                 mt: 0.25,
@@ -932,7 +932,7 @@
 //                       <TableCell>
 //                         <Typography
 //                           sx={{
-//                             fontFamily: "'Share Tech Mono', monospace",
+//                             fontFamily: "'Arial', san-serif",
 //                             fontSize: "0.82rem",
 //                             color: ui.textSoft,
 //                             fontWeight: 700,
@@ -945,7 +945,7 @@
 //                       <TableCell>
 //                         <Typography
 //                           sx={{
-//                             fontFamily: "'Share Tech Mono', monospace",
+//                             fontFamily: "'Arial', san-serif",
 //                             fontSize: "0.84rem",
 //                             fontWeight: 800,
 //                             color: ui.textMain,
@@ -985,7 +985,7 @@
 //                           />
 //                           <Typography
 //                             sx={{
-//                               fontFamily: "'Share Tech Mono', monospace",
+//                               fontFamily: "'Arial', san-serif",
 //                               fontSize: "0.74rem",
 //                               color: s.yuk > 90 ? ui.warning : ui.textSoft,
 //                               minWidth: 38,
@@ -1000,7 +1000,7 @@
 //                       <TableCell>
 //                         <Typography
 //                           sx={{
-//                             fontFamily: "'Share Tech Mono', monospace",
+//                             fontFamily: "'Arial', san-serif",
 //                             fontSize: "0.84rem",
 //                             fontWeight: 800,
 //                             color:
@@ -1069,7 +1069,7 @@
 //                   </Box>
 //                   <Typography
 //                     sx={{
-//                       fontFamily: "'Share Tech Mono', monospace",
+//                       fontFamily: "'Arial', san-serif",
 //                       fontSize: "0.68rem",
 //                       color: ui.textMuted,
 //                       whiteSpace: "nowrap",
@@ -1111,7 +1111,7 @@
 //                     />
 //                     <Typography
 //                       sx={{
-//                         fontFamily: "'Share Tech Mono', monospace",
+//                         fontFamily: "'Arial', san-serif",
 //                         fontSize: "0.72rem",
 //                         color: ui.textSoft,
 //                         fontWeight: 700,
@@ -1134,7 +1134,7 @@
 //                   <XAxis
 //                     dataKey="time"
 //                     tick={{
-//                       fontFamily: "'Share Tech Mono', monospace",
+//                       fontFamily: "'Arial', san-serif",
 //                       fontSize: 11,
 //                       fill: ui.chartTick,
 //                     }}
@@ -1143,7 +1143,7 @@
 //                   />
 //                   <YAxis
 //                     tick={{
-//                       fontFamily: "'Share Tech Mono', monospace",
+//                       fontFamily: "'Arial', san-serif",
 //                       fontSize: 11,
 //                       fill: ui.chartTick,
 //                     }}
@@ -1207,7 +1207,7 @@
 //                   <XAxis
 //                     dataKey="kun"
 //                     tick={{
-//                       fontFamily: "'Share Tech Mono', monospace",
+//                       fontFamily: "'Arial', san-serif",
 //                       fontSize: 11,
 //                       fill: ui.chartTick,
 //                     }}
@@ -1216,7 +1216,7 @@
 //                   />
 //                   <YAxis
 //                     tick={{
-//                       fontFamily: "'Share Tech Mono', monospace",
+//                       fontFamily: "'Arial', san-serif",
 //                       fontSize: 11,
 //                       fill: ui.chartTick,
 //                     }}
@@ -1290,7 +1290,7 @@
 //                   </Typography>
 //                   <Typography
 //                     sx={{
-//                       fontFamily: "'Share Tech Mono', monospace",
+//                       fontFamily: "'Arial', san-serif",
 //                       fontSize: "0.76rem",
 //                       color: item.color,
 //                       fontWeight: 800,
@@ -1316,7 +1316,7 @@
 
 //                 <Typography
 //                   sx={{
-//                     fontFamily: "'Share Tech Mono', monospace",
+//                     fontFamily: "'Arial', san-serif",
 //                     fontSize: "0.72rem",
 //                     color: ui.textSoft,
 //                     mt: 0.55,
@@ -1573,7 +1573,7 @@
 //                             <Typography
 //                               sx={{
 //                                 fontSize: "0.84rem",
-//                                 fontFamily: "'Share Tech Mono', monospace",
+//                                 fontFamily: "'Arial', san-serif",
 //                                 fontWeight: 800,
 //                                 color: ui.textMain,
 //                                 textAlign: "right",
@@ -1894,7 +1894,7 @@ function CustomTooltip({ active, payload, label }) {
     >
       <Typography
         sx={{
-          fontFamily: "'Share Tech Mono', monospace",
+          fontFamily: "'Arial', san-serif",
           fontSize: "0.72rem",
           color: ui.textSoft,
           mb: 0.8,
@@ -1908,7 +1908,7 @@ function CustomTooltip({ active, payload, label }) {
         <Typography
           key={`${p.name}-${p.dataKey}`}
           sx={{
-            fontFamily: "'Share Tech Mono', monospace",
+            fontFamily: "'Arial', san-serif",
             fontSize: "0.82rem",
             color: p.color,
             lineHeight: 1.7,
@@ -1968,7 +1968,7 @@ function MiniInfoCard({ title, rows = [] }) {
                 sx={{
                   fontSize: "0.86rem",
                   fontWeight: 800,
-                  fontFamily: "'Share Tech Mono', monospace",
+                  fontFamily: "'Arial', san-serif",
                   color: r.color || ui.textMain,
                   textAlign: "right",
                 }}
@@ -2011,7 +2011,7 @@ export default function Dashboard() {
   );
 
   const complexInfo = {
-    short: "ЛПК",
+    short: "QPK",
     title: "Quyuv Prokatlash Kompleksi",
     subtitle:
       "LPK bo‘yicha real vaqt statistikasi, jarayonlar holati va ishlab chiqarish ko‘rsatkichlari",
@@ -2050,37 +2050,37 @@ export default function Dashboard() {
 
     return [
       {
-        label: "LPK ISHLAB CHIQARISH",
+        label: "ISHLAB CHIQARISH",
         value: fmtN(totalProductionTon, 1),
         unit: "t",
         trend: `${periodLabel} bo'yicha jami`,
         trendUp: true,
         color: ui.orange,
       },
-      {
-        label: "LPK JARAYONLARI",
-        value: `${activeUnits}/${totalUnits}`,
-        unit: "",
-        trend: "EAF / LRF / VOD / TSC",
-        trendUp: true,
-        color: ui.blue,
-      },
-      {
-        label: "LPK O'RTA HARORATI",
-        value: fmtN(avgTemp, 0),
-        unit: "°C",
-        trend: "Kompleks bo‘yicha o‘rtacha",
-        trendUp: false,
-        color: ui.red,
-      },
-      {
-        label: "LPK DATCHIK NUQTALARI",
-        value: fmtN(totalTempPoints, 0),
-        unit: "",
-        trend: "Temperatura o‘lchovlari",
-        trendUp: true,
-        color: ui.green,
-      },
+      // {
+      //   label: "LPK JARAYONLARI",
+      //   value: `${activeUnits}/${totalUnits}`,
+      //   unit: "",
+      //   trend: "EAF / LRF / VOD / TSC",
+      //   trendUp: true,
+      //   color: ui.blue,
+      // },
+      // {
+      //   label: "LPK O'RTA HARORATI",
+      //   value: fmtN(avgTemp, 0),
+      //   unit: "°C",
+      //   trend: "Kompleks bo‘yicha o‘rtacha",
+      //   trendUp: false,
+      //   color: ui.red,
+      // },
+      // {
+      //   label: "LPK DATCHIK NUQTALARI",
+      //   value: fmtN(totalTempPoints, 0),
+      //   unit: "",
+      //   trend: "Temperatura o‘lchovlari",
+      //   trendUp: true,
+      //   color: ui.green,
+      // },
       {
         label: "LPK ENERGIYA SARFI",
         value: fmtN(totalEnergy, 0),
@@ -2455,7 +2455,7 @@ export default function Dashboard() {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "center",
             alignItems: { xs: "flex-start", md: "center" },
             flexDirection: { xs: "column", md: "row" },
             gap: 1.5,
@@ -2464,19 +2464,20 @@ export default function Dashboard() {
           <Box>
             <Typography
               sx={{
-                fontFamily: "'Orbitron', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: { xs: "1rem", md: "1.18rem" },
                 fontWeight: 900,
                 letterSpacing: "0.08em",
                 color: ui.lpkAccent,
                 textTransform: "uppercase",
                 lineHeight: 1.2,
+                textAlign: "center",
               }}
             >
-              {complexInfo.short} — {complexInfo.title}
+              {complexInfo.title} ({complexInfo.short})
             </Typography>
 
-            <Typography
+            {/* <Typography
               sx={{
                 mt: 0.55,
                 fontSize: "0.92rem",
@@ -2486,10 +2487,10 @@ export default function Dashboard() {
               }}
             >
               {complexInfo.subtitle}
-            </Typography>
+            </Typography> */}
           </Box>
 
-          <Chip
+          {/* <Chip
             label="FAOL KOMPLEKS"
             sx={{
               height: 32,
@@ -2500,13 +2501,13 @@ export default function Dashboard() {
               background: alpha(ui.green, 0.1),
               border: `1px solid ${alpha(ui.green, 0.2)}`,
             }}
-          />
+          /> */}
         </Box>
       </DashboardPaper>
 
       <DashboardPaper sx={{ p: 1.75 }}>
         <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
-          <Chip
+          {/* <Chip
             label="Kompleks: ЛПК"
             sx={{
               borderRadius: 2,
@@ -2514,7 +2515,7 @@ export default function Dashboard() {
               fontSize: "0.82rem",
               height: 34,
             }}
-          />
+          /> */}
 
           {PERIOD_OPTIONS.map((opt) => (
             <Chip
@@ -2532,7 +2533,7 @@ export default function Dashboard() {
             />
           ))}
 
-          <Chip
+          {/* <Chip
             label={`Tanlangan davr: ${PERIOD_LABELS[period] || period}`}
             sx={{
               ml: "auto",
@@ -2540,7 +2541,7 @@ export default function Dashboard() {
               fontSize: "0.82rem",
               height: 34,
             }}
-          />
+          /> */}
         </Stack>
       </DashboardPaper>
 
@@ -2555,9 +2556,10 @@ export default function Dashboard() {
       <Grid container spacing={2}>
         <Grid item xs={12} lg={8}>
           <DashboardPaper>
-            <SectionHeader title="LPK Jarayonlari Holati" action="JARAYONLAR →">
-              <LiveBadge />
-            </SectionHeader>
+            <SectionHeader
+              title="LPK Jarayonlari Holati"
+              action="JARAYONLAR →"
+            ></SectionHeader>
 
             {isAnyLoading ? (
               <CardSkeleton />
@@ -2635,7 +2637,7 @@ export default function Dashboard() {
 
                             <Typography
                               sx={{
-                                fontFamily: "'Share Tech Mono', monospace",
+                                fontFamily: "'Arial', san-serif",
                                 fontSize: "0.72rem",
                                 color: ui.textMuted,
                                 mt: 0.22,
@@ -2654,7 +2656,7 @@ export default function Dashboard() {
                       <TableCell>
                         <Typography
                           sx={{
-                            fontFamily: "'Share Tech Mono', monospace",
+                            fontFamily: "'Arial', san-serif",
                             fontSize: "0.82rem",
                             color: ui.textSoft,
                             fontWeight: 700,
@@ -2667,7 +2669,7 @@ export default function Dashboard() {
                       <TableCell>
                         <Typography
                           sx={{
-                            fontFamily: "'Share Tech Mono', monospace",
+                            fontFamily: "'Arial', san-serif",
                             fontSize: "0.84rem",
                             fontWeight: 800,
                             color: ui.textMain,
@@ -2707,7 +2709,7 @@ export default function Dashboard() {
                           />
                           <Typography
                             sx={{
-                              fontFamily: "'Share Tech Mono', monospace",
+                              fontFamily: "'Arial', san-serif",
                               fontSize: "0.74rem",
                               color: s.yuk > 90 ? ui.yellow : ui.textSoft,
                               minWidth: 38,
@@ -2722,7 +2724,7 @@ export default function Dashboard() {
                       <TableCell>
                         <Typography
                           sx={{
-                            fontFamily: "'Share Tech Mono', monospace",
+                            fontFamily: "'Arial', san-serif",
                             fontSize: "0.84rem",
                             fontWeight: 800,
                             color:
@@ -2793,7 +2795,7 @@ export default function Dashboard() {
 
                   <Typography
                     sx={{
-                      fontFamily: "'Share Tech Mono', monospace",
+                      fontFamily: "'Arial', san-serif",
                       fontSize: "0.68rem",
                       color: ui.textMuted,
                       whiteSpace: "nowrap",
@@ -2835,7 +2837,7 @@ export default function Dashboard() {
                     />
                     <Typography
                       sx={{
-                        fontFamily: "'Share Tech Mono', monospace",
+                        fontFamily: "'Arial', san-serif",
                         fontSize: "0.72rem",
                         color: ui.textSoft,
                         fontWeight: 700,
@@ -2859,7 +2861,7 @@ export default function Dashboard() {
                   <XAxis
                     dataKey="time"
                     tick={{
-                      fontFamily: "'Share Tech Mono', monospace",
+                      fontFamily: "'Arial', san-serif",
                       fontSize: 11,
                       fill: ui.chartTick,
                     }}
@@ -2869,7 +2871,7 @@ export default function Dashboard() {
 
                   <YAxis
                     tick={{
-                      fontFamily: "'Share Tech Mono', monospace",
+                      fontFamily: "'Arial', san-serif",
                       fontSize: 11,
                       fill: ui.chartTick,
                     }}
@@ -2935,7 +2937,7 @@ export default function Dashboard() {
                   <XAxis
                     dataKey="kun"
                     tick={{
-                      fontFamily: "'Share Tech Mono', monospace",
+                      fontFamily: "'Arial', san-serif",
                       fontSize: 11,
                       fill: ui.chartTick,
                     }}
@@ -2945,7 +2947,7 @@ export default function Dashboard() {
 
                   <YAxis
                     tick={{
-                      fontFamily: "'Share Tech Mono', monospace",
+                      fontFamily: "'Arial', san-serif",
                       fontSize: 11,
                       fill: ui.chartTick,
                     }}
@@ -2992,7 +2994,10 @@ export default function Dashboard() {
       </Grid>
 
       <DashboardPaper>
-        <SectionHeader title="LPK Ishlab Chiqarish Rejasi" dot={ui.blue} />
+        <SectionHeader
+          title="QUYUV PROKATLASH KOMPLEKSI Ishlab Chiqarish Rejasi"
+          dot={ui.blue}
+        />
         <Box sx={{ p: 2.2, display: "flex", gap: 3, flexWrap: "wrap" }}>
           {planItems.map((item) => {
             const percent = item.plan
@@ -3021,7 +3026,7 @@ export default function Dashboard() {
 
                   <Typography
                     sx={{
-                      fontFamily: "'Share Tech Mono', monospace",
+                      fontFamily: "'Arial', san-serif",
                       fontSize: "0.76rem",
                       color: item.color,
                       fontWeight: 800,
@@ -3047,7 +3052,7 @@ export default function Dashboard() {
 
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono', monospace",
+                    fontFamily: "'Arial', san-serif",
                     fontSize: "0.72rem",
                     color: ui.textSoft,
                     mt: 0.55,
@@ -3305,7 +3310,7 @@ export default function Dashboard() {
                             <Typography
                               sx={{
                                 fontSize: "0.84rem",
-                                fontFamily: "'Share Tech Mono', monospace",
+                                fontFamily: "'Arial', san-serif",
                                 fontWeight: 800,
                                 color: ui.textMain,
                                 textAlign: "right",

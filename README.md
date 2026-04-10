@@ -11,16 +11,16 @@ npm run dev
 
 ## Sahifalar
 
-| Yo'l | Sahifa | Tavsif |
-|------|--------|--------|
-| `/` | Dashboard | Asosiy boshqaruv paneli — KPI, sexlar holati, grafiklar |
-| `/sexlar` | Sexlar | 6 ta sex kartalar va detail panel |
-| `/uchastkalar` | Uchastkalar | DataGrid + karta ko'rinish, filtr |
-| `/uskunalar` | Uskunalar | DataGrid + side drawer batafsil |
-| `/datchiklar` | Datchiklar | Grid/List ko'rinish, jonli yangilanish (3s) |
-| `/kameralar` | Kameralar | Video nazorat, fullscreen dialog |
-| `/analitika` | Analitika | Area, Bar, Radar, Pie grafiklar (Recharts) |
-| `/ogohlantirishlar` | Ogohlantirishlar | Filtrli ogohlantirish boshqaruvi |
+| Yo'l                | Sahifa           | Tavsif                                                  |
+| ------------------- | ---------------- | ------------------------------------------------------- |
+| `/`                 | Dashboard        | Asosiy boshqaruv paneli — KPI, sexlar holati, grafiklar |
+| `/sexlar`           | Sexlar           | 6 ta sex kartalar va detail panel                       |
+| `/uchastkalar`      | Uchastkalar      | DataGrid + karta ko'rinish, filtr                       |
+| `/uskunalar`        | Uskunalar        | DataGrid + side drawer batafsil                         |
+| `/datchiklar`       | Datchiklar       | Grid/List ko'rinish, jonli yangilanish (3s)             |
+| `/kameralar`        | Kameralar        | Video nazorat, fullscreen dialog                        |
+| `/analitika`        | Analitika        | Area, Bar, Radar, Pie grafiklar (Recharts)              |
+| `/ogohlantirishlar` | Ogohlantirishlar | Filtrli ogohlantirish boshqaruvi                        |
 
 ## Arxitektura
 
@@ -39,7 +39,7 @@ src/
 ## Texnologiyalar
 
 - **React 18** + **Vite 5**
-- **MUI v6** — industrial dark theme (Orbitron + Rajdhani + Share Tech Mono)
+- **MUI v6** — industrial dark theme (Arial + san-serif + Arial)
 - **Redux Toolkit** — UI state, filterlar
 - **React Query v5** — server state, auto-refetch
 - **Axios** — API layer (fake interceptor bilan)
@@ -50,6 +50,7 @@ src/
 ## Fake Data
 
 Haqiqiy API yo'q — `src/utils/fakeData.js` da to'liq fake ma'lumotlar:
+
 - 6 ta sex, 24 ta uchastka, 12 ta uskuna, 12 ta datchik, 7 ta ogohlantirish, 9 ta kamera
 - API interceptor 300-500ms kechikish simulatsiya qiladi
 - Ba'zi querylar avtomatik yangilanadi (KPI: 5s, datchiklar: 3s, ogohlantirishlar: 5s)

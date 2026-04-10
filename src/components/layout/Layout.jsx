@@ -111,7 +111,7 @@
 // //   return (
 // //     <Typography
 // //       sx={{
-// //         fontFamily: "'Share Tech Mono', monospace",
+// //         fontFamily: "'Arial', san-serif",
 // //         fontSize: "0.75rem",
 // //         color: "primary.main",
 // //         letterSpacing: "0.1em",
@@ -169,14 +169,14 @@
 // //               sx={{
 // //                 fontSize: "0.65rem",
 // //                 color: "text.secondary",
-// //                 fontFamily: "'Share Tech Mono', monospace",
+// //                 fontFamily: "'Arial', san-serif",
 // //               }}
 // //             >
 // //               {s.l}
 // //             </Typography>
 // //             <Typography
 // //               sx={{
-// //                 fontFamily: "'Share Tech Mono', monospace",
+// //                 fontFamily: "'Arial', san-serif",
 // //                 fontSize: "0.72rem",
 // //                 color: s.c,
 // //               }}
@@ -191,7 +191,7 @@
 // //         <Box sx={{ px: 2, pt: 1.5, pb: 0.5 }}>
 // //           <Typography
 // //             sx={{
-// //               fontFamily: "'Share Tech Mono', monospace",
+// //               fontFamily: "'Arial', san-serif",
 // //               fontSize: "0.55rem",
 // //               letterSpacing: "0.2em",
 // //               color: "text.disabled",
@@ -252,7 +252,7 @@
 // //         <Box sx={{ px: 2, pb: 0.5 }}>
 // //           <Typography
 // //             sx={{
-// //               fontFamily: "'Share Tech Mono', monospace",
+// //               fontFamily: "'Arial', san-serif",
 // //               fontSize: "0.55rem",
 // //               letterSpacing: "0.2em",
 // //               color: "text.disabled",
@@ -335,7 +335,7 @@
 // //         />
 // //         <Typography
 // //           sx={{
-// //             fontFamily: "'Share Tech Mono', monospace",
+// //             fontFamily: "'Arial', san-serif",
 // //             fontSize: "0.6rem",
 // //             color: "text.secondary",
 // //           }}
@@ -345,7 +345,7 @@
 // //         <Box sx={{ flex: 1 }} />
 // //         <Typography
 // //           sx={{
-// //             fontFamily: "'Share Tech Mono', monospace",
+// //             fontFamily: "'Arial', san-serif",
 // //             fontSize: "0.6rem",
 // //             color: "text.secondary",
 // //           }}
@@ -454,7 +454,7 @@
 
 // //               <Typography
 // //                 sx={{
-// //                   fontFamily: "'Orbitron', monospace",
+// //                   fontFamily: "'Arial', san-serif",
 // //                   fontSize: { xs: "0.72rem", sm: "0.85rem" },
 // //                   fontWeight: 900,
 // //                   letterSpacing: { xs: "0.06em", sm: "0.14em" },
@@ -512,7 +512,7 @@
 // //                 <Typography
 // //                   ref={sloganTextRef}
 // //                   sx={{
-// //                     fontFamily: "'Orbitron', monospace",
+// //                     fontFamily: "'Arial', san-serif",
 // //                     fontSize: {
 // //                       md: open ? "0.66rem" : "0.76rem",
 // //                       lg: open ? "0.76rem" : "0.88rem",
@@ -606,7 +606,7 @@
 // //               color="error"
 // //               sx={{
 // //                 "& .MuiBadge-badge": {
-// //                   fontFamily: "'Share Tech Mono', monospace",
+// //                   fontFamily: "'Arial', san-serif",
 // //                   fontSize: "0.55rem",
 // //                 },
 // //               }}
@@ -630,7 +630,7 @@
 // //                     height: 28,
 // //                     bgcolor: "divider",
 // //                     fontSize: "0.7rem",
-// //                     fontFamily: "'Orbitron', monospace",
+// //                     fontFamily: "'Arial', san-serif",
 // //                     border: "1px solid",
 // //                     borderColor: "divider",
 // //                     cursor: "pointer",
@@ -829,7 +829,7 @@
 //   return (
 //     <Typography
 //       sx={{
-//         fontFamily: "'Share Tech Mono', monospace",
+//         fontFamily: "'Arial', san-serif",
 //         fontSize: "0.75rem",
 //         color: "primary.main",
 //         letterSpacing: "0.1em",
@@ -891,14 +891,14 @@
 //               sx={{
 //                 fontSize: "0.65rem",
 //                 color: "text.secondary",
-//                 fontFamily: "'Share Tech Mono', monospace",
+//                 fontFamily: "'Arial', san-serif",
 //               }}
 //             >
 //               {s.l}
 //             </Typography>
 //             <Typography
 //               sx={{
-//                 fontFamily: "'Share Tech Mono', monospace",
+//                 fontFamily: "'Arial', san-serif",
 //                 fontSize: "0.72rem",
 //                 color: s.c,
 //               }}
@@ -913,7 +913,7 @@
 //         <Box sx={{ px: 2, pt: 1.5, pb: 0.5 }}>
 //           <Typography
 //             sx={{
-//               fontFamily: "'Share Tech Mono', monospace",
+//               fontFamily: "'Arial', san-serif",
 //               fontSize: "0.55rem",
 //               letterSpacing: "0.2em",
 //               color: "text.disabled",
@@ -974,7 +974,7 @@
 //         <Box sx={{ px: 2, pb: 0.5 }}>
 //           <Typography
 //             sx={{
-//               fontFamily: "'Share Tech Mono', monospace",
+//               fontFamily: "'Arial', san-serif",
 //               fontSize: "0.55rem",
 //               letterSpacing: "0.2em",
 //               color: "text.disabled",
@@ -1057,7 +1057,7 @@
 //         />
 //         <Typography
 //           sx={{
-//             fontFamily: "'Share Tech Mono', monospace",
+//             fontFamily: "'Arial', san-serif",
 //             fontSize: "0.6rem",
 //             color: "text.secondary",
 //           }}
@@ -1067,7 +1067,7 @@
 //         <Box sx={{ flex: 1 }} />
 //         <Typography
 //           sx={{
-//             fontFamily: "'Share Tech Mono', monospace",
+//             fontFamily: "'Arial', san-serif",
 //             fontSize: "0.6rem",
 //             color: "text.secondary",
 //           }}
@@ -1177,7 +1177,7 @@
 
 //               <Typography
 //                 sx={{
-//                   fontFamily: "'Orbitron', monospace",
+//                   fontFamily: "'Arial', san-serif",
 //                   fontSize: { xs: "0.72rem", sm: "0.85rem" },
 //                   fontWeight: 900,
 //                   letterSpacing: { xs: "0.06em", sm: "0.14em" },
@@ -1235,7 +1235,7 @@
 //                 <Typography
 //                   ref={sloganTextRef}
 //                   sx={{
-//                     fontFamily: "'Orbitron', monospace",
+//                     fontFamily: "'Arial', san-serif",
 //                     fontSize: {
 //                       md: open ? "0.66rem" : "0.76rem",
 //                       lg: open ? "0.76rem" : "0.88rem",
@@ -1524,7 +1524,7 @@ function Clock() {
   return (
     <Typography
       sx={{
-        fontFamily: "'Share Tech Mono', monospace",
+        fontFamily: "'Arial', san-serif",
         fontSize: "0.76rem",
         color: "text.secondary",
         letterSpacing: "0.08em",
@@ -1542,7 +1542,7 @@ function SectionLabel({ children, px = 2, pt = 1.5, pb = 0.6 }) {
     <Box sx={{ px, pt, pb }}>
       <Typography
         sx={{
-          fontFamily: "'Share Tech Mono', monospace",
+          fontFamily: "'Arial', san-serif",
           fontSize: "0.56rem",
           letterSpacing: "0.18em",
           color: "text.secondary",
@@ -1740,7 +1740,7 @@ export function Layout({ children }) {
             sx={{
               height: 20,
               fontSize: "0.52rem",
-              fontFamily: "'Share Tech Mono', monospace",
+              fontFamily: "'Arial', san-serif",
               color: ui.chipColor,
               border: `1px solid ${ui.chipBorder}`,
               background: ui.chipBg,
@@ -1813,7 +1813,7 @@ export function Layout({ children }) {
               />
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono', monospace",
+                  fontFamily: "'Arial', san-serif",
                   fontSize: "0.72rem",
                   letterSpacing: "0.12em",
                   color: aiOpen ? "text.primary" : "text.secondary",
@@ -1882,7 +1882,7 @@ export function Layout({ children }) {
         />
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono', monospace",
+            fontFamily: "'Arial', san-serif",
             fontSize: "0.62rem",
             color: "text.secondary",
             fontWeight: 700,
@@ -1893,7 +1893,7 @@ export function Layout({ children }) {
         <Box sx={{ flex: 1 }} />
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono', monospace",
+            fontFamily: "'Arial', san-serif",
             fontSize: "0.62rem",
             color: "text.secondary",
             fontWeight: 700,
@@ -1971,35 +1971,56 @@ export function Layout({ children }) {
             >
               <MenuIcon fontSize="small" />
             </IconButton>
-
             <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
-                gap: 1,
-                minWidth: 0,
+                gap: { xs: 0.5, sm: 1 },
+                flexShrink: 0,
               }}
             >
-              <img
-                src="/images/logo.svg"
-                alt="logo"
-                width={isSmall ? 24 : 30}
+              <VoiceAssistantIndicator
+                isEnabled={voice.isEnabled}
+                isListening={voice.isListening}
+                lastCommand={voice.lastCommand}
+                error={voice.error}
+                onToggle={voice.toggleMic}
               />
 
-              <Typography
-                sx={{
-                  fontFamily: "'Orbitron', monospace",
-                  fontSize: { xs: "0.72rem", sm: "0.88rem" },
-                  fontWeight: 900,
-                  letterSpacing: { xs: "0.05em", sm: "0.12em" },
-                  lineHeight: 1,
-                  color: isDark ? "#f8fafc" : "#1e293b",
-                  textTransform: "uppercase",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                UZMETKOMBINAT
-              </Typography>
+              {!isSmall && <LiveBadge />}
+              {!isSmall && <Clock />}
+
+              <Tooltip title={isDark ? "Kunduzgi rejim" : "Kechki rejim"}>
+                <IconButton
+                  size="small"
+                  onClick={toggleMode}
+                  sx={{
+                    color: isDark ? "#facc15" : "#2563eb",
+                    background: isDark
+                      ? "rgba(250,204,21,0.10)"
+                      : "rgba(37,99,235,0.08)",
+                    border: `1px solid ${
+                      isDark ? "rgba(250,204,21,0.22)" : "rgba(37,99,235,0.14)"
+                    }`,
+                    borderRadius: 1.5,
+                    width: 34,
+                    height: 34,
+                    transition: "all 0.25s ease",
+                    "&:hover": {
+                      background: isDark
+                        ? "rgba(250,204,21,0.16)"
+                        : "rgba(37,99,235,0.12)",
+                      transform: "translateY(-1px) rotate(10deg)",
+                    },
+                  }}
+                >
+                  {isDark ? (
+                    <LightModeIcon sx={{ fontSize: 17 }} />
+                  ) : (
+                    <DarkModeIcon sx={{ fontSize: 17 }} />
+                  )}
+                </IconButton>
+              </Tooltip>
             </Box>
 
             {!isSmall && (
@@ -2042,7 +2063,7 @@ export function Layout({ children }) {
                 <Typography
                   ref={sloganTextRef}
                   sx={{
-                    fontFamily: "'Orbitron', monospace",
+                    fontFamily: "'Arial', san-serif",
                     fontSize: {
                       md: open ? "0.68rem" : "0.78rem",
                       lg: open ? "0.78rem" : "0.90rem",
@@ -2078,7 +2099,7 @@ export function Layout({ children }) {
                     },
                   }}
                 >
-                  RAQAMLI • INNOVATSION • XAVFSIZ KOMBINAT
+                  RAQAMLI INNOVATSION XAVFSIZ KOMBINAT
                 </Typography>
               </Box>
             </Box>
@@ -2088,52 +2109,26 @@ export function Layout({ children }) {
             sx={{
               display: "flex",
               alignItems: "center",
-              gap: { xs: 0.5, sm: 1 },
-              flexShrink: 0,
+              gap: 1,
+              minWidth: 0,
             }}
           >
-            <VoiceAssistantIndicator
-              isEnabled={voice.isEnabled}
-              isListening={voice.isListening}
-              lastCommand={voice.lastCommand}
-              error={voice.error}
-              onToggle={voice.toggleMic}
-            />
+            <img src="/images/logo.svg" alt="logo" width={isSmall ? 24 : 30} />
 
-            {!isSmall && <LiveBadge />}
-            {!isSmall && <Clock />}
-
-            <Tooltip title={isDark ? "Kunduzgi rejim" : "Kechki rejim"}>
-              <IconButton
-                size="small"
-                onClick={toggleMode}
-                sx={{
-                  color: isDark ? "#facc15" : "#2563eb",
-                  background: isDark
-                    ? "rgba(250,204,21,0.10)"
-                    : "rgba(37,99,235,0.08)",
-                  border: `1px solid ${
-                    isDark ? "rgba(250,204,21,0.22)" : "rgba(37,99,235,0.14)"
-                  }`,
-                  borderRadius: 1.5,
-                  width: 34,
-                  height: 34,
-                  transition: "all 0.25s ease",
-                  "&:hover": {
-                    background: isDark
-                      ? "rgba(250,204,21,0.16)"
-                      : "rgba(37,99,235,0.12)",
-                    transform: "translateY(-1px) rotate(10deg)",
-                  },
-                }}
-              >
-                {isDark ? (
-                  <LightModeIcon sx={{ fontSize: 17 }} />
-                ) : (
-                  <DarkModeIcon sx={{ fontSize: 17 }} />
-                )}
-              </IconButton>
-            </Tooltip>
+            <Typography
+              sx={{
+                fontFamily: "'Arial', san-serif",
+                fontSize: { xs: "0.72rem", sm: "0.88rem" },
+                fontWeight: 900,
+                letterSpacing: { xs: "0.05em", sm: "0.12em" },
+                lineHeight: 1,
+                color: isDark ? "#f8fafc" : "#1e293b",
+                textTransform: "uppercase",
+                whiteSpace: "nowrap",
+              }}
+            >
+              UZMETKOMBINAT
+            </Typography>
           </Box>
         </Toolbar>
       </AppBar>

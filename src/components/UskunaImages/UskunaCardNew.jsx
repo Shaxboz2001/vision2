@@ -170,7 +170,7 @@ export default function UskunaCard({ u, onClick }) {
         >
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.55rem",
               color: c,
             }}
@@ -204,7 +204,7 @@ export default function UskunaCard({ u, onClick }) {
             sx={{
               height: 18,
               fontSize: "0.55rem",
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               bgcolor: `${c}14`,
               color: c,
               border: `1px solid ${c}30`,
@@ -227,9 +227,7 @@ export default function UskunaCard({ u, onClick }) {
               <Box
                 sx={{
                   textAlign: "center",
-                  background: isDark
-                    ? "rgba(0,0,0,0.15)"
-                    : "rgba(0,0,0,0.025)",
+                  background: isDark ? "rgba(0,0,0,0.15)" : "rgba(0,0,0,0.025)",
                   borderRadius: 0.5,
                   py: 0.4,
                   border: "1px solid",
@@ -238,7 +236,7 @@ export default function UskunaCard({ u, onClick }) {
               >
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.7rem",
                     fontWeight: 700,
                     color: s.c2,
@@ -248,7 +246,7 @@ export default function UskunaCard({ u, onClick }) {
                 </Typography>
                 <Typography
                   sx={{
-                    fontFamily: "'Share Tech Mono',monospace",
+                    fontFamily: "'Arial',san-serif",
                     fontSize: "0.44rem",
                     color: "text.disabled",
                   }}
@@ -271,7 +269,7 @@ export default function UskunaCard({ u, onClick }) {
           />
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.62rem",
               color: samColor,
               minWidth: 32,

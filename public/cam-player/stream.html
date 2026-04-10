@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Camera Stream</title>
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+    }
+
+    video-stream {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+  <video-stream id="stream" mode="webrtc,mse,hls,mjpeg"></video-stream>
+
+  <script type="module" src="/cam-player/video-rtc.js"></script>
+  <script type="module" src="/cam-player/video-stream.js"></script>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const src = params.get("src");
+    const player = document.getElementById("stream");
+
+    const streamName = String(src).startsWith("cam") ? src : `cam${src}`;
+    player.src = `/camera-ws?src=${streamName}`;
+  </script>
+</body>
+</html>

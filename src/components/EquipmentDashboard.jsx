@@ -138,7 +138,7 @@ function GaugeWidget({
           textAnchor="middle"
           fill={color || "#ff6b1a"}
           fontSize={size * 0.22}
-          fontFamily="'Orbitron', monospace"
+          fontFamily="'Arial', san-serif"
           fontWeight="700"
         >
           {typeof value === "number" ? value.toFixed(1) : value}
@@ -149,7 +149,7 @@ function GaugeWidget({
           textAnchor="middle"
           fill={isDark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)"}
           fontSize={size * 0.09}
-          fontFamily="'Share Tech Mono', monospace"
+          fontFamily="'Arial', san-serif"
         >
           {unit}
         </text>
@@ -162,7 +162,7 @@ function GaugeWidget({
             left: 0,
             right: 0,
             textAlign: "center",
-            fontFamily: "'Rajdhani', sans-serif",
+            fontFamily: "'san-serif', sans-serif",
             fontWeight: 700,
             fontSize: "0.7rem",
             color: "text.secondary",
@@ -240,7 +240,7 @@ function TempIndicator({
       >
         <Typography
           sx={{
-            fontFamily: "'Orbitron', monospace",
+            fontFamily: "'Arial', san-serif",
             fontSize: "0.72rem",
             fontWeight: 700,
             color: color,
@@ -277,7 +277,7 @@ function StatRow({ label, value, unit, valueColor }) {
     >
       <Typography
         sx={{
-          fontFamily: "'Share Tech Mono', monospace",
+          fontFamily: "'Arial', san-serif",
           fontSize: "0.72rem",
           color: "text.secondary",
           letterSpacing: "0.03em",
@@ -288,7 +288,7 @@ function StatRow({ label, value, unit, valueColor }) {
       <Box sx={{ display: "flex", alignItems: "baseline", gap: 0.5 }}>
         <Typography
           sx={{
-            fontFamily: "'Orbitron', monospace",
+            fontFamily: "'Arial', san-serif",
             fontSize: "0.95rem",
             fontWeight: 700,
             color: valueColor || "text.primary",
@@ -299,7 +299,7 @@ function StatRow({ label, value, unit, valueColor }) {
         {unit && (
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono', monospace",
+              fontFamily: "'Arial', san-serif",
               fontSize: "0.6rem",
               color: "text.disabled",
             }}
@@ -329,7 +329,7 @@ function MiniChart({ data, dataKey, color, title, unit }) {
       >
         <Typography
           sx={{
-            fontFamily: "'Share Tech Mono', monospace",
+            fontFamily: "'Arial', san-serif",
             fontSize: "0.62rem",
             color: "text.secondary",
             letterSpacing: "0.1em",
@@ -339,7 +339,7 @@ function MiniChart({ data, dataKey, color, title, unit }) {
         </Typography>
         <Typography
           sx={{
-            fontFamily: "'Orbitron', monospace",
+            fontFamily: "'Arial', san-serif",
             fontSize: "0.85rem",
             fontWeight: 700,
             color: color,
@@ -368,7 +368,7 @@ function MiniChart({ data, dataKey, color, title, unit }) {
             tick={{
               fontSize: 8,
               fill: isDark ? "#555" : "#bbb",
-              fontFamily: "'Share Tech Mono'",
+              fontFamily: "'Arial'",
             }}
             axisLine={false}
             tickLine={false}
@@ -381,7 +381,7 @@ function MiniChart({ data, dataKey, color, title, unit }) {
                 : "rgba(255,255,255,0.95)",
               border: `1px solid ${color}40`,
               borderRadius: 4,
-              fontFamily: "'Share Tech Mono'",
+              fontFamily: "'Arial'",
               fontSize: "0.65rem",
             }}
           />
@@ -489,7 +489,7 @@ export default function EquipmentCharacteristics({ uskuna }) {
           ? "linear-gradient(180deg, #060a14 0%, #0a0e1a 100%)"
           : "linear-gradient(180deg, #f4f6fa 0%, #ebeef5 100%)",
         p: { xs: 1.5, md: 2.5 },
-        fontFamily: "'Rajdhani', sans-serif",
+        fontFamily: "'Arial', sans-serif",
       }}
     >
       {/* ═══ HEADER BAR ═══ */}
@@ -529,7 +529,7 @@ export default function EquipmentCharacteristics({ uskuna }) {
           <Box>
             <Typography
               sx={{
-                fontFamily: "'Orbitron', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: { xs: "0.85rem", md: "1.1rem" },
                 fontWeight: 700,
                 color: "text.primary",
@@ -540,7 +540,7 @@ export default function EquipmentCharacteristics({ uskuna }) {
             </Typography>
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: "0.6rem",
                 color: "text.secondary",
               }}
@@ -556,7 +556,7 @@ export default function EquipmentCharacteristics({ uskuna }) {
             size="small"
             sx={{
               height: 24,
-              fontFamily: "'Share Tech Mono', monospace",
+              fontFamily: "'Arial', san-serif",
               fontSize: "0.6rem",
               fontWeight: 700,
               bgcolor: `${c}18`,
@@ -598,7 +598,7 @@ export default function EquipmentCharacteristics({ uskuna }) {
           >
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: "0.6rem",
                 color: "text.secondary",
                 letterSpacing: "0.12em",
@@ -615,7 +615,7 @@ export default function EquipmentCharacteristics({ uskuna }) {
             />
             <Typography
               sx={{
-                fontFamily: "'Rajdhani', sans-serif",
+                fontFamily: "'san-serif', sans-serif",
                 fontWeight: 600,
                 fontSize: "0.75rem",
                 color: "text.secondary",
@@ -797,7 +797,7 @@ export default function EquipmentCharacteristics({ uskuna }) {
               position: "absolute",
               top: 16,
               left: 20,
-              fontFamily: "'Orbitron', monospace",
+              fontFamily: "'Arial', san-serif",
               fontSize: "0.75rem",
               fontWeight: 600,
               color: "text.secondary",
@@ -820,7 +820,7 @@ export default function EquipmentCharacteristics({ uskuna }) {
           >
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: "0.55rem",
                 color: "text.secondary",
                 letterSpacing: "0.1em",
@@ -830,7 +830,7 @@ export default function EquipmentCharacteristics({ uskuna }) {
             </Typography>
             <Typography
               sx={{
-                fontFamily: "'Orbitron', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: "1.5rem",
                 fontWeight: 700,
                 color: "#00e676",
@@ -859,7 +859,7 @@ export default function EquipmentCharacteristics({ uskuna }) {
           >
             <Typography
               sx={{
-                fontFamily: "'Share Tech Mono', monospace",
+                fontFamily: "'Arial', san-serif",
                 fontSize: "0.6rem",
                 color: "text.secondary",
                 letterSpacing: "0.12em",
@@ -889,7 +889,7 @@ export default function EquipmentCharacteristics({ uskuna }) {
             >
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono', monospace",
+                  fontFamily: "'Arial', san-serif",
                   fontSize: "0.6rem",
                   color: "text.secondary",
                   letterSpacing: "0.12em",
@@ -936,7 +936,7 @@ export default function EquipmentCharacteristics({ uskuna }) {
             >
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono', monospace",
+                  fontFamily: "'Arial', san-serif",
                   fontSize: "0.6rem",
                   color: "text.secondary",
                   letterSpacing: "0.12em",
@@ -983,7 +983,7 @@ export default function EquipmentCharacteristics({ uskuna }) {
             >
               <Typography
                 sx={{
-                  fontFamily: "'Share Tech Mono', monospace",
+                  fontFamily: "'Arial', san-serif",
                   fontSize: "0.6rem",
                   color: "text.secondary",
                   letterSpacing: "0.12em",
@@ -1040,7 +1040,7 @@ export default function EquipmentCharacteristics({ uskuna }) {
           />
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono', monospace",
+              fontFamily: "'Arial', san-serif",
               fontSize: "0.65rem",
               color: "text.secondary",
             }}
@@ -1052,7 +1052,7 @@ export default function EquipmentCharacteristics({ uskuna }) {
         <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
           <Typography
             sx={{
-              fontFamily: "'Share Tech Mono', monospace",
+              fontFamily: "'Arial', san-serif",
               fontSize: "0.6rem",
               color: "text.disabled",
             }}
@@ -1064,7 +1064,7 @@ export default function EquipmentCharacteristics({ uskuna }) {
             size="small"
             sx={{
               height: 20,
-              fontFamily: "'Share Tech Mono', monospace",
+              fontFamily: "'Arial', san-serif",
               fontSize: "0.55rem",
               bgcolor: "#00e67615",
               color: "#00e676",

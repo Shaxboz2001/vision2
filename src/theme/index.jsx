@@ -64,30 +64,30 @@ export const buildTheme = (mode) => {
       divider: t.border,
     },
     typography: {
-      fontFamily: "'Rajdhani', sans-serif",
-      h1: { fontFamily: "'Orbitron', monospace", fontWeight: 900 },
-      h2: { fontFamily: "'Orbitron', monospace", fontWeight: 700 },
-      h3: { fontFamily: "'Orbitron', monospace", fontWeight: 700 },
-      h4: { fontFamily: "'Rajdhani', sans-serif", fontWeight: 700 },
-      h5: { fontFamily: "'Rajdhani', sans-serif", fontWeight: 600 },
-      h6: { fontFamily: "'Rajdhani', sans-serif", fontWeight: 600 },
+      fontFamily: "'san-serif', sans-serif",
+      h1: { fontFamily: "'Arial', san-serif", fontWeight: 900 },
+      h2: { fontFamily: "'Arial', san-serif", fontWeight: 700 },
+      h3: { fontFamily: "'Arial', san-serif", fontWeight: 700 },
+      h4: { fontFamily: "'san-serif', sans-serif", fontWeight: 700 },
+      h5: { fontFamily: "'san-serif', sans-serif", fontWeight: 600 },
+      h6: { fontFamily: "'san-serif', sans-serif", fontWeight: 600 },
       subtitle1: {
-        fontFamily: "'Share Tech Mono', monospace",
+        fontFamily: "'Arial', san-serif",
         fontSize: "0.75rem",
         letterSpacing: "0.1em",
       },
       subtitle2: {
-        fontFamily: "'Share Tech Mono', monospace",
+        fontFamily: "'Arial', san-serif",
         fontSize: "0.7rem",
         letterSpacing: "0.15em",
       },
       caption: {
-        fontFamily: "'Share Tech Mono', monospace",
+        fontFamily: "'Arial', san-serif",
         fontSize: "0.65rem",
         letterSpacing: "0.1em",
       },
       overline: {
-        fontFamily: "'Share Tech Mono', monospace",
+        fontFamily: "'Arial', san-serif",
         letterSpacing: "0.2em",
       },
     },
@@ -118,7 +118,7 @@ export const buildTheme = (mode) => {
         styleOverrides: {
           root: {
             "& .MuiTableCell-head": {
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.65rem",
               letterSpacing: "0.15em",
               textTransform: "uppercase",
@@ -151,7 +151,7 @@ export const buildTheme = (mode) => {
       MuiChip: {
         styleOverrides: {
           root: {
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.65rem",
             letterSpacing: "0.1em",
             borderRadius: 2,
@@ -162,7 +162,7 @@ export const buildTheme = (mode) => {
       MuiButton: {
         styleOverrides: {
           root: {
-            fontFamily: "'Rajdhani',sans-serif",
+            fontFamily: "'san-serif',sans-serif",
             fontWeight: 600,
             letterSpacing: "0.1em",
             textTransform: "uppercase",
@@ -228,7 +228,7 @@ export const buildTheme = (mode) => {
             "& .MuiDataGrid-columnHeaders": {
               background: t.tableHead,
               borderBottom: `1px solid ${t.border}`,
-              fontFamily: "'Share Tech Mono',monospace",
+              fontFamily: "'Arial',san-serif",
               fontSize: "0.65rem",
               letterSpacing: "0.15em",
               textTransform: "uppercase",
@@ -250,7 +250,7 @@ export const buildTheme = (mode) => {
       MuiTab: {
         styleOverrides: {
           root: {
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.7rem",
             letterSpacing: "0.15em",
             textTransform: "uppercase",
@@ -270,7 +270,7 @@ export const buildTheme = (mode) => {
       MuiInputLabel: {
         styleOverrides: {
           root: {
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.7rem",
             color: t.textSec,
           },
@@ -279,7 +279,7 @@ export const buildTheme = (mode) => {
       MuiSelect: {
         styleOverrides: {
           root: {
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.75rem",
           },
         },
@@ -301,7 +301,7 @@ export const buildTheme = (mode) => {
       MuiMenuItem: {
         styleOverrides: {
           root: {
-            fontFamily: "'Share Tech Mono',monospace",
+            fontFamily: "'Arial',san-serif",
             fontSize: "0.75rem",
           },
         },

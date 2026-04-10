@@ -84,6 +84,10 @@ const ID_IMAGES = {
   "USK-079": "/images/uskunalar/yakuni guruh klet.png",
   "USK-003": "/images/uskunalar/rolikli pech.png",
   "USK-017": "/images/uskunalar/lpk pech.png",
+  "USK-024": "/images/uskunalar/Gorizontal kovsh.png",
+  "USK-025": "/images/uskunalar/Vertikal kovsh.png",
+  "USK-020": "/images/uskunalar/Dozator.png",
+  "USK-021": "/images/uskunalar/Vakuumator.png",
 };
 
 /**
