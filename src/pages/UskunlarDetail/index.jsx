@@ -15673,17 +15673,6 @@ export default function UskunaDetailPage() {
         <Typography
           sx={{
             fontFamily: "'Arial',san-serif",
-            fontSize: "0.65rem",
-            color: c,
-            letterSpacing: "0.1em",
-          }}
-        >
-          {uskuna.id}
-        </Typography>
-
-        <Typography
-          sx={{
-            fontFamily: "'Arial',san-serif",
             fontSize: "0.62rem",
             color: "text.primary",
             ml: 0.5,

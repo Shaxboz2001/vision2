@@ -1,637 +1,3 @@
-// import { useQuery } from "@tanstack/react-query";
-// import {
-//   Box,
-//   Grid,
-//   Paper,
-//   Typography,
-//   Tabs,
-//   Tab,
-//   Divider,
-// } from "@mui/material";
-// import { useState } from "react";
-// import {
-//   AreaChart,
-//   Area,
-//   BarChart,
-//   Bar,
-//   LineChart,
-//   Line,
-//   RadarChart,
-//   Radar,
-//   PolarGrid,
-//   PolarAngleAxis,
-//   XAxis,
-//   YAxis,
-//   CartesianGrid,
-//   Tooltip,
-//   Legend,
-//   ResponsiveContainer,
-//   PieChart,
-//   Pie,
-//   Cell,
-// } from "recharts";
-// import { getHaroratGrafik, getIshlabGrafik } from "@/api";
-// import { SectionHeader } from "@/components/common";
-
-// const CT = ({ active, payload, label }) => {
-//   if (!active || !payload?.length) return null;
-//   return (
-//     <Box
-//       sx={{
-//         background: "#0d1220",
-//         border: "1px solid #1e2a3d",
-//         p: 1.5,
-//         borderRadius: 1,
-//       }}
-//     >
-//       <Typography
-//         sx={{
-//           fontFamily: "'Arial',san-serif",
-//           fontSize: "0.6rem",
-//           color: "#6b7280",
-//           mb: 0.5,
-//         }}
-//       >
-//         {label}
-//       </Typography>
-//       {payload.map((p) => (
-//         <Typography
-//           key={p.dataKey}
-//           sx={{
-//             fontFamily: "'Arial',san-serif",
-//             fontSize: "0.68rem",
-//             color: p.color,
-//           }}
-//         >
-//           {p.name}: {p.value}
-//         </Typography>
-//       ))}
-//     </Box>
-//   );
-// };
-
-// const samaradorlikData = [
-//   { sex: "ЛПК", samaradorlik: 94, plan: 90 },
-//   { sex: "ПТНП", samaradorlik: 82, plan: 85 },
-//   { sex: "СПП", samaradorlik: 72, plan: 85 },
-//   { sex: "ШПП", samaradorlik: 88, plan: 88 },
-//   // {
-//   //   sex: "Подразделение по переработке лома и отходов металла",
-//   //   samaradorlik: 45,
-//   //   plan: 80,
-//   // },
-//   { sex: "ЦПФ", samaradorlik: 60, plan: 80 },
-//   { sex: "ЭСПЦ", samaradorlik: 60, plan: 80 },
-// ];
-
-// const energiyaData = Array.from({ length: 12 }, (_, i) => ({
-//   oy: [
-//     "Yan",
-//     "Fev",
-//     "Mar",
-//     "Apr",
-//     "May",
-//     "Iyn",
-//     "Iyl",
-//     "Avg",
-//     "Sen",
-//     "Okt",
-//     "Noy",
-//     "Dek",
-//   ][i],
-//   iste_mol: Math.round(2400 + Math.sin(i * 0.6) * 400 + Math.random() * 200),
-//   tejash: Math.round(200 + Math.random() * 150),
-// }));
-
-// const holatData = [
-//   { nom: "Faol", qiymat: 38, color: "#00ff9d" },
-//   { nom: "Ogohlantirish", qiymat: 2, color: "#ffd60a" },
-//   { nom: "Xato", qiymat: 1, color: "#ff2d55" },
-//   { nom: "To'xtatildi", qiymat: 1, color: "#374151" },
-// ];
-
-// const radarData = [
-//   { subject: "Harorat", SEX01: 92, SEX02: 88, SEX04: 78 },
-//   { subject: "Bosim", SEX01: 85, SEX02: 90, SEX04: 75 },
-//   { subject: "Samaradorlik", SEX01: 94, SEX02: 82, SEX04: 88 },
-//   { subject: "Energiya", SEX01: 78, SEX02: 82, SEX04: 90 },
-//   { subject: "Xavfsizlik", SEX01: 95, SEX02: 88, SEX04: 96 },
-//   { subject: "Sifat", SEX01: 91, SEX02: 84, SEX04: 93 },
-// ];
-
-// export default function Analitika() {
-//   const [tab, setTab] = useState(0);
-//   const { data: harorat } = useQuery({
-//     queryKey: ["harorat-grafik"],
-//     queryFn: getHaroratGrafik,
-//   });
-//   const { data: ishlab } = useQuery({
-//     queryKey: ["ishlab-grafik"],
-//     queryFn: getIshlabGrafik,
-//   });
-
-//   const hg = (harorat?.data || []).filter((_, i) => i % 3 === 0);
-//   const ig = ishlab?.data || [];
-
-//   return (
-//     <Box sx={{ p: 2.5, display: "flex", flexDirection: "column", gap: 2 }}>
-//       <Box>
-//         <Typography
-//           sx={{
-//             fontFamily: "'Arial',san-serif",
-//             fontSize: "1.1rem",
-//             fontWeight: 700,
-//             letterSpacing: "0.15em",
-//           }}
-//         >
-//           ANALITIKA
-//         </Typography>
-//         <Typography
-//           sx={{
-//             fontFamily: "'Arial',san-serif",
-//             fontSize: "0.65rem",
-//             color: "#6b7280",
-//           }}
-//         >
-//           Ko'rsatkichlar tahlili va grafiklar
-//         </Typography>
-//       </Box>
-
-//       {/* TABS */}
-//       <Paper sx={{ p: 0 }}>
-//         <Tabs
-//           value={tab}
-//           onChange={(_, v) => setTab(v)}
-//           sx={{
-//             borderBottom: "1px solid #1e2a3d",
-//             "& .MuiTabs-indicator": { background: "#00d4ff" },
-//           }}
-//         >
-//           {[
-//             "Ishlab Chiqarish",
-//             "Harorat",
-//             "Energiya",
-//             "Samaradorlik",
-//             "Bo'linmalarlar Taqqoslash",
-//           ].map((label, i) => (
-//             <Tab
-//               key={i}
-//               label={label}
-//               sx={{
-//                 fontFamily: "'Arial',san-serif",
-//                 fontSize: "0.65rem",
-//                 letterSpacing: "0.1em",
-//                 color: tab === i ? "#00d4ff" : "#6b7280",
-//                 minHeight: 44,
-//               }}
-//             />
-//           ))}
-//         </Tabs>
-
-//         <Box sx={{ p: 2.5 }}>
-//           {/* ISHLAB CHIQARISH */}
-//           {tab === 0 && (
-//             <Grid container spacing={2}>
-//               <Grid item xs={12} md={8}>
-//                 <Typography
-//                   sx={{
-//                     fontFamily: "'Arial',san-serif",
-//                     fontSize: "0.65rem",
-//                     color: "#6b7280",
-//                     mb: 1.5,
-//                     letterSpacing: "0.1em",
-//                   }}
-//                 >
-//                   HAFTALIK ISHLAB CHIQARISH (TONNADA)
-//                 </Typography>
-//                 <Box sx={{ height: 280 }}>
-//                   <ResponsiveContainer>
-//                     <BarChart data={ig}>
-//                       <CartesianGrid
-//                         strokeDasharray="3 3"
-//                         stroke="rgba(30,42,61,0.8)"
-//                       />
-//                       <XAxis
-//                         dataKey="kun"
-//                         tick={{
-//                           fontFamily: "'Arial',san-serif",
-//                           fontSize: 10,
-//                           fill: "#6b7280",
-//                         }}
-//                       />
-//                       <YAxis
-//                         tick={{
-//                           fontFamily: "'Arial',san-serif",
-//                           fontSize: 10,
-//                           fill: "#6b7280",
-//                         }}
-//                       />
-//                       <Tooltip content={<CT />} />
-//                       <Legend
-//                         wrapperStyle={{
-//                           fontFamily: "'Arial',san-serif",
-//                           fontSize: "0.65rem",
-//                         }}
-//                       />
-//                       <Bar
-//                         dataKey="choyan"
-//                         name="Armatura"
-//                         fill="#ff6b1a"
-//                         opacity={0.85}
-//                         radius={[2, 2, 0, 0]}
-//                       />
-//                       <Bar
-//                         dataKey="polat"
-//                         name="List"
-//                         fill="#00d4ff"
-//                         opacity={0.85}
-//                         radius={[2, 2, 0, 0]}
-//                       />
-//                       <Bar
-//                         dataKey="prokat"
-//                         name="Zoldir Shar"
-//                         fill="#00ff9d"
-//                         opacity={0.85}
-//                         radius={[2, 2, 0, 0]}
-//                       />
-//                     </BarChart>
-//                   </ResponsiveContainer>
-//                 </Box>
-//               </Grid>
-//               <Grid item xs={12} md={4}>
-//                 <Typography
-//                   sx={{
-//                     fontFamily: "'Arial',san-serif",
-//                     fontSize: "0.65rem",
-//                     color: "#6b7280",
-//                     mb: 1.5,
-//                   }}
-//                 >
-//                   USKUNALAR HOLATI
-//                 </Typography>
-//                 <Box
-//                   sx={{
-//                     height: 280,
-//                     display: "flex",
-//                     alignItems: "center",
-//                     justifyContent: "center",
-//                   }}
-//                 >
-//                   <ResponsiveContainer>
-//                     <PieChart>
-//                       <Pie
-//                         data={holatData}
-//                         cx="50%"
-//                         cy="50%"
-//                         innerRadius={60}
-//                         outerRadius={100}
-//                         dataKey="qiymat"
-//                         paddingAngle={2}
-//                       >
-//                         {holatData.map((entry, i) => (
-//                           <Cell key={i} fill={entry.color} />
-//                         ))}
-//                       </Pie>
-//                       <Tooltip
-//                         formatter={(v, n, p) => [v, p.payload.nom]}
-//                         contentStyle={{
-//                           background: "#0d1220",
-//                           border: "1px solid #1e2a3d",
-//                           fontFamily: "'Arial',san-serif",
-//                           fontSize: "0.7rem",
-//                         }}
-//                       />
-//                     </PieChart>
-//                   </ResponsiveContainer>
-//                 </Box>
-//                 <Box
-//                   sx={{
-//                     display: "flex",
-//                     flexWrap: "wrap",
-//                     gap: 1,
-//                     justifyContent: "center",
-//                   }}
-//                 >
-//                   {holatData.map((d) => (
-//                     <Box
-//                       key={d.nom}
-//                       sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
-//                     >
-//                       <Box
-//                         sx={{
-//                           width: 8,
-//                           height: 8,
-//                           borderRadius: "50%",
-//                           background: d.color,
-//                         }}
-//                       />
-//                       <Typography
-//                         sx={{
-//                           fontFamily: "'Arial',san-serif",
-//                           fontSize: "0.6rem",
-//                           color: "#6b7280",
-//                         }}
-//                       >
-//                         {d.nom} ({d.qiymat})
-//                       </Typography>
-//                     </Box>
-//                   ))}
-//                 </Box>
-//               </Grid>
-//             </Grid>
-//           )}
-
-//           {/* HARORAT */}
-//           {tab === 1 && (
-//             <Box>
-//               <Typography
-//                 sx={{
-//                   fontFamily: "'Arial',san-serif",
-//                   fontSize: "0.65rem",
-//                   color: "#6b7280",
-//                   mb: 1.5,
-//                   letterSpacing: "0.1em",
-//                 }}
-//               >
-//                 24-SOATLIK HARORAT DINAMIKASI
-//               </Typography>
-//               <Box sx={{ height: 320 }}>
-//                 <ResponsiveContainer>
-//                   <AreaChart data={hg}>
-//                     <defs>
-//                       {[
-//                         ["domna", "#ff2d55"],
-//                         ["konverter", "#ff6b1a"],
-//                         ["pech", "#00d4ff"],
-//                       ].map(([k, c]) => (
-//                         <linearGradient
-//                           key={k}
-//                           id={`grad_${k}`}
-//                           x1="0"
-//                           y1="0"
-//                           x2="0"
-//                           y2="1"
-//                         >
-//                           <stop offset="5%" stopColor={c} stopOpacity={0.3} />
-//                           <stop offset="95%" stopColor={c} stopOpacity={0.02} />
-//                         </linearGradient>
-//                       ))}
-//                     </defs>
-//                     <CartesianGrid
-//                       strokeDasharray="3 3"
-//                       stroke="rgba(30,42,61,0.8)"
-//                     />
-//                     <XAxis
-//                       dataKey="soat"
-//                       tick={{
-//                         fontFamily: "'Arial',san-serif",
-//                         fontSize: 9,
-//                         fill: "#6b7280",
-//                       }}
-//                     />
-//                     <YAxis
-//                       domain={[1200, 1700]}
-//                       tick={{
-//                         fontFamily: "'Arial',san-serif",
-//                         fontSize: 9,
-//                         fill: "#6b7280",
-//                       }}
-//                     />
-//                     <Tooltip content={<CT />} />
-//                     <Legend
-//                       wrapperStyle={{
-//                         fontFamily: "'Arial',san-serif",
-//                         fontSize: "0.65rem",
-//                       }}
-//                     />
-//                     <Area
-//                       type="monotone"
-//                       dataKey="domna"
-//                       name="Domna"
-//                       stroke="#ff2d55"
-//                       fill="url(#grad_domna)"
-//                       strokeWidth={2}
-//                     />
-//                     <Area
-//                       type="monotone"
-//                       dataKey="konverter"
-//                       name="Konverter"
-//                       stroke="#ff6b1a"
-//                       fill="url(#grad_konverter)"
-//                       strokeWidth={2}
-//                     />
-//                     <Area
-//                       type="monotone"
-//                       dataKey="pech"
-//                       name="Elektr Pech"
-//                       stroke="#00d4ff"
-//                       fill="url(#grad_pech)"
-//                       strokeWidth={2}
-//                     />
-//                   </AreaChart>
-//                 </ResponsiveContainer>
-//               </Box>
-//             </Box>
-//           )}
-
-//           {/* ENERGIYA */}
-//           {tab === 2 && (
-//             <Box>
-//               <Typography
-//                 sx={{
-//                   fontFamily: "'Arial',san-serif",
-//                   fontSize: "0.65rem",
-//                   color: "#6b7280",
-//                   mb: 1.5,
-//                 }}
-//               >
-//                 YILLIK ENERGIYA SARFI (kWh)
-//               </Typography>
-//               <Box sx={{ height: 320 }}>
-//                 <ResponsiveContainer>
-//                   <BarChart data={energiyaData}>
-//                     <CartesianGrid
-//                       strokeDasharray="3 3"
-//                       stroke="rgba(30,42,61,0.8)"
-//                     />
-//                     <XAxis
-//                       dataKey="oy"
-//                       tick={{
-//                         fontFamily: "'Arial',san-serif",
-//                         fontSize: 9,
-//                         fill: "#6b7280",
-//                       }}
-//                     />
-//                     <YAxis
-//                       tick={{
-//                         fontFamily: "'Arial',san-serif",
-//                         fontSize: 9,
-//                         fill: "#6b7280",
-//                       }}
-//                     />
-//                     <Tooltip content={<CT />} />
-//                     <Legend
-//                       wrapperStyle={{
-//                         fontFamily: "'Arial',san-serif",
-//                         fontSize: "0.65rem",
-//                       }}
-//                     />
-//                     <Bar
-//                       dataKey="iste_mol"
-//                       name="Iste'mol (kWh)"
-//                       fill="#ff6b1a"
-//                       opacity={0.85}
-//                       radius={[2, 2, 0, 0]}
-//                     />
-//                     <Bar
-//                       dataKey="tejash"
-//                       name="Tejash (kWh)"
-//                       fill="#00ff9d"
-//                       opacity={0.85}
-//                       radius={[2, 2, 0, 0]}
-//                     />
-//                   </BarChart>
-//                 </ResponsiveContainer>
-//               </Box>
-//             </Box>
-//           )}
-
-//           {/* SAMARADORLIK */}
-//           {tab === 3 && (
-//             <Box>
-//               <Typography
-//                 sx={{
-//                   fontFamily: "'Arial',san-serif",
-//                   fontSize: "0.65rem",
-//                   color: "#6b7280",
-//                   mb: 1.5,
-//                 }}
-//               >
-//                 BO'LINMALAR SAMARADORLIGI (HAQIQIY vs PLAN)
-//               </Typography>
-//               <Box sx={{ height: 320 }}>
-//                 <ResponsiveContainer>
-//                   <BarChart data={samaradorlikData} layout="vertical">
-//                     <CartesianGrid
-//                       strokeDasharray="3 3"
-//                       stroke="rgba(30,42,61,0.8)"
-//                     />
-//                     <XAxis
-//                       type="number"
-//                       domain={[0, 100]}
-//                       tick={{
-//                         fontFamily: "'Arial',san-serif",
-//                         fontSize: 9,
-//                         fill: "#6b7280",
-//                       }}
-//                     />
-//                     <YAxis
-//                       dataKey="sex"
-//                       type="category"
-//                       tick={{
-//                         fontFamily: "'Arial',san-serif",
-//                         fontSize: 9,
-//                         fill: "#6b7280",
-//                       }}
-//                       width={60}
-//                     />
-//                     <Tooltip content={<CT />} />
-//                     <Legend
-//                       wrapperStyle={{
-//                         fontFamily: "'Arial',san-serif",
-//                         fontSize: "0.65rem",
-//                       }}
-//                     />
-//                     <Bar
-//                       dataKey="plan"
-//                       name="Plan %"
-//                       fill="rgba(0,212,255,0.2)"
-//                       radius={[0, 2, 2, 0]}
-//                     />
-//                     <Bar
-//                       dataKey="samaradorlik"
-//                       name="Haqiqiy %"
-//                       fill="#00d4ff"
-//                       opacity={0.85}
-//                       radius={[0, 2, 2, 0]}
-//                     />
-//                   </BarChart>
-//                 </ResponsiveContainer>
-//               </Box>
-//             </Box>
-//           )}
-
-//           {/* RADAR */}
-//           {tab === 4 && (
-//             <Box>
-//               <Typography
-//                 sx={{
-//                   fontFamily: "'Arial',san-serif",
-//                   fontSize: "0.65rem",
-//                   color: "#6b7280",
-//                   mb: 1.5,
-//                 }}
-//               >
-//                 BO'LINMALAR MULTIDIMENSIONAL TAQQOSLASH
-//               </Typography>
-//               <Box sx={{ height: 340 }}>
-//                 <ResponsiveContainer>
-//                   <RadarChart data={radarData}>
-//                     <PolarGrid stroke="rgba(30,42,61,0.8)" />
-//                     <PolarAngleAxis
-//                       dataKey="subject"
-//                       tick={{
-//                         fontFamily: "'Arial',san-serif",
-//                         fontSize: 10,
-//                         fill: "#6b7280",
-//                       }}
-//                     />
-//                     <Radar
-//                       name="ЛПК Домна"
-//                       dataKey="SEX01"
-//                       stroke="#ff2d55"
-//                       fill="#ff2d55"
-//                       fillOpacity={0.15}
-//                     />
-//                     <Radar
-//                       name="ЭСПП Конвертер"
-//                       dataKey="SEX02"
-//                       stroke="#00d4ff"
-//                       fill="#00d4ff"
-//                       fillOpacity={0.15}
-//                     />
-//                     <Radar
-//                       name="СПП Прокат"
-//                       dataKey="SEX04"
-//                       stroke="#00ff9d"
-//                       fill="#00ff9d"
-//                       fillOpacity={0.15}
-//                     />
-//                     <Legend
-//                       wrapperStyle={{
-//                         fontFamily: "'Arial',san-serif",
-//                         fontSize: "0.65rem",
-//                       }}
-//                     />
-//                     <Tooltip
-//                       contentStyle={{
-//                         background: "#0d1220",
-//                         border: "1px solid #1e2a3d",
-//                         fontFamily: "'Arial',san-serif",
-//                         fontSize: "0.7rem",
-//                       }}
-//                     />
-//                   </RadarChart>
-//                 </ResponsiveContainer>
-//               </Box>
-//             </Box>
-//           )}
-//         </Box>
-//       </Paper>
-//     </Box>
-//   );
-// }
-
 import { memo, useMemo, useState, useCallback } from "react";
 import dayjs from "dayjs";
 import { useQueries } from "@tanstack/react-query";
@@ -935,29 +301,168 @@ const getLastChem = (an = [], code) => {
   );
   return Number(f?.value || 0);
 };
-const trendCalc = (data, key) => {
-  const cl = safeArr(data)
-    .map((x) => Number(x?.[key]) || 0)
-    .filter(Number.isFinite);
-  if (cl.length < 3)
-    return { trend: "stable", delta: 0, message: "Prognoz uchun ma'lumot kam" };
-  const sp = Math.max(1, Math.floor(cl.length * 0.7));
-  const pA = avg(cl.slice(0, sp)),
-    lA = avg(cl.slice(sp));
-  const d = pA ? ((lA - pA) / pA) * 100 : 0;
-  if (d > 3)
-    return {
-      trend: "up",
-      delta: d,
-      message: `+${fmtN(Math.abs(d), 1)}% o'sish`,
+/**
+ * REAL period-over-period comparison
+ * Bugun vs Kecha, Bu hafta vs O'tgan hafta, Bu oy vs O'tgan oy, Bu yil vs O'tgan yil
+ *
+ * rows — enriched heat array
+ * dateField — qaysi maydondan sana olish (productionDate, startTime...)
+ * metrics — [{ key, label, unit, higherIsBad }] solishtiriladigan ko'rsatkichlar
+ */
+function buildComparisons(rows, dateField, metrics) {
+  const now = dayjs();
+  const list = safeArr(rows);
+  if (!list.length) {
+    const empty = {
+      current: 0,
+      previous: 0,
+      delta: 0,
+      trend: "stable",
+      currentCount: 0,
+      prevCount: 0,
     };
-  if (d < -3)
-    return {
-      trend: "down",
-      delta: d,
-      message: `-${fmtN(Math.abs(d), 1)}% pasayish`,
+    const emptyPeriods = {
+      day: { ...empty, label: "Bugun vs Kecha" },
+      week: { ...empty, label: "Bu hafta vs O'tgan hafta" },
+      month: { ...empty, label: "Bu oy vs O'tgan oy" },
+      year: { ...empty, label: "Bu yil vs O'tgan yil (shu kunlarigacha)" },
     };
-  return { trend: "stable", delta: d, message: "Barqaror" };
+    return metrics.map((m) => ({
+      ...m,
+      periods: emptyPeriods,
+      summary: "Ma'lumot yo'q",
+    }));
+  }
+
+  // Davr chegaralari
+  const periods = {
+    day: {
+      label: "Bugun vs Kecha",
+      curStart: now.startOf("day"),
+      curEnd: now,
+      prevStart: now.subtract(1, "day").startOf("day"),
+      prevEnd: now.subtract(1, "day").endOf("day"),
+    },
+    week: {
+      label: "Bu hafta vs O'tgan hafta",
+      curStart: now.startOf("week"),
+      curEnd: now,
+      prevStart: now.subtract(1, "week").startOf("week"),
+      prevEnd: now.subtract(1, "week").endOf("week"),
+    },
+    month: {
+      label: "Bu oy vs O'tgan oy",
+      curStart: now.startOf("month"),
+      curEnd: now,
+      prevStart: now.subtract(1, "month").startOf("month"),
+      prevEnd: now.subtract(1, "month").endOf("month"),
+    },
+    year: {
+      label: "Bu yil vs O'tgan yil (shu kunlarigacha)",
+      curStart: now.startOf("year"),
+      curEnd: now,
+      prevStart: now.subtract(1, "year").startOf("year"),
+      prevEnd: now
+        .subtract(1, "year")
+        .startOf("year")
+        .add(now.diff(now.startOf("year"), "day"), "day"),
+    },
+  };
+
+  // Heatlarni bir marta filter qilish — O(n) per period
+  const filterByRange = (start, end) =>
+    list.filter((h) => {
+      const d = dayjs(h?.[dateField]);
+      return d.isValid() && !d.isBefore(start) && !d.isAfter(end);
+    });
+
+  const cached = {};
+  for (const [pk, p] of Object.entries(periods)) {
+    cached[pk] = {
+      cur: filterByRange(p.curStart, p.curEnd),
+      prev: filterByRange(p.prevStart, p.prevEnd),
+    };
+  }
+
+  return metrics.map((m) => {
+    const result = {
+      key: m.key,
+      label: m.label,
+      unit: m.unit || "",
+      higherIsBad: m.higherIsBad || false,
+      periods: {},
+    };
+
+    for (const [pk, p] of Object.entries(periods)) {
+      const { cur, prev } = cached[pk];
+
+      // Metric hisoblash: agar "sum" bo'lsa — sum, aks holda avg
+      const curVal =
+        m.aggregate === "sum"
+          ? sum(cur, (x) => Number(x?.[m.key]) || 0)
+          : avg(cur, (x) => Number(x?.[m.key]) || 0);
+      const prevVal =
+        m.aggregate === "sum"
+          ? sum(prev, (x) => Number(x?.[m.key]) || 0)
+          : avg(prev, (x) => Number(x?.[m.key]) || 0);
+
+      const delta = prevVal
+        ? ((curVal - prevVal) / prevVal) * 100
+        : curVal > 0
+          ? 100
+          : 0;
+
+      let trend = "stable";
+      if (Math.abs(delta) > 2) {
+        if (m.higherIsBad) trend = delta > 0 ? "bad_up" : "good_down";
+        else trend = delta > 0 ? "good_up" : "bad_down";
+      }
+
+      result.periods[pk] = {
+        label: p.label,
+        current: curVal,
+        previous: prevVal,
+        delta,
+        trend,
+        currentCount: cur.length,
+        prevCount: prev.length,
+      };
+    }
+
+    // Umumiy summary — eng muhim o'zgarish
+    const monthP = result.periods.month;
+    const dir = monthP.delta > 0 ? "+" : "";
+    const desc = m.higherIsBad
+      ? monthP.delta > 2
+        ? "⚠ Oshmoqda"
+        : monthP.delta < -2
+          ? "✓ Kamaymoqda"
+          : "— Barqaror"
+      : monthP.delta > 2
+        ? "✓ O'smoqda"
+        : monthP.delta < -2
+          ? "⚠ Kamaymoqda"
+          : "— Barqaror";
+    result.summary = `${desc} (oy: ${dir}${fmtN(monthP.delta, 1)}%)`;
+
+    return result;
+  });
+}
+
+/** Qisqa trend — USC va boshqa joy uchun backward-compatible wrapper */
+const buildTrend = (rows, dateField, key, higherIsBad = false) => {
+  const comps = buildComparisons(rows, dateField, [
+    { key, label: key, higherIsBad },
+  ]);
+  const m = comps[0]?.periods?.month || {};
+  const d = m.delta || 0;
+  const trendDir = Math.abs(d) < 2 ? "stable" : d > 0 ? "up" : "down";
+  let message = "Barqaror";
+  if (Math.abs(d) >= 2) {
+    const dir = d > 0 ? "+" : "";
+    message = `${dir}${fmtN(d, 1)}% oylik (${fmtN(m.previous, 1)} → ${fmtN(m.current, 1)})`;
+  }
+  return { trend: trendDir, delta: d, message };
 };
 const statusMeta = (s) =>
   s >= 85
@@ -1147,6 +652,37 @@ function buildHeatCount(all, df = "productionDate") {
   return sortDK([...m.entries()].map(([kun, count]) => ({ kun, count })));
 }
 
+/** Har bir jarayon uchun kunlik tonna, energiya, to'xtalish */
+function buildProcessDaily(
+  rows,
+  dateField,
+  tonGetter,
+  energyGetter,
+  delayKey = "delayMin",
+) {
+  const daily = new Map();
+  for (const h of safeArr(rows)) {
+    const d = h?.[dateField];
+    if (!d) continue;
+    const k = dayjs(d).format("DD.MM");
+    const ex = daily.get(k);
+    if (ex) {
+      ex.items.push(h);
+    } else daily.set(k, { items: [h] });
+  }
+  const result = [];
+  for (const [kun, { items }] of daily) {
+    result.push({
+      kun,
+      tonna: sum(items, tonGetter),
+      energiya: avg(items, energyGetter),
+      toxtalish: sum(items, (x) => Number(x?.[delayKey]) || 0),
+      heatlar: items.length,
+    });
+  }
+  return sortDK(result);
+}
+
 /* ═══ ANALYTICS BUILDERS ═══ */
 function buildEAF(rows, fd = 30) {
   const en = safeArr(rows).map((h) => {
@@ -1195,7 +731,28 @@ function buildEAF(rows, fd = 30) {
     avgRatio: aR,
     avgTemp: avg(en, (x) => x.avgTemp),
     score: clamp(s, 30, 100),
-    trend: trendCalc(en, "kwhPerTon"),
+    trend: buildTrend(en, "productionDate", "kwhPerTon", true),
+    comparisons: buildComparisons(en, "productionDate", [
+      {
+        key: "tappingWeight",
+        label: "Ishlab chiqarish",
+        unit: "kg",
+        aggregate: "sum",
+      },
+      {
+        key: "kwhPerTon",
+        label: "Energiya sarfi",
+        unit: "kWh/t",
+        higherIsBad: true,
+      },
+      { key: "delayMin", label: "To'xtalish", unit: "min", higherIsBad: true },
+    ]),
+    daily: buildProcessDaily(
+      en,
+      "productionDate",
+      (x) => kgToTon(x.tappingWeight),
+      (x) => x.kwhPerTon,
+    ),
     forecast: buildForecast(
       en,
       "productionDate",
@@ -1240,7 +797,23 @@ function buildLRF(rows, fd = 30) {
     avgTemp: aT,
     avgDelay: aD,
     score: clamp(s, 30, 100),
-    trend: trendCalc(en, "kwhPerTon"),
+    trend: buildTrend(en, "productionDate", "kwhPerTon", true),
+    comparisons: buildComparisons(en, "productionDate", [
+      { key: "steel", label: "Ishlab chiqarish", unit: "kg", aggregate: "sum" },
+      {
+        key: "kwhPerTon",
+        label: "Energiya sarfi",
+        unit: "kWh/t",
+        higherIsBad: true,
+      },
+      { key: "avgTemp", label: "Harorat", unit: "°C" },
+    ]),
+    daily: buildProcessDaily(
+      en,
+      "productionDate",
+      (x) => kgToTon(x.steel),
+      (x) => x.kwhPerTon,
+    ),
     forecast: buildForecast(en, "productionDate", (x) => kgToTon(x.steel), fd),
   };
 }
@@ -1286,7 +859,24 @@ function buildTSC(rows, fd = 30) {
     avgDelta: aDl,
     avgDelay: aD,
     score: clamp(s, 30, 100),
-    trend: trendCalc(en, "castSpeedAvg"),
+    trend: buildTrend(en, "productionDate", "castSpeedAvg"),
+    comparisons: buildComparisons(en, "productionDate", [
+      {
+        key: "slabWeight",
+        label: "Ishlab chiqarish",
+        unit: "kg",
+        aggregate: "sum",
+      },
+      { key: "castSpeedAvg", label: "Quyish tezligi", unit: "m/min" },
+      { key: "delta", label: "Superheat", unit: "°C" },
+    ]),
+    daily: buildProcessDaily(
+      en,
+      "productionDate",
+      (x) => kgToTon(x.slabWeight || x.steel),
+      (x) => x.castSpeedAvg,
+      "delayMin",
+    ),
     forecast: buildForecast(
       en,
       "productionDate",
@@ -1331,7 +921,29 @@ function buildVOD(rows, fd = 30) {
     avgMinVac: aV,
     avgDelay: aD,
     score: clamp(s, 30, 100),
-    trend: trendCalc(en, "yieldLossPct"),
+    trend: buildTrend(en, "productionDate", "yieldLossPct", true),
+    comparisons: buildComparisons(en, "productionDate", [
+      {
+        key: "finalSteel",
+        label: "Ishlab chiqarish",
+        unit: "kg",
+        aggregate: "sum",
+      },
+      {
+        key: "yieldLossPct",
+        label: "Yield loss",
+        unit: "%",
+        higherIsBad: true,
+      },
+      { key: "delayMin", label: "Kechikish", unit: "min", higherIsBad: true },
+    ]),
+    daily: buildProcessDaily(
+      en,
+      "productionDate",
+      (x) => kgToTon(x.finalSteel),
+      (x) => x.oxygenPerTon,
+      "delayMin",
+    ),
     forecast: buildForecast(
       en,
       "productionDate",
@@ -1484,8 +1096,22 @@ function dirMsg(ex, eaf, lrf, tsc, vod, w) {
     "Holat: " + ex.status.label.toLowerCase() + ".",
     "Kuchli: " + ex.strongest?.name + ", zaif: " + ex.weakest?.name + ".",
   ];
-  if (eaf.avgKwhPerTon > T.EAF.kwhPerTon.crit - 20)
-    p.push("EAF energiya sarfi yuqori.");
+  // Real oylik solishtirish natijalaridan foydalanish
+  const eafProd = eaf.comparisons?.find((c) => c.key === "tappingWeight")
+    ?.periods?.month;
+  const eafEnergy = eaf.comparisons?.find((c) => c.key === "kwhPerTon")?.periods
+    ?.month;
+  if (eafProd && Math.abs(eafProd.delta) > 2)
+    p.push(
+      "EAF ishlab chiqarish: " +
+        (eafProd.delta > 0 ? "+" : "") +
+        fmtN(eafProd.delta, 1) +
+        "% oylik o'zgarish.",
+    );
+  if (eafEnergy && eafEnergy.delta > 3)
+    p.push(
+      "EAF energiya sarfi " + fmtN(eafEnergy.delta, 1) + "% oshgan — bu yomon.",
+    );
   if (tsc.avgDelta < T.TSC.superheat.crit && tsc.totalHeats > 0)
     p.push("TSC superheat past.");
   if (vod.totalHeats > 0 && vod.avgYieldLoss > T.VOD.yieldLoss.anomaly)
@@ -1837,6 +1463,117 @@ const HDD = memo(function HDD({ open, onClose, item }) {
   );
 });
 
+/* ═══ PERIOD COMPARISON UI ═══ */
+const TREND_ICONS = {
+  good_up: "▲",
+  good_down: "▼",
+  bad_up: "▲",
+  bad_down: "▼",
+  stable: "—",
+};
+const TREND_COLORS = {
+  good_up: "#22c55e",
+  good_down: "#22c55e",
+  bad_up: "#ef4444",
+  bad_down: "#ef4444",
+  stable: "#64748b",
+};
+
+const ComparisonRow = memo(function ComparisonRow({ comp, periodKey }) {
+  const p = comp.periods[periodKey];
+  if (!p) return null;
+  const tc = TREND_COLORS[p.trend] || "#64748b";
+  const icon = TREND_ICONS[p.trend] || "—";
+  const dir = p.delta > 0 ? "+" : "";
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        py: 0.6,
+      }}
+    >
+      <Typography sx={{ fontSize: "0.8rem", color: "text.secondary", flex: 1 }}>
+        {comp.label}
+      </Typography>
+      <Typography
+        sx={{
+          fontSize: "0.78rem",
+          color: "text.secondary",
+          flex: 1,
+          textAlign: "center",
+        }}
+      >
+        {fmtN(p.previous, 1)} → <b>{fmtN(p.current, 1)}</b> {comp.unit}
+      </Typography>
+      <Typography
+        sx={{
+          fontSize: "0.82rem",
+          fontWeight: 800,
+          color: tc,
+          flex: 0,
+          minWidth: 90,
+          textAlign: "right",
+        }}
+      >
+        {icon} {dir}
+        {fmtN(p.delta, 1)}%
+      </Typography>
+    </Box>
+  );
+});
+
+const ComparisonCard = memo(function ComparisonCard({
+  unit,
+  periodKey = "month",
+}) {
+  const ui = useUi();
+  if (!unit.comparisons?.length) return null;
+
+  const periodLabels = {
+    day: "Kunlik",
+    week: "Haftalik",
+    month: "Oylik",
+    year: "Yillik",
+  };
+
+  return (
+    <DP sx={{ p: 2, height: "100%" }}>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        sx={{ mb: 1.5 }}
+      >
+        <Typography sx={{ fontWeight: 800 }}>
+          {unit.name} — {periodLabels[periodKey]} solishtirish
+        </Typography>
+        <Chip
+          size="small"
+          label={unit.comparisons[0]?.periods?.[periodKey]?.label || ""}
+          sx={{ fontSize: "0.7rem", fontWeight: 600 }}
+        />
+      </Stack>
+      <Stack spacing={0.3} divider={<Divider />}>
+        {unit.comparisons.map((c) => (
+          <ComparisonRow key={c.key} comp={c} periodKey={periodKey} />
+        ))}
+      </Stack>
+      <Typography
+        sx={{
+          mt: 1.5,
+          fontSize: "0.76rem",
+          color: ui.textMuted,
+          fontStyle: "italic",
+        }}
+      >
+        {unit.comparisons.map((c) => c.summary).join(" · ")}
+      </Typography>
+    </DP>
+  );
+});
+
 /* ═══════════════════════════════════════════════════════════════
    MAIN — Boshliq sahifani ochganda darhol grafiklar ko'radi
 ═══════════════════════════════════════════════════════════════ */
@@ -1847,6 +1584,7 @@ export default function Analitika() {
   const [fcDays, setFcDays] = useState(30);
   const [fcUnit, setFcUnit] = useState("ALL");
   const [showFilters, setShowFilters] = useState(false);
+  const [compPeriod, setCompPeriod] = useState("month");
 
   const now = dayjs(),
     b30 = now.subtract(30, "day");
@@ -2050,7 +1788,7 @@ export default function Analitika() {
         <Stack spacing={2} alignItems="center">
           <CircularProgress size={48} />
           <Typography sx={{ color: "text.secondary", fontSize: "0.9rem" }}>
-            AI analitika yuklanmoqda...
+            AI Tahlil yuklanmoqda...
           </Typography>
         </Stack>
       </Box>
@@ -2113,13 +1851,13 @@ export default function Analitika() {
                   color: ui.textMain,
                 }}
               >
-                AI ANALITIKA
+                AI Tahlil
               </Typography>
             </Stack>
             <Typography
               sx={{ color: ui.textSoft, mt: 0.6, fontSize: "0.84rem" }}
             >
-              EAF • LRF • TSC • VOD — tezkor xulosa
+              Eritish • Qayta Ishlash • Vakuum • Quyish — tezkor xulosa
             </Typography>
           </Box>
           <Stack
@@ -2162,7 +1900,7 @@ export default function Analitika() {
       <Grid container spacing={1.5}>
         <Grid item xs={6} sm={3}>
           <KPI
-            title="Jami heatlar"
+            title="Jami Eritishlar"
             value={fmtN(exec.totalHeats, 0)}
             subtitle="Filtr bo'yicha"
             color="#0ea5e9"
@@ -2171,14 +1909,14 @@ export default function Analitika() {
         </Grid>
         <Grid item xs={6} sm={3}>
           <KPI
-            title="Jami hajm"
+            title="Jami Suyuq Metall"
             value={`${fmtN(exec.totalTons, 1)} t`}
             subtitle="Barcha jarayonlar"
             color="#22c55e"
             icon={<WaterfallChartRoundedIcon />}
           />
         </Grid>
-        <Grid item xs={6} sm={3}>
+        {/* <Grid item xs={6} sm={3}>
           <KPI
             title="Eng kuchli"
             value={safeText(exec.strongest?.name)}
@@ -2195,10 +1933,10 @@ export default function Analitika() {
             color="#ef4444"
             icon={<WarningAmberRoundedIcon />}
           />
-        </Grid>
+        </Grid> */}
       </Grid>
 
-      {/* 4 Score cards + 2 Charts — BIRINCHI EKRANDA GRAFIKLAR! */}
+      {/* 4 Score cards */}
       <Grid container spacing={1.5}>
         {[eaf, lrf, tsc, vod].map((u) => (
           <Grid item xs={6} md={3} key={u.name}>
@@ -2206,6 +1944,58 @@ export default function Analitika() {
           </Grid>
         ))}
       </Grid>
+
+      {/* ═══ PERIOD COMPARISON — boshliq uchun asosiy tahlil ═══ */}
+      <DP sx={{ p: 2 }}>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          spacing={2}
+          alignItems={{ sm: "center" }}
+          sx={{ mb: 2 }}
+        >
+          <Typography sx={{ fontWeight: 800, color: ui.textMain }}>
+            Davriy solishtirish
+          </Typography>
+          <ToggleButtonGroup
+            value={compPeriod}
+            exclusive
+            onChange={(_, v) => v && setCompPeriod(v)}
+            size="small"
+          >
+            <ToggleButton
+              value="day"
+              sx={{ fontWeight: 700, textTransform: "none" }}
+            >
+              Kunlik
+            </ToggleButton>
+            <ToggleButton
+              value="week"
+              sx={{ fontWeight: 700, textTransform: "none" }}
+            >
+              Haftalik
+            </ToggleButton>
+            <ToggleButton
+              value="month"
+              sx={{ fontWeight: 700, textTransform: "none" }}
+            >
+              Oylik
+            </ToggleButton>
+            <ToggleButton
+              value="year"
+              sx={{ fontWeight: 700, textTransform: "none" }}
+            >
+              Yillik
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Stack>
+        <Grid container spacing={1.5}>
+          {[eaf, lrf, tsc, vod].map((u) => (
+            <Grid item xs={12} md={3} key={`comp-${u.name}`}>
+              <ComparisonCard unit={u} periodKey={compPeriod} />
+            </Grid>
+          ))}
+        </Grid>
+      </DP>
 
       <Grid container spacing={1.5}>
         {/* Ishlab chiqarish trendi */}
@@ -2409,7 +2199,7 @@ export default function Analitika() {
         )}
       </Box>
 
-      {/* ═══ TABS — chuqurroq tahlil ═══ */}
+      {/* ═══ TABLAR ═══ */}
       <Tabs
         value={tab}
         onChange={(_, v) => setTab(v)}
@@ -2421,11 +2211,12 @@ export default function Analitika() {
         }}
       >
         {[
-          "Harorat & Energiya",
-          "Delay & Smena",
+          "Jarayonlar tahlili",
+          "Harorat va energiya",
+          "To'xtalish va smena",
           "Prognoz",
           "Og'ishlar",
-          "Tafsilot",
+          "Oxirgi heatlar",
         ].map((t) => (
           <Tab
             key={t}
@@ -2440,8 +2231,279 @@ export default function Analitika() {
         ))}
       </Tabs>
 
-      {/* TAB 0: Harorat & Energiya */}
+      {/* TAB 0: JARAYONLAR TAHLILI — har bir blok uchun tonna, energiya, to'xtalish */}
       {tab === 0 && (
+        <Grid container spacing={2}>
+          {[eaf, lrf, tsc, vod].map((u) => {
+            const color = CC[u.name];
+            const energyLabel =
+              u.name === "TSC"
+                ? "Quyish tezligi (m/min)"
+                : u.name === "VOD"
+                  ? "O₂ sarfi (m³/t)"
+                  : "Energiya sarfi (kWh/t)";
+            return [
+              /* Tonna */
+              <Grid item xs={12} md={6} key={`ton-${u.name}`}>
+                <DP>
+                  <Box sx={{ p: 2 }}>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      sx={{ mb: 1 }}
+                    >
+                      <Typography sx={{ fontWeight: 800 }}>
+                        {u.name} — Kunlik ishlab chiqarish (tonna)
+                      </Typography>
+                      <Chip
+                        size="small"
+                        label={`Jami: ${fmtN(u.totalTons, 1)} t`}
+                        sx={{
+                          background: `${color}22`,
+                          color,
+                          fontWeight: 700,
+                        }}
+                      />
+                    </Stack>
+                    <Box sx={{ height: 220 }}>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <ComposedChart data={u.daily}>
+                          <defs>
+                            <linearGradient
+                              id={`ton_${u.name}`}
+                              x1="0"
+                              y1="0"
+                              x2="0"
+                              y2="1"
+                            >
+                              <stop
+                                offset="5%"
+                                stopColor={color}
+                                stopOpacity={0.3}
+                              />
+                              <stop
+                                offset="95%"
+                                stopColor={color}
+                                stopOpacity={0.02}
+                              />
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid
+                            strokeDasharray="3 3"
+                            stroke={ui.grid}
+                          />
+                          <XAxis
+                            dataKey="kun"
+                            tick={{ fill: ui.textMuted, fontSize: 9 }}
+                          />
+                          <YAxis tick={{ fill: ui.textMuted, fontSize: 10 }} />
+                          <Tooltip content={<CT />} />
+                          <Legend />
+                          <Area
+                            type="monotone"
+                            dataKey="tonna"
+                            name="Tonna"
+                            stroke={color}
+                            fill={`url(#ton_${u.name})`}
+                            strokeWidth={2}
+                          />
+                          <Line
+                            type="monotone"
+                            dataKey="heatlar"
+                            name="Heatlar soni"
+                            stroke={ui.textMuted}
+                            strokeWidth={1.5}
+                            strokeDasharray="4 3"
+                            dot={false}
+                          />
+                        </ComposedChart>
+                      </ResponsiveContainer>
+                    </Box>
+                  </Box>
+                </DP>
+              </Grid>,
+              /* Energiya */
+              <Grid item xs={12} md={6} key={`nrg-${u.name}`}>
+                <DP>
+                  <Box sx={{ p: 2 }}>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      sx={{ mb: 1 }}
+                    >
+                      <Typography sx={{ fontWeight: 800 }}>
+                        {u.name} — {energyLabel}
+                      </Typography>
+                      {u.name !== "TSC" && u.name !== "VOD" && (
+                        <Chip
+                          size="small"
+                          label={`O'rt: ${fmtN(u.avgKwhPerTon, 1)} kWh/t`}
+                          sx={{
+                            background: "#f59e0b22",
+                            color: "#f59e0b",
+                            fontWeight: 700,
+                          }}
+                        />
+                      )}
+                    </Stack>
+                    <Box sx={{ height: 220 }}>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <ComposedChart data={u.daily}>
+                          <CartesianGrid
+                            strokeDasharray="3 3"
+                            stroke={ui.grid}
+                          />
+                          <XAxis
+                            dataKey="kun"
+                            tick={{ fill: ui.textMuted, fontSize: 9 }}
+                          />
+                          <YAxis tick={{ fill: ui.textMuted, fontSize: 10 }} />
+                          <Tooltip content={<CT />} />
+                          <Legend />
+                          {(u.name === "EAF" || u.name === "LRF") && (
+                            <ReferenceLine
+                              y={T[u.name].kwhPerTon.crit}
+                              stroke="#ef4444"
+                              strokeDasharray="5 5"
+                              label={{
+                                value: "Kritik",
+                                fill: "#ef4444",
+                                fontSize: 9,
+                              }}
+                            />
+                          )}
+                          {(u.name === "EAF" || u.name === "LRF") && (
+                            <ReferenceLine
+                              y={T[u.name].kwhPerTon.warn}
+                              stroke="#f59e0b"
+                              strokeDasharray="5 5"
+                            />
+                          )}
+                          <Bar
+                            dataKey="energiya"
+                            name={energyLabel}
+                            fill={color}
+                            opacity={0.8}
+                            radius={[3, 3, 0, 0]}
+                          />
+                        </ComposedChart>
+                      </ResponsiveContainer>
+                    </Box>
+                  </Box>
+                </DP>
+              </Grid>,
+              /* To'xtalish */
+              <Grid item xs={12} md={6} key={`del-${u.name}`}>
+                <DP>
+                  <Box sx={{ p: 2 }}>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      sx={{ mb: 1 }}
+                    >
+                      <Typography sx={{ fontWeight: 800 }}>
+                        {u.name} — Kunlik to'xtalishlar (daqiqa)
+                      </Typography>
+                      <Chip
+                        size="small"
+                        label={`O'rt: ${fmtN(u.avgDelay, 0)} min`}
+                        sx={{
+                          background:
+                            u.avgDelay > 10 ? "#ef444422" : "#22c55e22",
+                          color: u.avgDelay > 10 ? "#ef4444" : "#22c55e",
+                          fontWeight: 700,
+                        }}
+                      />
+                    </Stack>
+                    <Box sx={{ height: 220 }}>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={u.daily}>
+                          <CartesianGrid
+                            strokeDasharray="3 3"
+                            stroke={ui.grid}
+                          />
+                          <XAxis
+                            dataKey="kun"
+                            tick={{ fill: ui.textMuted, fontSize: 9 }}
+                          />
+                          <YAxis tick={{ fill: ui.textMuted, fontSize: 10 }} />
+                          <Tooltip content={<CT />} />
+                          <Bar
+                            dataKey="toxtalish"
+                            name="To'xtalish (min)"
+                            fill="#ef4444"
+                            opacity={0.75}
+                            radius={[3, 3, 0, 0]}
+                          />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </Box>
+                  </Box>
+                </DP>
+              </Grid>,
+              /* Prognoz mini */
+              <Grid item xs={12} md={6} key={`fcp-${u.name}`}>
+                <DP>
+                  <Box sx={{ p: 2 }}>
+                    <Typography sx={{ fontWeight: 800, mb: 1 }}>
+                      {u.name} — Ishlab chiqarish prognozi ({fcDays} kun)
+                    </Typography>
+                    <Box sx={{ height: 220 }}>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <ComposedChart data={u.forecast.dailyChart}>
+                          <CartesianGrid
+                            strokeDasharray="3 3"
+                            stroke={ui.grid}
+                          />
+                          <XAxis
+                            dataKey="kun"
+                            tick={{ fill: ui.textMuted, fontSize: 9 }}
+                            interval={Math.max(
+                              0,
+                              Math.floor(u.forecast.dailyChart.length / 12),
+                            )}
+                          />
+                          <YAxis tick={{ fill: ui.textMuted, fontSize: 10 }} />
+                          <Tooltip content={<CT />} />
+                          <Legend />
+                          <Area
+                            type="monotone"
+                            dataKey="upper"
+                            stroke="none"
+                            fill={CC_SOFT[u.name]}
+                            name="Yuqori chegara"
+                          />
+                          <Bar
+                            dataKey="actual"
+                            name="Haqiqiy (t)"
+                            fill={color}
+                            radius={[3, 3, 0, 0]}
+                            opacity={0.85}
+                          />
+                          <Line
+                            dataKey="forecast"
+                            name="Prognoz (t)"
+                            stroke={color}
+                            strokeWidth={2}
+                            strokeDasharray="6 3"
+                            dot={false}
+                          />
+                        </ComposedChart>
+                      </ResponsiveContainer>
+                    </Box>
+                  </Box>
+                </DP>
+              </Grid>,
+            ];
+          })}
+        </Grid>
+      )}
+
+      {/* TAB 1: Harorat va energiya */}
+      {tab === 1 && (
         <Grid container spacing={2}>
           <Grid item xs={12} md={7}>
             <DP>
@@ -2683,14 +2745,14 @@ export default function Analitika() {
         </Grid>
       )}
 
-      {/* TAB 1: Delay & Smena */}
-      {tab === 1 && (
+      {/* TAB 2: To'xtalish va smena */}
+      {tab === 2 && (
         <Grid container spacing={2}>
           <Grid item xs={12} md={7}>
             <DP>
               <Box sx={{ p: 2 }}>
                 <Typography sx={{ fontWeight: 800, mb: 1.5 }}>
-                  Delay sabablari (top 10)
+                  To'xtalish sabablari (eng ko'p 10 tasi)
                 </Typography>
                 <Box sx={{ height: 300 }}>
                   <ResponsiveContainer width="100%" height="100%">
@@ -2851,8 +2913,8 @@ export default function Analitika() {
         </Grid>
       )}
 
-      {/* TAB 2: Prognoz */}
-      {tab === 2 && (
+      {/* TAB 3: Prognoz */}
+      {tab === 3 && (
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <DP sx={{ p: 2 }}>
@@ -3118,8 +3180,8 @@ export default function Analitika() {
         </Grid>
       )}
 
-      {/* TAB 3: Og'ishlar */}
-      {tab === 3 && (
+      {/* TAB 4: Og'ishlar */}
+      {tab === 4 && (
         <DP sx={{ p: 2 }}>
           <Typography sx={{ fontWeight: 800, mb: 2 }}>
             AI aniqlagan og'ishlar
@@ -3181,8 +3243,8 @@ export default function Analitika() {
         </DP>
       )}
 
-      {/* TAB 4: Tafsilot */}
-      {tab === 4 && (
+      {/* TAB 5: Oxirgi heatlar */}
+      {tab === 5 && (
         <Grid container spacing={2}>
           {[
             {

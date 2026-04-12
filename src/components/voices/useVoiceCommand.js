@@ -40,7 +40,7 @@ async function getMicStream() {
   });
 }
 
-export function useVoiceCommand({ onCommand, maxDuration = 3500 }) {
+export function useVoiceCommand({ onCommand, maxDuration = 3000 }) {
   const [isListening, setIsListening] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [transcript, setTranscript] = useState("");
@@ -106,7 +106,6 @@ export function useVoiceCommand({ onCommand, maxDuration = 3500 }) {
     [onCommand],
   );
 
-  // Asosiy recording funksiyasi — tugma yoki wake word orqali chaqiriladi
   const startRecording = useCallback(async () => {
     setError(null);
     setTranscript("");
@@ -147,7 +146,6 @@ export function useVoiceCommand({ onCommand, maxDuration = 3500 }) {
     }
   }, [maxDuration, stopAndProcess]);
 
-  // Tugma bosilganda — toggle
   const startListening = useCallback(async () => {
     if (isListening && recorderRef.current) {
       clearTimeout(timeoutRef.current);
@@ -157,7 +155,6 @@ export function useVoiceCommand({ onCommand, maxDuration = 3500 }) {
     await startRecording();
   }, [isListening, startRecording]);
 
-  // Wake word dan chaqirish uchun — doim yangi recording boshlaydi
   const triggerListening = useCallback(async () => {
     if (isListening || isProcessing) return;
     await startRecording();
@@ -168,8 +165,8 @@ export function useVoiceCommand({ onCommand, maxDuration = 3500 }) {
     isProcessing,
     transcript,
     error,
-    startListening, // tugma uchun (toggle)
-    triggerListening, // wake word uchun (avtomatik)
+    startListening,
+    triggerListening,
     clearError: () => setError(null),
   };
 }

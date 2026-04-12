@@ -22,6 +22,7 @@ import UskunaDetail from "./pages/UskunlarDetail";
 import ProkatLivePage from "./components/ProkatLivePage";
 import VoiceCalibration from "./pages/voiceCalibration/VoiceCalibration";
 import MonitoringDashboard from "./pages/MonitoringDashboard";
+import PPEPage from "./pages/PPEPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -83,26 +84,27 @@ export default function App() {
 
 import { useState, useEffect } from "react";
 
-function PPEPage() {
-  return (
-    <div
-      style={{
-        width: "80%",
-        margin: "50px auto",
-        border: "2px solid #333",
-      }}
-    >
-      <img
-        src="https://ai.uzbeksteel.uz:8008/video"
-        alt="camera"
-        style={{
-          width: "100%",
-          display: "block",
-        }}
-      />
-    </div>
-  );
-}
+// function PPEPage() {
+//   return (
+//     <div
+//       style={{
+//         width: "80%",
+//         margin: "50px auto",
+//         border: "2px solid #333",
+//       }}
+//     >
+//       <img
+//         src="https://ai.uzbeksteel.uz:8008/video"
+//         // src="http://172.16.55.12:8005/video"
+//         alt="camera"
+//         style={{
+//           width: "100%",
+//           display: "block",
+//         }}
+//       />
+//     </div>
+//   );
+// }
 
 function AILom() {
   return (

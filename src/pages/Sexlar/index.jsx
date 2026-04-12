@@ -3495,7 +3495,7 @@ function SexCard({ s, selected, onClick }) {
               c: "#ff6b1a",
             },
             { l: "ISHCHI", v: s.ishchilar, c: isDark ? "#00ff9d" : "#00a85a" },
-            { l: "SMENA", v: s.smena, c: isDark ? "#ffd60a" : "#d97700" },
+            { l: "SMENA", v: "kun", c: isDark ? "#ffd60a" : "#d97700" },
           ].map((st) => (
             <Grid item xs={3} key={st.l}>
               <Box

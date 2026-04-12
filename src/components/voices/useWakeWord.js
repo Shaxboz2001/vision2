@@ -2,12 +2,8 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 
 /**
- * Wake word detection hook — Web Speech API orqali doimiy tinglaydi.
- *
- * "Durdona" eshitilganda onWakeWord() chaqiriladi.
- *
- * Web Speech API brauzerda bepul ishlaydi, resurs kam sarflaydi.
- * Whisper faqat wake word dan keyin ishga tushadi.
+ * Wake word detection — Web Speech API orqali doimiy tinglaydi.
+ * "Muhlisa" eshitilganda onWakeWord() chaqiriladi.
  */
 
 const SpeechRecognition =
@@ -16,7 +12,7 @@ const SpeechRecognition =
     : null;
 
 export function useWakeWord({
-  wakeWord = "durdona",
+  wakeWord = "muhlisa",
   onWakeWord,
   enabled = true,
 }) {
@@ -31,7 +27,6 @@ export function useWakeWord({
       return;
     }
 
-    // Avvalgisini to'xtatish
     if (recognitionRef.current) {
       try {
         recognitionRef.current.abort();
@@ -41,23 +36,20 @@ export function useWakeWord({
     const recognition = new SpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;
-    recognition.lang = "ru-RU"; // Rus/O'zbek aralash uchun
+    recognition.lang = "ru-RU";
     recognition.maxAlternatives = 3;
 
     recognition.onresult = (event) => {
       for (let i = event.resultIndex; i < event.results.length; i++) {
-        // Barcha alternativalarni tekshirish
         for (let j = 0; j < event.results[i].length; j++) {
           const text = event.results[i][j].transcript.toLowerCase().trim();
           setLastHeard(text);
 
-          // Wake word bor-yo'qligini tekshirish
           if (text.includes(wakeWord.toLowerCase())) {
             console.log(`Wake word aniqlandi: "${text}"`);
-            // Vaqtincha to'xtatish — command recording boshlanishi uchun
             recognition.abort();
             onWakeWord?.();
-            // 4 sekunddan keyin qayta tinglash (command recording tugagandan keyin)
+            // Command recording tugagandan keyin qayta tinglash
             restartTimeoutRef.current = setTimeout(() => {
               startListening();
             }, 5000);
@@ -68,15 +60,11 @@ export function useWakeWord({
     };
 
     recognition.onerror = (event) => {
-      // "no-speech" va "aborted" — normal holatlar, restart qilish
-      if (event.error === "no-speech" || event.error === "aborted") {
-        return;
-      }
+      if (event.error === "no-speech" || event.error === "aborted") return;
       console.warn("Speech recognition error:", event.error);
     };
 
     recognition.onend = () => {
-      // Avtomatik restart — doimiy tinglash uchun
       if (enabled) {
         restartTimeoutRef.current = setTimeout(() => {
           startListening();
@@ -104,7 +92,6 @@ export function useWakeWord({
     }
   }, []);
 
-  // Auto-start/stop based on enabled flag
   useEffect(() => {
     if (enabled) {
       startListening();

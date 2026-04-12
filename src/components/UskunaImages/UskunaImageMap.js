@@ -43,9 +43,8 @@ const ID_IMAGES = {
   // Masalan:
   "USK-001": "/images/uskunalar/klet.png",
   "USK-002": "/images/uskunalar/vakuum.png",
-  "USK-017": "/images/uskunalar/ELK Pechka.png",
-  "USK-018": "/images/uskunalar/ELK Pechka.png",
-  "USK-019": "/images/uskunalar/pech elpk.png",
+  "USK-017": "/images/uskunalar/pech elpk.png",
+  "USK-018": "/images/uskunalar/Vakuumator.png",
   "USK-053": "/images/uskunalar/klet vertikal.png",
   "USK-051": "/images/uskunalar/klet vertikal.png",
   "USK-049": "/images/uskunalar/klet vertikal.png",
@@ -83,11 +82,16 @@ const ID_IMAGES = {
   "USK-078": "/images/uskunalar/yakuni guruh klet.png",
   "USK-079": "/images/uskunalar/yakuni guruh klet.png",
   "USK-003": "/images/uskunalar/rolikli pech.png",
-  "USK-017": "/images/uskunalar/lpk pech.png",
   "USK-024": "/images/uskunalar/Gorizontal kovsh.png",
+  "USK-019": "/images/uskunalar/Gorizontal kovsh.png",
   "USK-025": "/images/uskunalar/Vertikal kovsh.png",
-  "USK-020": "/images/uskunalar/Dozator.png",
+  "USK-020": "/images/uskunalar/Vertikal kovsh.png",
   "USK-021": "/images/uskunalar/Vakuumator.png",
+  "USK-022": "/images/uskunalar/Dozator.png",
+  "USK-027": "/images/uskunalar/PPS.png",
+  "USK-029": "/images/uskunalar/rolikli pech.png",
+  "USK-028": "/images/uskunalar/matalka.png",
+  "USK-023": "/images/uskunalar/Adyustaj.png",
 };
 
 /**

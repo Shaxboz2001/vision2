@@ -2061,7 +2061,7 @@ export default function Dashboard() {
         label: "USKUNALARNING ISHLAB CHIQARISH JARAYONLARI",
         value: `${activeUnits}/${totalUnits}`,
         unit: "",
-        trend: "EAF / LRF / VOD / TSC",
+        trend: "Eritish / Qayta ishlash / Vakuum / Quyish",
         trendUp: true,
         color: ui.blue,
       },
@@ -2085,7 +2085,7 @@ export default function Dashboard() {
         label: "MAJMUADAGI UMUMIY ENERGIYA SARFI",
         value: fmtN(totalEnergy, 0),
         unit: "kWh",
-        trend: "EAF + LRF bo‘yicha",
+        trend: "Eritish + Qayta ishlash bo‘yicha",
         trendUp: false,
         color: ui.yellow,
       },
@@ -2192,7 +2192,7 @@ export default function Dashboard() {
       if (eafKwhTon > 520) {
         out.push({
           id: "eaf-energy",
-          xabar: `EAF energiya sarfi yuqori: ${fmtN(eafKwhTon, 1)} kWh/t`,
+          xabar: `Elektrda metall eritishda energiya sarfi yuqori: ${fmtN(eafKwhTon, 1)} kWh/t`,
           daraja: "kritik",
           vaqt: new Date().toISOString(),
         });
@@ -2202,7 +2202,7 @@ export default function Dashboard() {
       if (delayMin > 30) {
         out.push({
           id: "eaf-delay",
-          xabar: `EAF bekor turish vaqti yuqori: ${delayMin} min`,
+          xabar: `Elektrda metall eritishda to'xtalish vaqti yuqori: ${delayMin} min`,
           daraja: "ogohlantirish",
           vaqt: new Date().toISOString(),
         });
@@ -2211,7 +2211,7 @@ export default function Dashboard() {
       if ((latestEAF.powerOnTime || 0) > 70) {
         out.push({
           id: "eaf-poweron",
-          xabar: `EAF power-on time uzun: ${latestEAF.powerOnTime} min`,
+          xabar: `Elektrda metall eritishda ishlash vaqti uzun: ${latestEAF.powerOnTime} min`,
           daraja: "ogohlantirish",
           vaqt: new Date().toISOString(),
         });
@@ -2818,10 +2818,10 @@ export default function Dashboard() {
             <SectionHeader title="Harorat Grafigi" dot={ui.orange}>
               <Box sx={{ display: "flex", gap: 2.2, flexWrap: "wrap" }}>
                 {[
-                  ["EAF", ui.red],
-                  ["LRF", ui.orange],
-                  ["VOD", ui.blue],
-                  ["TSC", ui.green],
+                  ["Eritish", ui.red],
+                  ["Qayta ishlash", ui.orange],
+                  ["Vakuum", ui.blue],
+                  ["Quyish", ui.green],
                 ].map(([n, c]) => (
                   <Box
                     key={n}
@@ -2888,28 +2888,28 @@ export default function Dashboard() {
 
                   <Line
                     dataKey="eaf"
-                    name="EAF"
+                    name="Eritish"
                     stroke={ui.red}
                     strokeWidth={2.5}
                     dot={false}
                   />
                   <Line
                     dataKey="lrf"
-                    name="LRF"
+                    name="Qayta ishlash"
                     stroke={ui.orange}
                     strokeWidth={2.5}
                     dot={false}
                   />
                   <Line
                     dataKey="vod"
-                    name="VOD"
+                    name="Vakuum"
                     stroke={ui.blue}
                     strokeWidth={2.5}
                     dot={false}
                   />
                   <Line
                     dataKey="tsc"
-                    name="TSC"
+                    name="Quyish"
                     stroke={ui.green}
                     strokeWidth={2.5}
                     dot={false}
@@ -3067,9 +3067,9 @@ export default function Dashboard() {
       <Grid container spacing={2}>
         <Grid item xs={12} md={3}>
           <MiniInfoCard
-            title="LPK / EAF"
+            title="Elektrda Metall Eritish"
             rows={[
-              { label: "Heatlar", value: fmtN(eafList.length, 0) },
+              { label: "Eritishlar", value: fmtN(eafList.length, 0) },
               {
                 label: "Jami energiya",
                 value: `${fmtN(sum(eafList.map((x) => x.electricalEnergy)), 0)} kWh`,
@@ -3080,11 +3080,11 @@ export default function Dashboard() {
                 value: fmtN(sum(eafList.map((x) => x.injectedO2)), 0),
               },
               {
-                label: "O'rtacha power-on",
+                label: "O'rtacha ishlash vaqti",
                 value: `${fmtN(avg(eafList.map((x) => x.powerOnTime)), 0)} min`,
               },
               {
-                label: "Oxirgi plavka",
+                label: "Oxirgi eritish",
                 value: latestEAF ? formatDateTime(latestEAF.startTime) : "—",
               },
             ]}
@@ -3093,9 +3093,9 @@ export default function Dashboard() {
 
         <Grid item xs={12} md={3}>
           <MiniInfoCard
-            title="LPK / LRF"
+            title="Po‘latni pechda qayta ishlash"
             rows={[
-              { label: "Heatlar", value: fmtN(lrfList.length, 0) },
+              { label: "Eritishlar", value: fmtN(lrfList.length, 0) },
               {
                 label: "Jami energiya",
                 value: `${fmtN(sum(lrfList.map((x) => x.electricalEnergy)), 0)} kWh`,
@@ -3119,23 +3119,23 @@ export default function Dashboard() {
 
         <Grid item xs={12} md={3}>
           <MiniInfoCard
-            title="LPK / VOD"
+            title="Vakuum ostida qayta ishlash"
             rows={[
-              { label: "Heatlar", value: fmtN(vodList.length, 0) },
+              { label: "Eritishlar", value: fmtN(vodList.length, 0) },
               {
                 label: "Jami O₂",
                 value: fmtN(sum(vodList.map((x) => x.totalOxygen)), 0),
               },
               {
-                label: "Blow time",
+                label: "Vakuum vaqti",
                 value: `${fmtN(avg(vodList.map((x) => x.totalBlowTime)), 0)} min`,
               },
               {
-                label: "Deep vacuum",
+                label: "Chuqur vakuum",
                 value: `${fmtN(avg(vodList.map((x) => x.totalDeepVacuumTime)), 0)} min`,
               },
               {
-                label: "Min vacuum",
+                label: "Minimal vakuum",
                 value: fmtN(avg(vodList.map((x) => x.minVacuumPressure)), 2),
               },
             ]}
@@ -3144,23 +3144,23 @@ export default function Dashboard() {
 
         <Grid item xs={12} md={3}>
           <MiniInfoCard
-            title="LPK / TSC"
+            title="Uzluksiz quyish"
             rows={[
-              { label: "Heatlar", value: fmtN(tscList.length, 0) },
+              { label: "Eritishlar", value: fmtN(tscList.length, 0) },
               {
-                label: "Slablar",
+                label: "Po‘lat quymalar",
                 value: fmtN(tscStats.totalSlabs, 0),
               },
               {
-                label: "Cast length",
+                label: "Quyilgan metall uzunligi",
                 value: `${fmtN(tscStats.totalCastLength, 0)} m`,
               },
               {
-                label: "Avg cast speed",
+                label: "O'rtacha Quyish tezligi",
                 value: `${fmtN(tscStats.avgCastSpeed, 2)} m/min`,
               },
               {
-                label: "Avg tundish life",
+                label: "O'rtacha quyish vaqti",
                 value: fmtN(tscStats.avgTundishLife, 0),
               },
             ]}
@@ -3169,25 +3169,34 @@ export default function Dashboard() {
       </Grid>
 
       <DashboardPaper>
-        <SectionHeader title="LPK Oxirgi Jarayonlari" dot={ui.blue} />
+        <SectionHeader
+          title="Oxirgi Ishlab Chiqarish Jarayonlari"
+          dot={ui.blue}
+        />
         <Box sx={{ p: 2.2 }}>
           <Grid container spacing={2}>
             {[
               {
-                title: "EAF",
+                title: "Elektrda Metall Eritish",
                 heat: latestEAF,
                 rows: latestEAF
                   ? [
-                      ["Heat ID", `#${latestEAF.heatId}`],
-                      ["Steel grade", latestEAF.steelGradeName || "—"],
-                      ["Boshlanish", formatDateTime(latestEAF.startTime)],
-                      ["Tugash", formatDateTime(latestEAF.stopTime)],
+                      ["Eritish raqami", `${latestEAF.heatId}`],
+                      ["Po'lat markasi", latestEAF.steelGradeName || "—"],
                       [
-                        "Tapping",
+                        "Eritish Boshlanish vaqti",
+                        formatDateTime(latestEAF.startTime),
+                      ],
+                      [
+                        "Eritish Tugash vaqti",
+                        formatDateTime(latestEAF.stopTime),
+                      ],
+                      [
+                        "Pechda chiqqan suyuq metall miqdori",
                         `${fmtN(kgToTon(latestEAF.tappingWeight), 1)} t`,
                       ],
                       [
-                        "kWh/t",
+                        "1 tonna metall sarflangan elektr energiya miqdori",
                         fmtN(
                           calcKwhPerTon(
                             latestEAF.electricalEnergy,
@@ -3200,19 +3209,22 @@ export default function Dashboard() {
                   : [],
               },
               {
-                title: "LRF",
+                title: "Po‘latni pechda qayta ishlash",
                 heat: latestLRF,
                 rows: latestLRF
                   ? [
-                      ["Heat ID", `#${latestLRF.heatId}`],
-                      ["Steel grade", latestLRF.steelGradeName || "—"],
-                      ["Boshlanish", formatDateTime(latestLRF.startTime)],
-                      ["Tugash", formatDateTime(latestLRF.stopTime)],
+                      ["Eritish raqami", `${latestLRF.heatId}`],
+                      ["Po'lat markasi", latestLRF.steelGradeName || "—"],
+                      ["Boshlanish vaqti", formatDateTime(latestLRF.startTime)],
+                      ["Tugash vaqti", formatDateTime(latestLRF.stopTime)],
                       [
-                        "Final steel",
+                        "Yakuniy po'lat hajmi",
                         `${fmtN(kgToTon(latestLRF.finalSteelWeight), 1)} t`,
                       ],
-                      ["Power on", `${fmtN(latestLRF.powerOnTime, 0)} min`],
+                      [
+                        "Tok ostida ishlash vaqti",
+                        `${fmtN(latestLRF.powerOnTime, 0)} min`,
+                      ],
                     ]
                   : [],
               },
@@ -3221,36 +3233,42 @@ export default function Dashboard() {
                 heat: latestVOD,
                 rows: latestVOD
                   ? [
-                      ["Heat ID", `#${latestVOD.heatId}`],
-                      ["Steel grade", latestVOD.steelGradeName || "—"],
-                      ["Boshlanish", formatDateTime(latestVOD.startTime)],
-                      ["Tugash", formatDateTime(latestVOD.stopTime)],
+                      ["Eritish raqami", `#${latestVOD.heatId}`],
+                      ["Po'lat markasi", latestVOD.steelGradeName || "—"],
+                      ["Boshlanish vaqti", formatDateTime(latestVOD.startTime)],
+                      ["Tugash vaqti", formatDateTime(latestVOD.stopTime)],
                       [
-                        "Final steel",
+                        "Yakuniy po'lat hajmi",
                         `${fmtN(kgToTon(latestVOD.finalSteelWeight), 1)} t`,
                       ],
                       [
-                        "Deep vacuum",
+                        "Chuqur vakuum vaqti",
                         `${fmtN(latestVOD.totalDeepVacuumTime, 0)} min`,
                       ],
                     ]
                   : [],
               },
               {
-                title: "TSC",
+                title: "Uzluksiz quyish",
                 heat: latestTSC,
                 rows: latestTSC
                   ? [
-                      ["Heat ID", `#${latestTSC.heatId}`],
-                      ["Steel grade", latestTSC.steelGradeName || "—"],
-                      ["Opening", formatDateTime(latestTSC.ladleOpeningDate)],
-                      ["Close", formatDateTime(latestTSC.ladleCloseDate)],
+                      ["Eritish raqami", `#${latestTSC.heatId}`],
+                      ["Po'lat markasi", latestTSC.steelGradeName || "—"],
                       [
-                        "Final steel",
+                        "Quyish boshlanish vaqti",
+                        formatDateTime(latestTSC.ladleOpeningDate),
+                      ],
+                      [
+                        "Quyish tugagan vaqt",
+                        formatDateTime(latestTSC.ladleCloseDate),
+                      ],
+                      [
+                        "Quyilgan Umumiy metall hajmi",
                         `${fmtN(kgToTon(latestTSC.finalSteelWeight), 1)} t`,
                       ],
                       [
-                        "Liquidus",
+                        "To'liq erish harorati(Liquidus)",
                         `${fmtN(latestTSC.liquidusTemperature, 0)} °C`,
                       ],
                     ]

@@ -2065,9 +2065,9 @@ export function Layout({ children }) {
                   sx={{
                     fontFamily: "'Arial', san-serif",
                     fontSize: {
-                      md: open ? "0.68rem" : "0.78rem",
-                      lg: open ? "0.78rem" : "0.90rem",
-                      xl: "0.96rem",
+                      md: open ? "1rem" : "1.5rem",
+                      lg: open ? "1rem" : "1.5rem",
+                      xl: "1.2rem",
                     },
                     fontWeight: 800,
                     letterSpacing: {

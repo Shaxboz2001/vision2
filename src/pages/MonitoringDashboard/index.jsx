@@ -21,15 +21,12 @@ import {
   alpha,
   useTheme,
 } from "@mui/material";
+
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 import ExpandLessRoundedIcon from "@mui/icons-material/ExpandLessRounded";
-import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
-import FactoryRoundedIcon from "@mui/icons-material/FactoryRounded";
-import PrecisionManufacturingRoundedIcon from "@mui/icons-material/PrecisionManufacturingRounded";
 import BuildRoundedIcon from "@mui/icons-material/BuildRounded";
-import ThermostatRoundedIcon from "@mui/icons-material/ThermostatRounded";
+import PrecisionManufacturingRoundedIcon from "@mui/icons-material/PrecisionManufacturingRounded";
 import SpeedRoundedIcon from "@mui/icons-material/SpeedRounded";
-import RadioButtonCheckedRoundedIcon from "@mui/icons-material/RadioButtonCheckedRounded";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 
@@ -57,52 +54,46 @@ const useTokens = () => {
   return {
     isDark,
 
-    pageBg: isDark ? "#0a111d" : "#edf3f8",
-
-    heroBg: isDark
-      ? "linear-gradient(135deg, #0f172a 0%, #16253c 100%)"
-      : "linear-gradient(135deg, #ffffff 0%, #f3f8fd 100%)",
+    pageBg: isDark ? "#0a111d" : "#f4f7fb",
 
     paper: isDark ? "#111b2f" : "#ffffff",
-    paperSoft: isDark ? "#162338" : "#f7fbff",
-    paperSoft2: isDark ? "#1a2941" : "#eef5fb",
-    paperHover: isDark ? "#1b2b45" : "#f1f7fd",
+    paperSoft: isDark ? "#162338" : "#f8fbff",
+    paperSoft2: isDark ? "#1a2941" : "#eef4fb",
+    paperHover: isDark ? "#1b2b45" : "#f6faff",
 
-    border: isDark ? "rgba(148,163,184,0.16)" : "rgba(15,23,42,0.10)",
-    borderStrong: isDark ? "rgba(148,163,184,0.26)" : "rgba(15,23,42,0.16)",
+    border: isDark ? "rgba(148,163,184,0.16)" : "rgba(15,23,42,0.08)",
+    borderStrong: isDark ? "rgba(148,163,184,0.26)" : "rgba(15,23,42,0.14)",
 
-    text: isDark ? "#e8eef9" : "#182235",
-    textSoft: isDark ? "#a7b4c8" : "#4f5f79",
-    textMuted: isDark ? "#7d8aa0" : "#71809a",
+    text: isDark ? "#e8eef9" : "#162033",
+    textSoft: isDark ? "#a7b4c8" : "#42526b",
+    textMuted: isDark ? "#7d8aa0" : "#6b7a90",
 
-    accent: isDark ? "#38bdf8" : "#2563eb",
-    accentSoft: isDark ? "rgba(56,189,248,0.12)" : "rgba(37,99,235,0.09)",
+    accent: isDark ? "#38bdf8" : "#155eef",
+    accentSoft: isDark ? "rgba(56,189,248,0.12)" : "rgba(21,94,239,0.10)",
 
-    green: isDark ? "#00ff9d" : "#0b9f63",
-    yellow: isDark ? "#f5b301" : "#d99100",
-    red: "#ef4444",
-    orange: "#f97316",
-    cyan: "#06b6d4",
-    purple: "#8b5cf6",
+    green: isDark ? "#00ff9d" : "#0f9f6e",
+    yellow: isDark ? "#f5b301" : "#d4a017",
+    red: isDark ? "#ef4444" : "#dc2626",
+    orange: isDark ? "#f97316" : "#ea580c",
+    cyan: isDark ? "#06b6d4" : "#0891b2",
+    purple: isDark ? "#8b5cf6" : "#7c3aed",
 
-    mono: "'Arial', san-serif",
-    display: "'Arial', san-serif",
+    mono: "'Arial', sans-serif",
+    display: "'Arial', sans-serif",
 
     shadow: isDark
       ? "0 20px 50px rgba(0,0,0,0.34)"
-      : "0 16px 36px rgba(15,23,42,0.10)",
+      : "0 18px 42px rgba(15,23,42,0.10)",
 
     softShadow: isDark
       ? "0 12px 28px rgba(0,0,0,0.22)"
-      : "0 10px 22px rgba(15,23,42,0.07)",
+      : "0 10px 24px rgba(15,23,42,0.07)",
   };
 };
 
 /* =========================================================
    HELPERS
 ========================================================= */
-
-const safeArr = (v) => (Array.isArray(v) ? v : []);
 
 const avg = (arr = []) => {
   const nums = arr.map(Number).filter((n) => Number.isFinite(n));
@@ -124,12 +115,6 @@ const getStatusColor = (holat, t) => {
   return t.textMuted;
 };
 
-const getTempColor = (v, t) => {
-  if (Number(v) > 1200) return t.red;
-  if (Number(v) > 200) return t.orange;
-  return t.textMuted;
-};
-
 const getEffColor = (v, t) => {
   if (Number(v) >= 90) return t.green;
   if (Number(v) >= 70) return t.yellow;
@@ -139,6 +124,14 @@ const getEffColor = (v, t) => {
 const getUskunaType = (u) =>
   u?.tur || u?.type || u?.category || u?.modelType || "Uskuna";
 
+const getStatusIcon = (holat) => {
+  if (holat === "xato") return <InfoOutlinedIcon sx={{ fontSize: 24 }} />;
+  if (holat === "ogohlantirish") {
+    return <BuildRoundedIcon sx={{ fontSize: 24 }} />;
+  }
+  return <PrecisionManufacturingRoundedIcon sx={{ fontSize: 24 }} />;
+};
+
 /* =========================================================
    IMAGE MAP
 ========================================================= */
@@ -147,9 +140,7 @@ const ID_IMAGES = {
   "USK-001": "/images/uskunalar/klet.png",
   "USK-002": "/images/uskunalar/vakuum.png",
   "USK-003": "/images/uskunalar/rolikli pech.png",
-  "USK-017": "/images/uskunalar/ELK Pechka.png",
-  "USK-018": "/images/uskunalar/ELK Pechka.png",
-  "USK-019": "/images/uskunalar/pech elpk.png",
+  "USK-018": "/images/uskunalar/Vakuumator.png",
   "USK-053": "/images/uskunalar/klet vertikal.png",
   "USK-051": "/images/uskunalar/klet vertikal.png",
   "USK-049": "/images/uskunalar/klet vertikal.png",
@@ -186,82 +177,110 @@ const ID_IMAGES = {
   "USK-077": "/images/uskunalar/yakuni guruh klet.png",
   "USK-078": "/images/uskunalar/yakuni guruh klet.png",
   "USK-079": "/images/uskunalar/yakuni guruh klet.png",
-  "USK-017": "/images/uskunalar/lpk pech.png",
+  "USK-017": "/images/uskunalar/pech elpk.png",
   "USK-024": "/images/uskunalar/Gorizontal kovsh.png",
   "USK-025": "/images/uskunalar/Vertikal kovsh.png",
-  "USK-020": "/images/uskunalar/Dozator.png",
+  "USK-020": "/images/uskunalar/Vertikal kovsh.png",
   "USK-021": "/images/uskunalar/Vakuumator.png",
+  "USK-019": "/images/uskunalar/Gorizontal kovsh.png",
+  "USK-022": "/images/uskunalar/Dozator.png",
+  "USK-029": "/images/uskunalar/rolikli pech.png",
+  "USK-028": "/images/uskunalar/matalka.png",
+  "USK-023": "/images/uskunalar/Adyustaj.png",
 };
-
-const TUR_IMAGES = {
-  Pech: "/images/uskunalar/pech.png",
-  Konverter: "/images/uskunalar/konverter.png",
-  "Elektr Pech": "/images/uskunalar/electric-furnace.png",
-  Prokat: "/images/uskunalar/prokat.png",
-  Nasos: "/images/uskunalar/nasos.png",
-  Kran: "/images/uskunalar/kran.png",
-  Kesish: "/images/uskunalar/kesish.png",
-  Transport: "/images/uskunalar/transport.png",
-  Sensor: "/images/uskunalar/sensor.png",
-  Manipulator: "/images/uskunalar/manipulator.png",
-  Press: "/images/uskunalar/press.png",
-  Sovitish: "/images/uskunalar/sovitish.png",
-  Tekislash: "/images/uskunalar/tekislash.png",
-  Qadoqlash: "/images/uskunalar/qadoqlash.png",
-};
-
-// function getUskunaImage(u) {
-//   if (ID_IMAGES[u?.id]) return ID_IMAGES[u.id];
-
-//   const tur = getUskunaType(u);
-//   if (TUR_IMAGES[tur]) return TUR_IMAGES[tur];
-
-//   const model = (u?.model || "").toLowerCase();
-//   const nom = (u?.nom || "").toLowerCase();
-
-//   if (model.startsWith("clm") || nom.includes("ingichka")) {
-//     return "/images/uskunalar/klet.png";
-//   }
-//   if (model.startsWith("rw") || nom.includes("rulo")) {
-//     return "/images/uskunalar/prokat.png";
-//   }
-//   if (nom.includes("pech")) return "/images/uskunalar/pech.png";
-//   if (nom.includes("kran")) return "/images/uskunalar/kran.png";
-//   if (nom.includes("nasos")) return "/images/uskunalar/nasos.png";
-
-//   return "/images/uskunalar/lpk pech.png";
-// }
 
 const DEFAULT_USKUNA_IMAGE = "/images/uskunalar/lpk pech.png";
 
 function getUskunaImage(u) {
   const id = u?.id?.trim();
-
-  // faqat ID_IMAGES dan oladi
-  if (id && ID_IMAGES[id]) {
-    return ID_IMAGES[id];
-  }
-
-  // agar topilmasa default
+  if (id && ID_IMAGES[id]) return ID_IMAGES[id];
   return DEFAULT_USKUNA_IMAGE;
 }
 
 const getImageBg = (u, t) => {
   const tur = getUskunaType(u);
 
-  if (tur === "Pech") return alpha(t.orange, 0.1);
-  if (tur === "Konverter") return alpha(t.cyan, 0.1);
-  if (tur === "Elektr Pech") return alpha(t.purple, 0.1);
-  if (tur === "Prokat") return alpha(t.green, 0.1);
-  if (tur === "Nasos") return alpha(t.accent, 0.1);
-  if (tur === "Kran") return alpha(t.yellow, 0.12);
+  if (tur === "Pech") return alpha(t.orange, 0.12);
+  if (tur === "Konverter") return alpha(t.cyan, 0.12);
+  if (tur === "Elektr Pech") return alpha(t.purple, 0.12);
+  if (tur === "Prokat") return alpha(t.green, 0.12);
+  if (tur === "Nasos") return alpha(t.accent, 0.12);
+  if (tur === "Kran") return alpha(t.yellow, 0.14);
 
   return alpha(t.accent, 0.08);
 };
 
 /* =========================================================
-   MINI COMPONENTS
+   SMALL COMPONENTS
 ========================================================= */
+
+function SafeImage({ src, alt, sx }) {
+  const [imgSrc, setImgSrc] = useState(src || DEFAULT_USKUNA_IMAGE);
+
+  useEffect(() => {
+    setImgSrc(src || DEFAULT_USKUNA_IMAGE);
+  }, [src]);
+
+  return (
+    <Box
+      component="img"
+      src={imgSrc}
+      alt={alt}
+      onError={() => setImgSrc(DEFAULT_USKUNA_IMAGE)}
+      sx={sx}
+    />
+  );
+}
+
+function StatusAvatar({ statusColor, tokens, icon }) {
+  return (
+    <Avatar
+      sx={{
+        width: 54,
+        height: 54,
+        flexShrink: 0,
+        position: "relative",
+        bgcolor: tokens.isDark
+          ? alpha(statusColor, 0.16)
+          : alpha(statusColor, 0.12),
+        color: tokens.isDark ? statusColor : alpha(statusColor, 0.98),
+        border: `1px solid ${alpha(statusColor, tokens.isDark ? 0.28 : 0.32)}`,
+        boxShadow: tokens.isDark
+          ? `0 8px 20px ${alpha(statusColor, 0.16)}`
+          : `0 8px 18px ${alpha(statusColor, 0.12)}`,
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          inset: 3,
+          borderRadius: "50%",
+          background: tokens.isDark
+            ? "linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.00))"
+            : "linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.28))",
+          pointerEvents: "none",
+        },
+      }}
+    >
+      <Box
+        sx={{
+          position: "relative",
+          zIndex: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: tokens.isDark ? statusColor : alpha(statusColor, 0.98),
+          "& svg": {
+            fontSize: 24,
+            filter: tokens.isDark
+              ? "drop-shadow(0 1px 3px rgba(0,0,0,0.35))"
+              : "drop-shadow(0 1px 1px rgba(255,255,255,0.55))",
+          },
+        }}
+      >
+        {icon}
+      </Box>
+    </Avatar>
+  );
+}
 
 function StatCard({ label, value, color, tokens }) {
   return (
@@ -272,7 +291,7 @@ function StatCard({ label, value, color, tokens }) {
         borderRadius: 3,
         bgcolor: tokens.paperSoft2,
         border: `1px solid ${tokens.border}`,
-        boxShadow: tokens.isDark ? "none" : "0 2px 10px rgba(15,23,42,0.03)",
+        boxShadow: tokens.softShadow,
         height: "100%",
       }}
     >
@@ -306,7 +325,6 @@ function StatCard({ label, value, color, tokens }) {
 
 function UskunaCard({ u, tokens, onClick }) {
   const statusColor = getStatusColor(u.holat, tokens);
-  const tempColor = getTempColor(u.harorat, tokens);
   const effColor = getEffColor(u.samaradorlik, tokens);
 
   return (
@@ -314,8 +332,8 @@ function UskunaCard({ u, tokens, onClick }) {
       elevation={0}
       onClick={() => onClick(u)}
       sx={{
-        p: 1.55,
-        borderRadius: 3.2,
+        p: 1.65,
+        borderRadius: 3.5,
         bgcolor: tokens.paper,
         border: `1px solid ${tokens.border}`,
         transition: "all .22s ease",
@@ -323,11 +341,12 @@ function UskunaCard({ u, tokens, onClick }) {
         height: "100%",
         overflow: "hidden",
         position: "relative",
-        boxShadow: tokens.isDark ? "none" : "0 3px 12px rgba(15,23,42,0.04)",
+        boxShadow: tokens.softShadow,
         "&:hover": {
-          transform: "translateY(-5px)",
-          borderColor: alpha(statusColor, 0.4),
+          transform: "translateY(-6px)",
+          borderColor: alpha(statusColor, 0.32),
           boxShadow: tokens.shadow,
+          bgcolor: tokens.isDark ? tokens.paper : "#fcfdff",
         },
       }}
     >
@@ -340,86 +359,57 @@ function UskunaCard({ u, tokens, onClick }) {
           height: 10,
           borderRadius: "50%",
           bgcolor: statusColor,
-          boxShadow: `0 0 12px ${alpha(statusColor, 0.55)}`,
+          boxShadow: `0 0 14px ${alpha(statusColor, 0.55)}`,
         }}
       />
 
       <Box
         sx={{
-          height: 145,
-          mb: 1.3,
+          height: 150,
+          mb: 1.35,
           borderRadius: 3,
-          bgcolor: getImageBg(u, tokens),
-          border: `1px solid ${alpha(statusColor, 0.14)}`,
+          bgcolor: tokens.isDark ? getImageBg(u, tokens) : "#f8fbff",
+          border: `1px solid ${
+            tokens.isDark ? alpha(statusColor, 0.14) : alpha(tokens.accent, 0.1)
+          }`,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           overflow: "hidden",
+          boxShadow: tokens.isDark
+            ? "none"
+            : "inset 0 1px 0 rgba(255,255,255,0.72)",
         }}
       >
-        <Box
-          component="img"
+        <SafeImage
           src={getUskunaImage(u)}
           alt={u.nom}
-          onError={(e) => {
-            e.currentTarget.src = "/images/uskunalar/default.png";
-          }}
           sx={{
             width: "82%",
             height: "82%",
             objectFit: "contain",
             display: "block",
+            filter: tokens.isDark
+              ? "drop-shadow(0 10px 18px rgba(0,0,0,0.22))"
+              : "drop-shadow(0 8px 14px rgba(15,23,42,0.08))",
           }}
         />
       </Box>
 
       <Typography
         sx={{
-          fontSize: "0.96rem",
+          fontSize: "0.97rem",
           fontWeight: 800,
           color: tokens.text,
-          lineHeight: 1.22,
-          mb: 0.34,
+          lineHeight: 1.24,
+          mb: 0.38,
           pr: 2,
         }}
       >
         {u.nom}
       </Typography>
 
-      <Typography
-        sx={{
-          fontFamily: tokens.mono,
-          fontSize: "0.68rem",
-          color: tokens.textMuted,
-          mb: 1.12,
-        }}
-      >
-        {u.id} · {getUskunaType(u)}
-      </Typography>
-
       <Stack spacing={0.9}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1 }}>
-          {/* <Typography
-            sx={{
-              fontSize: "0.75rem",
-              color: tokens.textSoft,
-              fontWeight: 500,
-            }}
-          >
-            Harorat
-          </Typography> */}
-          {/* <Typography
-            sx={{
-              fontFamily: tokens.mono,
-              fontSize: "0.78rem",
-              fontWeight: 800,
-              color: tempColor,
-            }}
-          >
-            {u.harorat ? `${u.harorat}°C` : "—"}
-          </Typography> */}
-        </Box>
-
         <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1 }}>
           <Typography
             sx={{
@@ -433,7 +423,7 @@ function UskunaCard({ u, tokens, onClick }) {
           <Typography
             sx={{
               fontFamily: tokens.mono,
-              fontSize: "0.78rem",
+              fontSize: "0.79rem",
               fontWeight: 800,
               color: effColor,
             }}
@@ -459,7 +449,7 @@ function UskunaCard({ u, tokens, onClick }) {
 
       <Box
         sx={{
-          mt: 1.15,
+          mt: 1.2,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -468,7 +458,7 @@ function UskunaCard({ u, tokens, onClick }) {
         <Typography
           sx={{
             color: tokens.accent,
-            fontSize: "0.74rem",
+            fontSize: "0.76rem",
             fontWeight: 700,
           }}
         >
@@ -482,7 +472,6 @@ function UskunaCard({ u, tokens, onClick }) {
 
 function UchastkaCard({ u, tokens, open, onToggle, children }) {
   const statusColor = getStatusColor(u.holat, tokens);
-  const tempColor = getTempColor(u.harorat, tokens);
   const effColor = getEffColor(u.samaradorlik, tokens);
 
   return (
@@ -491,13 +480,13 @@ function UchastkaCard({ u, tokens, open, onToggle, children }) {
         elevation={0}
         onClick={onToggle}
         sx={{
-          p: 1.75,
+          p: 1.8,
           borderRadius: 3.2,
           bgcolor: tokens.paper,
           border: `1px solid ${open ? alpha(tokens.accent, 0.3) : tokens.border}`,
           transition: "all .2s ease",
           cursor: "pointer",
-          boxShadow: tokens.isDark ? "none" : "0 3px 12px rgba(15,23,42,0.04)",
+          boxShadow: tokens.softShadow,
           "&:hover": {
             borderColor: alpha(statusColor, 0.3),
             bgcolor: tokens.paperHover,
@@ -505,17 +494,11 @@ function UchastkaCard({ u, tokens, open, onToggle, children }) {
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 1.35 }}>
-          <Avatar
-            sx={{
-              width: 50,
-              height: 50,
-              bgcolor: alpha(statusColor, 0.1),
-              color: statusColor,
-              border: `1px solid ${alpha(statusColor, 0.16)}`,
-            }}
-          >
-            <PrecisionManufacturingRoundedIcon sx={{ fontSize: 24 }} />
-          </Avatar>
+          <StatusAvatar
+            statusColor={statusColor}
+            tokens={tokens}
+            icon={getStatusIcon(u.holat)}
+          />
 
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Box
@@ -528,7 +511,7 @@ function UchastkaCard({ u, tokens, open, onToggle, children }) {
             >
               <Typography
                 sx={{
-                  fontSize: "1.03rem",
+                  fontSize: "1.04rem",
                   fontWeight: 800,
                   color: tokens.text,
                   lineHeight: 1.2,
@@ -538,17 +521,6 @@ function UchastkaCard({ u, tokens, open, onToggle, children }) {
               </Typography>
               <StatusChip holat={u.holat} />
             </Box>
-
-            <Typography
-              sx={{
-                mt: 0.34,
-                fontFamily: tokens.mono,
-                fontSize: "0.68rem",
-                color: tokens.textMuted,
-              }}
-            >
-              {u.id} · {u.sexId}
-            </Typography>
           </Box>
 
           <Stack
@@ -556,19 +528,6 @@ function UchastkaCard({ u, tokens, open, onToggle, children }) {
             spacing={1}
             sx={{ display: { xs: "none", md: "flex" }, mr: 0.45 }}
           >
-            {/* <Chip
-              size="small"
-              icon={
-                <ThermostatRoundedIcon sx={{ fontSize: "15px !important" }} />
-              }
-              label={`${u.harorat || 0}°C`}
-              sx={{
-                color: tempColor,
-                bgcolor: alpha(tempColor, 0.1),
-                border: `1px solid ${alpha(tempColor, 0.16)}`,
-                fontWeight: 700,
-              }}
-            /> */}
             <Chip
               size="small"
               icon={<SpeedRoundedIcon sx={{ fontSize: "15px !important" }} />}
@@ -576,7 +535,7 @@ function UchastkaCard({ u, tokens, open, onToggle, children }) {
               sx={{
                 color: effColor,
                 bgcolor: alpha(effColor, 0.1),
-                border: `1px solid ${alpha(effColor, 0.16)}`,
+                border: `1px solid ${alpha(effColor, 0.18)}`,
                 fontWeight: 700,
               }}
             />
@@ -587,7 +546,7 @@ function UchastkaCard({ u, tokens, open, onToggle, children }) {
               sx={{
                 color: tokens.accent,
                 bgcolor: alpha(tokens.accent, 0.08),
-                border: `1px solid ${alpha(tokens.accent, 0.16)}`,
+                border: `1px solid ${alpha(tokens.accent, 0.18)}`,
                 fontWeight: 700,
               }}
             />
@@ -598,7 +557,9 @@ function UchastkaCard({ u, tokens, open, onToggle, children }) {
             sx={{
               color: open ? tokens.accent : tokens.textSoft,
               bgcolor: open ? alpha(tokens.accent, 0.08) : "transparent",
-              border: `1px solid ${open ? alpha(tokens.accent, 0.16) : tokens.border}`,
+              border: `1px solid ${
+                open ? alpha(tokens.accent, 0.18) : tokens.border
+              }`,
             }}
           >
             {open ? <ExpandLessRoundedIcon /> : <ExpandMoreRoundedIcon />}
@@ -628,7 +589,6 @@ function UskunalarSection({ uchastka, tokens, onUskunaClick }) {
   });
 
   const uskunalar = data?.data || [];
-  const avgTemp = avg(uskunalar.map((x) => Number(x.harorat || 0)));
   const avgEff = avg(uskunalar.map((x) => Number(x.samaradorlik || 0)));
   const activeCount = uskunalar.filter((x) => x.holat === "faol").length;
 
@@ -660,14 +620,6 @@ function UskunalarSection({ uchastka, tokens, onUskunaClick }) {
             tokens={tokens}
           />
         </Grid>
-        {/* <Grid item xs={6} md={3}>
-          <StatCard
-            label="O'RTA HARORAT"
-            value={`${fmtN(avgTemp, 0)}°C`}
-            color={getTempColor(avgTemp, tokens)}
-            tokens={tokens}
-          />
-        </Grid> */}
         <Grid item xs={6} md={3}>
           <StatCard
             label="O'RTA SAMARADORLIK"
@@ -744,6 +696,93 @@ function UskunalarSection({ uchastka, tokens, onUskunaClick }) {
   );
 }
 
+function FilterBar({ sexlar, sexFilter, setSexFilter, pageStats, tokens }) {
+  return (
+    <Paper
+      elevation={0}
+      sx={{
+        p: 1.7,
+        borderRadius: 3.2,
+        bgcolor: tokens.paper,
+        border: `1px solid ${tokens.border}`,
+        boxShadow: tokens.softShadow,
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 1.2,
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+        }}
+      >
+        <FormControl size="small" sx={{ minWidth: 250 }}>
+          <InputLabel id="sex-filter-label">
+            Bo'linma bo‘yicha filter
+          </InputLabel>
+          <Select
+            labelId="sex-filter-label"
+            value={sexFilter}
+            label="Bo'linma bo‘yicha filter"
+            onChange={(e) => setSexFilter(e.target.value)}
+            sx={{
+              borderRadius: 2.3,
+              bgcolor: tokens.isDark ? tokens.paper : "#fcfdff",
+            }}
+          >
+            <MenuItem value="">Barcha sexlar</MenuItem>
+            {sexlar.map((s) => (
+              <MenuItem key={s.id} value={s.id}>
+                {s.nom}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
+          <Chip
+            label={`Hududlar: ${pageStats.totalUch}`}
+            sx={{
+              fontWeight: 700,
+              color: tokens.text,
+              bgcolor: tokens.isDark ? alpha(tokens.textMuted, 0.1) : "#f3f7fd",
+              border: `1px solid ${tokens.border}`,
+            }}
+          />
+          <Chip
+            label={`Faol: ${pageStats.activeUch}`}
+            sx={{
+              fontWeight: 700,
+              color: tokens.green,
+              bgcolor: alpha(tokens.green, 0.1),
+              border: `1px solid ${alpha(tokens.green, 0.18)}`,
+            }}
+          />
+          <Chip
+            label={`Uskunalar: ${pageStats.totalEquip}`}
+            sx={{
+              fontWeight: 700,
+              color: tokens.text,
+              bgcolor: tokens.isDark ? alpha(tokens.textMuted, 0.1) : "#f3f7fd",
+              border: `1px solid ${tokens.border}`,
+            }}
+          />
+          <Chip
+            label={`O'rtacha samaradorlik: ${fmtN(pageStats.avgEff, 0)}%`}
+            sx={{
+              fontWeight: 700,
+              color: tokens.accent,
+              bgcolor: alpha(tokens.accent, 0.08),
+              border: `1px solid ${alpha(tokens.accent, 0.16)}`,
+            }}
+          />
+        </Stack>
+      </Box>
+    </Paper>
+  );
+}
+
 /* =========================================================
    MAIN PAGE
 ========================================================= */
@@ -759,24 +798,14 @@ export default function MonitoringPage() {
 
   const today = useMemo(() => new Date().toISOString().split("T")[0], []);
 
-  const {
-    data: sexlarRes,
-    isLoading: sexlarLoading,
-    isFetching: sexlarFetching,
-    refetch: refetchSexlar,
-  } = useQuery({
+  const { data: sexlarRes, isLoading: sexlarLoading } = useQuery({
     queryKey: ["monitoring-sexlar", today],
     queryFn: () => getSexlarHybrid({ startDate: today, endDate: today }),
     refetchInterval: 60_000,
     refetchOnWindowFocus: true,
   });
 
-  const {
-    data: uchRes,
-    isLoading: uchLoading,
-    isFetching: uchFetching,
-    refetch: refetchUch,
-  } = useQuery({
+  const { data: uchRes, isLoading: uchLoading } = useQuery({
     queryKey: ["monitoring-uchastkalar", sexFilter || "all", today],
     queryFn: async () => {
       if (sexFilter) {
@@ -834,14 +863,12 @@ export default function MonitoringPage() {
   const pageStats = useMemo(() => {
     const totalUch = uchastkalar.length;
     const activeUch = uchastkalar.filter((u) => u.holat === "faol").length;
-    const avgTemp = avg(uchastkalar.map((u) => Number(u.harorat || 0)));
     const avgEff = avg(uchastkalar.map((u) => Number(u.samaradorlik || 0)));
     const totalEquip = sum(uchastkalar.map((u) => Number(u.uskunalar || 0)));
 
     return {
       totalUch,
       activeUch,
-      avgTemp,
       avgEff,
       totalEquip,
     };
@@ -875,10 +902,6 @@ export default function MonitoringPage() {
     setExpandedUchastka((prev) => (prev === u.id ? null : u.id));
   };
 
-  const handleRefresh = async () => {
-    await Promise.all([refetchSexlar(), refetchUch()]);
-  };
-
   return (
     <Box
       sx={{
@@ -890,152 +913,16 @@ export default function MonitoringPage() {
         bgcolor: tokens.pageBg,
       }}
     >
-      <Paper
-        elevation={0}
-        sx={{
-          p: { xs: 1.85, md: 2.4 },
-          borderRadius: 3.5,
-          bgcolor: tokens.heroBg,
-          border: `1px solid ${tokens.border}`,
-          boxShadow: tokens.shadow,
+      <FilterBar
+        sexlar={sexlar}
+        sexFilter={sexFilter}
+        setSexFilter={(value) => {
+          setSexFilter(value);
+          setExpandedUchastka(null);
         }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            gap: 2,
-            flexWrap: "wrap",
-            alignItems: "flex-start",
-          }}
-        >
-          <Box>
-            <Typography
-              sx={{
-                fontFamily: tokens.display,
-                fontSize: { xs: "1.02rem", md: "1.18rem" },
-                fontWeight: 900,
-                letterSpacing: "0.08em",
-                color: tokens.accent,
-                textTransform: "uppercase",
-              }}
-            >
-              UCHASTKALAR MONITORINGI
-            </Typography>
-
-            <Typography
-              sx={{
-                mt: 0.62,
-                color: tokens.textSoft,
-                fontSize: "0.96rem",
-                lineHeight: 1.65,
-                maxWidth: 920,
-                fontWeight: 500,
-              }}
-            >
-              Har bir sex ichidagi uchastkalarni ochib, ularning uskunalarini
-              rasm, holat va asosiy ko‘rsatkichlari bilan ko‘rishingiz mumkin.
-            </Typography>
-          </Box>
-
-          <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
-            <Chip
-              icon={<FactoryRoundedIcon sx={{ fontSize: "16px !important" }} />}
-              label={`Sexlar: ${sexlar.length}`}
-              sx={{
-                fontWeight: 700,
-                bgcolor: alpha(tokens.accent, 0.08),
-                border: `1px solid ${tokens.border}`,
-                color: tokens.text,
-              }}
-            />
-            <Chip
-              icon={
-                <RadioButtonCheckedRoundedIcon
-                  sx={{ fontSize: "14px !important" }}
-                />
-              }
-              label={sexlarFetching || uchFetching ? "Yangilanmoqda" : "LIVE"}
-              sx={{
-                fontWeight: 700,
-                bgcolor: alpha(tokens.green, 0.1),
-                border: `1px solid ${alpha(tokens.green, 0.18)}`,
-                color: tokens.green,
-              }}
-            />
-            <IconButton
-              onClick={handleRefresh}
-              sx={{
-                borderRadius: 2.2,
-                border: `1px solid ${tokens.border}`,
-                color: tokens.accent,
-                bgcolor: alpha(tokens.accent, 0.06),
-              }}
-            >
-              <RefreshRoundedIcon />
-            </IconButton>
-          </Stack>
-        </Box>
-      </Paper>
-
-      <Paper
-        elevation={0}
-        sx={{
-          p: 1.7,
-          borderRadius: 3.2,
-          bgcolor: tokens.paper,
-          border: `1px solid ${tokens.border}`,
-          boxShadow: tokens.softShadow,
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 1.2,
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-          }}
-        >
-          <FormControl size="small" sx={{ minWidth: 250 }}>
-            <InputLabel id="sex-filter-label">Sex bo‘yicha filter</InputLabel>
-            <Select
-              labelId="sex-filter-label"
-              value={sexFilter}
-              label="Sex bo‘yicha filter"
-              onChange={(e) => {
-                setSexFilter(e.target.value);
-                setExpandedUchastka(null);
-              }}
-              sx={{ borderRadius: 2.3 }}
-            >
-              <MenuItem value="">Barcha sexlar</MenuItem>
-              {sexlar.map((s) => (
-                <MenuItem key={s.id} value={s.id}>
-                  {s.nom}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
-            <Chip label={`Uchastkalar: ${pageStats.totalUch}`} />
-            <Chip
-              label={`Faol: ${pageStats.activeUch}`}
-              sx={{
-                color: tokens.green,
-                bgcolor: alpha(tokens.green, 0.1),
-                border: `1px solid ${alpha(tokens.green, 0.18)}`,
-              }}
-            />
-            <Chip label={`Uskunalar: ${pageStats.totalEquip}`} />
-            {/* <Chip label={`O'rtacha harorat: ${fmtN(pageStats.avgTemp, 0)}°C`} /> */}
-            <Chip
-              label={`O'rtacha samaradorlik: ${fmtN(pageStats.avgEff, 0)}%`}
-            />
-          </Stack>
-        </Box>
-      </Paper>
+        pageStats={pageStats}
+        tokens={tokens}
+      />
 
       {isLoading ? (
         <Grid container spacing={2}>
@@ -1056,7 +943,7 @@ export default function MonitoringPage() {
               >
                 <Chip
                   size="small"
-                  label="Sex"
+                  label="Bo'lim"
                   sx={{
                     fontFamily: tokens.mono,
                     fontSize: "0.54rem",
@@ -1088,32 +975,6 @@ export default function MonitoringPage() {
             </Box>
           ))
       )}
-
-      <Paper
-        elevation={0}
-        sx={{
-          p: 1.5,
-          borderRadius: 3,
-          bgcolor: tokens.paper,
-          border: `1px solid ${tokens.border}`,
-          display: "flex",
-          alignItems: "center",
-          gap: 1,
-        }}
-      >
-        <InfoOutlinedIcon sx={{ fontSize: 18, color: tokens.accent }} />
-        <Typography
-          sx={{
-            fontSize: "0.86rem",
-            color: tokens.textSoft,
-            lineHeight: 1.55,
-            fontWeight: 500,
-          }}
-        >
-          Uskuna kartasini bossangiz, uskunaning alohida sahifasiga o‘tasiz.
-          Rasm topilmasa avtomatik `default.png` ishlatiladi.
-        </Typography>
-      </Paper>
     </Box>
   );
 }
