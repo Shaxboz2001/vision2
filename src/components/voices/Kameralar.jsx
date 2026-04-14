@@ -1,5 +1,6 @@
-import { useState, useCallback, useMemo, useRef, useEffect } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { alpha, useTheme } from "@mui/material/styles";
 import {
   Box,
   Grid,
@@ -14,17 +15,16 @@ import {
   CircularProgress,
   Tooltip,
   Stack,
+  Chip,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import ZoomOutMapIcon from "@mui/icons-material/ZoomOutMap";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
 import SensorsOffRoundedIcon from "@mui/icons-material/SensorsOffRounded";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import { getKameralar } from "@/api";
 import { SectionHeader, LiveBadge } from "@/components/common";
-import { useVoiceCommand } from "./useVoiceCommand";
-import { useWakeWord } from "./useWakeWord";
-import VoiceMicButton from "./VoiceMicButton";
 
 const STREAM_BASE = "http://172.16.55.13:8889";
 
@@ -119,39 +119,6 @@ function getStreamConfig(cam) {
   return CAMERA_STREAMS.find((item) => String(item.id) === String(cam?.id));
 }
 
-function getCameraStatusMeta(status) {
-  switch (status) {
-    case "jonli":
-      return {
-        label: "JONLI",
-        color: "#34d399",
-        bg: "rgba(16,185,129,0.16)",
-        border: "1px solid rgba(16,185,129,0.34)",
-      };
-    case "xato":
-      return {
-        label: "XATO",
-        color: "#f87171",
-        bg: "rgba(239,68,68,0.16)",
-        border: "1px solid rgba(239,68,68,0.34)",
-      };
-    case "signal_yoq":
-      return {
-        label: "SIGNAL YO‘Q",
-        color: "#cbd5e1",
-        bg: "rgba(148,163,184,0.16)",
-        border: "1px solid rgba(148,163,184,0.28)",
-      };
-    default:
-      return {
-        label: "NOMA’LUM",
-        color: "#cbd5e1",
-        bg: "rgba(148,163,184,0.16)",
-        border: "1px solid rgba(148,163,184,0.28)",
-      };
-  }
-}
-
 function buildStreamUrl(cam, isLarge = false) {
   const config = getStreamConfig(cam);
   if (!config) return null;
@@ -162,36 +129,141 @@ function buildStreamUrl(cam, isLarge = false) {
   return `${STREAM_BASE}/${path}?controls=${controls}&muted=true&autoplay=true&playsInline=true`;
 }
 
-function StatsCard({ title, value, color, icon }) {
+function getCameraStatusMeta(status, theme) {
+  const isDark = theme.palette.mode === "dark";
+
+  switch (status) {
+    case "jonli":
+      return {
+        label: "JONLI",
+        color: theme.palette.success.main,
+        bg: alpha(theme.palette.success.main, isDark ? 0.18 : 0.12),
+        border: `1px solid ${alpha(theme.palette.success.main, isDark ? 0.38 : 0.25)}`,
+        icon: <CheckCircleRoundedIcon sx={{ fontSize: 14 }} />,
+      };
+
+    case "xato":
+      return {
+        label: "XATO",
+        color: theme.palette.error.main,
+        bg: alpha(theme.palette.error.main, isDark ? 0.18 : 0.1),
+        border: `1px solid ${alpha(theme.palette.error.main, isDark ? 0.38 : 0.22)}`,
+        icon: <WarningAmberRoundedIcon sx={{ fontSize: 14 }} />,
+      };
+
+    case "signal_yoq":
+      return {
+        label: "SIGNAL YO‘Q",
+        color: theme.palette.text.secondary,
+        bg: alpha(theme.palette.text.secondary, isDark ? 0.18 : 0.08),
+        border: `1px solid ${alpha(theme.palette.text.secondary, isDark ? 0.28 : 0.16)}`,
+        icon: <SensorsOffRoundedIcon sx={{ fontSize: 14 }} />,
+      };
+
+    default:
+      return {
+        label: "NOMA’LUM",
+        color: theme.palette.text.secondary,
+        bg: alpha(theme.palette.text.secondary, isDark ? 0.18 : 0.08),
+        border: `1px solid ${alpha(theme.palette.text.secondary, isDark ? 0.28 : 0.16)}`,
+        icon: <SensorsOffRoundedIcon sx={{ fontSize: 14 }} />,
+      };
+  }
+}
+
+function PageShell({ children }) {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
+
   return (
-    <Paper
+    <Box
       sx={{
-        p: 1.5,
-        borderRadius: 3,
-        background:
-          "linear-gradient(180deg, rgba(15,23,42,0.98) 0%, rgba(7,10,18,0.98) 100%)",
-        border: "1px solid rgba(255,255,255,0.06)",
-        boxShadow: "0 10px 24px rgba(0,0,0,0.18)",
+        p: { xs: 1.5, sm: 2, md: 2.5 },
+        minHeight: "100%",
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+        background: isDark
+          ? `
+            radial-gradient(circle at top left, rgba(0,212,255,0.10), transparent 25%),
+            radial-gradient(circle at top right, rgba(34,197,94,0.10), transparent 22%),
+            linear-gradient(180deg, #0b1220 0%, #09101a 100%)
+          `
+          : `
+            radial-gradient(circle at top left, rgba(37,99,235,0.08), transparent 25%),
+            radial-gradient(circle at top right, rgba(16,185,129,0.08), transparent 22%),
+            linear-gradient(180deg, #f8fbff 0%, #eef4fa 100%)
+          `,
       }}
     >
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
+      {children}
+    </Box>
+  );
+}
+
+function SurfaceCard({ children, sx = {} }) {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
+
+  return (
+    <Paper
+      elevation={0}
+      sx={{
+        borderRadius: 4,
+        border: `1px solid ${alpha(
+          isDark ? "#ffffff" : theme.palette.primary.main,
+          isDark ? 0.08 : 0.1,
+        )}`,
+        background: isDark
+          ? "linear-gradient(180deg, rgba(15,23,42,0.94) 0%, rgba(7,10,18,0.96) 100%)"
+          : "linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(247,250,252,0.98) 100%)",
+        boxShadow: isDark
+          ? "0 14px 40px rgba(0,0,0,0.28)"
+          : "0 14px 34px rgba(15, 23, 42, 0.08)",
+        ...sx,
+      }}
+    >
+      {children}
+    </Paper>
+  );
+}
+
+function StatsCard({ title, value, color, icon }) {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
+
+  return (
+    <SurfaceCard
+      sx={{
+        p: 1.6,
+        height: "100%",
+      }}
+    >
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        spacing={1.5}
+      >
         <Box>
           <Typography
             sx={{
-              fontSize: "1.65rem",
-              fontWeight: 800,
+              fontSize: { xs: "1.35rem", sm: "1.55rem", md: "1.7rem" },
+              fontWeight: 900,
               lineHeight: 1,
               color,
             }}
           >
             {value}
           </Typography>
+
           <Typography
             sx={{
-              mt: 0.5,
-              fontSize: "0.64rem",
-              letterSpacing: "0.12em",
-              color: "#94a3b8",
+              mt: 0.6,
+              fontSize: "0.68rem",
+              fontWeight: 700,
+              letterSpacing: "0.14em",
+              color: isDark ? "rgba(226,232,240,0.72)" : "text.secondary",
             }}
           >
             {title}
@@ -200,49 +272,61 @@ function StatsCard({ title, value, color, icon }) {
 
         <Box
           sx={{
-            width: 40,
-            height: 40,
-            borderRadius: "50%",
+            width: 44,
+            height: 44,
+            borderRadius: "14px",
             display: "grid",
             placeItems: "center",
             color,
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.06)",
+            background: alpha(color, isDark ? 0.14 : 0.1),
+            border: `1px solid ${alpha(color, isDark ? 0.25 : 0.18)}`,
+            flexShrink: 0,
           }}
         >
           {icon}
         </Box>
       </Stack>
-    </Paper>
+    </SurfaceCard>
   );
 }
 
 function CameraCard({ cam, highlighted = false, onOpen }) {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
   const streamCfg = getStreamConfig(cam);
   const streamUrl = buildStreamUrl(cam, false);
-  const statusMeta = getCameraStatusMeta(cam?.holat);
+  const statusMeta = getCameraStatusMeta(cam?.holat, theme);
+  const isLive = cam?.holat === "jonli";
 
   return (
     <Box
       sx={{
         position: "relative",
-        borderRadius: 3,
+        height: "100%",
+        borderRadius: 4,
         overflow: "hidden",
-        background:
-          "linear-gradient(180deg, rgba(15,23,42,0.98) 0%, rgba(7,10,18,0.98) 100%)",
+        background: isDark
+          ? "linear-gradient(180deg, rgba(15,23,42,0.96) 0%, rgba(7,10,18,0.98) 100%)"
+          : "linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(245,248,252,1) 100%)",
         border: highlighted
-          ? "2px solid #00ff9d"
-          : "1px solid rgba(255,255,255,0.06)",
+          ? `1.5px solid ${alpha(theme.palette.success.main, 0.9)}`
+          : `1px solid ${alpha(
+              isDark ? "#ffffff" : theme.palette.primary.main,
+              isDark ? 0.08 : 0.1,
+            )}`,
         boxShadow: highlighted
-          ? "0 0 0 1px rgba(0,255,157,0.14), 0 18px 34px rgba(0,0,0,0.30)"
-          : "0 14px 28px rgba(0,0,0,0.20)",
+          ? isDark
+            ? `0 0 0 1px ${alpha(theme.palette.success.main, 0.18)}, 0 18px 40px rgba(0,0,0,0.34)`
+            : `0 0 0 1px ${alpha(theme.palette.success.main, 0.14)}, 0 16px 34px rgba(15,23,42,0.12)`
+          : isDark
+            ? "0 14px 30px rgba(0,0,0,0.22)"
+            : "0 10px 24px rgba(15,23,42,0.08)",
         transition: "all 0.28s ease",
         "&:hover": {
-          transform: cam?.holat === "jonli" ? "translateY(-3px)" : "none",
-          boxShadow:
-            cam?.holat === "jonli"
-              ? "0 18px 36px rgba(0,0,0,0.30)"
-              : "0 14px 28px rgba(0,0,0,0.20)",
+          transform: isLive ? "translateY(-4px)" : "none",
+          boxShadow: isDark
+            ? "0 18px 38px rgba(0,0,0,0.30)"
+            : "0 16px 34px rgba(15,23,42,0.12)",
         },
       }}
     >
@@ -251,9 +335,9 @@ function CameraCard({ cam, highlighted = false, onOpen }) {
           position: "relative",
           aspectRatio: "16 / 10",
           background: "#000",
-          cursor: cam?.holat === "jonli" ? "pointer" : "default",
+          cursor: isLive ? "pointer" : "default",
         }}
-        onClick={() => cam?.holat === "jonli" && onOpen?.(cam)}
+        onClick={() => isLive && onOpen?.(cam)}
       >
         {streamUrl ? (
           <iframe
@@ -278,16 +362,16 @@ function CameraCard({ cam, highlighted = false, onOpen }) {
               placeItems: "center",
               px: 2,
               textAlign: "center",
-              color: "#94a3b8",
+              color: isDark ? "#94a3b8" : "text.secondary",
             }}
           >
-            <Typography sx={{ fontSize: "0.82rem" }}>
+            <Typography sx={{ fontSize: "0.82rem", fontWeight: 600 }}>
               Stream topilmadi
             </Typography>
           </Box>
         )}
 
-        {cam?.holat === "jonli" && (
+        {isLive && (
           <Tooltip title="Kattalashtirish">
             <IconButton
               size="small"
@@ -301,11 +385,11 @@ function CameraCard({ cam, highlighted = false, onOpen }) {
                 right: 10,
                 zIndex: 3,
                 color: "#fff",
-                background: "rgba(6,8,16,0.74)",
+                background: "rgba(6,8,16,0.72)",
                 backdropFilter: "blur(8px)",
-                border: "1px solid rgba(255,255,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.14)",
                 "&:hover": {
-                  background: "rgba(6,8,16,0.95)",
+                  background: "rgba(6,8,16,0.92)",
                 },
               }}
             >
@@ -330,19 +414,19 @@ function CameraCard({ cam, highlighted = false, onOpen }) {
           <Box
             sx={{
               px: 1,
-              py: 0.45,
+              py: 0.5,
               borderRadius: 999,
-              background: "rgba(6,8,16,0.72)",
-              border: "1px solid rgba(255,255,255,0.08)",
+              background: "rgba(6,8,16,0.70)",
+              border: "1px solid rgba(255,255,255,0.10)",
               backdropFilter: "blur(8px)",
-              maxWidth: "70%",
+              maxWidth: "72%",
             }}
           >
             <Typography
               sx={{
                 fontSize: "0.68rem",
-                color: "#e5e7eb",
-                fontWeight: 700,
+                color: "#f8fafc",
+                fontWeight: 800,
                 whiteSpace: "nowrap",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
@@ -351,38 +435,43 @@ function CameraCard({ cam, highlighted = false, onOpen }) {
               {cam?.nom || streamCfg?.name || "Noma’lum kamera"}
             </Typography>
           </Box>
-
+          {/* 
           <Box
             sx={{
               px: 1,
-              py: 0.35,
+              py: 0.38,
               borderRadius: 999,
+              display: "flex",
+              alignItems: "center",
+              gap: 0.5,
               background: statusMeta.bg,
               border: statusMeta.border,
             }}
           >
+            {statusMeta.icon}
             <Typography
               sx={{
-                fontSize: "0.62rem",
-                fontWeight: 800,
+                fontSize: "0.60rem",
+                fontWeight: 900,
                 color: statusMeta.color,
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
+                lineHeight: 1,
               }}
             >
               {statusMeta.label}
             </Typography>
-          </Box>
+          </Box> */}
         </Box>
       </Box>
 
-      <Box sx={{ p: 1.25 }}>
+      {/* <Box sx={{ p: 1.4 }}>
         <Typography
           sx={{
-            fontSize: "0.9rem",
-            fontWeight: 700,
-            color: "#f8fafc",
-            lineHeight: 1.2,
+            fontSize: "0.94rem",
+            fontWeight: 800,
+            color: "text.primary",
+            lineHeight: 1.25,
           }}
         >
           {cam?.nom || streamCfg?.name || "Noma’lum kamera"}
@@ -390,19 +479,22 @@ function CameraCard({ cam, highlighted = false, onOpen }) {
 
         <Typography
           sx={{
-            mt: 0.5,
-            fontSize: "0.72rem",
-            color: "#94a3b8",
+            mt: 0.55,
+            fontSize: "0.74rem",
+            color: "text.secondary",
+            lineHeight: 1.5,
           }}
         >
           {cam?.sex || "—"} · {cam?.uchastka || streamCfg?.location || "—"}
         </Typography>
-      </Box>
+      </Box> */}
     </Box>
   );
 }
 
 function CameraDialog({ cam, open, onClose }) {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
   const streamUrl = buildStreamUrl(cam, true);
 
   return (
@@ -413,11 +505,15 @@ function CameraDialog({ cam, open, onClose }) {
       fullWidth
       PaperProps={{
         sx: {
-          background:
-            "linear-gradient(180deg, rgba(15,23,42,0.99) 0%, rgba(6,8,16,0.99) 100%)",
-          border: "1px solid rgba(0,212,255,0.22)",
-          borderRadius: 3,
+          background: isDark
+            ? "linear-gradient(180deg, rgba(15,23,42,0.99) 0%, rgba(6,8,16,0.99) 100%)"
+            : "linear-gradient(180deg, rgba(255,255,255,0.99) 0%, rgba(245,248,252,0.99) 100%)",
+          border: `1px solid ${alpha(theme.palette.primary.main, isDark ? 0.28 : 0.14)}`,
+          borderRadius: 4,
           overflow: "hidden",
+          boxShadow: isDark
+            ? "0 24px 60px rgba(0,0,0,0.40)"
+            : "0 24px 50px rgba(15,23,42,0.16)",
         },
       }}
     >
@@ -427,7 +523,7 @@ function CameraDialog({ cam, open, onClose }) {
             sx={{
               px: 2,
               py: 1.5,
-              borderBottom: "1px solid rgba(255,255,255,0.08)",
+              borderBottom: `1px solid ${alpha(theme.palette.divider, 0.8)}`,
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
@@ -435,31 +531,35 @@ function CameraDialog({ cam, open, onClose }) {
             }}
           >
             <Box>
-              <Typography
+              {/* <Typography
                 sx={{
-                  fontSize: "0.9rem",
-                  fontWeight: 800,
-                  color: "#00d4ff",
+                  fontSize: "0.96rem",
+                  fontWeight: 900,
+                  color: theme.palette.primary.main,
                 }}
               >
                 {cam?.id} — {cam?.nom || "Kamera"}
-              </Typography>
-              <Typography
+              </Typography> */}
+
+              {/* <Typography
                 sx={{
-                  mt: 0.25,
-                  fontSize: "0.72rem",
-                  color: "#94a3b8",
+                  mt: 0.35,
+                  fontSize: "0.74rem",
+                  color: "text.secondary",
                 }}
               >
                 {cam?.sex || "—"} · {cam?.uchastka || "—"} · {cam?.fps || "—"}{" "}
                 fps
-              </Typography>
+              </Typography> */}
             </Box>
 
             <IconButton
               size="small"
               onClick={onClose}
-              sx={{ color: "#94a3b8" }}
+              sx={{
+                color: "text.secondary",
+                border: `1px solid ${alpha(theme.palette.divider, 0.9)}`,
+              }}
             >
               <CloseIcon />
             </IconButton>
@@ -473,7 +573,7 @@ function CameraDialog({ cam, open, onClose }) {
                 borderRadius: 3,
                 overflow: "hidden",
                 background: "#000",
-                border: "1px solid rgba(255,255,255,0.08)",
+                border: `1px solid ${alpha(theme.palette.divider, 0.9)}`,
               }}
             >
               {streamUrl ? (
@@ -497,10 +597,12 @@ function CameraDialog({ cam, open, onClose }) {
                     height: "100%",
                     display: "grid",
                     placeItems: "center",
-                    color: "#94a3b8",
+                    color: "text.secondary",
                   }}
                 >
-                  <Typography>Asosiy stream topilmadi</Typography>
+                  <Typography sx={{ fontWeight: 700 }}>
+                    Asosiy stream topilmadi
+                  </Typography>
                 </Box>
               )}
             </Box>
@@ -512,10 +614,12 @@ function CameraDialog({ cam, open, onClose }) {
 }
 
 export default function Kameralar() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
+
   const [filter, setFilter] = useState("barchasi");
   const [fullscreenCam, setFullscreenCam] = useState(null);
   const [highlightedCamId, setHighlightedCamId] = useState(null);
-  const timeoutRef = useRef(null);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["kameralar"],
@@ -525,71 +629,25 @@ export default function Kameralar() {
 
   const kameralar = useMemo(() => data?.data || [], [data]);
 
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, []);
-
   const openCamera = useCallback((cam) => {
     if (!cam) return;
-
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
     setHighlightedCamId(cam.id);
 
-    timeoutRef.current = setTimeout(() => {
+    setTimeout(() => {
       setFullscreenCam(cam);
       setHighlightedCamId(null);
-      timeoutRef.current = null;
-    }, 220);
+    }, 180);
   }, []);
-
-  const handleVoiceCommand = useCallback(
-    ({ camera_name, camera_id }) => {
-      let cam = null;
-
-      if (camera_id) {
-        cam =
-          kameralar.find((item) => String(item.id) === String(camera_id)) ||
-          kameralar.find((item) => String(item.channel) === String(camera_id));
-      }
-
-      if (!cam && camera_name) {
-        const query = String(camera_name).toLowerCase().trim();
-        cam =
-          kameralar.find((item) => item.nom?.toLowerCase() === query) ||
-          kameralar.find((item) => item.nom?.toLowerCase()?.includes(query));
-      }
-
-      if (!cam && camera_id && Number(camera_id) <= kameralar.length) {
-        cam = kameralar[Number(camera_id) - 1];
-      }
-
-      if (!cam) return;
-      openCamera(cam);
-    },
-    [kameralar, openCamera],
-  );
-
-  const voice = useVoiceCommand({
-    onCommand: handleVoiceCommand,
-  });
-
-  const wakeWord = useWakeWord({
-    wakeWord: "дурдона",
-    onWakeWord: voice.triggerListening,
-    enabled: true,
-  });
 
   const filtered = useMemo(() => {
     if (filter === "barchasi") return kameralar;
-    if (filter === "jonli") {
+    if (filter === "jonli")
       return kameralar.filter((cam) => cam.holat === "jonli");
-    }
-    return kameralar.filter((cam) => cam.holat !== "jonli");
+    if (filter === "xato")
+      return kameralar.filter((cam) => cam.holat === "xato");
+    if (filter === "signal_yoq")
+      return kameralar.filter((cam) => cam.holat === "signal_yoq");
+    return kameralar;
   }, [filter, kameralar]);
 
   const stats = useMemo(() => {
@@ -600,112 +658,119 @@ export default function Kameralar() {
       (cam) => cam.holat === "signal_yoq",
     ).length;
 
-    return {
-      jami,
-      jonli,
-      xato,
-      signalYoq,
-    };
+    return { jami, jonli, xato, signalYoq };
   }, [kameralar]);
 
   return (
-    <Box sx={{ p: 2.5, display: "flex", flexDirection: "column", gap: 2 }}>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: { xs: "flex-start", md: "center" },
-          justifyContent: "space-between",
-          flexDirection: { xs: "column", md: "row" },
-          gap: 1.5,
-        }}
-      >
-        <Box>
-          <Typography
-            sx={{
-              fontFamily: "Arial, sans-serif",
-              fontSize: "1.15rem",
-              fontWeight: 800,
-              letterSpacing: "0.14em",
-              color: "#f8fafc",
-            }}
-          >
-            KAMERA NAZORATI
-          </Typography>
-
-          <Typography
-            sx={{
-              mt: 0.5,
-              fontFamily: "Arial, sans-serif",
-              fontSize: "0.68rem",
-              color: "#94a3b8",
-            }}
-          >
-            {stats.jonli}/{stats.jami} kamera jonli · PyVision Video Analitika
-          </Typography>
-        </Box>
-
+    <PageShell>
+      {/* <SurfaceCard sx={{ p: { xs: 1.5, sm: 2, md: 2.2 } }}>
         <Box
           sx={{
             display: "flex",
+            alignItems: { xs: "flex-start", md: "center" },
+            justifyContent: "space-between",
+            flexDirection: { xs: "column", md: "row" },
             gap: 1.5,
-            alignItems: "center",
-            flexWrap: "wrap",
           }}
         >
-          <VoiceMicButton
-            isListening={voice.isListening}
-            isProcessing={voice.isProcessing}
-            transcript={voice.transcript}
-            error={voice.error}
-            onClick={voice.startListening}
-            wakeWordActive={wakeWord.isActive}
-          />
-
-          <LiveBadge />
-
-          <FormControl size="small" sx={{ minWidth: 160 }}>
-            <Select
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
+          <Box>
+            <Typography
               sx={{
                 fontFamily: "Arial, sans-serif",
-                fontSize: "0.78rem",
+                fontSize: { xs: "1rem", sm: "1.12rem", md: "1.22rem" },
+                fontWeight: 900,
+                letterSpacing: "0.14em",
+                color: "text.primary",
               }}
             >
-              <MenuItem value="barchasi">Barchasi ({stats.jami})</MenuItem>
-              <MenuItem value="jonli">Jonli ({stats.jonli})</MenuItem>
-              <MenuItem value="nosoz">
-                Nosoz ({stats.xato + stats.signalYoq})
-              </MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-      </Box>
+              KAMERA NAZORATI
+            </Typography>
 
-      <Grid container spacing={1.5}>
+            <Typography
+              sx={{
+                mt: 0.6,
+                fontFamily: "Arial, sans-serif",
+                fontSize: "0.73rem",
+                color: "text.secondary",
+              }}
+            >
+              {stats.jonli}/{stats.jami} kamera jonli · PyVision Video Analitika
+            </Typography>
+          </Box>
+
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={1.2}
+            alignItems={{ xs: "stretch", sm: "center" }}
+            sx={{ width: { xs: "100%", md: "auto" } }}
+          >
+            <LiveBadge />
+
+            <Chip
+              icon={<VideocamIcon />}
+              label="Mikrofon o‘chirildi"
+              sx={{
+                height: 34,
+                fontWeight: 700,
+                borderRadius: 999,
+                color: theme.palette.text.primary,
+                background: alpha(
+                  theme.palette.warning.main,
+                  isDark ? 0.16 : 0.1,
+                ),
+                border: `1px solid ${alpha(theme.palette.warning.main, isDark ? 0.28 : 0.18)}`,
+              }}
+            />
+
+            <FormControl size="small" sx={{ minWidth: 180 }}>
+              <Select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                sx={{
+                  fontSize: "0.82rem",
+                  fontWeight: 700,
+                  borderRadius: 2.5,
+                  background: isDark
+                    ? alpha("#ffffff", 0.03)
+                    : alpha(theme.palette.common.white, 0.88),
+                }}
+              >
+                <MenuItem value="barchasi">Barchasi ({stats.jami})</MenuItem>
+                <MenuItem value="jonli">Jonli ({stats.jonli})</MenuItem>
+                <MenuItem value="xato">Xato ({stats.xato})</MenuItem>
+                <MenuItem value="signal_yoq">
+                  Signal yo‘q ({stats.signalYoq})
+                </MenuItem>
+              </Select>
+            </FormControl>
+          </Stack>
+        </Box>
+      </SurfaceCard> */}
+
+      <Grid container spacing={1.6}>
         <Grid item xs={6} sm={3}>
           <StatsCard
             title="JAMI KAMERA"
             value={stats.jami}
-            color="#00d4ff"
+            color={theme.palette.primary.main}
             icon={<VideocamIcon fontSize="small" />}
           />
         </Grid>
 
-        <Grid item xs={6} sm={3}>
+        {/* <Grid item xs={6} sm={3}>
           <StatsCard
             title="JONLI"
             value={stats.jonli}
-            color="#00ff9d"
-            icon={<VideocamIcon fontSize="small" />}
+            color={theme.palette.success.main}
+            icon={<CheckCircleRoundedIcon fontSize="small" />}
           />
-        </Grid>
+        </Grid> */}
 
         <Grid item xs={6} sm={3}>
           <StatsCard
-            title="NOSOZ"
+            title="XATO"
             value={stats.xato}
-            color="#ff2d55"
+            color={theme.palette.error.main}
             icon={<WarningAmberRoundedIcon fontSize="small" />}
           />
         </Grid>
@@ -714,23 +779,15 @@ export default function Kameralar() {
           <StatsCard
             title="SIGNAL YO‘Q"
             value={stats.signalYoq}
-            color="#94a3b8"
+            color={theme.palette.text.secondary}
             icon={<SensorsOffRoundedIcon fontSize="small" />}
           />
         </Grid>
       </Grid>
 
-      <Paper
-        sx={{
-          borderRadius: 3,
-          overflow: "hidden",
-          background:
-            "linear-gradient(180deg, rgba(15,23,42,0.98) 0%, rgba(7,10,18,0.98) 100%)",
-          border: "1px solid rgba(255,255,255,0.06)",
-        }}
-      >
-        <SectionHeader title="Kameralar" dot="#ff2d55">
-          <LiveBadge />
+      <SurfaceCard sx={{ overflow: "hidden" }}>
+        <SectionHeader title="Kameralar" dot={theme.palette.error.main}>
+          {/* <LiveBadge /> */}
         </SectionHeader>
 
         <Box sx={{ p: 2 }}>
@@ -740,18 +797,18 @@ export default function Kameralar() {
             </Box>
           ) : isError ? (
             <Box sx={{ minHeight: 280, display: "grid", placeItems: "center" }}>
-              <Typography sx={{ color: "#cbd5e1" }}>
+              <Typography sx={{ color: "text.secondary", fontWeight: 700 }}>
                 Kameralarni yuklashda xatolik bo‘ldi
               </Typography>
             </Box>
           ) : filtered.length === 0 ? (
             <Box sx={{ minHeight: 280, display: "grid", placeItems: "center" }}>
-              <Typography sx={{ color: "#94a3b8" }}>
+              <Typography sx={{ color: "text.secondary", fontWeight: 700 }}>
                 Bu filtr bo‘yicha kamera topilmadi
               </Typography>
             </Box>
           ) : (
-            <Grid container spacing={3}>
+            <Grid container spacing={2}>
               {filtered.map((cam) => (
                 <Grid item xs={12} sm={6} md={4} xl={3} key={cam.id}>
                   <CameraCard
@@ -764,13 +821,13 @@ export default function Kameralar() {
             </Grid>
           )}
         </Box>
-      </Paper>
+      </SurfaceCard>
 
       <CameraDialog
         cam={fullscreenCam}
         open={!!fullscreenCam}
         onClose={() => setFullscreenCam(null)}
       />
-    </Box>
+    </PageShell>
   );
 }
