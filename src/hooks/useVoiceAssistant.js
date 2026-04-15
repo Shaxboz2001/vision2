@@ -6,7 +6,7 @@ import { voiceFeedback } from "@/utils/voiceFeedback";
 const API = import.meta.env.VITE_VOICE_API || "https://172.16.55.13:8006";
 
 const VOL_THRESHOLD = 0.035;
-const SILENCE_MS = 500; // 800→500ms (tezroq to'xtash)
+const SILENCE_MS = 500;
 const MAX_REC_MS = 4000;
 const MIN_REC_MS = 500;
 
@@ -69,7 +69,7 @@ export function useVoiceAssistant() {
     try {
       await voiceFeedback.speak(key);
     } catch {}
-    await new Promise((r) => setTimeout(r, 200)); // 300→200ms
+    await new Promise((r) => setTimeout(r, 200));
     setIsSpeaking(false);
     busyRef.current = false;
   }, []);
@@ -106,12 +106,10 @@ export function useVoiceAssistant() {
         const found = d.nav_path || d.camera_name || d.camera_id;
 
         if (found) {
-          // Avval navigate, keyin audio (tezroq)
-          if (d.nav_path) {
-            setLastCommand({ label: d.nav_label });
-            nav(d.nav_path);
-          } else {
-            setLastCommand({ label: d.camera_name });
+          // AVVAL navigate (tez), KEYIN audio (fonda)
+          if (d.camera_name || d.camera_id) {
+            // Aniq kamera — kameralar sahifasiga o'tib, keyin kamerani ochish
+            setLastCommand({ label: d.camera_name || `Kamera ${d.camera_id}` });
             nav("/kameralar");
             setTimeout(() => {
               window.dispatchEvent(
@@ -123,6 +121,9 @@ export function useVoiceAssistant() {
                 }),
               );
             }, 300);
+          } else if (d.nav_path) {
+            setLastCommand({ label: d.nav_label });
+            nav(d.nav_path);
           }
           await say("accepted");
           await say("opened");
@@ -158,7 +159,6 @@ export function useVoiceAssistant() {
 
     const tick = () => {
       if (!enabledRef.current) return;
-
       if (busyRef.current || voiceFeedback.isSpeaking()) {
         rafRef.current = requestAnimationFrame(tick);
         return;
@@ -172,14 +172,12 @@ export function useVoiceAssistant() {
       if (rms > VOL_THRESHOLD) {
         clearTimeout(silenceRef.current);
         if (rms > peakRef.current) peakRef.current = rms;
-
         if (!recording && !busyRef.current) {
           recording = true;
           chunks = [];
           peakRef.current = rms;
           startRef.current = Date.now();
           setIsRecording(true);
-
           const mime = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
             ? "audio/webm;codecs=opus"
             : "audio/webm";
@@ -220,7 +218,6 @@ export function useVoiceAssistant() {
       setIsEnabled(false);
       return;
     }
-
     cleanup();
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -233,17 +230,14 @@ export function useVoiceAssistant() {
         },
       });
       streamRef.current = stream;
-
       const ctx = new AudioContext({ sampleRate: 16000 });
       audioCtxRef.current = ctx;
       if (ctx.state === "suspended") await ctx.resume();
-
       const src = ctx.createMediaStreamSource(stream);
       const an = ctx.createAnalyser();
       an.fftSize = 512;
       src.connect(an);
       analyserRef.current = an;
-
       enabledRef.current = true;
       busyRef.current = false;
       setIsEnabled(true);

@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { alpha, useTheme } from "@mui/material/styles";
 import {
@@ -638,6 +638,33 @@ export default function Kameralar() {
       setHighlightedCamId(null);
     }, 180);
   }, []);
+
+  // Voice command: "Muhlisa, Elektr Pech 1 kamerani och"
+  useEffect(() => {
+    const handler = (e) => {
+      const { camera_name, camera_id } = e.detail || {};
+      let cam = null;
+
+      if (camera_id) {
+        cam =
+          kameralar.find((c) => String(c.id) === String(camera_id)) ||
+          kameralar.find((c) => String(c.channel) === String(camera_id));
+      }
+      if (!cam && camera_name) {
+        const q = String(camera_name).toLowerCase();
+        cam =
+          kameralar.find((c) => c.nom?.toLowerCase() === q) ||
+          kameralar.find((c) => c.nom?.toLowerCase()?.includes(q));
+      }
+      if (!cam && camera_id && Number(camera_id) <= kameralar.length) {
+        cam = kameralar[Number(camera_id) - 1];
+      }
+
+      if (cam) openCamera(cam);
+    };
+    window.addEventListener("voice-camera-command", handler);
+    return () => window.removeEventListener("voice-camera-command", handler);
+  }, [kameralar, openCamera]);
 
   const filtered = useMemo(() => {
     if (filter === "barchasi") return kameralar;
