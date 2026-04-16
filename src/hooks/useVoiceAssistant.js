@@ -1,4 +1,11 @@
 // hooks/useVoiceAssistant.js
+//
+// Tezlik degradatsiyasi fix:
+//   1. AbortController — eski fetch lar cancel qilinadi
+//   2. Har recording dan keyin chunks tozalanadi
+//   3. MediaRecorder har safar yangi yaratiladi va eski ref null qilinadi
+//   4. requestAnimationFrame o'rniga setInterval (barqaror tezlik)
+
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { voiceFeedback } from "@/utils/voiceFeedback";
@@ -9,6 +16,7 @@ const VOL_THRESHOLD = 0.035;
 const SILENCE_MS = 500;
 const MAX_REC_MS = 4000;
 const MIN_REC_MS = 500;
+const VAD_INTERVAL = 50; // 50ms interval (20 FPS) — barqaror, CPU friendly
 
 export function useVoiceAssistant() {
   const nav = useNavigate();
@@ -24,28 +32,45 @@ export function useVoiceAssistant() {
   const streamRef = useRef(null);
   const audioCtxRef = useRef(null);
   const analyserRef = useRef(null);
-  const rafRef = useRef(null);
+  const vadIntervalRef = useRef(null); // setInterval ID
   const silenceRef = useRef(null);
   const recRef = useRef(null);
+  const chunksRef = useRef([]); // chunks ref da — closure muammo yo'q
   const startRef = useRef(0);
   const enabledRef = useRef(false);
   const busyRef = useRef(false);
   const peakRef = useRef(0);
+  const recordingRef = useRef(false);
+  const abortRef = useRef(null); // AbortController
 
   const cleanup = useCallback(() => {
     enabledRef.current = false;
     busyRef.current = false;
-    cancelAnimationFrame(rafRef.current);
-    rafRef.current = null;
+    recordingRef.current = false;
+
+    // VAD interval
+    clearInterval(vadIntervalRef.current);
+    vadIntervalRef.current = null;
+
     clearTimeout(silenceRef.current);
     silenceRef.current = null;
+
+    // Fetch cancel
+    if (abortRef.current) {
+      abortRef.current.abort();
+      abortRef.current = null;
+    }
+
     voiceFeedback.stop();
+
     if (recRef.current) {
       try {
         if (recRef.current.state === "recording") recRef.current.stop();
       } catch {}
       recRef.current = null;
     }
+    chunksRef.current = [];
+
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((t) => t.stop());
       streamRef.current = null;
@@ -57,6 +82,7 @@ export function useVoiceAssistant() {
       audioCtxRef.current = null;
     }
     analyserRef.current = null;
+
     setIsListening(false);
     setIsRecording(false);
     setIsProcessing(false);
@@ -81,12 +107,18 @@ export function useVoiceAssistant() {
       setIsProcessing(true);
       setError(null);
 
+      // Eski fetch ni cancel qilish
+      if (abortRef.current) abortRef.current.abort();
+      const controller = new AbortController();
+      abortRef.current = controller;
+
       try {
         const fd = new FormData();
         fd.append("audio", blob, "v.webm");
         const res = await fetch(`${API}/api/voice/command`, {
           method: "POST",
           body: fd,
+          signal: controller.signal,
         });
         if (!res.ok)
           throw new Error(
@@ -106,9 +138,7 @@ export function useVoiceAssistant() {
         const found = d.nav_path || d.camera_name || d.camera_id;
 
         if (found) {
-          // AVVAL navigate (tez), KEYIN audio (fonda)
           if (d.camera_name || d.camera_id) {
-            // Aniq kamera — kameralar sahifasiga o'tib, keyin kamerani ochish
             setLastCommand({ label: d.camera_name || `Kamera ${d.camera_id}` });
             nav("/kameralar");
             setTimeout(() => {
@@ -135,6 +165,7 @@ export function useVoiceAssistant() {
           setTimeout(() => setError(null), 3000);
         }
       } catch (e) {
+        if (e.name === "AbortError") return; // cancel qilingan — normal
         console.error("[Voice]", e);
         setIsProcessing(false);
         setError(e.message);
@@ -143,26 +174,22 @@ export function useVoiceAssistant() {
       } finally {
         busyRef.current = false;
         setIsProcessing(false);
+        abortRef.current = null;
       }
     },
     [nav, say],
   );
 
-  const runVAD = useCallback(() => {
+  // ─── VAD — setInterval bilan (barqaror tezlik) ─────
+  const startVAD = useCallback(() => {
     const an = analyserRef.current;
     if (!an || !enabledRef.current) return;
 
     const buf = new Float32Array(an.fftSize);
-    let recording = false;
-    let chunks = [];
-    let rec = null;
 
-    const tick = () => {
+    vadIntervalRef.current = setInterval(() => {
       if (!enabledRef.current) return;
-      if (busyRef.current || voiceFeedback.isSpeaking()) {
-        rafRef.current = requestAnimationFrame(tick);
-        return;
-      }
+      if (busyRef.current || voiceFeedback.isSpeaking()) return;
 
       an.getFloatTimeDomainData(buf);
       let s = 0;
@@ -172,44 +199,54 @@ export function useVoiceAssistant() {
       if (rms > VOL_THRESHOLD) {
         clearTimeout(silenceRef.current);
         if (rms > peakRef.current) peakRef.current = rms;
-        if (!recording && !busyRef.current) {
-          recording = true;
-          chunks = [];
+
+        if (!recordingRef.current && !busyRef.current) {
+          recordingRef.current = true;
+          chunksRef.current = [];
           peakRef.current = rms;
           startRef.current = Date.now();
           setIsRecording(true);
+
           const mime = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
             ? "audio/webm;codecs=opus"
             : "audio/webm";
-          rec = new MediaRecorder(streamRef.current, { mimeType: mime });
+          const rec = new MediaRecorder(streamRef.current, { mimeType: mime });
           recRef.current = rec;
+
           rec.ondataavailable = (e) => {
-            if (e.data.size > 0) chunks.push(e.data);
+            if (e.data.size > 0) chunksRef.current.push(e.data);
           };
+
           rec.onstop = () => {
             const dur = Date.now() - startRef.current;
             setIsRecording(false);
-            recording = false;
-            if (dur >= MIN_REC_MS && chunks.length) {
-              send(new Blob(chunks, { type: "audio/webm" }));
+            recordingRef.current = false;
+
+            if (dur >= MIN_REC_MS && chunksRef.current.length) {
+              const blob = new Blob(chunksRef.current, { type: "audio/webm" });
+              chunksRef.current = []; // GC
+              send(blob);
+            } else {
+              chunksRef.current = []; // GC
             }
+            recRef.current = null; // GC
           };
+
           rec.start(80);
           setTimeout(() => {
-            if (rec?.state === "recording") rec.stop();
+            if (rec.state === "recording") rec.stop();
           }, MAX_REC_MS);
         }
-      } else if (recording && rec?.state === "recording") {
+      } else if (
+        recordingRef.current &&
+        recRef.current?.state === "recording"
+      ) {
         clearTimeout(silenceRef.current);
         silenceRef.current = setTimeout(() => {
-          if (rec?.state === "recording") rec.stop();
+          if (recRef.current?.state === "recording") recRef.current.stop();
         }, SILENCE_MS);
       }
-
-      rafRef.current = requestAnimationFrame(tick);
-    };
-
-    rafRef.current = requestAnimationFrame(tick);
+    }, VAD_INTERVAL);
   }, [send]);
 
   const toggleMic = useCallback(async () => {
@@ -218,6 +255,7 @@ export function useVoiceAssistant() {
       setIsEnabled(false);
       return;
     }
+
     cleanup();
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -230,20 +268,24 @@ export function useVoiceAssistant() {
         },
       });
       streamRef.current = stream;
+
       const ctx = new AudioContext({ sampleRate: 16000 });
       audioCtxRef.current = ctx;
       if (ctx.state === "suspended") await ctx.resume();
+
       const src = ctx.createMediaStreamSource(stream);
       const an = ctx.createAnalyser();
       an.fftSize = 512;
       src.connect(an);
       analyserRef.current = an;
+
       enabledRef.current = true;
       busyRef.current = false;
+      recordingRef.current = false;
       setIsEnabled(true);
       setIsListening(true);
       setError(null);
-      runVAD();
+      startVAD();
     } catch (e) {
       cleanup();
       setError(
@@ -254,7 +296,7 @@ export function useVoiceAssistant() {
             : e.message,
       );
     }
-  }, [isEnabled, cleanup, runVAD]);
+  }, [isEnabled, cleanup, startVAD]);
 
   useEffect(() => () => cleanup(), [cleanup]);
 

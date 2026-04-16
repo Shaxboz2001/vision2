@@ -117,6 +117,82 @@ const CC_SOFT = Object.freeze({
   TSC: "#22c55e33",
   VOD: "#38bdf833",
 });
+
+/**
+ * Har bir jarayon haqida to'liq ma'lumot — O'zbekcha
+ * fullName: Ekranda ko'rinadigan to'liq nom
+ * short: Qisqa kod
+ * desc: Jarayonning qisqa ta'rifi
+ * scoreHelp: Ball qanday hisoblanishini tushuntirish
+ * metrics: Har bir ko'rsatkich nimaga nisbatan ekanini tushuntirish
+ */
+const PROCESS_INFO = Object.freeze({
+  EAF: {
+    fullName: "Elektrda eritish pechi",
+    short: "EAF",
+    desc: "Metall lomini elektr yoyi yordamida eritib, suyuq po'lat olish bosqichi",
+    scoreHelp:
+      "Ball 100 dan boshlanib, energiya sarfi, kechikish, LOM/HBI nisbati va eritish davomiyligiga qarab kamayadi",
+    metrics: {
+      kwhPerTon:
+        "1 tonna suyuq po'lat eritish uchun sarflangan elektr energiyasi (kWh). Kamroq bo'lsa — yaxshi",
+      delay:
+        "Eritish jarayonidagi to'xtalishlar davomiyligi (daqiqada). Kamroq — yaxshi",
+      ratio:
+        "Metall lomi (LOM) va temir briketlari (HBI) nisbati. Optimal: 2–4 oralig'ida bo'lishi kerak",
+      duration: "Bitta eritma (heat) uchun ketgan umumiy vaqt (daqiqada)",
+      tappingWeight:
+        "Eritish oxirida olingan suyuq po'lat og'irligi (kg yoki tonna)",
+    },
+  },
+  LRF: {
+    fullName: "Qayta ishlash pechi",
+    short: "LRF",
+    desc: "EAF dan kelgan suyuq po'latni kimyoviy tarkibini sozlash va haroratini moslashtirish bosqichi",
+    scoreHelp:
+      "Ball 100 dan boshlanib, energiya sarfi, kechikish va harorat nazoratiga qarab kamayadi",
+    metrics: {
+      kwhPerTon:
+        "1 tonna po'latni qayta ishlash uchun sarflangan elektr energiyasi (kWh). Kamroq — yaxshi",
+      avgTemp:
+        "Po'lat haroratining o'rtacha qiymati (°C). 1500°C dan past bo'lmasligi kerak",
+      delay: "Qayta ishlash jarayonidagi to'xtalishlar (daqiqada)",
+    },
+  },
+  TSC: {
+    fullName: "Quyish pechi",
+    short: "TSC",
+    desc: "Suyuq po'latni uzluksiz quyish orqali slab (po'lat plita) shakliga keltirish bosqichi",
+    scoreHelp:
+      "Ball 100 dan boshlanib, quyish tezligi, superheat (ortiqcha qizish) va kechikishga qarab kamayadi",
+    metrics: {
+      castSpeedAvg:
+        "Po'lat quyish tezligi (metr/daqiqa). Juda past bo'lsa — unumdorlik tushadi",
+      delta:
+        "Superheat = Haqiqiy harorat − Eritish nuqtasi (°C). Juda past bo'lsa quyish jarayoni to'xtab qolishi mumkin",
+      slabWeight: "Tayyor slab (plita) og'irligi (kg)",
+    },
+  },
+  VOD: {
+    fullName: "Vakuum ostida olish pechi",
+    short: "VOD",
+    desc: "Po'latdagi keraksiz gazlarni vakuum yordamida chiqarib, sifatni oshirish bosqichi",
+    scoreHelp:
+      "Ball 100 dan boshlanib, chiqish yo'qotish foizi, vakuum bosimi va kechikishga qarab kamayadi",
+    metrics: {
+      yieldLossPct:
+        "Kiritilgan po'lat va chiqarilgan po'lat orasidagi farq (%). Kamroq yo'qotish — yaxshi",
+      vacuum:
+        "Vakuum bosimining minimal qiymati (mbar). Kamroq bosim — sifat yaxshiroq",
+      oxygenPerTon: "1 tonna po'latga sarflangan kislorod (m³)",
+    },
+  },
+});
+
+/** Jarayon nomini to'liq o'zbekcha ko'rinishda qaytaradi */
+const pName = (code) => PROCESS_INFO[code]?.fullName || code;
+/** Jarayon nomini qisqa + to'liq ko'rinishda qaytaradi: "EAF — Elektrda eritish pechi" */
+const pLabel = (code) => `${code} — ${PROCESS_INFO[code]?.fullName || code}`;
 const STALE_MS = 60_000;
 const DAMP = 0.35;
 const DELAY_COLORS = [
@@ -735,17 +811,22 @@ function buildEAF(rows, fd = 30) {
     comparisons: buildComparisons(en, "productionDate", [
       {
         key: "tappingWeight",
-        label: "Ishlab chiqarish",
+        label: "Ishlab chiqarish hajmi",
         unit: "kg",
         aggregate: "sum",
       },
       {
         key: "kwhPerTon",
-        label: "Energiya sarfi",
+        label: "Energiya sarfi (har tonnaga)",
         unit: "kWh/t",
         higherIsBad: true,
       },
-      { key: "delayMin", label: "To'xtalish", unit: "min", higherIsBad: true },
+      {
+        key: "delayMin",
+        label: "To'xtalish davomiyligi",
+        unit: "daq",
+        higherIsBad: true,
+      },
     ]),
     daily: buildProcessDaily(
       en,
@@ -799,14 +880,19 @@ function buildLRF(rows, fd = 30) {
     score: clamp(s, 30, 100),
     trend: buildTrend(en, "productionDate", "kwhPerTon", true),
     comparisons: buildComparisons(en, "productionDate", [
-      { key: "steel", label: "Ishlab chiqarish", unit: "kg", aggregate: "sum" },
+      {
+        key: "steel",
+        label: "Ishlab chiqarish hajmi",
+        unit: "kg",
+        aggregate: "sum",
+      },
       {
         key: "kwhPerTon",
-        label: "Energiya sarfi",
+        label: "Energiya sarfi (har tonnaga)",
         unit: "kWh/t",
         higherIsBad: true,
       },
-      { key: "avgTemp", label: "Harorat", unit: "°C" },
+      { key: "avgTemp", label: "O'rtacha harorat", unit: "°C" },
     ]),
     daily: buildProcessDaily(
       en,
@@ -863,12 +949,12 @@ function buildTSC(rows, fd = 30) {
     comparisons: buildComparisons(en, "productionDate", [
       {
         key: "slabWeight",
-        label: "Ishlab chiqarish",
+        label: "Ishlab chiqarish hajmi",
         unit: "kg",
         aggregate: "sum",
       },
-      { key: "castSpeedAvg", label: "Quyish tezligi", unit: "m/min" },
-      { key: "delta", label: "Superheat", unit: "°C" },
+      { key: "castSpeedAvg", label: "Quyish tezligi", unit: "m/daq" },
+      { key: "delta", label: "Superheat (ortiqcha qizish)", unit: "°C" },
     ]),
     daily: buildProcessDaily(
       en,
@@ -925,17 +1011,22 @@ function buildVOD(rows, fd = 30) {
     comparisons: buildComparisons(en, "productionDate", [
       {
         key: "finalSteel",
-        label: "Ishlab chiqarish",
+        label: "Ishlab chiqarish hajmi",
         unit: "kg",
         aggregate: "sum",
       },
       {
         key: "yieldLossPct",
-        label: "Yield loss",
+        label: "Chiqish yo'qotish (kiritilganga nisbatan)",
         unit: "%",
         higherIsBad: true,
       },
-      { key: "delayMin", label: "Kechikish", unit: "min", higherIsBad: true },
+      {
+        key: "delayMin",
+        label: "To'xtalish davomiyligi",
+        unit: "daq",
+        higherIsBad: true,
+      },
     ]),
     daily: buildProcessDaily(
       en,
@@ -967,31 +1058,37 @@ function buildExec(eaf, lrf, tsc, vod) {
   const risks = [],
     rec = [];
   if (eaf.avgKwhPerTon > T.EAF.kwhPerTon.crit - 20) {
-    risks.push("EAF energiya sarfi yuqori");
-    rec.push("EAF charge mix va power-on optimallashtirish");
+    risks.push("Elektrda eritish pechi — energiya sarfi yuqori");
+    rec.push(
+      "Eritish pechi lom tarkibi (charge mix) va elektrod rejimini optimallashtirish",
+    );
   }
   if (eaf.avgDelay > T.EAF.delay.warn + 2)
-    risks.push("EAF kechikishlari yuqori");
+    risks.push("Elektrda eritish pechi — to'xtalishlar ko'p");
   if (eaf.avgRatio < T.EAF.ratio.min || eaf.avgRatio > T.EAF.ratio.max)
     rec.push(
-      "LOM/HBI nisbatini " +
+      "Metall lomi/HBI nisbatini " +
         T.EAF.ratio.min +
         "–" +
         T.EAF.ratio.max +
-        " da ushlash",
+        " oralig'ida ushlash",
     );
-  if (lrf.avgTemp < T.LRF.temp.min) risks.push("LRF harorat nazorati kerak");
+  if (lrf.avgTemp < T.LRF.temp.min)
+    risks.push("Qayta ishlash pechi — harorat nazorati kerak");
   if (lrf.avgDelay > T.LRF.delay.crit - 2)
-    rec.push("LRF material addition standartlashtirish");
+    rec.push(
+      "Qayta ishlash pechi — qo'shimchalar berish jarayonini standartlashtirish",
+    );
   if (tsc.avgDelta < T.TSC.superheat.crit) {
-    risks.push("TSC superheat past");
-    rec.push("TSC superheat zaxirasini oshirish");
+    risks.push("Quyish pechi — superheat (ortiqcha qizish) past");
+    rec.push("Quyish pechida superheat zaxirasini oshirish");
   }
   if (vod.totalHeats > 0 && vod.avgYieldLoss > T.VOD.yieldLoss.anomaly) {
-    risks.push("VOD yield loss yuqori");
-    rec.push("VOD vacuum parametrlarini sozlash");
+    risks.push("Vakuum pechi — chiqish yo'qotish yuqori");
+    rec.push("Vakuum pechi bosim parametrlarini sozlash");
   }
-  if (!rec.length) rec.push("Barqaror, nuqtaviy optimizatsiya tavsiya etiladi");
+  if (!rec.length)
+    rec.push("Barqaror holat. Nuqtaviy optimizatsiya tavsiya etiladi");
   return {
     totalHeats: tH,
     totalTons: tT,
@@ -1010,20 +1107,22 @@ function buildAnoms(eaf, lrf, tsc, vod) {
       L.push({
         process: "EAF",
         heatId: h.heatId,
-        type: "Yuqori energiya",
+        type: "Yuqori energiya sarfi",
         value: fmtN(h.kwhPerTon, 1) + " kWh/t",
         risk: riskLvl(h.kwhPerTon, T.EAF.kwhPerTon.warn, T.EAF.kwhPerTon.crit),
-        reason: "Charge mix / power-on qayta ko'rish kerak.",
+        reason:
+          "Eritish pechi uchun energiya sarfi kritik chegaradan oshgan. Charge mix (lom tarkibi) va elektrod rejimini qayta ko'rish tavsiya etiladi.",
         raw: h,
       });
     if (h.delayMin > T.EAF.delay.crit)
       L.push({
         process: "EAF",
         heatId: h.heatId,
-        type: "Katta kechikish",
-        value: fmtN(h.delayMin, 0) + " min",
+        type: "Katta to'xtalish",
+        value: fmtN(h.delayMin, 0) + " daqiqa",
         risk: riskLvl(h.delayMin, T.EAF.delay.warn, T.EAF.delay.crit),
-        reason: "Delay sabablarini ko'rish kerak.",
+        reason:
+          "Eritish jarayonida kutilganidan uzun to'xtalish bo'lgan. To'xtalish sababi va davomiyligini tekshirish kerak.",
         raw: h,
       });
   }
@@ -1035,7 +1134,8 @@ function buildAnoms(eaf, lrf, tsc, vod) {
         type: "Past harorat",
         value: fmtN(h.latestTemp, 0) + " °C",
         risk: riskLvl(h.latestTemp, T.LRF.temp.warnFrom, T.LRF.temp.min, true),
-        reason: "Termik rejim sifatga ta'sir qilishi mumkin.",
+        reason:
+          "Qayta ishlash pechida harorat minimal chegaradan past. Po'lat sifatiga salbiy ta'sir ko'rsatishi mumkin.",
         raw: h,
       });
   }
@@ -1044,7 +1144,7 @@ function buildAnoms(eaf, lrf, tsc, vod) {
       L.push({
         process: "TSC",
         heatId: h.heatId,
-        type: "Superheat past",
+        type: "Past superheat (ortiqcha qizish)",
         value: fmtN(h.delta, 1) + " °C",
         risk: riskLvl(
           h.delta,
@@ -1052,22 +1152,24 @@ function buildAnoms(eaf, lrf, tsc, vod) {
           T.TSC.superheat.crit,
           true,
         ),
-        reason: "Quyish barqarorligiga xavf.",
+        reason:
+          "Quyish pechida superheat juda past. Quyish jarayoni to'xtab qolishi yoki sifat muammolari chiqishi mumkin.",
         raw: h,
       });
     if (h.castSpeedAvg > 0 && h.castSpeedAvg < T.TSC.castSpeed.anomaly)
       L.push({
         process: "TSC",
         heatId: h.heatId,
-        type: "Tezlik past",
-        value: fmtN(h.castSpeedAvg, 2) + " m/min",
+        type: "Past quyish tezligi",
+        value: fmtN(h.castSpeedAvg, 2) + " m/daq",
         risk: riskLvl(
           h.castSpeedAvg,
           T.TSC.castSpeed.warn,
           T.TSC.castSpeed.anomaly,
           true,
         ),
-        reason: "Unumdorlikka ta'sir.",
+        reason:
+          "Quyish tezligi juda past bo'lib, ishlab chiqarish unumdorligiga ta'sir qilmoqda.",
         raw: h,
       });
   }
@@ -1076,14 +1178,15 @@ function buildAnoms(eaf, lrf, tsc, vod) {
       L.push({
         process: "VOD",
         heatId: h.heatId,
-        type: "Yield loss",
+        type: "Yuqori chiqish yo'qotish",
         value: fmtN(h.yieldLossPct, 2) + " %",
         risk: riskLvl(
           h.yieldLossPct,
           T.VOD.yieldLoss.warn,
           T.VOD.yieldLoss.anomaly,
         ),
-        reason: "Chiqish foizi pasaygan.",
+        reason:
+          "Vakuum pechida kiritilgan va chiqarilgan po'lat orasidagi farq katta. Vakuum parametrlarini tekshirish kerak.",
         raw: h,
       });
   }
@@ -1092,31 +1195,42 @@ function buildAnoms(eaf, lrf, tsc, vod) {
   return L;
 }
 function dirMsg(ex, eaf, lrf, tsc, vod, w) {
+  const nameMap = {
+    EAF: "Eritish pechi",
+    LRF: "Qayta ishlash pechi",
+    TSC: "Quyish pechi",
+    VOD: "Vakuum pechi",
+  };
   const p = [
-    "Holat: " + ex.status.label.toLowerCase() + ".",
-    "Kuchli: " + ex.strongest?.name + ", zaif: " + ex.weakest?.name + ".",
+    "Umumiy holat: " + ex.status.label.toLowerCase() + ".",
+    "Eng kuchli pech: " +
+      (nameMap[ex.strongest?.name] || ex.strongest?.name) +
+      ", eng zaif: " +
+      (nameMap[ex.weakest?.name] || ex.weakest?.name) +
+      ".",
   ];
-  // Real oylik solishtirish natijalaridan foydalanish
   const eafProd = eaf.comparisons?.find((c) => c.key === "tappingWeight")
     ?.periods?.month;
   const eafEnergy = eaf.comparisons?.find((c) => c.key === "kwhPerTon")?.periods
     ?.month;
   if (eafProd && Math.abs(eafProd.delta) > 2)
     p.push(
-      "EAF ishlab chiqarish: " +
+      "Eritish pechi ishlab chiqarish: " +
         (eafProd.delta > 0 ? "+" : "") +
         fmtN(eafProd.delta, 1) +
-        "% oylik o'zgarish.",
+        "% o'tgan oyga nisbatan o'zgargan.",
     );
   if (eafEnergy && eafEnergy.delta > 3)
     p.push(
-      "EAF energiya sarfi " + fmtN(eafEnergy.delta, 1) + "% oshgan — bu yomon.",
+      "Eritish pechi energiya sarfi " +
+        fmtN(eafEnergy.delta, 1) +
+        "% oshgan (o'tgan oyga nisbatan) — bu salbiy holat.",
     );
   if (tsc.avgDelta < T.TSC.superheat.crit && tsc.totalHeats > 0)
-    p.push("TSC superheat past.");
+    p.push("Quyish pechi superheat (ortiqcha qizish) past — e'tibor kerak.");
   if (vod.totalHeats > 0 && vod.avgYieldLoss > T.VOD.yieldLoss.anomaly)
-    p.push("VOD yield loss oshgan.");
-  if (w.length) p.push("API: " + w.join(", ") + ".");
+    p.push("Vakuum pechi chiqish yo'qotish me'yoridan yuqori.");
+  if (w.length) p.push("API muammolar: " + w.join(", ") + ".");
   p.push("Tavsiya: " + ex.recommendations[0] + ".");
   return p.join(" ");
 }
@@ -1236,10 +1350,20 @@ const KPI = memo(function KPI({ title, value, subtitle, color, icon }) {
 
 const USC = memo(function USC({ unit }) {
   const st = statusMeta(unit.score);
+  const info = PROCESS_INFO[unit.name];
   return (
     <DP sx={{ p: 2 }}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Typography sx={{ fontWeight: 800 }}>{unit.name}</Typography>
+        <Box>
+          <Typography sx={{ fontWeight: 800 }}>
+            {unit.name} — {info?.fullName || unit.name}
+          </Typography>
+          <Typography
+            sx={{ fontSize: "0.68rem", color: "text.secondary", mt: 0.2 }}
+          >
+            {info?.desc || ""}
+          </Typography>
+        </Box>
         <Chip
           size="small"
           label={st.label}
@@ -1253,6 +1377,12 @@ const USC = memo(function USC({ unit }) {
       </Stack>
       <Typography sx={{ mt: 1, fontSize: "2rem", fontWeight: 900 }}>
         {fmtN(unit.score, 0)}
+        <Typography
+          component="span"
+          sx={{ fontSize: "0.7rem", color: "text.secondary", ml: 0.5 }}
+        >
+          / 100 ball
+        </Typography>
       </Typography>
       <LinearProgress
         variant="determinate"
@@ -1269,13 +1399,23 @@ const USC = memo(function USC({ unit }) {
       />
       <Stack spacing={0.6} sx={{ mt: 1.4 }}>
         <Typography sx={{ fontSize: "0.78rem", color: "text.secondary" }}>
-          Heatlar: <b>{fmtN(unit.totalHeats, 0)}</b>
+          Eritishlar soni: <b>{fmtN(unit.totalHeats, 0)}</b> ta
         </Typography>
         <Typography sx={{ fontSize: "0.78rem", color: "text.secondary" }}>
-          Hajm: <b>{fmtN(unit.totalTons, 1)} t</b>
+          Ishlab chiqarish hajmi: <b>{fmtN(unit.totalTons, 1)} tonna</b>
         </Typography>
         <Typography sx={{ fontSize: "0.78rem", color: "text.secondary" }}>
-          Trend: <b>{unit.trend.message}</b>
+          Oylik trend: <b>{unit.trend.message}</b>
+        </Typography>
+        <Typography
+          sx={{
+            fontSize: "0.66rem",
+            color: "text.secondary",
+            fontStyle: "italic",
+            mt: 0.5,
+          }}
+        >
+          💡 {info?.scoreHelp || ""}
         </Typography>
       </Stack>
     </DP>
@@ -1320,30 +1460,39 @@ const MIC = memo(function MIC({ title, rows = [] }) {
 });
 
 const FC = memo(function FC({ title, forecast, color = "#0ea5e9" }) {
+  const info = PROCESS_INFO[title];
   return (
     <DP sx={{ p: 2.1, height: "100%" }}>
-      <Typography sx={{ fontSize: "1rem", fontWeight: 800, mb: 1.4 }}>
-        {title}
+      <Typography sx={{ fontSize: "1rem", fontWeight: 800, mb: 0.3 }}>
+        {title} — {info?.fullName || title}
+      </Typography>
+      <Typography
+        sx={{ fontSize: "0.68rem", color: "text.secondary", mb: 1.2 }}
+      >
+        {info?.desc || ""}
       </Typography>
       <Stack spacing={0.8}>
         <Typography sx={{ fontSize: "0.84rem", color: "text.secondary" }}>
-          Ertangi kun: <b style={{ color }}>{fmtN(forecast.tomorrow, 1)} t</b>
+          Ertangi prognoz:{" "}
+          <b style={{ color }}>{fmtN(forecast.tomorrow, 1)} tonna</b>
         </Typography>
         <Typography sx={{ fontSize: "0.84rem", color: "text.secondary" }}>
-          {forecast.forecastDays} kunlik:{" "}
-          <b style={{ color }}>{fmtN(forecast.periodEnd, 1)} t</b>
+          {forecast.forecastDays} kunlik jami:{" "}
+          <b style={{ color }}>{fmtN(forecast.periodEnd, 1)} tonna</b>
         </Typography>
         <Typography sx={{ fontSize: "0.84rem", color: "text.secondary" }}>
-          Oy: <b style={{ color }}>{fmtN(forecast.monthEnd, 1)} t</b>
+          Oy oxirigacha:{" "}
+          <b style={{ color }}>{fmtN(forecast.monthEnd, 1)} tonna</b>
         </Typography>
         <Typography sx={{ fontSize: "0.84rem", color: "text.secondary" }}>
-          Yil: <b style={{ color }}>{fmtN(forecast.yearEnd, 1)} t</b>
+          Yil oxirigacha:{" "}
+          <b style={{ color }}>{fmtN(forecast.yearEnd, 1)} tonna</b>
         </Typography>
         <Divider />
         <Typography sx={{ fontSize: "0.78rem", color: "text.secondary" }}>
-          Kunlik:{" "}
+          Kunlik o'rtacha:{" "}
           <b>
-            {fmtN(forecast.avgPerDay, 1)} ± {fmtN(forecast.stdPerDay, 1)} t
+            {fmtN(forecast.avgPerDay, 1)} ± {fmtN(forecast.stdPerDay, 1)} tonna
           </b>
         </Typography>
         <Typography
@@ -1354,6 +1503,16 @@ const FC = memo(function FC({ title, forecast, color = "#0ea5e9" }) {
           }}
         >
           {forecast.insight}
+        </Typography>
+        <Typography
+          sx={{
+            fontSize: "0.62rem",
+            color: "text.secondary",
+            fontStyle: "italic",
+            opacity: 0.7,
+          }}
+        >
+          💡 Prognoz so'nggi 7 kunlik o'rtacha va trend asosida hisoblanadi
         </Typography>
       </Stack>
     </DP>
@@ -1380,17 +1539,22 @@ const HDD = memo(function HDD({ open, onClose, item }) {
         }}
       >
         <Typography sx={{ fontSize: "1rem", fontWeight: 800, mb: 1 }}>
-          Heat tafsiloti
+          Eritma tafsiloti
         </Typography>
         <DP sx={{ p: 2, mb: 2 }}>
           <Stack spacing={0.8}>
             {[
-              ["Jarayon", item?.process],
-              ["Heat ID", safeText(raw?.heatId)],
-              ["Po'lat", safeText(raw?.steelGradeName)],
-              ["Shift", safeShift(raw?.shift)],
-              ["Team", safeTeam(raw?.team)],
-              ["Foreman", safePerson(raw?.foreman)],
+              [
+                "Pech",
+                item?.process
+                  ? `${item.process} — ${pName(item.process)}`
+                  : "—",
+              ],
+              ["Eritma raqami", safeText(raw?.heatId)],
+              ["Po'lat markasi", safeText(raw?.steelGradeName)],
+              ["Smena", safeShift(raw?.shift)],
+              ["Brigada", safeTeam(raw?.team)],
+              ["Usta", safePerson(raw?.foreman)],
             ].map(([k, v]) => (
               <Typography key={k}>
                 <b>{k}:</b> {v}
@@ -1399,7 +1563,7 @@ const HDD = memo(function HDD({ open, onClose, item }) {
           </Stack>
         </DP>
         <DP sx={{ p: 2, mb: 2 }}>
-          <Typography sx={{ fontWeight: 700, mb: 1 }}>AI izoh</Typography>
+          <Typography sx={{ fontWeight: 700, mb: 1 }}>AI tavsiya</Typography>
           <Typography
             sx={{ fontSize: "0.84rem", color: "#94a3b8", lineHeight: 1.7 }}
           >
@@ -1408,7 +1572,7 @@ const HDD = memo(function HDD({ open, onClose, item }) {
         </DP>
         <DP sx={{ p: 2, mb: 2 }}>
           <Typography sx={{ fontWeight: 700, mb: 1 }}>
-            Temperaturalar
+            Harorat o'lchovlari (°C)
           </Typography>
           <Stack spacing={0.7}>
             {temps.length ? (
@@ -1429,15 +1593,15 @@ const HDD = memo(function HDD({ open, onClose, item }) {
         </DP>
         <DP sx={{ p: 2 }}>
           <Typography sx={{ fontWeight: 700, mb: 1 }}>
-            Kimyoviy tahlil
+            Kimyoviy tarkib tahlili
           </Typography>
           {latSteel?.chemicalAnalysis?.length ? (
             <TableContainer>
               <Table size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={{ color: "#94a3b8" }}>Kod</TableCell>
-                    <TableCell sx={{ color: "#94a3b8" }}>Qiymat</TableCell>
+                    <TableCell sx={{ color: "#94a3b8" }}>Element</TableCell>
+                    <TableCell sx={{ color: "#94a3b8" }}>Miqdori</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -1485,40 +1649,59 @@ const ComparisonRow = memo(function ComparisonRow({ comp, periodKey }) {
   const tc = TREND_COLORS[p.trend] || "#64748b";
   const icon = TREND_ICONS[p.trend] || "—";
   const dir = p.delta > 0 ? "+" : "";
+  // Foiz nimaga nisbatan ekanini tushuntirish
+  const pctExplain =
+    Math.abs(p.delta) > 0.1
+      ? `(oldingi davrdagi ${fmtN(p.previous, 1)} ga nisbatan ${dir}${fmtN(p.delta, 1)}% o'zgarish)`
+      : "(o'zgarmagan)";
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        py: 0.6,
-      }}
-    >
-      <Typography sx={{ fontSize: "0.8rem", color: "text.secondary", flex: 1 }}>
-        {comp.label}
-      </Typography>
+    <Box sx={{ py: 0.6 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Typography
+          sx={{ fontSize: "0.8rem", color: "text.secondary", flex: 1 }}
+        >
+          {comp.label}
+        </Typography>
+        <Typography
+          sx={{
+            fontSize: "0.78rem",
+            color: "text.secondary",
+            flex: 1,
+            textAlign: "center",
+          }}
+        >
+          {fmtN(p.previous, 1)} → <b>{fmtN(p.current, 1)}</b> {comp.unit}
+        </Typography>
+        <Typography
+          sx={{
+            fontSize: "0.82rem",
+            fontWeight: 800,
+            color: tc,
+            flex: 0,
+            minWidth: 90,
+            textAlign: "right",
+          }}
+        >
+          {icon} {dir}
+          {fmtN(p.delta, 1)}%
+        </Typography>
+      </Box>
       <Typography
         sx={{
-          fontSize: "0.78rem",
+          fontSize: "0.62rem",
           color: "text.secondary",
-          flex: 1,
-          textAlign: "center",
+          fontStyle: "italic",
+          mt: 0.15,
+          opacity: 0.7,
         }}
       >
-        {fmtN(p.previous, 1)} → <b>{fmtN(p.current, 1)}</b> {comp.unit}
-      </Typography>
-      <Typography
-        sx={{
-          fontSize: "0.82rem",
-          fontWeight: 800,
-          color: tc,
-          flex: 0,
-          minWidth: 90,
-          textAlign: "right",
-        }}
-      >
-        {icon} {dir}
-        {fmtN(p.delta, 1)}%
+        {pctExplain}
       </Typography>
     </Box>
   );
@@ -1532,10 +1715,10 @@ const ComparisonCard = memo(function ComparisonCard({
   if (!unit.comparisons?.length) return null;
 
   const periodLabels = {
-    day: "Kunlik",
-    week: "Haftalik",
-    month: "Oylik",
-    year: "Yillik",
+    day: "Kunlik (bugun va kechaga nisbatan)",
+    week: "Haftalik (bu va o'tgan hafta)",
+    month: "Oylik (bu va o'tgan oy)",
+    year: "Yillik (bu va o'tgan yil shu kungacha)",
   };
 
   return (
@@ -1544,17 +1727,25 @@ const ComparisonCard = memo(function ComparisonCard({
         direction="row"
         justifyContent="space-between"
         alignItems="center"
-        sx={{ mb: 1.5 }}
+        sx={{ mb: 0.5 }}
       >
-        <Typography sx={{ fontWeight: 800 }}>
-          {unit.name} — {periodLabels[periodKey]} solishtirish
-        </Typography>
-        <Chip
-          size="small"
-          label={unit.comparisons[0]?.periods?.[periodKey]?.label || ""}
-          sx={{ fontSize: "0.7rem", fontWeight: 600 }}
-        />
+        <Typography sx={{ fontWeight: 800 }}>{pLabel(unit.name)}</Typography>
       </Stack>
+      <Chip
+        size="small"
+        label={periodLabels[periodKey] || ""}
+        sx={{ fontSize: "0.66rem", fontWeight: 600, mb: 1.5 }}
+      />
+      <Typography
+        sx={{
+          fontSize: "0.64rem",
+          color: ui.textMuted,
+          mb: 1,
+          fontStyle: "italic",
+        }}
+      >
+        📊 Foizlar oldingi davr ko'rsatkichlariga nisbatan hisoblanadi
+      </Typography>
       <Stack spacing={0.3} divider={<Divider />}>
         {unit.comparisons.map((c) => (
           <ComparisonRow key={c.key} comp={c} periodKey={periodKey} />
@@ -1703,19 +1894,19 @@ export default function Analitika() {
     if (eaf.totalHeats && eaf.avgKwhPerTon > T.EAF.kwhPerTon.crit - 20)
       alerts.push({
         id: "e",
-        xabar: `EAF energiya: ${fmtN(eaf.avgKwhPerTon, 1)} kWh/t`,
+        xabar: `Eritish pechi energiya sarfi: ${fmtN(eaf.avgKwhPerTon, 1)} kWh/t (har tonnaga)`,
         daraja: "kritik",
       });
     if (tsc.totalHeats && tsc.avgDelta < T.TSC.superheat.crit)
       alerts.push({
         id: "t",
-        xabar: `TSC superheat: ${fmtN(tsc.avgDelta, 1)} °C`,
+        xabar: `Quyish pechi superheat: ${fmtN(tsc.avgDelta, 1)} °C (ortiqcha qizish past)`,
         daraja: "ogohlantirish",
       });
     if (vod.totalHeats && vod.avgYieldLoss > T.VOD.yieldLoss.anomaly)
       alerts.push({
         id: "v",
-        xabar: `VOD yield loss: ${fmtN(vod.avgYieldLoss, 2)} %`,
+        xabar: `Vakuum pechi chiqish yo'qotish: ${fmtN(vod.avgYieldLoss, 2)} %`,
         daraja: "kritik",
       });
     if (w.length)
@@ -1723,7 +1914,7 @@ export default function Analitika() {
     if (unkShift > 0)
       alerts.push({
         id: "sh",
-        xabar: `${unkShift} smena yo'q`,
+        xabar: `${unkShift} ta eritma uchun smena kiritilmagan`,
         daraja: "info",
       });
     if (!alerts.length)
@@ -1788,7 +1979,7 @@ export default function Analitika() {
         <Stack spacing={2} alignItems="center">
           <CircularProgress size={48} />
           <Typography sx={{ color: "text.secondary", fontSize: "0.9rem" }}>
-            AI Tahlil yuklanmoqda...
+            AI tahlil yuklanmoqda — barcha pechlar tekshirilmoqda...
           </Typography>
         </Stack>
       </Box>
@@ -1857,7 +2048,7 @@ export default function Analitika() {
             <Typography
               sx={{ color: ui.textSoft, mt: 0.6, fontSize: "0.84rem" }}
             >
-              Eritish • Qayta Ishlash • Vakuum • Quyish — tezkor xulosa
+              Elektrda eritish • Qayta ishlash • Quyish • Vakuum — tezkor xulosa
             </Typography>
           </Box>
           <Stack
@@ -1900,18 +2091,18 @@ export default function Analitika() {
       <Grid container spacing={1.5}>
         <Grid item xs={6} sm={3}>
           <KPI
-            title="Jami Eritishlar"
+            title="Jami eritishlar soni"
             value={fmtN(exec.totalHeats, 0)}
-            subtitle="Filtr bo'yicha"
+            subtitle="Tanlangan davrdagi barcha jarayonlar"
             color="#0ea5e9"
             icon={<PrecisionManufacturingRoundedIcon />}
           />
         </Grid>
         <Grid item xs={6} sm={3}>
           <KPI
-            title="Jami Suyuq Metall"
+            title="Jami suyuq metall"
             value={`${fmtN(exec.totalTons, 1)} t`}
-            subtitle="Barcha jarayonlar"
+            subtitle="Barcha pechlardan olingan (tonna)"
             color="#22c55e"
             icon={<WaterfallChartRoundedIcon />}
           />
@@ -1954,7 +2145,7 @@ export default function Analitika() {
           sx={{ mb: 2 }}
         >
           <Typography sx={{ fontWeight: 800, color: ui.textMain }}>
-            Davriy solishtirish
+            Davriy solishtirish (oldingi davr bilan taqqos)
           </Typography>
           <ToggleButtonGroup
             value={compPeriod}
@@ -2002,8 +2193,13 @@ export default function Analitika() {
         <Grid item xs={12} md={7}>
           <DP>
             <Box sx={{ p: 2 }}>
-              <Typography sx={{ fontWeight: 800, mb: 1 }}>
+              <Typography sx={{ fontWeight: 800, mb: 0.3 }}>
                 Ishlab chiqarish trendi (tonnada)
+              </Typography>
+              <Typography
+                sx={{ fontSize: "0.68rem", color: "text.secondary", mb: 1 }}
+              >
+                Har bir pechdan kunlik olingan suyuq po'lat miqdori
               </Typography>
               <Box sx={{ height: 260 }}>
                 <ResponsiveContainer width="100%" height="100%">
@@ -2036,7 +2232,7 @@ export default function Analitika() {
                         key={k}
                         type="monotone"
                         dataKey={k.toLowerCase()}
-                        name={k}
+                        name={`${k} — ${pName(k)}`}
                         stroke={c}
                         fill={`url(#g_${k})`}
                         strokeWidth={2}
@@ -2053,8 +2249,14 @@ export default function Analitika() {
         <Grid item xs={12} md={5}>
           <DP>
             <Box sx={{ p: 2 }}>
-              <Typography sx={{ fontWeight: 800, mb: 1 }}>
-                Blok baholari
+              <Typography sx={{ fontWeight: 800, mb: 0.3 }}>
+                Pechlar baholari (100 ball tizimi)
+              </Typography>
+              <Typography
+                sx={{ fontSize: "0.68rem", color: "text.secondary", mb: 1 }}
+              >
+                Yashil = yaxshi (85+), sariq = o'rtacha (65-84), qizil = xavfli
+                (65 dan past)
               </Typography>
               <Box sx={{ height: 160 }}>
                 <ResponsiveContainer width="100%" height="100%">
@@ -2211,12 +2413,12 @@ export default function Analitika() {
         }}
       >
         {[
-          "Jarayonlar tahlili",
+          "Pechlar tahlili",
           "Harorat va energiya",
           "To'xtalish va smena",
-          "Prognoz",
-          "Og'ishlar",
-          "Oxirgi heatlar",
+          "Ishlab chiqarish prognozi",
+          "AI aniqlagan og'ishlar",
+          "Oxirgi eritishlar",
         ].map((t) => (
           <Tab
             key={t}
@@ -2231,17 +2433,17 @@ export default function Analitika() {
         ))}
       </Tabs>
 
-      {/* TAB 0: JARAYONLAR TAHLILI — har bir blok uchun tonna, energiya, to'xtalish */}
+      {/* TAB 0: PECHLAR TAHLILI — har bir pech uchun tonna, energiya, to'xtalish */}
       {tab === 0 && (
         <Grid container spacing={2}>
           {[eaf, lrf, tsc, vod].map((u) => {
             const color = CC[u.name];
             const energyLabel =
               u.name === "TSC"
-                ? "Quyish tezligi (m/min)"
+                ? "Quyish tezligi (metr/daqiqa)"
                 : u.name === "VOD"
-                  ? "O₂ sarfi (m³/t)"
-                  : "Energiya sarfi (kWh/t)";
+                  ? "Kislorod sarfi (m³/tonna)"
+                  : "Energiya sarfi (kWh har tonnaga)";
             return [
               /* Tonna */
               <Grid item xs={12} md={6} key={`ton-${u.name}`}>
@@ -2251,14 +2453,21 @@ export default function Analitika() {
                       direction="row"
                       justifyContent="space-between"
                       alignItems="center"
-                      sx={{ mb: 1 }}
+                      sx={{ mb: 0.5 }}
                     >
-                      <Typography sx={{ fontWeight: 800 }}>
-                        {u.name} — Kunlik ishlab chiqarish (tonna)
-                      </Typography>
+                      <Box>
+                        <Typography sx={{ fontWeight: 800 }}>
+                          {pLabel(u.name)} — Kunlik ishlab chiqarish
+                        </Typography>
+                        <Typography
+                          sx={{ fontSize: "0.64rem", color: "text.secondary" }}
+                        >
+                          Har kuni necha tonna suyuq po'lat olingan
+                        </Typography>
+                      </Box>
                       <Chip
                         size="small"
-                        label={`Jami: ${fmtN(u.totalTons, 1)} t`}
+                        label={`Jami: ${fmtN(u.totalTons, 1)} tonna`}
                         sx={{
                           background: `${color}22`,
                           color,
@@ -2311,7 +2520,7 @@ export default function Analitika() {
                           <Line
                             type="monotone"
                             dataKey="heatlar"
-                            name="Heatlar soni"
+                            name="Eritishlar soni"
                             stroke={ui.textMuted}
                             strokeWidth={1.5}
                             strokeDasharray="4 3"
@@ -2331,15 +2540,26 @@ export default function Analitika() {
                       direction="row"
                       justifyContent="space-between"
                       alignItems="center"
-                      sx={{ mb: 1 }}
+                      sx={{ mb: 0.5 }}
                     >
-                      <Typography sx={{ fontWeight: 800 }}>
-                        {u.name} — {energyLabel}
-                      </Typography>
+                      <Box>
+                        <Typography sx={{ fontWeight: 800 }}>
+                          {pLabel(u.name)} — {energyLabel}
+                        </Typography>
+                        <Typography
+                          sx={{ fontSize: "0.64rem", color: "text.secondary" }}
+                        >
+                          {u.name === "TSC"
+                            ? "Quyish jarayoni tezligi — past bo'lsa unumdorlik tushadi"
+                            : u.name === "VOD"
+                              ? "Har tonna po'latga sarflangan kislorod miqdori"
+                              : "Har tonna suyuq po'lat eritish uchun ketgan elektr energiyasi"}
+                        </Typography>
+                      </Box>
                       {u.name !== "TSC" && u.name !== "VOD" && (
                         <Chip
                           size="small"
-                          label={`O'rt: ${fmtN(u.avgKwhPerTon, 1)} kWh/t`}
+                          label={`O'rtacha: ${fmtN(u.avgKwhPerTon, 1)} kWh/t`}
                           sx={{
                             background: "#f59e0b22",
                             color: "#f59e0b",
@@ -2402,14 +2622,22 @@ export default function Analitika() {
                       direction="row"
                       justifyContent="space-between"
                       alignItems="center"
-                      sx={{ mb: 1 }}
+                      sx={{ mb: 0.5 }}
                     >
-                      <Typography sx={{ fontWeight: 800 }}>
-                        {u.name} — Kunlik to'xtalishlar (daqiqa)
-                      </Typography>
+                      <Box>
+                        <Typography sx={{ fontWeight: 800 }}>
+                          {pLabel(u.name)} — Kunlik to'xtalishlar
+                        </Typography>
+                        <Typography
+                          sx={{ fontSize: "0.64rem", color: "text.secondary" }}
+                        >
+                          Jarayondagi kutilmagan to'xtashlar davomiyligi
+                          (daqiqada)
+                        </Typography>
+                      </Box>
                       <Chip
                         size="small"
-                        label={`O'rt: ${fmtN(u.avgDelay, 0)} min`}
+                        label={`O'rtacha: ${fmtN(u.avgDelay, 0)} daqiqa`}
                         sx={{
                           background:
                             u.avgDelay > 10 ? "#ef444422" : "#22c55e22",
@@ -2433,7 +2661,7 @@ export default function Analitika() {
                           <Tooltip content={<CT />} />
                           <Bar
                             dataKey="toxtalish"
-                            name="To'xtalish (min)"
+                            name="To'xtalish (daq)"
                             fill="#ef4444"
                             opacity={0.75}
                             radius={[3, 3, 0, 0]}
@@ -2448,8 +2676,18 @@ export default function Analitika() {
               <Grid item xs={12} md={6} key={`fcp-${u.name}`}>
                 <DP>
                   <Box sx={{ p: 2 }}>
-                    <Typography sx={{ fontWeight: 800, mb: 1 }}>
-                      {u.name} — Ishlab chiqarish prognozi ({fcDays} kun)
+                    <Typography sx={{ fontWeight: 800, mb: 0.3 }}>
+                      {pLabel(u.name)} — Prognoz ({fcDays} kun)
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: "0.64rem",
+                        color: "text.secondary",
+                        mb: 1,
+                      }}
+                    >
+                      So'nggi 7 kunlik o'rtacha asosida hisoblangan taxminiy
+                      ishlab chiqarish
                     </Typography>
                     <Box sx={{ height: 220 }}>
                       <ResponsiveContainer width="100%" height="100%">
@@ -2508,8 +2746,14 @@ export default function Analitika() {
           <Grid item xs={12} md={7}>
             <DP>
               <Box sx={{ p: 2 }}>
-                <Typography sx={{ fontWeight: 800, mb: 1.5 }}>
-                  Harorat dinamikasi
+                <Typography sx={{ fontWeight: 800, mb: 0.3 }}>
+                  Harorat dinamikasi (°C)
+                </Typography>
+                <Typography
+                  sx={{ fontSize: "0.68rem", color: "text.secondary", mb: 1.5 }}
+                >
+                  Har bir pechdagi oxirgi eritma haroratining vaqt bo'yicha
+                  o'zgarishi
                 </Typography>
                 <Box sx={{ height: 300 }}>
                   <ResponsiveContainer width="100%" height="100%">
@@ -2526,7 +2770,7 @@ export default function Analitika() {
                         <Line
                           key={k}
                           dataKey={k.toLowerCase()}
-                          name={k}
+                          name={`${k} — ${pName(k)}`}
                           stroke={c}
                           strokeWidth={2.4}
                           dot={false}
@@ -2549,9 +2793,16 @@ export default function Analitika() {
                 >
                   <BoltRoundedIcon sx={{ color: "#f59e0b" }} />
                   <Typography sx={{ fontWeight: 800 }}>
-                    Energiya trendi (kWh/t)
+                    Energiya sarfi trendi (kWh har tonnaga)
                   </Typography>
                 </Stack>
+                <Typography
+                  sx={{ fontSize: "0.68rem", color: "text.secondary", mb: 1 }}
+                >
+                  Eritish va qayta ishlash pechlari uchun kunlik o'rtacha
+                  energiya sarfi. Qizil chiziq = kritik chegara, sariq =
+                  ogohlantirish
+                </Typography>
                 <Box sx={{ height: 300 }}>
                   <ResponsiveContainer width="100%" height="100%">
                     <ComposedChart data={eTrend}>
@@ -2575,14 +2826,14 @@ export default function Analitika() {
                       />
                       <Bar
                         dataKey="eafKwh"
-                        name="EAF"
+                        name="Eritish pechi (EAF)"
                         fill={CC.EAF}
                         opacity={0.8}
                         radius={[3, 3, 0, 0]}
                       />
                       <Line
                         dataKey="lrfKwh"
-                        name="LRF"
+                        name="Qayta ishlash pechi (LRF)"
                         stroke={CC.LRF}
                         strokeWidth={2.4}
                         dot={false}
@@ -2596,8 +2847,14 @@ export default function Analitika() {
           <Grid item xs={12} md={5}>
             <DP>
               <Box sx={{ p: 2 }}>
-                <Typography sx={{ fontWeight: 800, mb: 1.5 }}>
-                  EAF: kWh/t vs Tonnaj
+                <Typography sx={{ fontWeight: 800, mb: 0.3 }}>
+                  Elektrda eritish pechi: Energiya sarfi va tonnaj bog'liqligi
+                </Typography>
+                <Typography
+                  sx={{ fontSize: "0.68rem", color: "text.secondary", mb: 1 }}
+                >
+                  Har bir nuqta bitta eritma. Qizil nuqtalar = kritik chegaradan
+                  oshgan
                 </Typography>
                 <Box sx={{ height: 280 }}>
                   <ResponsiveContainer width="100%" height="100%">
@@ -2672,30 +2929,41 @@ export default function Analitika() {
           </Grid>
           <Grid item xs={12} md={3}>
             <MIC
-              title="EAF"
+              title="Elektrda eritish pechi (EAF)"
               rows={[
-                { label: "Heatlar", value: fmtN(eaf.totalHeats, 0) },
                 {
-                  label: "Energiya",
+                  label: "Eritishlar soni",
+                  value: fmtN(eaf.totalHeats, 0) + " ta",
+                },
+                {
+                  label: "Jami energiya",
                   value: fmtN(eaf.totalEnergy, 0) + " kWh",
                   color: "#f59e0b",
                 },
-                { label: "kWh/t", value: fmtN(eaf.avgKwhPerTon, 1) },
-                { label: "Delay", value: fmtN(eaf.avgDelay, 0) + " min" },
-                { label: "LOM/HBI", value: fmtN(eaf.avgRatio, 2) },
+                {
+                  label: "Har tonnaga energiya",
+                  value: fmtN(eaf.avgKwhPerTon, 1) + " kWh/t",
+                },
+                {
+                  label: "O'rt. to'xtalish",
+                  value: fmtN(eaf.avgDelay, 0) + " daq",
+                },
+                { label: "LOM/HBI nisbati", value: fmtN(eaf.avgRatio, 2) },
               ]}
             />
           </Grid>
           <Grid item xs={12} md={4}>
             <DP>
               <Box sx={{ p: 2 }}>
-                <Typography sx={{ fontWeight: 800, mb: 1.5 }}>Radar</Typography>
+                <Typography sx={{ fontWeight: 800, mb: 1.5 }}>
+                  Pechlar taqqosiy ko'rsatkichlari
+                </Typography>
                 <Box sx={{ height: 240 }}>
                   <ResponsiveContainer width="100%" height="100%">
                     <RadarChart
                       data={[
                         {
-                          s: "Hajm",
+                          s: "Hajm (t)",
                           ...Object.fromEntries(
                             [eaf, lrf, tsc, vod].map((u) => [
                               u.name,
@@ -2704,13 +2972,13 @@ export default function Analitika() {
                           ),
                         },
                         {
-                          s: "Ball",
+                          s: "Ball (100)",
                           ...Object.fromEntries(
                             [eaf, lrf, tsc, vod].map((u) => [u.name, u.score]),
                           ),
                         },
                         {
-                          s: "Heat",
+                          s: "Eritishlar",
                           ...Object.fromEntries(
                             [eaf, lrf, tsc, vod].map((u) => [
                               u.name,
@@ -2728,7 +2996,7 @@ export default function Analitika() {
                       {Object.entries(CC).map(([k, c]) => (
                         <Radar
                           key={k}
-                          name={k}
+                          name={`${k} — ${pName(k)}`}
                           dataKey={k}
                           stroke={c}
                           fill={c}
@@ -2745,14 +3013,20 @@ export default function Analitika() {
         </Grid>
       )}
 
-      {/* TAB 2: To'xtalish va smena */}
+      {/* TAB 2: To'xtalish va smena tahlili */}
       {tab === 2 && (
         <Grid container spacing={2}>
           <Grid item xs={12} md={7}>
             <DP>
               <Box sx={{ p: 2 }}>
-                <Typography sx={{ fontWeight: 800, mb: 1.5 }}>
+                <Typography sx={{ fontWeight: 800, mb: 0.3 }}>
                   To'xtalish sabablari (eng ko'p 10 tasi)
+                </Typography>
+                <Typography
+                  sx={{ fontSize: "0.68rem", color: "text.secondary", mb: 1.5 }}
+                >
+                  Barcha pechlardagi to'xtalishlar sababi va jami davomiyligi
+                  (daqiqada)
                 </Typography>
                 <Box sx={{ height: 300 }}>
                   <ResponsiveContainer width="100%" height="100%">
@@ -2771,7 +3045,7 @@ export default function Analitika() {
                       <Tooltip content={<CT />} />
                       <Bar
                         dataKey="totalMin"
-                        name="Jami (min)"
+                        name="Jami to'xtalish (daq)"
                         radius={[0, 4, 4, 0]}
                       >
                         {delayA.map((_, i) => (
@@ -2791,8 +3065,14 @@ export default function Analitika() {
           <Grid item xs={12} md={5}>
             <DP>
               <Box sx={{ p: 2 }}>
-                <Typography sx={{ fontWeight: 800, mb: 1.5 }}>
+                <Typography sx={{ fontWeight: 800, mb: 0.3 }}>
                   Smena samaradorligi
+                </Typography>
+                <Typography
+                  sx={{ fontSize: "0.68rem", color: "text.secondary", mb: 1.5 }}
+                >
+                  Har bir smenada nechta eritish bajarilgan va o'rtacha
+                  to'xtalish (daqiqada)
                 </Typography>
                 <Box sx={{ height: 300 }}>
                   <ResponsiveContainer width="100%" height="100%">
@@ -2816,7 +3096,7 @@ export default function Analitika() {
                       <Bar
                         yAxisId="left"
                         dataKey="heats"
-                        name="Heatlar"
+                        name="Eritishlar soni"
                         fill="#0ea5e9"
                         radius={[4, 4, 0, 0]}
                         opacity={0.8}
@@ -2824,7 +3104,7 @@ export default function Analitika() {
                       <Line
                         yAxisId="right"
                         dataKey="avgDelay"
-                        name="Delay (min)"
+                        name="To'xtalish (daq)"
                         stroke="#ef4444"
                         strokeWidth={2.5}
                         dot={{ r: 4 }}
@@ -2838,8 +3118,13 @@ export default function Analitika() {
           <Grid item xs={12} md={5}>
             <DP>
               <Box sx={{ p: 2 }}>
-                <Typography sx={{ fontWeight: 800, mb: 1.5 }}>
-                  Kunlik heat soni
+                <Typography sx={{ fontWeight: 800, mb: 0.3 }}>
+                  Kunlik eritishlar soni
+                </Typography>
+                <Typography
+                  sx={{ fontSize: "0.68rem", color: "text.secondary", mb: 1 }}
+                >
+                  Barcha pechlardan har kunda bajarilib tugatilgan eritishlar
                 </Typography>
                 <Box sx={{ height: 220 }}>
                   <ResponsiveContainer width="100%" height="100%">
@@ -2856,7 +3141,7 @@ export default function Analitika() {
                       <Tooltip content={<CT />} />
                       <Bar
                         dataKey="count"
-                        name="Heatlar"
+                        name="Eritishlar"
                         fill="#0ea5e9"
                         radius={[4, 4, 0, 0]}
                         opacity={0.85}
@@ -2869,43 +3154,61 @@ export default function Analitika() {
           </Grid>
           <Grid item xs={12} md={3}>
             <MIC
-              title="LRF"
+              title="Qayta ishlash pechi (LRF)"
               rows={[
-                { label: "Heatlar", value: fmtN(lrf.totalHeats, 0) },
                 {
-                  label: "kWh/t",
-                  value: fmtN(lrf.avgKwhPerTon, 1),
+                  label: "Eritishlar soni",
+                  value: fmtN(lrf.totalHeats, 0) + " ta",
+                },
+                {
+                  label: "Energiya (har tonnaga)",
+                  value: fmtN(lrf.avgKwhPerTon, 1) + " kWh/t",
                   color: "#f59e0b",
                 },
-                { label: "Harorat", value: fmtN(lrf.avgTemp, 0) + " °C" },
-                { label: "Delay", value: fmtN(lrf.avgDelay, 0) + " min" },
+                { label: "O'rt. harorat", value: fmtN(lrf.avgTemp, 0) + " °C" },
+                {
+                  label: "O'rt. to'xtalish",
+                  value: fmtN(lrf.avgDelay, 0) + " daq",
+                },
               ]}
             />
           </Grid>
           <Grid item xs={12} md={4}>
             <Stack spacing={1.5}>
               <MIC
-                title="TSC"
+                title="Quyish pechi (TSC)"
                 rows={[
-                  { label: "Heatlar", value: fmtN(tsc.totalHeats, 0) },
                   {
-                    label: "Cast speed",
-                    value: fmtN(tsc.avgCastSpeed, 2) + " m/min",
+                    label: "Eritishlar soni",
+                    value: fmtN(tsc.totalHeats, 0) + " ta",
+                  },
+                  {
+                    label: "Quyish tezligi",
+                    value: fmtN(tsc.avgCastSpeed, 2) + " m/daq",
                     color: "#22c55e",
                   },
-                  { label: "Superheat", value: fmtN(tsc.avgDelta, 1) + " °C" },
+                  {
+                    label: "Superheat (ortiqcha qizish)",
+                    value: fmtN(tsc.avgDelta, 1) + " °C",
+                  },
                 ]}
               />
               <MIC
-                title="VOD"
+                title="Vakuum pechi (VOD)"
                 rows={[
-                  { label: "Heatlar", value: fmtN(vod.totalHeats, 0) },
                   {
-                    label: "Yield loss",
+                    label: "Eritishlar soni",
+                    value: fmtN(vod.totalHeats, 0) + " ta",
+                  },
+                  {
+                    label: "Chiqish yo'qotish",
                     value: fmtN(vod.avgYieldLoss, 2) + " %",
                     color: "#ef4444",
                   },
-                  { label: "Min vacuum", value: fmtN(vod.avgMinVac, 2) },
+                  {
+                    label: "Min. vakuum bosimi",
+                    value: fmtN(vod.avgMinVac, 2) + " mbar",
+                  },
                 ]}
               />
             </Stack>
@@ -2913,7 +3216,7 @@ export default function Analitika() {
         </Grid>
       )}
 
-      {/* TAB 3: Prognoz */}
+      {/* TAB 3: Ishlab chiqarish prognozi */}
       {tab === 3 && (
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -2925,7 +3228,9 @@ export default function Analitika() {
               >
                 <Stack direction="row" spacing={1} alignItems="center">
                   <TimelineRoundedIcon sx={{ color: "#0ea5e9" }} />
-                  <Typography sx={{ fontWeight: 800 }}>Davr:</Typography>
+                  <Typography sx={{ fontWeight: 800 }}>
+                    Prognoz davri:
+                  </Typography>
                 </Stack>
                 <ToggleButtonGroup
                   value={fcDays}
@@ -2954,7 +3259,7 @@ export default function Analitika() {
                     value="ALL"
                     sx={{ fontWeight: 700, textTransform: "none" }}
                   >
-                    Barchasi
+                    Barcha pechlar
                   </ToggleButton>
                   {Object.keys(CC).map((k) => (
                     <ToggleButton
@@ -2991,8 +3296,14 @@ export default function Analitika() {
             >
               <DP>
                 <Box sx={{ p: 2 }}>
-                  <Typography sx={{ fontWeight: 800, mb: 1 }}>
-                    {u.name}: {fcDays} kun prognoz
+                  <Typography sx={{ fontWeight: 800, mb: 0.3 }}>
+                    {pLabel(u.name)}: {fcDays} kunlik prognoz
+                  </Typography>
+                  <Typography
+                    sx={{ fontSize: "0.64rem", color: "text.secondary", mb: 1 }}
+                  >
+                    Ustunlar — haqiqiy natija (tonna), chiziq — bashorat
+                    qilingan qiymat
                   </Typography>
                   <Box sx={{ height: 280 }}>
                     <ResponsiveContainer width="100%" height="100%">
@@ -3070,8 +3381,18 @@ export default function Analitika() {
               <Grid item xs={12} md={6} key={`tr-${u.name}`}>
                 <DP>
                   <Box sx={{ p: 2 }}>
-                    <Typography sx={{ fontWeight: 800, mb: 1 }}>
-                      {u.name}: MA-5
+                    <Typography sx={{ fontWeight: 800, mb: 0.3 }}>
+                      {pLabel(u.name)}: 5 kunlik harakatchan o'rtacha
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: "0.64rem",
+                        color: "text.secondary",
+                        mb: 1,
+                      }}
+                    >
+                      MA-5 = so'nggi 5 kunning o'rtachasi. Trend yo'nalishini
+                      ko'rsatadi
                     </Typography>
                     <Box sx={{ height: 240 }}>
                       <ResponsiveContainer width="100%" height="100%">
@@ -3110,8 +3431,14 @@ export default function Analitika() {
           <Grid item xs={12}>
             <DP>
               <Box sx={{ p: 2 }}>
-                <Typography sx={{ fontWeight: 800, mb: 1.5 }}>
-                  Prognoz taqqosi
+                <Typography sx={{ fontWeight: 800, mb: 0.3 }}>
+                  Barcha pechlar prognoz taqqoslash
+                </Typography>
+                <Typography
+                  sx={{ fontSize: "0.68rem", color: "text.secondary", mb: 1.5 }}
+                >
+                  Har bir pech uchun ertaga, tanlangan davr, oy va yil
+                  oxirigacha bashorat qilingan tonnaj
                 </Typography>
                 <Box sx={{ height: 300 }}>
                   <ResponsiveContainer width="100%" height="100%">
@@ -3180,29 +3507,37 @@ export default function Analitika() {
         </Grid>
       )}
 
-      {/* TAB 4: Og'ishlar */}
+      {/* TAB 4: AI aniqlagan og'ishlar */}
       {tab === 4 && (
         <DP sx={{ p: 2 }}>
-          <Typography sx={{ fontWeight: 800, mb: 2 }}>
+          <Typography sx={{ fontWeight: 800, mb: 0.3 }}>
             AI aniqlagan og'ishlar
+          </Typography>
+          <Typography
+            sx={{ fontSize: "0.68rem", color: "text.secondary", mb: 2 }}
+          >
+            Belgilangan chegaralardan chiqib ketgan ko'rsatkichlar. Xavf
+            darajasi: Yuqori (qizil), O'rta (sariq), Past (yashil)
           </Typography>
           <TableContainer>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Jarayon</TableCell>
-                  <TableCell>Heat</TableCell>
-                  <TableCell>Muammo</TableCell>
-                  <TableCell>Qiymat</TableCell>
-                  <TableCell>Risk</TableCell>
-                  <TableCell>Amal</TableCell>
+                  <TableCell>Pech</TableCell>
+                  <TableCell>Eritma raqami</TableCell>
+                  <TableCell>Muammo turi</TableCell>
+                  <TableCell>Qiymati</TableCell>
+                  <TableCell>Xavf darajasi</TableCell>
+                  <TableCell>Batafsil</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {anoms.length ? (
                   anoms.slice(0, 20).map((a, i) => (
                     <TableRow key={`${a.process}-${a.heatId}-${i}`} hover>
-                      <TableCell>{a.process}</TableCell>
+                      <TableCell>
+                        {a.process} — {pName(a.process)}
+                      </TableCell>
                       <TableCell>{a.heatId}</TableCell>
                       <TableCell>{a.type}</TableCell>
                       <TableCell>{a.value}</TableCell>
@@ -3243,59 +3578,62 @@ export default function Analitika() {
         </DP>
       )}
 
-      {/* TAB 5: Oxirgi heatlar */}
+      {/* TAB 5: Oxirgi eritishlar */}
       {tab === 5 && (
         <Grid container spacing={2}>
           {[
             {
-              t: "Oxirgi EAF",
+              t: "Oxirgi eritma — Elektrda eritish pechi (EAF)",
               d: lE,
               r: lE
                 ? [
-                    ["Heat", "#" + lE.heatId],
-                    ["Steel", safeText(lE.steelGradeName)],
-                    ["Boshlanish", fmtDT(lE.startTime)],
-                    ["Shift", safeShift(lE.shift)],
-                    ["kWh/t", fmtN(lE.kwhPerTon, 1)],
+                    ["Eritma raqami", "#" + lE.heatId],
+                    ["Po'lat markasi", safeText(lE.steelGradeName)],
+                    ["Boshlanish vaqti", fmtDT(lE.startTime)],
+                    ["Smena", safeShift(lE.shift)],
+                    [
+                      "Energiya (har tonnaga)",
+                      fmtN(lE.kwhPerTon, 1) + " kWh/t",
+                    ],
                   ]
                 : null,
             },
             {
-              t: "Oxirgi LRF",
+              t: "Oxirgi eritma — Qayta ishlash pechi (LRF)",
               d: lL,
               r: lL
                 ? [
-                    ["Heat", "#" + lL.heatId],
-                    ["Steel", safeText(lL.steelGradeName)],
-                    ["Boshlanish", fmtDT(lL.startTime)],
-                    ["Shift", safeShift(lL.shift)],
+                    ["Eritma raqami", "#" + lL.heatId],
+                    ["Po'lat markasi", safeText(lL.steelGradeName)],
+                    ["Boshlanish vaqti", fmtDT(lL.startTime)],
+                    ["Smena", safeShift(lL.shift)],
                     ["Harorat", fmtN(lL.latestTemp, 0) + " °C"],
                   ]
                 : null,
             },
             {
-              t: "Oxirgi TSC",
+              t: "Oxirgi eritma — Quyish pechi (TSC)",
               d: lT,
               r: lT
                 ? [
-                    ["Heat", "#" + lT.heatId],
-                    ["Steel", safeText(lT.steelGradeName)],
-                    ["Opening", fmtDT(lT.ladleOpeningDate)],
-                    ["Shift", safeShift(lT.shift)],
-                    ["Speed", fmtN(lT.castSpeedAvg, 2) + " m/min"],
+                    ["Eritma raqami", "#" + lT.heatId],
+                    ["Po'lat markasi", safeText(lT.steelGradeName)],
+                    ["Quyish boshlandi", fmtDT(lT.ladleOpeningDate)],
+                    ["Smena", safeShift(lT.shift)],
+                    ["Quyish tezligi", fmtN(lT.castSpeedAvg, 2) + " m/daq"],
                   ]
                 : null,
             },
             {
-              t: "Oxirgi VOD",
+              t: "Oxirgi eritma — Vakuum pechi (VOD)",
               d: lV,
               r: lV
                 ? [
-                    ["Heat", "#" + lV.heatId],
-                    ["Steel", safeText(lV.steelGradeName)],
-                    ["Boshlanish", fmtDT(lV.startTime)],
-                    ["Shift", safeShift(lV.shift)],
-                    ["Yield", fmtN(lV.yieldLossPct, 2) + " %"],
+                    ["Eritma raqami", "#" + lV.heatId],
+                    ["Po'lat markasi", safeText(lV.steelGradeName)],
+                    ["Boshlanish vaqti", fmtDT(lV.startTime)],
+                    ["Smena", safeShift(lV.shift)],
+                    ["Chiqish yo'qotish", fmtN(lV.yieldLossPct, 2) + " %"],
                   ]
                 : null,
             },
@@ -3306,7 +3644,7 @@ export default function Analitika() {
                 rows={
                   c.r
                     ? c.r.map(([l, v]) => ({ label: l, value: v }))
-                    : [{ label: "Holat", value: "Yo'q" }]
+                    : [{ label: "Holat", value: "Ma'lumot yo'q" }]
                 }
               />
             </Grid>

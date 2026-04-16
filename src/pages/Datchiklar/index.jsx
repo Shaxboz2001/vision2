@@ -632,7 +632,7 @@ function DatchikCard({ d, isDark }) {
         }}
       >
         <Box>
-          <Typography
+          {/* <Typography
             sx={{
               fontFamily: FONT_FAMILY,
               fontSize: "0.72rem",
@@ -643,7 +643,7 @@ function DatchikCard({ d, isDark }) {
             }}
           >
             {turIcons[d.tur]} {d.id}
-          </Typography>
+          </Typography> */}
 
           <Typography
             sx={{

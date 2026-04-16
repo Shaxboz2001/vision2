@@ -4030,7 +4030,7 @@ function RealHistoryTab({ apiKey, c, isDark }) {
   const criticalDelays = delayEvents.filter((e) => e.critical).length;
 
   return (
-    <Box sx={{ maxWidth: 900 }}>
+    <Box sx={{ width: "100%" }}>
       {/* Sarlavha */}
       <Box
         sx={{
@@ -4385,7 +4385,7 @@ function CamerasTab({ c, isDark }) {
   const isOnline = cam.status === "online";
 
   return (
-    <Box sx={{ maxWidth: 1200 }}>
+    <Box sx={{ width: "100%" }}>
       {/* Header */}
       <Box
         sx={{
@@ -5996,7 +5996,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                   />
                   {hotHeel > 0 && (
                     <InfoRow
-                      label="Hot heel"
+                      label="Pech qolgan issiq suyuq metall"
                       value={`${fmtN(hotHeel / 1000, 1)} t`}
                       color="#ff6b1a"
                     />
@@ -6589,7 +6589,7 @@ export default function UskunaDetailPage() {
     "🔧 Interaktiv Sxema",
     ...uchastkaTabs.map((t) => t.label),
     "📹 Kameralar",
-    "📋 Tarix",
+    "📋 Ishlash Jarayoni tarixi",
   ];
 
   const TAB_SXEMA = 0;

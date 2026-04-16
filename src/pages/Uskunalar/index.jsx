@@ -411,18 +411,6 @@ function UskunaCard({ u, onClick }) {
         >
           {u.nom}
         </Typography>
-
-        <Typography
-          sx={{
-            fontFamily: FONT_FAMILY,
-            fontSize: "0.78rem",
-            color: ui.subtext,
-            mb: 1.4,
-          }}
-        >
-          ID: {u.id}
-        </Typography>
-
         <Grid container spacing={1} sx={{ mb: 1.4 }}>
           {[
             {
