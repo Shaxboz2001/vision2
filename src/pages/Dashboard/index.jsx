@@ -1645,6 +1645,7 @@ import {
   PERIOD_OPTIONS,
   PERIOD_LABELS,
 } from "@/hooks/useProduction";
+import { useScriptText } from "../../hooks/useScriptText";
 
 /* ═══════════════════════════════════════════════════════════════
    HELPERS
@@ -1993,6 +1994,7 @@ function MiniInfoCard({ title, rows = [] }) {
 
 export default function Dashboard() {
   const ui = useDashboardUi();
+  const { t } = useScriptText();
 
   const { eaf, lrf, vod, tsc, period, setPeriod, periodLabel, isAnyLoading } =
     useAllProductionStats("today");
@@ -2431,10 +2433,10 @@ export default function Dashboard() {
               color: ui.title,
             }}
           >
-            LPK dashboard ma'lumotlarini yuklashda xatolik
+            {t("LPK dashboard ma'lumotlarini yuklashda xatolik")}
           </Typography>
           <Typography sx={{ color: ui.textSoft, fontSize: "0.94rem" }}>
-            Barcha API larni tekshirib chiqing.
+            {t("Barcha API larni tekshirib chiqing.")}
           </Typography>
         </DashboardPaper>
       </Box>
@@ -2474,7 +2476,7 @@ export default function Dashboard() {
                 textAlign: "center",
               }}
             >
-              {complexInfo.title}
+              {t(complexInfo.title)}
             </Typography>
 
             {/* <Typography
@@ -2520,7 +2522,7 @@ export default function Dashboard() {
           {PERIOD_OPTIONS.map((opt) => (
             <Chip
               key={opt.value}
-              label={opt.label}
+              label={t(opt.label)}
               clickable
               onClick={() => setPeriod(opt.value)}
               color={period === opt.value ? "primary" : "default"}
@@ -2557,8 +2559,8 @@ export default function Dashboard() {
         <Grid item xs={12} lg={8}>
           <DashboardPaper>
             <SectionHeader
-              title="Quyuv Prokatlash Kompleksi Jarayonlari Holati"
-              action="JARAYONLAR →"
+              title={t("Quyuv Prokatlash Kompleksi Jarayonlari Holati")}
+              action={t("JARAYONLAR →")}
             ></SectionHeader>
 
             {isAnyLoading ? (
@@ -2578,12 +2580,12 @@ export default function Dashboard() {
                       },
                     }}
                   >
-                    <TableCell>JARAYON NOMI</TableCell>
-                    <TableCell>HOLAT</TableCell>
-                    <TableCell>HUDUD</TableCell>
-                    <TableCell>USKUNALAR</TableCell>
-                    <TableCell>YUK</TableCell>
-                    <TableCell>HARORAT</TableCell>
+                    <TableCell>{t("JARAYON NOMI")}</TableCell>
+                    <TableCell>{t("HOLAT")}</TableCell>
+                    <TableCell>{t("HUDUD")}</TableCell>
+                    <TableCell>{t("USKUNALAR")}</TableCell>
+                    <TableCell>{t("YUK")}</TableCell>
+                    <TableCell>{t("HARORAT")}</TableCell>
                   </TableRow>
                 </TableHead>
 
@@ -2632,7 +2634,7 @@ export default function Dashboard() {
                                 lineHeight: 1.2,
                               }}
                             >
-                              {s.nom}
+                              {t(s.nom)}
                             </Typography>
 
                             {/* <Typography
@@ -2662,7 +2664,7 @@ export default function Dashboard() {
                             fontWeight: 700,
                           }}
                         >
-                          {s.uchastkalar} ta
+                          {t(s.uchastkalar)} ta
                         </Typography>
                       </TableCell>
 
@@ -2749,9 +2751,9 @@ export default function Dashboard() {
         <Grid item xs={12} lg={4}>
           <DashboardPaper sx={{ height: "100%" }}>
             <SectionHeader
-              title="MAJMUADAGI FAOL DATCHIKLAR TEXNIK HOLATI"
+              title={t("MAJMUADAGI FAOL DATCHIKLAR TEXNIK HOLATI")}
               dot={ui.red}
-              action="HAMMASI →"
+              action={t("HAMMASI →")}
             />
             <Box sx={{ p: 1.6 }}>
               {alerts.slice(0, 6).map((o) => (
@@ -2785,7 +2787,7 @@ export default function Dashboard() {
                         fontWeight: 600,
                       }}
                     >
-                      {o.xabar}
+                      {t(o.xabar)}
                     </Typography>
 
                     <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
@@ -2815,7 +2817,7 @@ export default function Dashboard() {
       <Grid container spacing={2}>
         <Grid item xs={12} md={7}>
           <DashboardPaper>
-            <SectionHeader title="Harorat Grafigi" dot={ui.orange}>
+            <SectionHeader title={t("Harorat Grafigi")} dot={ui.orange}>
               <Box sx={{ display: "flex", gap: 2.2, flexWrap: "wrap" }}>
                 {[
                   ["Eritish", ui.red],
@@ -2843,7 +2845,7 @@ export default function Dashboard() {
                         fontWeight: 700,
                       }}
                     >
-                      {n}
+                      {t(n)}
                     </Typography>
                   </Box>
                 ))}
@@ -2888,28 +2890,28 @@ export default function Dashboard() {
 
                   <Line
                     dataKey="eaf"
-                    name="Eritish"
+                    name={t("Eritish")}
                     stroke={ui.red}
                     strokeWidth={2.5}
                     dot={false}
                   />
                   <Line
                     dataKey="lrf"
-                    name="Qayta ishlash"
+                    name={t("Qayta ishlash")}
                     stroke={ui.orange}
                     strokeWidth={2.5}
                     dot={false}
                   />
                   <Line
                     dataKey="vod"
-                    name="Vakuum"
+                    name={t("Vakuum")}
                     stroke={ui.blue}
                     strokeWidth={2.5}
                     dot={false}
                   />
                   <Line
                     dataKey="tsc"
-                    name="Quyish"
+                    name={t("Quyish")}
                     stroke={ui.green}
                     strokeWidth={2.5}
                     dot={false}
@@ -2922,7 +2924,10 @@ export default function Dashboard() {
 
         <Grid item xs={12} md={5}>
           <DashboardPaper>
-            <SectionHeader title="Ishlab Chiqarish Dinamikasi" dot={ui.green} />
+            <SectionHeader
+              title={t("Ishlab Chiqarish Dinamikasi")}
+              dot={ui.green}
+            />
             <Box sx={{ p: 2, height: 290 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
@@ -2961,25 +2966,25 @@ export default function Dashboard() {
 
                   <Bar
                     dataKey="eaf"
-                    name="Eritish"
+                    name={t("Eritish")}
                     fill={ui.orange}
                     radius={[4, 4, 0, 0]}
                   />
                   <Bar
                     dataKey="lrf"
-                    name="Qayta ishlash"
+                    name={t("Qayta ishlash")}
                     fill={ui.yellow}
                     radius={[4, 4, 0, 0]}
                   />
                   <Bar
                     dataKey="vod"
-                    name="Vakuum"
+                    name={t("Vakuum")}
                     fill={ui.blue}
                     radius={[4, 4, 0, 0]}
                   />
                   <Bar
                     dataKey="tsc"
-                    name="Quyish"
+                    name={t("Quyish")}
                     fill={ui.green}
                     radius={[4, 4, 0, 0]}
                   />
@@ -2992,7 +2997,7 @@ export default function Dashboard() {
 
       <DashboardPaper>
         <SectionHeader
-          title="QUYUV PROKATLASH KOMPLEKSI Ishlab Chiqarish Rejasi"
+          title={t("QUYUV PROKATLASH KOMPLEKSI Ishlab Chiqarish Rejasi")}
           dot={ui.blue}
         />
         <Box sx={{ p: 2.2, display: "flex", gap: 3, flexWrap: "wrap" }}>
@@ -3056,7 +3061,7 @@ export default function Dashboard() {
                     fontWeight: 700,
                   }}
                 >
-                  {Math.round(percent)}% bajarildi
+                  {Math.round(percent)}% {t("bajarildi")}
                 </Typography>
               </Box>
             );
@@ -3067,24 +3072,24 @@ export default function Dashboard() {
       <Grid container spacing={2}>
         <Grid item xs={12} md={3}>
           <MiniInfoCard
-            title="Elektrda Metall Eritish"
+            title={t("Elektrda Metall Eritish")}
             rows={[
-              { label: "Eritishlar", value: fmtN(eafList.length, 0) },
+              { label: t("Eritishlar"), value: fmtN(eafList.length, 0) },
               {
-                label: "Jami energiya",
+                label: t("Jami energiya"),
                 value: `${fmtN(sum(eafList.map((x) => x.electricalEnergy)), 0)} kWh`,
                 color: ui.yellow,
               },
               {
-                label: "Jami O₂",
+                label: t("Jami O₂"),
                 value: fmtN(sum(eafList.map((x) => x.injectedO2)), 0),
               },
               {
-                label: "O'rtacha ishlash vaqti",
+                label: t("O'rtacha ishlash vaqti"),
                 value: `${fmtN(avg(eafList.map((x) => x.powerOnTime)), 0)} min`,
               },
               {
-                label: "Oxirgi eritish",
+                label: t("Oxirgi eritish"),
                 value: latestEAF ? formatDateTime(latestEAF.startTime) : "—",
               },
             ]}
@@ -3093,24 +3098,24 @@ export default function Dashboard() {
 
         <Grid item xs={12} md={3}>
           <MiniInfoCard
-            title="Po‘latni pechda qayta ishlash"
+            title={t("Po‘latni pechda qayta ishlash")}
             rows={[
-              { label: "Eritishlar", value: fmtN(lrfList.length, 0) },
+              { label: t("Eritishlar"), value: fmtN(lrfList.length, 0) },
               {
-                label: "Jami energiya",
+                label: t("Jami energiya"),
                 value: `${fmtN(sum(lrfList.map((x) => x.electricalEnergy)), 0)} kWh`,
                 color: ui.yellow,
               },
               {
-                label: "Argon",
+                label: t("Argon"),
                 value: fmtN(sum(lrfList.map((x) => x.totalArConsumption)), 0),
               },
               {
-                label: "Azot",
+                label: t("Azot"),
                 value: fmtN(sum(lrfList.map((x) => x.totalN2Consumption)), 0),
               },
               {
-                label: "O'rtacha harorat",
+                label: t("O'rtacha harorat"),
                 value: `${fmtN(avg(lrfList.map(getAvgTemp)), 0)} °C`,
               },
             ]}
@@ -3119,23 +3124,23 @@ export default function Dashboard() {
 
         <Grid item xs={12} md={3}>
           <MiniInfoCard
-            title="Vakuum ostida qayta ishlash"
+            title={t("Vakuum ostida qayta ishlash")}
             rows={[
-              { label: "Eritishlar", value: fmtN(vodList.length, 0) },
+              { label: t("Eritishlar"), value: fmtN(vodList.length, 0) },
               {
-                label: "Jami O₂",
+                label: t("Jami O₂"),
                 value: fmtN(sum(vodList.map((x) => x.totalOxygen)), 0),
               },
               {
-                label: "Vakuum vaqti",
+                label: t("Vakuum vaqti"),
                 value: `${fmtN(avg(vodList.map((x) => x.totalBlowTime)), 0)} min`,
               },
               {
-                label: "Chuqur vakuum",
+                label: t("Chuqur vakuum"),
                 value: `${fmtN(avg(vodList.map((x) => x.totalDeepVacuumTime)), 0)} min`,
               },
               {
-                label: "Minimal vakuum",
+                label: t("Minimal vakuum"),
                 value: fmtN(avg(vodList.map((x) => x.minVacuumPressure)), 2),
               },
             ]}
@@ -3144,23 +3149,23 @@ export default function Dashboard() {
 
         <Grid item xs={12} md={3}>
           <MiniInfoCard
-            title="Uzluksiz quyish"
+            title={t("Uzluksiz quyish")}
             rows={[
-              { label: "Eritishlar", value: fmtN(tscList.length, 0) },
+              { label: t("Eritishlar"), value: fmtN(tscList.length, 0) },
               {
-                label: "Po‘lat quymalar",
+                label: t("Po‘lat quymalar"),
                 value: fmtN(tscStats.totalSlabs, 0),
               },
               {
-                label: "Quyilgan metall uzunligi",
+                label: t("Quyilgan metall uzunligi"),
                 value: `${fmtN(tscStats.totalCastLength, 0)} m`,
               },
               {
-                label: "O'rtacha Quyish tezligi",
-                value: `${fmtN(tscStats.avgCastSpeed, 2)} m/min`,
+                label: t("O'rtacha Quyish tezligi"),
+                value: `${fmtN(tscStats.avgCastSpeed, 2)} ${t("m/min")}`,
               },
               {
-                label: "O'rtacha quyish vaqti",
+                label: t("O'rtacha quyish vaqti"),
                 value: fmtN(tscStats.avgTundishLife, 0),
               },
             ]}
@@ -3170,14 +3175,14 @@ export default function Dashboard() {
 
       <DashboardPaper>
         <SectionHeader
-          title="Oxirgi Ishlab Chiqarish Jarayonlari"
+          title={t("Oxirgi Ishlab Chiqarish Jarayonlari")}
           dot={ui.blue}
         />
         <Box sx={{ p: 2.2 }}>
           <Grid container spacing={2}>
             {[
               {
-                title: "Elektrda Metall Eritish",
+                title: t("Elektrda Metall Eritish"),
                 heat: latestEAF,
                 rows: latestEAF
                   ? [
@@ -3285,14 +3290,14 @@ export default function Dashboard() {
                       color: ui.title,
                     }}
                   >
-                    {card.title}
+                    {t(card.title)}
                   </Typography>
 
                   {!card.heat ? (
                     <Typography
                       sx={{ fontSize: "0.88rem", color: ui.textSoft }}
                     >
-                      Ma'lumot yo'q
+                      {t("Ma'lumot yo'q")}
                     </Typography>
                   ) : (
                     <Box
@@ -3319,7 +3324,7 @@ export default function Dashboard() {
                                 fontWeight: 500,
                               }}
                             >
-                              {label}
+                              {t(label)}
                             </Typography>
 
                             <Typography
@@ -3331,7 +3336,7 @@ export default function Dashboard() {
                                 textAlign: "right",
                               }}
                             >
-                              {value}
+                              {t(value)}
                             </Typography>
                           </Box>
 

@@ -8,6 +8,7 @@ const uiSlice = createSlice({
     selectedSex: null,
     selectedUchastka: null,
     theme: "dark",
+    script: localStorage.getItem("pyv-script") || "latin",
   },
   reducers: {
     toggleSidebar: (state) => {
@@ -21,6 +22,18 @@ const uiSlice = createSlice({
     },
     setSelectedUchastka: (state, action) => {
       state.selectedUchastka = action.payload;
+    },
+    setScript: (state, action) => {
+      state.script = action.payload;
+      try {
+        localStorage.setItem("pyv-script", action.payload);
+      } catch {}
+    },
+    toggleScript: (state) => {
+      state.script = state.script === "latin" ? "cyrillic" : "latin";
+      try {
+        localStorage.setItem("pyv-script", state.script);
+      } catch {}
     },
   },
 });
@@ -84,6 +97,8 @@ export const {
   setSidebarOpen,
   setSelectedSex,
   setSelectedUchastka,
+  setScript,
+  toggleScript,
 } = uiSlice.actions;
 export const { setFilter, clearFilter, setSelectedId } =
   ogohlantirishSlice.actions;

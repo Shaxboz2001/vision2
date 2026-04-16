@@ -1427,8 +1427,11 @@ import { useThemeMode } from "@/theme";
 import { LiveBadge } from "@/components/common";
 import { useVoiceAssistant } from "@/hooks/useVoiceAssistant";
 import VoiceAssistantIndicator from "@/components/VoiceAssistantIndicator";
+import TranslateIcon from "@mui/icons-material/Translate";
+import { toggleScript } from "@/store";
+import { useScriptText } from "@/hooks/useScriptText";
 
-const DRAWER_WIDTH = 244;
+const DRAWER_WIDTH = 250;
 const APPBAR_HEIGHT = 56;
 
 const mainNavItems = [
@@ -1563,6 +1566,7 @@ export function Layout({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { toggleMode, isDark } = useThemeMode();
+  const { script, t } = useScriptText();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -1724,7 +1728,7 @@ export function Layout({ children }) {
         </ListItemIcon>
 
         <ListItemText
-          primary={item.label}
+          primary={t(item.label)}
           primaryTypographyProps={{
             fontSize: "1rem",
             fontWeight: selected ? 900 : 600,
@@ -1821,7 +1825,7 @@ export function Layout({ children }) {
                   fontWeight: 700,
                 }}
               >
-                Sun'iy intellekt
+                {t("Sun'iy intellekt")}
               </Typography>
             </AccordionSummary>
 
@@ -1852,7 +1856,7 @@ export function Layout({ children }) {
             <SettingsIcon sx={{ fontSize: 18 }} />
           </ListItemIcon>
           <ListItemText
-            primary="Sozlamalar"
+            primary={t("Sozlamalar")}
             primaryTypographyProps={{
               fontSize: "0.83rem",
               fontWeight: 500,
@@ -1987,7 +1991,7 @@ export function Layout({ children }) {
                 onToggle={voice.toggleMic}
               />
 
-              {!isSmall && <LiveBadge />}
+              {/* {!isSmall && <LiveBadge />} */}
               {!isSmall && <Clock />}
 
               <Tooltip title={isDark ? "Kunduzgi rejim" : "Kechki rejim"}>
@@ -2019,6 +2023,22 @@ export function Layout({ children }) {
                   ) : (
                     <DarkModeIcon sx={{ fontSize: 17 }} />
                   )}
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={script === "latin" ? "Кирилл" : "Lotin"}>
+                <IconButton
+                  size="small"
+                  onClick={() => dispatch(toggleScript())}
+                  sx={{
+                    color: "text.secondary",
+                    border: "1px solid",
+                    borderColor: "divider",
+                    borderRadius: 1,
+                    width: 32,
+                    height: 32,
+                  }}
+                >
+                  <TranslateIcon sx={{ fontSize: 16 }} />
                 </IconButton>
               </Tooltip>
             </Box>
@@ -2099,7 +2119,7 @@ export function Layout({ children }) {
                     },
                   }}
                 >
-                  RAQAMLI INNOVATSION XAVFSIZ KOMBINAT
+                  {t("RAQAMLI INNOVATSION XAVFSIZ KOMBINAT")}
                 </Typography>
               </Box>
             </Box>
@@ -2127,7 +2147,7 @@ export function Layout({ children }) {
                 whiteSpace: "nowrap",
               }}
             >
-              UZMETKOMBINAT
+              {t("UZMETKOMBINAT")}
             </Typography>
           </Box>
         </Toolbar>
