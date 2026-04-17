@@ -23,12 +23,14 @@ import {
   CardSkeleton,
 } from "@/components/common";
 import { setFilter, clearFilter } from "@/store";
+import { useScriptText } from "@/hooks/useScriptText";
 
 const darajaBorder = {
   kritik: "#ff2d55",
   ogohlantirish: "#ffd60a",
   axborot: "#00d4ff",
 };
+
 const darajaBg = {
   kritik: "rgba(255,45,85,0.05)",
   ogohlantirish: "rgba(255,214,10,0.03)",
@@ -36,9 +38,13 @@ const darajaBg = {
 };
 
 function OgohlanirishCard({ o }) {
+  const { t } = useScriptText();
+
   const ago = Math.round((Date.now() - new Date(o.vaqt)) / 60000);
   const agoText =
-    ago < 60 ? `${ago} daqiqa oldin` : `${Math.round(ago / 60)} soat oldin`;
+    ago < 60
+      ? `${ago} ${t("daqiqa oldin")}`
+      : `${Math.round(ago / 60)} ${t("soat oldin")}`;
 
   return (
     <Box
@@ -46,7 +52,9 @@ function OgohlanirishCard({ o }) {
         display: "flex",
         gap: 1.5,
         background: darajaBg[o.daraja] || "transparent",
-        border: `1px solid ${darajaBorder[o.daraja] ? darajaBorder[o.daraja] + "33" : "#1e2a3d"}`,
+        border: `1px solid ${
+          darajaBorder[o.daraja] ? darajaBorder[o.daraja] + "33" : "#1e2a3d"
+        }`,
         borderLeft: `3px solid ${darajaBorder[o.daraja] || "#374151"}`,
         borderRadius: 1,
         p: 1.5,
@@ -73,54 +81,59 @@ function OgohlanirishCard({ o }) {
           <StatusChip holat={o.holat} />
           <Typography
             sx={{
-              fontFamily: "'Arial',san-serif",
+              fontFamily: "'Arial', sans-serif",
               fontSize: "0.6rem",
               color: "#6b7280",
               ml: "auto",
             }}
           >
-            {agoText}
+            {t(agoText)}
           </Typography>
         </Box>
+
         <Typography sx={{ fontWeight: 600, fontSize: "0.88rem", mb: 0.5 }}>
-          {o.xabar}
+          {t(o.xabar)}
         </Typography>
+
         <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
           {/* <Typography
             sx={{
-              fontFamily: "'Arial',san-serif",
+              fontFamily: "'Arial', sans-serif",
               fontSize: "0.62rem",
               color: "#ff6b1a",
             }}
           >
             {o.sex}
           </Typography> */}
+
           {/* {o.uchastka && (
             <Typography
               sx={{
-                fontFamily: "'Arial',san-serif",
+                fontFamily: "'Arial', sans-serif",
                 fontSize: "0.62rem",
                 color: "#6b7280",
               }}
             >
-              {o.uchastka}
+              {t(o.uchastka)}
             </Typography>
           )} */}
+
           {/* {o.uskuna && (
             <Typography
               sx={{
-                fontFamily: "'Arial',san-serif",
+                fontFamily: "'Arial', sans-serif",
                 fontSize: "0.62rem",
                 color: "#6b7280",
               }}
             >
-              {o.uskuna}
+              {t(o.uskuna)}
             </Typography>
           )} */}
+
           {o.operator && (
             <Typography
               sx={{
-                fontFamily: "'Arial',san-serif",
+                fontFamily: "'Arial', sans-serif",
                 fontSize: "0.62rem",
                 color: "#00ff9d",
               }}
@@ -130,6 +143,7 @@ function OgohlanirishCard({ o }) {
           )}
         </Box>
       </Box>
+
       <Box
         sx={{
           display: "flex",
@@ -143,7 +157,7 @@ function OgohlanirishCard({ o }) {
           variant="outlined"
           sx={{
             fontSize: "0.6rem",
-            fontFamily: "'Arial',san-serif",
+            fontFamily: "'Arial', sans-serif",
             py: 0.3,
             px: 1,
             minWidth: "auto",
@@ -152,8 +166,9 @@ function OgohlanirishCard({ o }) {
             color: "#00d4ff",
           }}
         >
-          KO'RIB CHIQISH
+          {t("KO'RIB CHIQISH")}
         </Button>
+
         {o.holat === "ochiq" && (
           <Button
             size="small"
@@ -161,14 +176,14 @@ function OgohlanirishCard({ o }) {
             color="error"
             sx={{
               fontSize: "0.6rem",
-              fontFamily: "'Arial',san-serif",
+              fontFamily: "'Arial', sans-serif",
               py: 0.3,
               px: 1,
               minWidth: "auto",
               borderRadius: 1,
             }}
           >
-            YOPISH
+            {t("YOPISH")}
           </Button>
         )}
       </Box>
@@ -179,6 +194,7 @@ function OgohlanirishCard({ o }) {
 export default function Ogohlantirishlar() {
   const dispatch = useDispatch();
   const filter = useSelector((s) => s.ogohlantirishlar.filter);
+  const { t } = useScriptText();
 
   const { data, isLoading } = useQuery({
     queryKey: ["ogohlantirishlar", filter],
@@ -209,84 +225,92 @@ export default function Ogohlantirishlar() {
         <Box>
           <Typography
             sx={{
-              fontFamily: "'Arial',san-serif",
+              fontFamily: "'Arial', sans-serif",
               fontSize: "1.1rem",
               fontWeight: 700,
               letterSpacing: "0.15em",
             }}
           >
-            OGOHLANTIRISHLAR
+            {t("OGOHLANTIRISHLAR")}
           </Typography>
+
           <Typography
             sx={{
-              fontFamily: "'Arial',san-serif",
+              fontFamily: "'Arial', sans-serif",
               fontSize: "0.65rem",
               color: "#6b7280",
             }}
           >
-            Barcha ogohlantirishlar · Har 5 soniyada yangilanadi
+            {t("Barcha ogohlantirishlar · Har 5 soniyada yangilanadi")}
           </Typography>
         </Box>
+
         <Box sx={{ display: "flex", gap: 1.5, alignItems: "center" }}>
           <FormControl size="small" sx={{ minWidth: 130 }}>
             <InputLabel
               sx={{
-                fontFamily: "'Arial',san-serif",
+                fontFamily: "'Arial', sans-serif",
                 fontSize: "0.7rem",
               }}
             >
-              DARAJA
+              {t("DARAJA")}
             </InputLabel>
+
             <Select
               value={filter.daraja || ""}
               onChange={(e) => dispatch(setFilter({ daraja: e.target.value }))}
-              label="DARAJA"
+              label={t("DARAJA")}
               sx={{
-                fontFamily: "'Arial',san-serif",
+                fontFamily: "'Arial', sans-serif",
                 fontSize: "0.75rem",
               }}
             >
-              <MenuItem value="">Barchasi</MenuItem>
-              <MenuItem value="kritik">Kritik</MenuItem>
-              <MenuItem value="ogohlantirish">Ogohlantirish</MenuItem>
-              <MenuItem value="axborot">Axborot</MenuItem>
+              <MenuItem value="">{t("Barchasi")}</MenuItem>
+              <MenuItem value="kritik">{t("Kritik")}</MenuItem>
+              <MenuItem value="ogohlantirish">{t("Ogohlantirish")}</MenuItem>
+              <MenuItem value="axborot">{t("Axborot")}</MenuItem>
             </Select>
           </FormControl>
+
           <FormControl size="small" sx={{ minWidth: 130 }}>
             <InputLabel
               sx={{
-                fontFamily: "'Arial',san-serif",
+                fontFamily: "'Arial', sans-serif",
                 fontSize: "0.7rem",
               }}
             >
-              HOLAT
+              {t("HOLAT")}
             </InputLabel>
+
             <Select
               value={filter.holat || ""}
               onChange={(e) => dispatch(setFilter({ holat: e.target.value }))}
-              label="HOLAT"
+              label={t("HOLAT")}
               sx={{
-                fontFamily: "'Arial',san-serif",
+                fontFamily: "'Arial', sans-serif",
                 fontSize: "0.75rem",
               }}
             >
-              <MenuItem value="">Barchasi</MenuItem>
-              <MenuItem value="ochiq">Ochiq</MenuItem>
-              <MenuItem value="ko'rib chiqilmoqda">Ko'rib chiqilmoqda</MenuItem>
-              <MenuItem value="yopiq">Yopiq</MenuItem>
+              <MenuItem value="">{t("Barchasi")}</MenuItem>
+              <MenuItem value="ochiq">{t("Ochiq")}</MenuItem>
+              <MenuItem value="ko'rib chiqilmoqda">
+                {t("Ko'rib chiqilmoqda")}
+              </MenuItem>
+              <MenuItem value="yopiq">{t("Yopiq")}</MenuItem>
             </Select>
           </FormControl>
+
           {(filter.daraja || filter.holat) && (
             <Button
               size="small"
               onClick={() => dispatch(clearFilter())}
               sx={{
-                fontFamily: "'Arial',san-serif",
+                fontFamily: "'Arial', sans-serif",
                 fontSize: "0.65rem",
                 color: "#6b7280",
               }}
             >
-              TOZALASH ✕
+              {t("TOZALASH")} ✕
             </Button>
           )}
         </Box>
@@ -327,7 +351,7 @@ export default function Ogohlantirishlar() {
               <Typography sx={{ fontSize: 18, mb: 0.3 }}>{s.icon}</Typography>
               <Typography
                 sx={{
-                  fontFamily: "'Arial',san-serif",
+                  fontFamily: "'Arial', sans-serif",
                   fontSize: "1.5rem",
                   fontWeight: 700,
                   color: s.c,
@@ -337,13 +361,13 @@ export default function Ogohlantirishlar() {
               </Typography>
               <Typography
                 sx={{
-                  fontFamily: "'Arial',san-serif",
+                  fontFamily: "'Arial', sans-serif",
                   fontSize: "0.55rem",
                   color: "#6b7280",
                   letterSpacing: "0.08em",
                 }}
               >
-                {s.l}
+                {t(s.l)}
               </Typography>
             </Paper>
           </Grid>
@@ -376,13 +400,14 @@ export default function Ogohlantirishlar() {
           />
           <Typography
             sx={{
-              fontFamily: "'Arial',san-serif",
+              fontFamily: "'Arial', sans-serif",
               fontSize: "0.72rem",
               color: "#ff2d55",
               letterSpacing: "0.1em",
             }}
           >
-            ⚠ {kritik.length} TA KRITIK OGOHLANTIRISH DARHOL DIQQAT TALAB QILADI
+            ⚠ {kritik.length}{" "}
+            {t("TA KRITIK OGOHLANTIRISH DARHOL DIQQAT TALAB QILADI")}
           </Typography>
         </Box>
       )}
@@ -397,7 +422,7 @@ export default function Ogohlantirishlar() {
               <Grid item xs={12}>
                 <Paper>
                   <SectionHeader
-                    title={`Kritik (${kritik.length})`}
+                    title={`${t("Kritik")} (${kritik.length})`}
                     dot="#ff2d55"
                   />
                   <Box sx={{ p: 1.5 }}>
@@ -415,7 +440,7 @@ export default function Ogohlantirishlar() {
               <Grid item xs={12} md={6}>
                 <Paper>
                   <SectionHeader
-                    title={`Ogohlantirishlar (${ogohlantirish.length})`}
+                    title={`${t("Ogohlantirishlar")} (${ogohlantirish.length})`}
                     dot="#ffd60a"
                   />
                   <Box sx={{ p: 1.5 }}>
@@ -433,7 +458,7 @@ export default function Ogohlantirishlar() {
               <Grid item xs={12} md={6}>
                 <Paper>
                   <SectionHeader
-                    title={`Axborot (${axborot.length})`}
+                    title={`${t("Axborot")} (${axborot.length})`}
                     dot="#00d4ff"
                   />
                   <Box sx={{ p: 1.5 }}>
@@ -450,12 +475,12 @@ export default function Ogohlantirishlar() {
               <Paper sx={{ p: 4, textAlign: "center" }}>
                 <Typography
                   sx={{
-                    fontFamily: "'Arial',san-serif",
+                    fontFamily: "'Arial', sans-serif",
                     fontSize: "0.75rem",
                     color: "#6b7280",
                   }}
                 >
-                  ✓ Hech qanday ogohlantirish yo'q
+                  ✓ {t("Hech qanday ogohlantirish yo'q")}
                 </Typography>
               </Paper>
             </Grid>

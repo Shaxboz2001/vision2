@@ -82,6 +82,7 @@ function UchastkadDetail({ u, onClose }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
   const [tab, setTab] = useState(0);
+  const { t } = useScriptText();
 
   if (!u) return null;
 
@@ -150,53 +151,17 @@ function UchastkadDetail({ u, onClose }) {
           <Box>
             <Typography
               sx={{
-                fontFamily: "'Arial',san-serif",
-                fontSize: "0.72rem",
-                color: "secondary.main",
-                letterSpacing: "0.15em",
-                mb: 0.3,
-              }}
-            >
-              {u.id}
-            </Typography>
-            <Typography
-              sx={{
                 fontWeight: 700,
                 fontSize: "1rem",
                 color: "text.primary",
                 mb: 0.4,
               }}
             >
-              {u.nom}
+              {t(u.nom)}
             </Typography>
 
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <StatusChip holat={u.holat} />
-              <Typography
-                sx={{
-                  fontFamily: "'Arial',san-serif",
-                  fontSize: "0.6rem",
-                  color: "text.secondary",
-                }}
-              >
-                {u.sexId}
-              </Typography>
-              {u.live && (
-                <Typography
-                  sx={{
-                    fontFamily: "'Arial',san-serif",
-                    fontSize: "0.55rem",
-                    color: "#00e676",
-                    px: 0.5,
-                    py: 0.1,
-                    border: "1px solid rgba(0,230,118,0.35)",
-                    borderRadius: 0.5,
-                    background: "rgba(0,230,118,0.08)",
-                  }}
-                >
-                  LIVE
-                </Typography>
-              )}
             </Box>
           </Box>
 
@@ -221,10 +186,10 @@ function UchastkadDetail({ u, onClose }) {
         }}
       >
         <Tab
-          label="Ko'rsatkichlar"
+          label={t("Ko'rsatkichlar")}
           sx={{ fontSize: "0.65rem", minHeight: 38 }}
         />
-        <Tab label="Tarix" sx={{ fontSize: "0.65rem", minHeight: 38 }} />
+        <Tab label={t("Tarix")} sx={{ fontSize: "0.65rem", minHeight: 38 }} />
       </Tabs>
 
       <Box sx={{ flex: 1, overflow: "auto", p: 2 }}>
@@ -262,7 +227,7 @@ function UchastkadDetail({ u, onClose }) {
                           letterSpacing: "0.08em",
                         }}
                       >
-                        {m.label}
+                        {t(m.label)}
                       </Typography>
                     </Box>
 
@@ -322,7 +287,7 @@ function UchastkadDetail({ u, onClose }) {
                     color: "text.secondary",
                   }}
                 >
-                  {it.l}
+                  {t(it.l)}
                 </Typography>
                 <Typography
                   sx={{
@@ -349,7 +314,7 @@ function UchastkadDetail({ u, onClose }) {
                 mb: 1.5,
               }}
             >
-              OXIRGI 24 SOAT HARORAT DINAMIKASI
+              {t("OXIRGI 24 SOAT HARORAT DINAMIKASI")}
             </Typography>
 
             <Box
@@ -470,7 +435,7 @@ function UchastkadDetail({ u, onClose }) {
                       color: "text.primary",
                     }}
                   >
-                    {log.e}
+                    {t(log.e)}
                   </Typography>
                   <Typography
                     sx={{
@@ -479,7 +444,7 @@ function UchastkadDetail({ u, onClose }) {
                       color: "text.secondary",
                     }}
                   >
-                    {log.t}
+                    {t(log.t)}
                   </Typography>
                 </Box>
               </Box>
@@ -496,6 +461,7 @@ function UchastkCard({ u, onClick }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
   const color = uchastkRang[u.holat] || "#6b7280";
+  const { t } = useScriptText();
 
   return (
     <Box
@@ -526,21 +492,10 @@ function UchastkCard({ u, onClick }) {
         }}
       >
         <Box sx={{ minWidth: 0 }}>
-          {/* <Typography
-            sx={{
-              fontFamily: "'Arial',san-serif",
-              fontSize: "0.58rem",
-              color: "secondary.main",
-              mb: 0.2,
-            }}
-          >
-            {u.id}
-          </Typography> */}
-
           <Typography
             sx={{ fontWeight: 700, fontSize: "1rem", color: "text.primary" }}
           >
-            {u.nom}
+            {t(u.nom)}
           </Typography>
 
           {u.extraLabel && (
@@ -552,7 +507,7 @@ function UchastkCard({ u, onClick }) {
                 mt: 0.2,
               }}
             >
-              {u.extraLabel}
+              {t(u.extraLabel)}
             </Typography>
           )}
         </Box>
@@ -566,17 +521,6 @@ function UchastkCard({ u, onClick }) {
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.6 }}>
-            {u.live && (
-              <Typography
-                sx={{
-                  fontFamily: "'Arial',san-serif",
-                  fontSize: "0.52rem",
-                  color: "#00e676",
-                }}
-              >
-                LIVE
-              </Typography>
-            )}
             <StatusChip holat={u.holat} />
           </Box>
           <MiniSparkline color={color} pct={u.samaradorlik} />
@@ -613,7 +557,7 @@ function UchastkCard({ u, onClick }) {
                   color: s.c,
                 }}
               >
-                {s.v}
+                {t(s.v)}
               </Typography>
               <Typography
                 sx={{
@@ -623,7 +567,7 @@ function UchastkCard({ u, onClick }) {
                   letterSpacing: "0.06em",
                 }}
               >
-                {s.l}
+                {t(s.l)}
               </Typography>
             </Box>
           </Grid>
@@ -654,7 +598,7 @@ function UchastkCard({ u, onClick }) {
             mt: 0.3,
           }}
         >
-          SAMARADORLIK: {u.samaradorlik}%
+          {t("SAMARADORLIK:")} {u.samaradorlik}%
         </Typography>
       </Box>
     </Box>
@@ -671,6 +615,7 @@ export default function Uchastkalar() {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
   const navigation = useNavigate();
+  const { t } = useScriptText();
 
   const [sexFilter, setSexFilter] = useState(selectedSex?.id || "");
 
@@ -754,9 +699,9 @@ export default function Uchastkalar() {
       renderCell: (p) => (
         <Box sx={{ pl: 2, display: "flex", alignItems: "center", gap: 1 }}>
           <Typography sx={{ fontWeight: 600, fontSize: "0.85rem" }}>
-            {p.value}
+            {t(p.value)}
           </Typography>
-          {p.row.live && (
+          {/* {p.row.live && (
             <Typography
               sx={{
                 fontFamily: "'Arial',san-serif",
@@ -766,7 +711,7 @@ export default function Uchastkalar() {
             >
               LIVE
             </Typography>
-          )}
+          )} */}
         </Box>
       ),
     },
@@ -908,7 +853,7 @@ export default function Uchastkalar() {
               color: "text.primary",
             }}
           >
-            HUDUDLAR
+            {t("HUDUDLAR")}
           </Typography>
           <Typography
             sx={{
@@ -917,7 +862,7 @@ export default function Uchastkalar() {
               color: "text.secondary",
             }}
           >
-            Barcha hududlar holati · Kartani bosib uskunalarga o'ting
+            {t("Barcha hududlar holati · Kartani bosib uskunalarga o'ting")}
           </Typography>
         </Box>
 
@@ -930,21 +875,21 @@ export default function Uchastkalar() {
                 color: uchFetching ? "#00d4ff" : "#00e676",
               }}
             >
-              {uchFetching ? "LIVE yangilanmoqda..." : "LIVE"}
+              {uchFetching ? t("LIVE yangilanmoqda...") : t("LIVE")}
             </Typography>
           )}
 
           <FormControl size="small" sx={{ minWidth: 180 }}>
-            <InputLabel>BO'LINMALAR BO'YICHA FILTR</InputLabel>
+            <InputLabel>{t("BO'LINMALAR BO'YICHA FILTR")}</InputLabel>
             <Select
               value={sexFilter}
               onChange={(e) => setSexFilter(e.target.value)}
-              label="BO'LINMALAR BO'YICHA FILTR"
+              label={t("BO'LINMALAR BO'YICHA FILTR")}
             >
-              <MenuItem value="">Barchasi</MenuItem>
+              <MenuItem value="">{t("Barchasi")}</MenuItem>
               {sx.map((s) => (
                 <MenuItem key={s.id} value={s.id}>
-                  {s.nom}
+                  {t(s.nom)}
                 </MenuItem>
               ))}
             </Select>
@@ -970,7 +915,7 @@ export default function Uchastkalar() {
                   color: s.c,
                 }}
               >
-                {s.v}
+                {t(s.v)}
               </Typography>
               <Typography
                 sx={{
@@ -980,7 +925,7 @@ export default function Uchastkalar() {
                   letterSpacing: "0.1em",
                 }}
               >
-                {s.l}
+                {t(s.l)}
               </Typography>
             </Paper>
           </Grid>
@@ -1008,11 +953,11 @@ export default function Uchastkalar() {
             }}
           >
             <Tab
-              label="Karta ko'rinish"
+              label={t("Karta ko'rinish")}
               sx={{ fontSize: "0.65rem", minHeight: 42 }}
             />
             <Tab
-              label="Jadval ko'rinish"
+              label={t("Jadval ko'rinish")}
               sx={{ fontSize: "0.65rem", minHeight: 42 }}
             />
           </Tabs>
@@ -1024,7 +969,7 @@ export default function Uchastkalar() {
               color: "text.secondary",
             }}
           >
-            {uchastkalar.length} ta hudud
+            {uchastkalar.length} {t("ta hudud")}
           </Typography>
         </Box>
 
@@ -1069,10 +1014,10 @@ export default function Uchastkalar() {
                         color: "text.primary",
                       }}
                     >
-                      {sex.nom}
+                      {t(sex.nom)}
                     </Typography>
 
-                    {sex.live && (
+                    {/* {sex.live && (
                       <Typography
                         sx={{
                           fontFamily: "'Arial',san-serif",
@@ -1082,7 +1027,7 @@ export default function Uchastkalar() {
                       >
                         LIVE
                       </Typography>
-                    )}
+                    )} */}
 
                     <Box
                       sx={{
@@ -1100,7 +1045,7 @@ export default function Uchastkalar() {
                         color: "text.secondary",
                       }}
                     >
-                      {items.length} ta
+                      {items.length} {t("ta")}
                     </Typography>
                   </Box>
 

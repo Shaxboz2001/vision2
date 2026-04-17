@@ -60,6 +60,7 @@ import {
 import { StatusChip } from "@/components/common";
 import EAFFurnace3D from "../../components/UskunaImages/EafUskuna";
 import UskunaImageView from "../../components/UskunaImages/UskunaImageView";
+import { useScriptText } from "../../hooks/useScriptText";
 
 // ═══════════════════════════════════════════════════════════════
 //  useProductionStatsWithFallback
@@ -468,6 +469,7 @@ const fmtDur = (s, e) => {
 
 // ─── Period tanlagich ─────────────────────────────────────────────
 function PeriodSelector({ period, onChange, color }) {
+  const { t } = useScriptText();
   return (
     <FormControl size="small">
       <Select
@@ -492,7 +494,7 @@ function PeriodSelector({ period, onChange, color }) {
               fontSize: "0.68rem",
             }}
           >
-            {o.label}
+            {t(o.label)}
           </MenuItem>
         ))}
       </Select>
@@ -544,6 +546,7 @@ function StatCard({
   color = "#00d4ff",
   big = false,
 }) {
+  const { t } = useScriptText();
   return (
     <Box
       sx={{
@@ -574,7 +577,7 @@ function StatCard({
             textTransform: "uppercase",
           }}
         >
-          {label}
+          {t(label)}
         </Typography>
       </Box>
       <Box sx={{ display: "flex", alignItems: "baseline", gap: 0.5 }}>
@@ -607,6 +610,7 @@ function StatCard({
 
 // ─── Sektsiya sarlavhasi ──────────────────────────────────────────
 function SectionTitle({ children, color = "#00d4ff" }) {
+  const { t } = useScriptText();
   return (
     <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 2 }}>
       <Box sx={{ width: 3, height: 20, background: color, borderRadius: 2 }} />
@@ -619,7 +623,7 @@ function SectionTitle({ children, color = "#00d4ff" }) {
           textTransform: "uppercase",
         }}
       >
-        {children}
+        {t(children)}
       </Typography>
     </Box>
   );
@@ -627,6 +631,7 @@ function SectionTitle({ children, color = "#00d4ff" }) {
 
 // ─── Info qatori ─────────────────────────────────────────────────
 function InfoRow({ label, value, color = "#c8d8e8" }) {
+  const { t } = useScriptText();
   return (
     <Box
       sx={{
@@ -645,7 +650,7 @@ function InfoRow({ label, value, color = "#c8d8e8" }) {
           color: "#8896a5",
         }}
       >
-        {label}
+        {t(label)}
       </Typography>
       <Typography
         sx={{
@@ -701,20 +706,23 @@ function ChemCard({ code, value, color }) {
 
 // ─── Harorat grafigi ─────────────────────────────────────────────
 function TempChart({ data, c, isDark, extraLines = [] }) {
+  const { t } = useScriptText();
+
   if (!data?.length)
     return (
       <Box sx={{ py: 4, textAlign: "center" }}>
         <Typography
           sx={{
-            fontFamily: "'Arial', san-serif",
+            fontFamily: "'Arial', sans-serif",
             fontSize: "0.7rem",
             color: "#4b5563",
           }}
         >
-          Harorat ma'lumoti yo'q
+          {t("Harorat ma'lumoti yo'q")}
         </Typography>
       </Box>
     );
+
   return (
     <ResponsiveContainer width="100%" height={220}>
       <LineChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
@@ -722,41 +730,47 @@ function TempChart({ data, c, isDark, extraLines = [] }) {
           strokeDasharray="3 3"
           stroke={isDark ? "#1a2235" : "#e5e7eb"}
         />
+
         <XAxis dataKey="i" tick={{ fontSize: 11, fill: "#8896a5" }} />
+
         <YAxis
           domain={["auto", "auto"]}
           tick={{ fontSize: 11, fill: "#8896a5" }}
         />
+
         <RTooltip
           contentStyle={{
             background: "#0a0f1e",
             border: `1px solid ${c}50`,
             borderRadius: 8,
             fontSize: 12,
-            fontFamily: "san-serif",
+            fontFamily: "sans-serif",
           }}
-          formatter={(v, n) => [v, n]}
-          labelFormatter={(_, p) => p?.[0]?.payload?.t || ""}
+          formatter={(value, name) => [value, t(String(name))]}
+          labelFormatter={(_, payload) => payload?.[0]?.payload?.t || ""}
         />
+
         <Legend wrapperStyle={{ fontSize: 12 }} />
+
         <Line
           type="monotone"
           dataKey="temp"
           stroke={c}
           dot={{ r: 4, fill: c }}
-          name="Harorat °C"
+          name={t("Harorat °C")}
           strokeWidth={2.5}
         />
-        {extraLines.map((l) => (
+
+        {extraLines.map((line) => (
           <Line
-            key={l.key}
+            key={line.key}
             type="monotone"
-            dataKey={l.key}
-            stroke={l.color}
-            dot={l.dot ?? false}
-            name={l.name}
-            strokeWidth={l.width ?? 1.5}
-            strokeDasharray={l.dash}
+            dataKey={line.key}
+            stroke={line.color}
+            dot={line.dot ?? false}
+            name={t(line.name)}
+            strokeWidth={line.width ?? 1.5}
+            strokeDasharray={line.dash}
           />
         ))}
       </LineChart>
@@ -766,12 +780,13 @@ function TempChart({ data, c, isDark, extraLines = [] }) {
 
 // ─── Kimyoviy tarkib bloki ────────────────────────────────────────
 function ChemAnalysis({ heat, c }) {
+  const { t } = useScriptText();
   if (!heat?.steelAnalysis?.length) return null;
   const a = heat.steelAnalysis[heat.steelAnalysis.length - 1];
   return (
     <Box sx={{ mb: 4 }}>
       <SectionTitle color={c}>
-        Kimyoviy tarkib — {a.sampleId} · {fmtT(a.sampleTime)}
+        {t("Kimyoviy tarkib")} — {a.sampleId} · {fmtT(a.sampleTime)}
       </SectionTitle>
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
         {a.chemicalAnalysis?.map((ca) => (
@@ -788,6 +803,7 @@ function ChemAnalysis({ heat, c }) {
 }
 
 function AnalyzeDialog({ open, onClose, metrics, heats, apiKey }) {
+  const { t } = useScriptText();
   if (!metrics) return null;
 
   const issues = [];
@@ -826,7 +842,7 @@ function AnalyzeDialog({ open, onClose, metrics, heats, apiKey }) {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>
-        Analyze
+        {t("Analyze")}
         <IconButton
           onClick={onClose}
           sx={{ position: "absolute", right: 8, top: 8 }}
@@ -837,7 +853,7 @@ function AnalyzeDialog({ open, onClose, metrics, heats, apiKey }) {
 
       <DialogContent dividers>
         <Typography sx={{ color: "#ff2d55", mb: 1, fontWeight: 700 }}>
-          Muammolar:
+          {t("Muammolar:")}
         </Typography>
         {issues.length ? (
           issues.map((i, idx) => (
@@ -852,7 +868,7 @@ function AnalyzeDialog({ open, onClose, metrics, heats, apiKey }) {
         <Divider sx={{ my: 2 }} />
 
         <Typography sx={{ color: "#00e676", mb: 1, fontWeight: 700 }}>
-          Yaxshi tomonlar:
+          {t("Yaxshi tomonlar:")}
         </Typography>
         {good.length ? (
           good.map((g, idx) => (
@@ -861,7 +877,7 @@ function AnalyzeDialog({ open, onClose, metrics, heats, apiKey }) {
             </Typography>
           ))
         ) : (
-          <Typography>Yo'q</Typography>
+          <Typography>{t("Yo'q")}</Typography>
         )}
       </DialogContent>
     </Dialog>
@@ -1000,6 +1016,8 @@ const getDurMinutes = (start, stop) => {
 //  DelaysBlock
 // ══════════════════════════════════════════════════════════════════
 function DelaysBlock({ heat }) {
+  const { t } = useScriptText();
+
   if (!heat?.delays?.length) return null;
 
   // Jami kechikish vaqtini hisoblash
@@ -1011,11 +1029,14 @@ function DelaysBlock({ heat }) {
   // Tur bo'yicha guruhlab yig'indi
   const byType = heat.delays.reduce((acc, d) => {
     const info = getDelayInfo(d.delayOperation);
+
     if (!acc[d.delayOperation]) {
       acc[d.delayOperation] = { info, count: 0, totalMin: 0 };
     }
+
     acc[d.delayOperation].count++;
     acc[d.delayOperation].totalMin += getDurMinutes(d.startTime, d.stopTime);
+
     return acc;
   }, {});
 
@@ -1047,13 +1068,13 @@ function DelaysBlock({ heat }) {
           />
           <Typography
             sx={{
-              fontFamily: "'Arial', san-serif",
+              fontFamily: "'Arial', sans-serif",
               fontSize: "0.72rem",
               color: "#ffd60a",
               letterSpacing: "0.12em",
             }}
           >
-            KECHIKISHLAR
+            {t("KECHIKISHLAR")}
           </Typography>
         </Box>
 
@@ -1069,13 +1090,14 @@ function DelaysBlock({ heat }) {
         >
           <Typography
             sx={{
-              fontFamily: "'Arial', san-serif",
+              fontFamily: "'Arial', sans-serif",
               fontSize: "0.65rem",
               color: "#ffd60a",
             }}
           >
-            {heat.delays.length} ta · {Math.floor(totalMin / 60)}s{" "}
-            {totalMin % 60}d
+            {heat.delays.length} {t("ta")} · {Math.floor(totalMin / 60)}
+            {t("s")} {totalMin % 60}
+            {t("d")}
           </Typography>
         </Box>
 
@@ -1096,12 +1118,12 @@ function DelaysBlock({ heat }) {
             <Typography sx={{ fontSize: "0.7rem" }}>⚠️</Typography>
             <Typography
               sx={{
-                fontFamily: "'Arial', san-serif",
+                fontFamily: "'Arial', sans-serif",
                 fontSize: "0.62rem",
                 color: "#ff2d55",
               }}
             >
-              Kritik kechikish bor
+              {t("Kritik kechikish bor")}
             </Typography>
           </Box>
         )}
@@ -1124,24 +1146,28 @@ function DelaysBlock({ heat }) {
             }}
           >
             <Typography sx={{ fontSize: "0.75rem" }}>{info.icon}</Typography>
+
             <Box>
               <Typography
                 sx={{
-                  fontFamily: "'Arial', san-serif",
+                  fontFamily: "'Arial', sans-serif",
                   fontSize: "0.62rem",
                   color: info.color,
                 }}
               >
-                {info.label}
+                {t(info.label)}
               </Typography>
+
               <Typography
                 sx={{
-                  fontFamily: "'Arial', san-serif",
+                  fontFamily: "'Arial', sans-serif",
                   fontSize: "0.55rem",
                   color: "#8896a5",
                 }}
               >
-                {count} marta · {Math.floor(tm / 60)}s {tm % 60}d
+                {count} {t("marta")} · {Math.floor(tm / 60)}
+                {t("s")} {tm % 60}
+                {t("d")}
               </Typography>
             </Box>
           </Box>
@@ -1209,14 +1235,15 @@ function DelaysBlock({ heat }) {
                 >
                   <Typography
                     sx={{
-                      fontFamily: "'Arial', san-serif",
+                      fontFamily: "'Arial', sans-serif",
                       fontSize: "0.72rem",
                       fontWeight: 600,
                       color: info.color,
                     }}
                   >
-                    {info.label}
+                    {t(info.label)}
                   </Typography>
+
                   {isSlow && (
                     <Box
                       sx={{
@@ -1229,35 +1256,37 @@ function DelaysBlock({ heat }) {
                     >
                       <Typography
                         sx={{
-                          fontFamily: "'Arial', san-serif",
+                          fontFamily: "'Arial', sans-serif",
                           fontSize: "0.52rem",
                           color: info.color,
                         }}
                       >
-                        {info.type === "critical" ? "KRITIK" : "UZOQ"}
+                        {info.type === "critical" ? t("KRITIK") : t("UZOQ")}
                       </Typography>
                     </Box>
                   )}
                 </Box>
+
                 <Typography
                   sx={{
-                    fontFamily: "'Arial', san-serif",
+                    fontFamily: "'Arial', sans-serif",
                     fontSize: "0.62rem",
                     color: "#8896a5",
                     mb: 0.3,
                   }}
                 >
-                  {info.desc}
+                  {t(info.desc)}
                 </Typography>
+
                 {d.delayReason?.trim() && (
                   <Typography
                     sx={{
-                      fontFamily: "'Arial', san-serif",
+                      fontFamily: "'Arial', sans-serif",
                       fontSize: "0.62rem",
                       color: "#c8d8e8",
                     }}
                   >
-                    📋 Sabab: {d.delayReason}
+                    📋 {t("Sabab:")} {t(d.delayReason)}
                   </Typography>
                 )}
               </Box>
@@ -1266,7 +1295,7 @@ function DelaysBlock({ heat }) {
               <Box sx={{ textAlign: "right", flexShrink: 0 }}>
                 <Typography
                   sx={{
-                    fontFamily: "'Arial', san-serif",
+                    fontFamily: "'Arial', sans-serif",
                     fontSize: "0.75rem",
                     fontWeight: 700,
                     color:
@@ -1279,9 +1308,10 @@ function DelaysBlock({ heat }) {
                 >
                   {fmtDur(d.startTime, d.stopTime)}
                 </Typography>
+
                 <Typography
                   sx={{
-                    fontFamily: "'Arial', san-serif",
+                    fontFamily: "'Arial', sans-serif",
                     fontSize: "0.55rem",
                     color: "#8896a5",
                     mt: 0.2,
@@ -1308,14 +1338,19 @@ function DelaysBlock({ heat }) {
 
 // ─── Materiallar bloki ────────────────────────────────────────────
 function MaterialsBlock({ heat, c }) {
+  const { t } = useScriptText();
+
   if (!heat?.materialAdditions?.length) return null;
+
   const grouped = heat.materialAdditions.reduce((acc, m) => {
     acc[m.materialCode] = (acc[m.materialCode] || 0) + m.materialWgt;
     return acc;
   }, {});
+
   return (
     <Box sx={{ mb: 4 }}>
-      <SectionTitle color={c}>Material qo'shilishlari</SectionTitle>
+      <SectionTitle color={c}>{t("Material qo'shilishlari")}</SectionTitle>
+
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
         {Object.entries(grouped).map(([code, wgt]) => (
           <Box
@@ -1332,7 +1367,7 @@ function MaterialsBlock({ heat, c }) {
           >
             <Typography
               sx={{
-                fontFamily: "'Arial', san-serif",
+                fontFamily: "'Arial', sans-serif",
                 fontSize: "0.65rem",
                 color: "#8896a5",
                 mb: 0.3,
@@ -1340,9 +1375,10 @@ function MaterialsBlock({ heat, c }) {
             >
               {code}
             </Typography>
+
             <Typography
               sx={{
-                fontFamily: "'Arial', san-serif",
+                fontFamily: "'Arial', sans-serif",
                 fontSize: "0.78rem",
                 fontWeight: 700,
                 color: c,
@@ -1359,39 +1395,65 @@ function MaterialsBlock({ heat, c }) {
 }
 
 // ─── Heats jadvali sarlavhalari ───────────────────────────────────
-function HeatsTable({ heats, c, isDark, columns }) {
+function HeatsTable({ heats = [], c, isDark, columns = [] }) {
+  const { t } = useScriptText();
+
+  const renderCellValue = (col, row) => {
+    const rawValue = col.render ? col.render(row) : row[col.key];
+
+    if (rawValue === null || rawValue === undefined || rawValue === "") {
+      return "—";
+    }
+
+    if (typeof rawValue === "string" || typeof rawValue === "number") {
+      return t(String(rawValue));
+    }
+
+    return rawValue;
+  };
+
   return (
     <Paper
-      sx={{ border: `1px solid ${c}20`, borderRadius: 2, overflow: "hidden" }}
+      sx={{
+        border: `1px solid ${c}20`,
+        borderRadius: 2,
+        overflow: "hidden",
+      }}
     >
       <Table>
         <TableHead>
           <TableRow
-            sx={{ background: isDark ? "rgba(0,0,0,0.4)" : "rgba(0,0,0,0.04)" }}
+            sx={{
+              background: isDark ? "rgba(0,0,0,0.4)" : "rgba(0,0,0,0.04)",
+            }}
           >
             {columns.map((col) => (
               <TableCell
                 key={col.key}
-                sx={{ py: 1.2, borderBottom: `1px solid ${c}25` }}
+                sx={{
+                  py: 1.2,
+                  borderBottom: `1px solid ${c}25`,
+                }}
               >
                 <Typography
                   sx={{
-                    fontFamily: "'Arial', san-serif",
+                    fontFamily: "'Arial', sans-serif",
                     fontSize: "0.65rem",
                     color: "#8896a5",
                     whiteSpace: "nowrap",
                   }}
                 >
-                  {col.label}
+                  {t(col.label)}
                 </Typography>
               </TableCell>
             ))}
           </TableRow>
         </TableHead>
+
         <TableBody>
           {heats.map((h, i) => (
             <TableRow
-              key={h.heatId}
+              key={h.heatId ?? i}
               sx={{
                 "&:hover": { background: `${c}08` },
                 background:
@@ -1402,29 +1464,39 @@ function HeatsTable({ heats, c, isDark, columns }) {
                       : "rgba(0,0,0,0.01)",
               }}
             >
-              {columns.map((col) => (
-                <TableCell
-                  key={col.key}
-                  sx={{
-                    py: 1.2,
-                    borderBottom: "1px solid rgba(255,255,255,0.04)",
-                  }}
-                >
-                  <Typography
+              {columns.map((col) => {
+                const value = renderCellValue(col, h);
+                const isPrimitive =
+                  typeof value === "string" || typeof value === "number";
+
+                return (
+                  <TableCell
+                    key={col.key}
                     sx={{
-                      fontFamily: col.mono
-                        ? "'Arial', san-serif"
-                        : "'Arial', san-serif",
-                      fontSize: "0.72rem",
-                      color: col.color ?? "#c8d8e8",
-                      fontWeight: col.bold ? 700 : 400,
-                      whiteSpace: col.nowrap ? "nowrap" : "normal",
+                      py: 1.2,
+                      borderBottom: "1px solid rgba(255,255,255,0.04)",
                     }}
                   >
-                    {col.render ? col.render(h) : (h[col.key] ?? "—")}
-                  </Typography>
-                </TableCell>
-              ))}
+                    {isPrimitive ? (
+                      <Typography
+                        sx={{
+                          fontFamily: col.mono
+                            ? "'Arial', sans-serif"
+                            : "'Arial', sans-serif",
+                          fontSize: "0.72rem",
+                          color: col.color ?? "#c8d8e8",
+                          fontWeight: col.bold ? 700 : 400,
+                          whiteSpace: col.nowrap ? "nowrap" : "normal",
+                        }}
+                      >
+                        {value}
+                      </Typography>
+                    ) : (
+                      value
+                    )}
+                  </TableCell>
+                );
+              })}
             </TableRow>
           ))}
         </TableBody>
@@ -1437,8 +1509,10 @@ function HeatsTable({ heats, c, isDark, columns }) {
 //  EAF STATS TAB
 // ══════════════════════════════════════════════════════════════════
 function EAFStatsTab({ uskuna, c, isDark }) {
+  const { t } = useScriptText();
+
   const {
-    data: heats,
+    data: heats = [],
     isLoading,
     isError,
     refetch,
@@ -1450,10 +1524,15 @@ function EAFStatsTab({ uskuna, c, isDark }) {
   } = useProductionStatsWithFallback("eaf", "today");
 
   const [selectedHeatId, setSelectedHeatId] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [selectedHeatBtn, setSelectedHeatBtn] = useState(null);
+
   const prevPeriodRef = useRef(period);
   if (prevPeriodRef.current !== period) {
     prevPeriodRef.current = period;
-    if (selectedHeatId !== null) setSelectedHeatId(heats[heats.length - 1]);
+    if (selectedHeatId !== null) {
+      setSelectedHeatId(heats[heats.length - 1]?.heatId ?? null);
+    }
   }
 
   const selectedHeat =
@@ -1464,24 +1543,23 @@ function EAFStatsTab({ uskuna, c, isDark }) {
         heats.reduce((s, h) => s + (h.tappingWeight || 0), 0) / heats.length,
       )
     : 0;
+
   const avgEnergy = heats.length
     ? Math.round(
         heats.reduce((s, h) => s + (h.electricalEnergy || 0), 0) / heats.length,
       )
     : 0;
+
   const totalScrap = heats.reduce((s, h) => s + (h.totalScrap || 0), 0);
   const totalHBI = heats.reduce((s, h) => s + (h.totalHBI || 0), 0);
   const totalTapping = heats.reduce((s, h) => s + (h.tappingWeight || 0), 0);
 
-  const tempData = (selectedHeat?.temperatures || []).map((t, i) => ({
+  const tempData = (selectedHeat?.temperatures || []).map((temp, i) => ({
     i: i + 1,
-    temp: t.temperature,
-    o2: t.o2 || 0,
-    t: fmtT(t.dateTime),
+    temp: temp.temperature,
+    o2: temp.o2 || 0,
+    t: fmtT(temp.dateTime),
   }));
-
-  const [open, setOpen] = useState(false);
-  const [selectedHeatBtn, setSelectedHeatBtn] = useState(null);
 
   if (isLoading)
     return (
@@ -1489,6 +1567,7 @@ function EAFStatsTab({ uskuna, c, isDark }) {
         <CircularProgress size={36} sx={{ color: c }} />
       </Box>
     );
+
   if (isError)
     return (
       <Box sx={{ py: 6, textAlign: "center" }}>
@@ -1500,7 +1579,7 @@ function EAFStatsTab({ uskuna, c, isDark }) {
             color: "#ff2d55",
           }}
         >
-          EAF API xato
+          {t("EAF API xato")}
         </Typography>
       </Box>
     );
@@ -1536,7 +1615,7 @@ function EAFStatsTab({ uskuna, c, isDark }) {
               letterSpacing: "0.15em",
             }}
           >
-            ELEKTRDA ERITISH PECHI KO‘RSATKICHLARI
+            {t("ELEKTRDA ERITISH PECHI KO‘RSATKICHLARI")}
           </Typography>
           <Box
             sx={{
@@ -1554,10 +1633,11 @@ function EAFStatsTab({ uskuna, c, isDark }) {
                 color: c,
               }}
             >
-              {totalHeats} PLAVKA
+              {totalHeats} {t("PLAVKA")}
             </Typography>
           </Box>
         </Box>
+
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <PeriodSelector period={period} onChange={setPeriod} color={c} />
           <IconButton
@@ -1579,7 +1659,7 @@ function EAFStatsTab({ uskuna, c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="🔥"
-            label="Plavka soni"
+            label={t("Plavka soni")}
             value={totalHeats}
             color="#00d4ff"
             big
@@ -1588,7 +1668,7 @@ function EAFStatsTab({ uskuna, c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="⚖️"
-            label="Jami chiqarish"
+            label={t("Jami chiqarish")}
             value={fmtN(totalTapping / 1000, 1)}
             unit="t"
             color="#00e676"
@@ -1597,7 +1677,7 @@ function EAFStatsTab({ uskuna, c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="⚖️"
-            label="O'rt chiqarish"
+            label={t("O'rt chiqarish")}
             value={fmtN(avgTapping / 1000, 2)}
             unit="t"
             color="#00e676"
@@ -1606,7 +1686,7 @@ function EAFStatsTab({ uskuna, c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="⚡"
-            label="O'rt elektr"
+            label={t("O'rt elektr")}
             value={fmtN(avgEnergy / 1000, 1)}
             unit="MWh"
             color="#ffd60a"
@@ -1615,7 +1695,7 @@ function EAFStatsTab({ uskuna, c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="🏗️"
-            label="Jami Lom"
+            label={t("Jami Lom")}
             value={fmtN(totalScrap / 1000, 1)}
             unit="t"
             color="#ff6b1a"
@@ -1624,7 +1704,7 @@ function EAFStatsTab({ uskuna, c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="🔩"
-            label="Jami METALL"
+            label={t("Jami METALL")}
             value={fmtN(totalHBI / 1000, 1)}
             unit="t"
             color="#a78bfa"
@@ -1657,15 +1737,17 @@ function EAFStatsTab({ uskuna, c, isDark }) {
                   letterSpacing: "0.12em",
                 }}
               >
-                PLAVKANI TANLANG
+                {t("PLAVKANI TANLANG")}
               </Typography>
             </Box>
+
             <HeatSelector
               heats={heats}
               selectedId={selectedHeatId ?? selectedHeat?.heatId}
               onChange={(id) => setSelectedHeatId(Number(id))}
               color={c}
             />
+
             <Typography
               sx={{
                 fontFamily: "'Arial',san-serif",
@@ -1677,6 +1759,7 @@ function EAFStatsTab({ uskuna, c, isDark }) {
               {fmtDur(selectedHeat.startTime, selectedHeat.stopTime)}
             </Typography>
           </Box>
+
           <Grid container spacing={2}>
             <Grid item xs={12} md={4}>
               <Paper
@@ -1688,57 +1771,58 @@ function EAFStatsTab({ uskuna, c, isDark }) {
                 }}
               >
                 <InfoRow
-                  label="Suyuq Metall"
+                  label={t("Suyuq Metall")}
                   value={`${fmtN((selectedHeat.tappingWeight || 0) / 1000, 2)} t`}
                   color="#00e676"
                 />
                 <InfoRow
-                  label="Elektr energiya"
+                  label={t("Elektr energiya")}
                   value={`${fmtN(selectedHeat.electricalEnergy / 1000, 1)} MWh`}
                   color="#ffd60a"
                 />
                 <InfoRow
-                  label="Kislorod (O₂)"
+                  label={t("Kislorod (O₂)")}
                   value={`${fmtN(selectedHeat.injectedO2, 0)} m³`}
                   color="#00d4ff"
                 />
                 <InfoRow
-                  label="Uglerod"
+                  label={t("Uglerod")}
                   value={`${fmtN(selectedHeat.injectedCarbon, 0)} kg`}
                   color="#ff9500"
                 />
                 <InfoRow
-                  label="Yoqilg'i"
+                  label={t("Yoqilg'i")}
                   value={`${fmtN(selectedHeat.injectedFuel, 0)} kg`}
                   color="#a78bfa"
                 />
                 <InfoRow
-                  label="O'rt quvvat"
+                  label={t("O'rt quvvat")}
                   value={`${fmtN((selectedHeat.averagePower || 0) / 1000, 0)} MW`}
                   color="#ffd60a"
                 />
                 <InfoRow
-                  label="Quvvat vaqti"
+                  label={t("Quvvat vaqti")}
                   value={`${Math.floor((selectedHeat.powerOnTime || 0) / 60)} min`}
                   color="#00e676"
                 />
                 <InfoRow
-                  label="Lom"
+                  label={t("Lom")}
                   value={`${fmtN((selectedHeat.totalScrap || 0) / 1000, 1)} t`}
                   color="#8896a5"
                 />
                 <InfoRow
-                  label="METALL"
+                  label={t("METALL")}
                   value={`${fmtN((selectedHeat.totalHBI || 0) / 1000, 1)} t`}
                   color="#8896a5"
                 />
                 <InfoRow
-                  label="Smena"
-                  value={selectedHeat.shift || "—"}
+                  label={t("Smena")}
+                  value={t(selectedHeat.shift || "—")}
                   color="#8896a5"
                 />
               </Paper>
             </Grid>
+
             <Grid item xs={12} md={8}>
               <Paper
                 sx={{
@@ -1757,8 +1841,9 @@ function EAFStatsTab({ uskuna, c, isDark }) {
                     letterSpacing: "0.08em",
                   }}
                 >
-                  HARORAT DINAMIKASI
+                  {t("HARORAT DINAMIKASI")}
                 </Typography>
+
                 <TempChart
                   data={tempData}
                   c={c}
@@ -1784,7 +1869,10 @@ function EAFStatsTab({ uskuna, c, isDark }) {
 
       {/* Jadval */}
       <Box>
-        <SectionTitle color={c}>{periodLabel} — barcha plavkalar</SectionTitle>
+        <SectionTitle color={c}>
+          {t(periodLabel)} — {t("barcha plavkalar")}
+        </SectionTitle>
+
         <HeatsTable
           heats={heats}
           c={c}
@@ -1792,20 +1880,21 @@ function EAFStatsTab({ uskuna, c, isDark }) {
           columns={[
             {
               key: "heatId",
-              label: "Plavka ID",
+              label: t("Plavka ID"),
               bold: true,
               color: c,
               render: (h) => `#${h.heatId}`,
             },
             {
               key: "steelGradeName",
-              label: "Po'lat",
+              label: t("Po'lat"),
               mono: true,
               color: "#c8d8e8",
+              render: (h) => t(h.steelGradeName || "—"),
             },
             {
               key: "startTime",
-              label: "Boshlanish",
+              label: t("Boshlanish"),
               mono: true,
               color: "#8896a5",
               nowrap: true,
@@ -1813,21 +1902,21 @@ function EAFStatsTab({ uskuna, c, isDark }) {
             },
             {
               key: "dur",
-              label: "Davomiylik",
+              label: t("Davomiylik"),
               mono: true,
               color: "#8896a5",
               render: (h) => fmtDur(h.startTime, h.stopTime),
             },
             {
               key: "tappingWeight",
-              label: "Suyuq Metall",
+              label: t("Suyuq Metall"),
               bold: true,
               color: "#00e676",
               render: (h) => `${fmtN((h.tappingWeight || 0) / 1000, 2)} t`,
             },
             {
               key: "electricalEnergy",
-              label: "Elektr",
+              label: t("Elektr"),
               mono: true,
               color: "#ffd60a",
               render: (h) => `${fmtN((h.electricalEnergy || 0) / 1000, 1)} MWh`,
@@ -1841,7 +1930,7 @@ function EAFStatsTab({ uskuna, c, isDark }) {
             },
             {
               key: "yield",
-              label: "Samaradorlik",
+              label: t("Samaradorlik"),
               bold: true,
               render: (h) => {
                 const scrap = h.totalScrap || 0;
@@ -1850,16 +1939,13 @@ function EAFStatsTab({ uskuna, c, isDark }) {
 
                 const val = scrap + hbi > 0 ? output / (scrap + hbi) : 0;
 
-                let color = "#ff2d55"; // red
-                if (val > 0.9)
-                  color = "#00ff9d"; // green
-                else if (val > 0.8) color = "#ffd60a"; // yellow
+                let color = "#ff2d55";
+                if (val > 0.9) color = "#00ff9d";
+                else if (val > 0.8) color = "#ffd60a";
 
                 return <span style={{ color }}>{fmtN(val * 100, 1)} %</span>;
               },
             },
-
-            // ⚡ 2. ENERGY PER TON
             {
               key: "energyPerTon",
               label: "kWh/t",
@@ -1869,7 +1955,7 @@ function EAFStatsTab({ uskuna, c, isDark }) {
                 const output = h.tappingWeight || 0;
 
                 const val = output > 0 ? energy / (output / 1000) : 0;
-                let color = "#00ff9d"; // green
+                let color = "#00ff9d";
                 if (val > 500) color = "#ff2d55";
                 else if (val > 400) color = "#ffd60a";
 
@@ -1886,11 +1972,9 @@ function EAFStatsTab({ uskuna, c, isDark }) {
                 );
               },
             },
-
-            // 🔥 3. SCRAP / HBI
             {
               key: "ratio",
-              label: "LOM/METALL",
+              label: t("LOM/METALL"),
               mono: true,
               render: (h) => {
                 const scrap = h.totalScrap || 0;
@@ -1898,34 +1982,39 @@ function EAFStatsTab({ uskuna, c, isDark }) {
 
                 const val = hbi > 0 ? scrap / hbi : 0;
 
-                let color = "#ff2d55"; // red
+                let color = "#ff2d55";
                 if (val >= 2 && val <= 4) color = "#00ff9d";
-                else if ((val >= 1 && val < 2) || (val > 4 && val <= 6))
+                else if ((val >= 1 && val < 2) || (val > 4 && val <= 6)) {
                   color = "#ffd60a";
+                }
 
                 return <span style={{ color }}>{fmtN(val, 2)}</span>;
               },
             },
           ]}
         />
+
         <Dialog
           open={open}
           onClose={() => setOpen(false)}
           maxWidth="sm"
           fullWidth
         >
-          <DialogTitle>🔍 Heat #{selectedHeatBtn?.heatId}</DialogTitle>
+          <DialogTitle>
+            🔍 {t("Plavka")} #{selectedHeatBtn?.heatId}
+          </DialogTitle>
 
           <DialogContent>
             {selectedHeatBtn && (
               <>
                 <Typography>
-                  ⚡ Energy: {selectedHeatBtn.electricalEnergy} kWh
+                  ⚡ {t("Elektr energiyasi")}:{" "}
+                  {selectedHeatBtn.electricalEnergy} kWh
                 </Typography>
 
                 <Typography>
-                  🏭 Output: {(selectedHeatBtn.tappingWeight / 1000).toFixed(1)}{" "}
-                  t
+                  🏭 {t("Mahsulot chiqishi")}:{" "}
+                  {(selectedHeatBtn.tappingWeight / 1000).toFixed(1)} t
                 </Typography>
 
                 {analyzeHeat(selectedHeatBtn).map((item, i) => (
@@ -1935,22 +2024,24 @@ function EAFStatsTab({ uskuna, c, isDark }) {
                     p={1.5}
                     sx={{ border: "1px solid #333", borderRadius: 2 }}
                   >
-                    <Typography fontWeight={700}>{item.title}</Typography>
+                    <Typography fontWeight={700}>{t(item.title)}</Typography>
 
-                    <Typography fontSize="0.8rem">📊 {item.value}</Typography>
-
-                    <Typography fontSize="0.8rem" color="#ff2d55">
-                      ❌ {item.problem}
+                    <Typography fontSize="0.8rem">
+                      📊 {t("Qiymat")}: {item.value}
                     </Typography>
 
-                    {item.reason?.map((r, idx) => (
+                    <Typography fontSize="0.8rem" color="#ff2d55">
+                      ❌ {t(item.problem)}
+                    </Typography>
+
+                    {item.reason?.map((reasonItem, idx) => (
                       <Typography key={idx} fontSize="0.75rem">
-                        • {r}
+                        • {t(reasonItem)}
                       </Typography>
                     ))}
 
                     <Typography fontSize="0.8rem" color="#00ff9d">
-                      💡 {item.solution}
+                      💡 {t(item.solution)}
                     </Typography>
                   </Box>
                 ))}
@@ -2071,41 +2162,46 @@ function EventsTimeline({ events }) {
 }
 function AnalysisList({ heat }) {
   const reasons = analyzeHeatLRF(heat);
+  const { t } = useScriptText();
 
   return (
     <div>
       {reasons.map((r, i) => (
         <div key={i} style={{ marginBottom: 6 }}>
-          {r}
+          {t(r)}
         </div>
       ))}
     </div>
   );
 }
 function HeatDetailsModal({ heat, onClose }) {
+  const { t } = useScriptText();
+
   if (!heat) return null;
 
   return (
     <Dialog open={!!heat} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>Heat #{heat.heatId} — Batafsil tahlil</DialogTitle>
+      <DialogTitle>
+        {t("Heat")} #{heat.heatId} — {t("Batafsil tahlil")}
+      </DialogTitle>
 
       <DialogContent>
         <Grid container spacing={3}>
           {/* ANALYSIS */}
           <Grid item xs={12}>
-            <Typography variant="h6">🧠 Tahlil</Typography>
+            <Typography variant="h6">🧠 {t("Tahlil")}</Typography>
             <AnalysisList heat={heat} />
           </Grid>
 
           {/* TEMPERATURE */}
           <Grid item xs={12}>
-            <Typography variant="h6">🌡 Temperatura grafigi</Typography>
+            <Typography variant="h6">🌡 {t("Temperatura grafigi")}</Typography>
             <TempChartLRF data={heat.temperatures} />
           </Grid>
 
           {/* EVENTS */}
           <Grid item xs={12}>
-            <Typography variant="h6">⏱ Voqealar (Timeline)</Typography>
+            <Typography variant="h6">⏱ {t("Voqealar (Timeline)")}</Typography>
             <EventsTimeline events={heat.lrfEvents} />
           </Grid>
         </Grid>
@@ -2159,8 +2255,10 @@ function getStatusColor(status) {
   return "#00e676";
 }
 function LRFStatsTab({ c, isDark }) {
+  const { t } = useScriptText();
+
   const {
-    data: heats,
+    data: heats = [],
     isLoading,
     isError,
     refetch,
@@ -2170,39 +2268,44 @@ function LRFStatsTab({ c, isDark }) {
     periodLabel,
     totalHeats,
   } = useProductionStatsWithFallback("lrf", "today");
+
   const [selectedHeatId, setSelectedHeatId] = useState(null);
   const prevPeriodRef = useRef(period);
   const [selectedHeatLrf, setSelectedHeatLrf] = useState(null);
+
   if (prevPeriodRef.current !== period) {
     prevPeriodRef.current = period;
     if (selectedHeatId !== null) setSelectedHeatId(heats.length - 1);
   }
+
   const selectedHeat =
     heats.find((h) => h.heatId === selectedHeatId) ?? heats[heats.length - 1];
-  heats.find((h) => h.heatId === selectedHeatId) ?? heats[heats.length - 1];
 
   const avgFinal = heats.length
     ? Math.round(
         heats.reduce((s, h) => s + (h.finalSteelWeight || 0), 0) / heats.length,
       )
     : 0;
+
   const avgEnergy = heats.length
     ? Math.round(
         heats.reduce((s, h) => s + (h.electricalEnergy || 0), 0) / heats.length,
       )
     : 0;
+
   const avgAr = heats.length
     ? (
         heats.reduce((s, h) => s + (h.totalArConsumption || 0), 0) /
         heats.length
       ).toFixed(1)
     : 0;
+
   const totalFinal = heats.reduce((s, h) => s + (h.finalSteelWeight || 0), 0);
 
-  const tempData = (selectedHeat?.temperatures || []).map((t, i) => ({
+  const tempData = (selectedHeat?.temperatures || []).map((temp, i) => ({
     i: i + 1,
-    temp: t.temperature,
-    t: fmtT(t.dateTime),
+    temp: temp.temperature,
+    t: fmtT(temp.dateTime),
   }));
 
   if (isLoading)
@@ -2211,6 +2314,7 @@ function LRFStatsTab({ c, isDark }) {
         <CircularProgress size={36} sx={{ color: c }} />
       </Box>
     );
+
   if (isError)
     return (
       <Box sx={{ py: 6, textAlign: "center" }}>
@@ -2222,7 +2326,7 @@ function LRFStatsTab({ c, isDark }) {
             color: "#ff2d55",
           }}
         >
-          LRF API xato
+          {t("LRF API xato")}
         </Typography>
       </Box>
     );
@@ -2257,7 +2361,7 @@ function LRFStatsTab({ c, isDark }) {
               letterSpacing: "0.15em",
             }}
           >
-            Kovsh Tozalash Pechi HISOBOTI
+            {t("KOVSH TOZALASH PECHI HISOBOTI")}
           </Typography>
           <Box
             sx={{
@@ -2275,10 +2379,11 @@ function LRFStatsTab({ c, isDark }) {
                 color: c,
               }}
             >
-              {totalHeats} Plavka
+              {totalHeats} {t("Plavka")}
             </Typography>
           </Box>
         </Box>
+
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <PeriodSelector period={period} onChange={setPeriod} color={c} />
           <IconButton
@@ -2299,7 +2404,7 @@ function LRFStatsTab({ c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="🔥"
-            label="Plavka soni"
+            label={t("Plavka soni")}
             value={totalHeats}
             color="#00d4ff"
             big
@@ -2308,7 +2413,7 @@ function LRFStatsTab({ c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="⚖️"
-            label="Jami yakuniy"
+            label={t("Jami yakuniy")}
             value={fmtN(totalFinal / 1000, 1)}
             unit="t"
             color="#00e676"
@@ -2317,7 +2422,7 @@ function LRFStatsTab({ c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="⚖️"
-            label="O'rt yakuniy"
+            label={t("O'rt yakuniy")}
             value={fmtN(avgFinal / 1000, 2)}
             unit="t"
             color="#00e676"
@@ -2326,7 +2431,7 @@ function LRFStatsTab({ c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="⚡"
-            label="O'rt elektr"
+            label={t("O'rt elektr")}
             value={fmtN(avgEnergy / 1000, 1)}
             unit="MWh"
             color="#ffd60a"
@@ -2335,7 +2440,7 @@ function LRFStatsTab({ c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="💨"
-            label="O'rt Ar sarfi"
+            label={t("O'rt Ar sarfi")}
             value={avgAr}
             unit="m³"
             color="#a78bfa"
@@ -2344,7 +2449,7 @@ function LRFStatsTab({ c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="🪣"
-            label="Kovsh"
+            label={t("Kovsh")}
             value={selectedHeat?.ladleId || "—"}
             color="#ff6b1a"
           />
@@ -2374,9 +2479,10 @@ function LRFStatsTab({ c, isDark }) {
                   letterSpacing: "0.12em",
                 }}
               >
-                PLAVKANI TANLANG
+                {t("PLAVKANI TANLANG")}
               </Typography>
             </Box>
+
             <HeatSelector
               heats={heats}
               selectedId={selectedHeatId ?? selectedHeat?.heatId}
@@ -2384,9 +2490,11 @@ function LRFStatsTab({ c, isDark }) {
               color={c}
             />
           </Box>
+
           <SectionTitle color={c}>
-            #{selectedHeat.heatId} — {selectedHeat.steelGradeName}
+            #{selectedHeat.heatId} — {t(selectedHeat.steelGradeName || "—")}
           </SectionTitle>
+
           <Grid container spacing={2}>
             <Grid item xs={12} md={4}>
               <Paper
@@ -2398,47 +2506,48 @@ function LRFStatsTab({ c, isDark }) {
                 }}
               >
                 <InfoRow
-                  label="Boshlang'ich og'irlik"
+                  label={t("Boshlang'ich og'irlik")}
                   value={`${fmtN((selectedHeat.startSteelWeight || 0) / 1000, 2)} t`}
                   color="#8896a5"
                 />
                 <InfoRow
-                  label="Yakuniy og'irlik"
+                  label={t("Yakuniy og'irlik")}
                   value={`${fmtN((selectedHeat.finalSteelWeight || 0) / 1000, 2)} t`}
                   color="#00e676"
                 />
                 <InfoRow
-                  label="Boshlang'ich shlak"
+                  label={t("Boshlang'ich shlak")}
                   value={`${fmtN((selectedHeat.startSlagWeight || 0) / 1000, 2)} t`}
                   color="#8896a5"
                 />
                 <InfoRow
-                  label="Yakuniy shlak"
+                  label={t("Yakuniy shlak")}
                   value={`${fmtN((selectedHeat.finalSlagWeight || 0) / 1000, 2)} t`}
                   color="#ff9500"
                 />
                 <InfoRow
-                  label="Elektr energiya"
+                  label={t("Elektr energiya")}
                   value={`${fmtN(selectedHeat.electricalEnergy / 1000, 1)} MWh`}
                   color="#ffd60a"
                 />
                 <InfoRow
-                  label="Ar sarfi"
+                  label={t("Ar sarfi")}
                   value={`${fmtN(selectedHeat.totalArConsumption, 1)} m³`}
                   color="#a78bfa"
                 />
                 <InfoRow
-                  label="Davomiylik"
+                  label={t("Davomiylik")}
                   value={fmtDur(selectedHeat.startTime, selectedHeat.stopTime)}
                   color="#00d4ff"
                 />
                 <InfoRow
-                  label="Smena"
-                  value={selectedHeat.shift || "—"}
+                  label={t("Smena")}
+                  value={t(selectedHeat.shift || "—")}
                   color="#8896a5"
                 />
               </Paper>
             </Grid>
+
             <Grid item xs={12} md={8}>
               <Paper
                 sx={{
@@ -2457,8 +2566,9 @@ function LRFStatsTab({ c, isDark }) {
                     letterSpacing: "0.08em",
                   }}
                 >
-                  HARORAT DINAMIKASI
+                  {t("HARORAT DINAMIKASI")}
                 </Typography>
+
                 <TempChart data={tempData} c={c} isDark={isDark} />
               </Paper>
             </Grid>
@@ -2470,7 +2580,10 @@ function LRFStatsTab({ c, isDark }) {
       <ChemAnalysis heat={selectedHeat} c={c} />
 
       <Box>
-        <SectionTitle color={c}>{periodLabel} — barcha plavkalar</SectionTitle>
+        <SectionTitle color={c}>
+          {t(periodLabel)} — {t("barcha plavkalar")}
+        </SectionTitle>
+
         <HeatsTable
           heats={heats}
           c={c}
@@ -2478,20 +2591,21 @@ function LRFStatsTab({ c, isDark }) {
           columns={[
             {
               key: "heatId",
-              label: "Plavka ID",
+              label: t("Plavka ID"),
               bold: true,
               color: c,
               render: (h) => `#${h.heatId}`,
             },
             {
               key: "steelGradeName",
-              label: "Po'lat",
+              label: t("Po'lat"),
               mono: true,
               color: "#c8d8e8",
+              render: (h) => t(h.steelGradeName || "—"),
             },
             {
               key: "startTime",
-              label: "Boshlanish",
+              label: t("Boshlanish"),
               mono: true,
               color: "#8896a5",
               nowrap: true,
@@ -2499,44 +2613,37 @@ function LRFStatsTab({ c, isDark }) {
             },
             {
               key: "dur",
-              label: "Davomiylik",
+              label: t("Davomiylik"),
               mono: true,
               color: "#8896a5",
               render: (h) => fmtDur(h.startTime, h.stopTime),
             },
-            // {
-            //   key: "startSteelWeight",
-            //   label: "Boshlang‘ich og‘irlik",
-            //   mono: true,
-            //   color: "#90caf9",
-            //   render: (h) => `${fmtN((h.startSteelWeight || 0) / 1000, 2)} t`,
-            // },
-            // {
-            //   key: "finalSteelWeight",
-            //   label: "Yakuniy og'irlik",
-            //   bold: true,
-            //   color: "#00e676",
-            //   render: (h) => `${fmtN((h.finalSteelWeight || 0) / 1000, 2)} t`,
-            // },
             {
               key: "deltaWeight",
-              label: "Δ Og‘irlik",
+              label: t("Δ Og‘irlik"),
               mono: true,
               color: "#4dd0e1",
               render: (h) =>
-                `${fmtN(((h.finalSteelWeight || 0) - (h.startSteelWeight || 0)) / 1000, 2)} t`,
+                `${fmtN(
+                  ((h.finalSteelWeight || 0) - (h.startSteelWeight || 0)) /
+                    1000,
+                  2,
+                )} t`,
             },
             {
               key: "slagDelta",
-              label: "Δ Shlak",
+              label: t("Δ Shlak"),
               mono: true,
               color: "#ff8a65",
               render: (h) =>
-                `${fmtN(((h.finalSlagWeight || 0) - (h.startSlagWeight || 0)) / 1000, 2)} t`,
+                `${fmtN(
+                  ((h.finalSlagWeight || 0) - (h.startSlagWeight || 0)) / 1000,
+                  2,
+                )} t`,
             },
             {
               key: "electricalEnergy",
-              label: "Elektr sarfi",
+              label: t("Elektr sarfi"),
               mono: true,
               color: "#ffd60a",
               render: (h) => `${fmtN((h.electricalEnergy || 0) / 1000, 1)} MWh`,
@@ -2553,7 +2660,7 @@ function LRFStatsTab({ c, isDark }) {
             },
             {
               key: "powerRatio",
-              label: "Pech Ishlagan %",
+              label: t("Pech Ishlagan %"),
               mono: true,
               color: "#81c784",
               render: (h) => {
@@ -2566,7 +2673,7 @@ function LRFStatsTab({ c, isDark }) {
             },
             {
               key: "status",
-              label: "Jarayon holati",
+              label: t("Jarayon holati"),
               bold: true,
               render: (h) => {
                 const status = getStatus(h);
@@ -2580,20 +2687,21 @@ function LRFStatsTab({ c, isDark }) {
                     }}
                     onClick={() => setSelectedHeatLrf(h)}
                   >
-                    {status}
+                    {t(status)}
                   </span>
                 );
               },
             },
             {
               key: "totalArConsumption",
-              label: "Argon sarfi",
+              label: t("Argon sarfi"),
               mono: true,
               color: "#a78bfa",
               render: (h) => `${fmtN(h.totalArConsumption, 1)} m³`,
             },
           ]}
         />
+
         <HeatDetailsModal
           heat={selectedHeatLrf}
           onClose={() => setSelectedHeatLrf(null)}
@@ -2700,12 +2808,13 @@ function formatEvent(code) {
   return map[code] || code;
 }
 function AnalyzeDialogTSC({ open, onClose, heat }) {
+  const { t } = useScriptText();
   const { issues, good } = analyzeTSCAdvanced(heat);
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>
-        Analyze #{heat.heatId}
+        {t("Tahlil")} #{heat.heatId}
         <IconButton
           onClick={onClose}
           sx={{ position: "absolute", right: 8, top: 8 }}
@@ -2713,37 +2822,47 @@ function AnalyzeDialogTSC({ open, onClose, heat }) {
           <CloseIcon />
         </IconButton>
       </DialogTitle>
+
       <DialogContent>
         <Typography sx={{ color: "#ff2d55", mb: 1, fontWeight: 700 }}>
-          Muammolar:
+          {t("Muammolar")}:
         </Typography>
+
         {issues.length ? (
-          issues.map((i, idx) => (
+          issues.map((item, idx) => (
             <Typography key={idx} sx={{ mb: 0.5 }}>
-              {i}
+              {t(item)}
             </Typography>
           ))
         ) : (
-          <Typography>Yo‘q</Typography>
+          <Typography>{t("Yo‘q")}</Typography>
         )}
 
         <Divider sx={{ my: 2 }} />
 
         <Typography sx={{ color: "#00e676", mb: 1, fontWeight: 700 }}>
-          Yaxshi tomonlar:
+          {t("Yaxshi tomonlar")}:
         </Typography>
-        {good.map((g, idx) => (
-          <Typography key={idx} sx={{ mb: 0.5 }}>
-            {g}
-          </Typography>
-        ))}
+
+        {good.length ? (
+          good.map((item, idx) => (
+            <Typography key={idx} sx={{ mb: 0.5 }}>
+              {t(item)}
+            </Typography>
+          ))
+        ) : (
+          <Typography>{t("Yo‘q")}</Typography>
+        )}
       </DialogContent>
     </Dialog>
   );
 }
+
 function TSCStatsTab({ c, isDark }) {
+  const { t } = useScriptText();
+
   const {
-    data: heats,
+    data: heats = [],
     isLoading,
     isError,
     refetch,
@@ -2753,39 +2872,45 @@ function TSCStatsTab({ c, isDark }) {
     periodLabel,
     totalHeats,
   } = useProductionStatsWithFallback("tsc", "today");
+
   const [openAnalyze, setOpenAnalyze] = useState(false);
   const [selectedHeatAnalyze, setSelectedHeatAnalyze] = useState(null);
-
   const [selectedHeatId, setSelectedHeatId] = useState(null);
+
   const prevPeriodRef = useRef(period);
   if (prevPeriodRef.current !== period) {
     prevPeriodRef.current = period;
     if (selectedHeatId !== null) setSelectedHeatId(heats.length - 1);
   }
+
   const selectedHeat =
     heats.find((h) => h.heatId === selectedHeatId) ?? heats[heats.length - 1];
+
   const lastStrand = selectedHeat?.tscStrands?.[0];
+
   const totalSlabs = heats.reduce(
     (s, h) =>
       s + (h.tscProducts?.filter((p) => p.productType === 1).length || 0),
     0,
   );
+
   const avgSpeed = heats.length
     ? (
         heats.reduce((s, h) => s + (h.tscStrands?.[0]?.castSpeedAvg || 0), 0) /
         heats.length
       ).toFixed(2)
     : 0;
+
   const totalLength = heats.reduce(
     (s, h) => s + (h.tscStrands?.[0]?.castLength || 0),
     0,
   );
 
-  const tempData = (selectedHeat?.temperatures || []).map((t, i) => ({
+  const tempData = (selectedHeat?.temperatures || []).map((temp, i) => ({
     i: i + 1,
-    temp: t.temperature,
+    temp: temp.temperature,
     liq: selectedHeat?.liquidusTemperature,
-    t: fmtT(t.dateTime),
+    t: fmtT(temp.dateTime),
   }));
 
   if (isLoading)
@@ -2794,6 +2919,7 @@ function TSCStatsTab({ c, isDark }) {
         <CircularProgress size={36} sx={{ color: c }} />
       </Box>
     );
+
   if (isError)
     return (
       <Box sx={{ py: 6, textAlign: "center" }}>
@@ -2805,7 +2931,7 @@ function TSCStatsTab({ c, isDark }) {
             color: "#ff2d55",
           }}
         >
-          TSC API xato
+          {t("TSC API xato")}
         </Typography>
       </Box>
     );
@@ -2840,7 +2966,7 @@ function TSCStatsTab({ c, isDark }) {
               letterSpacing: "0.15em",
             }}
           >
-            UZLUKSIZ QUYISH MASHINASI HISOBOTI
+            {t("UZLUKSIZ QUYISH MASHINASI HISOBOTI")}
           </Typography>
           <Box
             sx={{
@@ -2858,10 +2984,11 @@ function TSCStatsTab({ c, isDark }) {
                 color: c,
               }}
             >
-              {totalHeats} PLAVKA
+              {totalHeats} {t("PLAVKA")}
             </Typography>
           </Box>
         </Box>
+
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <PeriodSelector period={period} onChange={setPeriod} color={c} />
           <IconButton
@@ -2882,7 +3009,7 @@ function TSCStatsTab({ c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="🔥"
-            label="Plavka soni"
+            label={t("Plavka soni")}
             value={totalHeats}
             color="#00d4ff"
             big
@@ -2891,7 +3018,7 @@ function TSCStatsTab({ c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="📦"
-            label="Jami slab"
+            label={t("Jami slab")}
             value={totalSlabs}
             color="#00e676"
           />
@@ -2899,7 +3026,7 @@ function TSCStatsTab({ c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="⚡"
-            label="O'rt tezlik"
+            label={t("O'rt tezlik")}
             value={avgSpeed}
             unit="m/min"
             color="#ffd60a"
@@ -2908,7 +3035,7 @@ function TSCStatsTab({ c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="📏"
-            label="Jami uzunlik"
+            label={t("Jami uzunlik")}
             value={fmtN(totalLength / 1000, 1)}
             unit="m"
             color="#a78bfa"
@@ -2917,7 +3044,7 @@ function TSCStatsTab({ c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="🪣"
-            label="Tundish"
+            label={t("Tundish")}
             value={selectedHeat?.tundishId || "—"}
             color="#ff6b1a"
           />
@@ -2925,7 +3052,7 @@ function TSCStatsTab({ c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="🌡️"
-            label="Likvidus"
+            label={t("Likvidus")}
             value={selectedHeat?.liquidusTemperature || "—"}
             unit="°C"
             color="#ff2d55"
@@ -2956,9 +3083,10 @@ function TSCStatsTab({ c, isDark }) {
                   letterSpacing: "0.12em",
                 }}
               >
-                PLAVKANI TANLANG
+                {t("PLAVKANI TANLANG")}
               </Typography>
             </Box>
+
             <HeatSelector
               heats={heats}
               selectedId={selectedHeatId ?? selectedHeat?.heatId}
@@ -2966,9 +3094,11 @@ function TSCStatsTab({ c, isDark }) {
               color={c}
             />
           </Box>
+
           <SectionTitle color={c}>
-            #{selectedHeat.heatId} — {selectedHeat.steelGradeName}
+            #{selectedHeat.heatId} — {t(selectedHeat.steelGradeName || "—")}
           </SectionTitle>
+
           <Grid container spacing={2}>
             <Grid item xs={12} md={4}>
               <Paper
@@ -2980,64 +3110,66 @@ function TSCStatsTab({ c, isDark }) {
                 }}
               >
                 <InfoRow
-                  label="Boshlang'ich og'irlik"
+                  label={t("Boshlang'ich og'irlik")}
                   value={`${fmtN((selectedHeat.startSteelWeight || 0) / 1000, 1)} t`}
                   color="#8896a5"
                 />
                 <InfoRow
-                  label="Tundish"
+                  label={t("Tundish")}
                   value={selectedHeat.tundishId || "—"}
                   color={c}
                 />
                 <InfoRow
-                  label="Tundish ishlagan soni"
-                  value={`${selectedHeat.tundishLife || "—"} quyish`}
+                  label={t("Tundish ishlagan soni")}
+                  value={`${selectedHeat.tundishLife || "—"} ${t("quyish")}`}
                   color="#ff9500"
                 />
                 <InfoRow
-                  label="Likvidus harorat"
+                  label={t("Likvidus harorat")}
                   value={`${selectedHeat.liquidusTemperature || "—"} °C`}
                   color="#ff2d55"
                 />
                 <InfoRow
-                  label="Davomiylik"
+                  label={t("Davomiylik")}
                   value={fmtDur(
                     selectedHeat.ladleOpeningDate,
                     selectedHeat.ladleCloseDate,
                   )}
                   color="#00d4ff"
                 />
+
                 {lastStrand && (
                   <>
                     <InfoRow
-                      label="Profil"
-                      value={lastStrand.profileName}
+                      label={t("Profil")}
+                      value={t(lastStrand.profileName || "—")}
                       color={c}
                     />
                     <InfoRow
-                      label="Quyish tezligi"
+                      label={t("Quyish tezligi")}
                       value={`${fmtN(lastStrand.castSpeedAvg, 2)} m/min`}
                       color="#ffd60a"
                     />
                     <InfoRow
-                      label="Uzunlik"
+                      label={t("Uzunlik")}
                       value={`${fmtN(lastStrand.castLength / 1000, 1)} m`}
                       color="#00e676"
                     />
                     <InfoRow
-                      label="Qolip"
-                      value={lastStrand.mouldId}
+                      label={t("Qolip")}
+                      value={lastStrand.mouldId || "—"}
                       color="#a78bfa"
                     />
                     <InfoRow
-                      label="Qolipga quyilgan soni"
-                      value={`${lastStrand.mouldLife} quyish`}
+                      label={t("Qolipga quyilgan soni")}
+                      value={`${lastStrand.mouldLife} ${t("quyish")}`}
                       color="#ff9500"
                     />
                   </>
                 )}
               </Paper>
             </Grid>
+
             <Grid item xs={12} md={8}>
               <Paper
                 sx={{
@@ -3056,8 +3188,10 @@ function TSCStatsTab({ c, isDark }) {
                     letterSpacing: "0.08em",
                   }}
                 >
-                  HARORAT vs LIKVIDUS ({selectedHeat.liquidusTemperature}°C)
+                  {t("HARORAT vs LIKVIDUS")} ({selectedHeat.liquidusTemperature}
+                  °C)
                 </Typography>
+
                 <TempChart
                   data={tempData}
                   c={c}
@@ -3066,7 +3200,7 @@ function TSCStatsTab({ c, isDark }) {
                     {
                       key: "liq",
                       color: "#ff2d55",
-                      name: "Likvidus °C",
+                      name: t("Likvidus °C"),
                       width: 1.5,
                       dash: "8,4",
                     },
@@ -3080,15 +3214,15 @@ function TSCStatsTab({ c, isDark }) {
 
       <ChemAnalysis heat={selectedHeat} c={c} />
 
-      {/* Slab mahsulotlar */}
       {selectedHeat?.tscProducts?.filter((p) => p.productType === 1).length >
         0 && (
         <Box sx={{ mb: 4 }}>
           <SectionTitle color={c}>
-            Slab mahsulotlar (
+            {t("Slab mahsulotlar")} (
             {selectedHeat.tscProducts.filter((p) => p.productType === 1).length}{" "}
-            ta)
+            {t("ta")})
           </SectionTitle>
+
           <Paper
             sx={{
               border: `1px solid ${c}20`,
@@ -3100,14 +3234,14 @@ function TSCStatsTab({ c, isDark }) {
               <TableHead>
                 <TableRow sx={{ background: "rgba(0,0,0,0.4)" }}>
                   {[
-                    "Slab ID",
-                    "Uzunlik",
-                    "Qalinlik",
-                    "Og'irlik",
-                    "Kesish vaqti",
-                  ].map((h) => (
+                    t("Slab ID"),
+                    t("Uzunlik"),
+                    t("Qalinlik"),
+                    t("Og'irlik"),
+                    t("Kesish vaqti"),
+                  ].map((head) => (
                     <TableCell
-                      key={h}
+                      key={head}
                       sx={{ py: 1.2, borderBottom: `1px solid ${c}25` }}
                     >
                       <Typography
@@ -3118,16 +3252,17 @@ function TSCStatsTab({ c, isDark }) {
                           whiteSpace: "nowrap",
                         }}
                       >
-                        {h}
+                        {head}
                       </Typography>
                     </TableCell>
                   ))}
                 </TableRow>
               </TableHead>
+
               <TableBody>
                 {selectedHeat.tscProducts
                   .filter((p) => p.productType === 1)
-                  .map((p, i) => (
+                  .map((p) => (
                     <TableRow
                       key={p.productNo}
                       sx={{ "&:hover": { background: `${c}08` } }}
@@ -3149,6 +3284,7 @@ function TSCStatsTab({ c, isDark }) {
                           {p.slabId}
                         </Typography>
                       </TableCell>
+
                       <TableCell
                         sx={{
                           py: 1.2,
@@ -3165,6 +3301,7 @@ function TSCStatsTab({ c, isDark }) {
                           {fmtN(p.productLength / 1000, 2)} m
                         </Typography>
                       </TableCell>
+
                       <TableCell
                         sx={{
                           py: 1.2,
@@ -3181,6 +3318,7 @@ function TSCStatsTab({ c, isDark }) {
                           {fmtN(p.productThickness, 1)} mm
                         </Typography>
                       </TableCell>
+
                       <TableCell
                         sx={{
                           py: 1.2,
@@ -3198,6 +3336,7 @@ function TSCStatsTab({ c, isDark }) {
                           {fmtN(p.productWeight / 1000, 2)} t
                         </Typography>
                       </TableCell>
+
                       <TableCell
                         sx={{
                           py: 1.2,
@@ -3224,7 +3363,10 @@ function TSCStatsTab({ c, isDark }) {
       )}
 
       <Box>
-        <SectionTitle color={c}>{periodLabel} — barcha plavkalar</SectionTitle>
+        <SectionTitle color={c}>
+          {t(periodLabel)} — {t("barcha plavkalar")}
+        </SectionTitle>
+
         <HeatsTable
           heats={heats}
           c={c}
@@ -3232,20 +3374,21 @@ function TSCStatsTab({ c, isDark }) {
           columns={[
             {
               key: "heatId",
-              label: "Plavka ID",
+              label: t("Plavka ID"),
               bold: true,
               color: c,
               render: (h) => `#${h.heatId}`,
             },
             {
               key: "steelGradeName",
-              label: "Po'lat",
+              label: t("Po'lat"),
               mono: true,
               color: "#c8d8e8",
+              render: (h) => t(h.steelGradeName || "—"),
             },
             {
               key: "ladleOpeningDate",
-              label: "Ochilish",
+              label: t("Ochilish"),
               mono: true,
               color: "#8896a5",
               nowrap: true,
@@ -3253,20 +3396,20 @@ function TSCStatsTab({ c, isDark }) {
             },
             {
               key: "dur",
-              label: "Davomiylik",
+              label: t("Davomiylik"),
               mono: true,
               color: "#8896a5",
               render: (h) => fmtDur(h.ladleOpeningDate, h.ladleCloseDate),
             },
             {
               key: "tundishId",
-              label: "Tundish",
+              label: t("Tundish"),
               mono: true,
               color: "#ff6b1a",
             },
             {
               key: "slabs",
-              label: "Slab soni",
+              label: t("Slab soni"),
               bold: true,
               color: "#00e676",
               render: (h) =>
@@ -3274,7 +3417,7 @@ function TSCStatsTab({ c, isDark }) {
             },
             {
               key: "speed",
-              label: "Tezlik",
+              label: t("Tezlik"),
               mono: true,
               color: "#ffd60a",
               render: (h) =>
@@ -3282,7 +3425,7 @@ function TSCStatsTab({ c, isDark }) {
             },
             {
               key: "eff",
-              label: "Samaradorlik",
+              label: t("Samaradorlik"),
               render: (h) => {
                 const eff =
                   ((h.finalSteelWeight || 0) / (h.startSteelWeight || 1)) * 100;
@@ -3299,7 +3442,7 @@ function TSCStatsTab({ c, isDark }) {
             },
             {
               key: "loss",
-              label: "Yo‘qotish",
+              label: t("Yo‘qotish"),
               render: (h) => {
                 const loss = h.tundishSkullWeight || 0;
 
@@ -3317,9 +3460,10 @@ function TSCStatsTab({ c, isDark }) {
             },
             {
               key: "tempDiff",
-              label: "Temp Δ",
+              label: t("Temp Δ"),
               render: (h) => {
-                const temps = h.temperatures?.map((t) => t.temperature) || [];
+                const temps =
+                  h.temperatures?.map((temp) => temp.temperature) || [];
                 if (!temps.length) return "—";
 
                 const diff = Math.min(...temps) - h.liquidusTemperature;
@@ -3334,20 +3478,22 @@ function TSCStatsTab({ c, isDark }) {
             },
             {
               key: "score",
-              label: "Umumiy baho",
+              label: t("Umumiy baho"),
               render: (h) => {
-                const s = getScore(h);
+                const score = getScore(h);
 
                 return (
-                  <span style={{ color: getScoreColor(s), fontWeight: 700 }}>
-                    {s}
+                  <span
+                    style={{ color: getScoreColor(score), fontWeight: 700 }}
+                  >
+                    {score}
                   </span>
                 );
               },
             },
             {
               key: "status",
-              label: "Status",
+              label: t("Status"),
               render: (h) => {
                 const score = getScore(h);
 
@@ -3363,10 +3509,10 @@ function TSCStatsTab({ c, isDark }) {
                     }}
                   >
                     {score >= 85
-                      ? "🟢 GOOD"
+                      ? `🟢 ${t("GOOD")}`
                       : score >= 65
-                        ? "🟡 NORMAL"
-                        : "🔴 BAD"}
+                        ? `🟡 ${t("NORMAL")}`
+                        : `🔴 ${t("BAD")}`}
                   </span>
                 );
               },
@@ -3374,6 +3520,7 @@ function TSCStatsTab({ c, isDark }) {
           ]}
         />
       </Box>
+
       {selectedHeatAnalyze && (
         <AnalyzeDialogTSC
           open={openAnalyze}
@@ -3389,8 +3536,10 @@ function TSCStatsTab({ c, isDark }) {
 //  VOD STATS TAB
 // ══════════════════════════════════════════════════════════════════
 function VODStatsTab({ c, isDark }) {
+  const { t } = useScriptText();
+
   const {
-    data: heats,
+    data: heats = [],
     isLoading,
     isError,
     refetch,
@@ -3426,12 +3575,12 @@ function VODStatsTab({ c, isDark }) {
     : 0;
   const totalFinal = heats.reduce((s, h) => s + (h.finalSteelWeight || 0), 0);
 
-  const tempData = (lastHeat?.temperatures || []).map((t, i) => ({
+  const tempData = (lastHeat?.temperatures || []).map((temp, i) => ({
     i: i + 1,
-    temp: t.temperature,
-    o2: t.o2 || 0,
-    carbon: t.carbon || 0,
-    t: fmtT(t.dateTime),
+    temp: temp.temperature,
+    o2: temp.o2 || 0,
+    carbon: temp.carbon || 0,
+    t: fmtT(temp.dateTime),
   }));
 
   if (isLoading)
@@ -3440,6 +3589,7 @@ function VODStatsTab({ c, isDark }) {
         <CircularProgress size={36} sx={{ color: c }} />
       </Box>
     );
+
   if (isError)
     return (
       <Box sx={{ py: 6, textAlign: "center" }}>
@@ -3451,7 +3601,7 @@ function VODStatsTab({ c, isDark }) {
             color: "#ff2d55",
           }}
         >
-          VOD API xato
+          {t("VOD API xato")}
         </Typography>
       </Box>
     );
@@ -3486,7 +3636,7 @@ function VODStatsTab({ c, isDark }) {
               letterSpacing: "0.15em",
             }}
           >
-            VAKUUM OSTIDA TOZALASH HISOBOTI
+            {t("VAKUUM OSTIDA TOZALASH HISOBOTI")}
           </Typography>
           <Box
             sx={{
@@ -3504,10 +3654,11 @@ function VODStatsTab({ c, isDark }) {
                 color: c,
               }}
             >
-              {totalHeats} Plavka
+              {totalHeats} {t("Plavka")}
             </Typography>
           </Box>
         </Box>
+
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <PeriodSelector period={period} onChange={setPeriod} color={c} />
           <IconButton
@@ -3528,7 +3679,7 @@ function VODStatsTab({ c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="🔥"
-            label="Plavka soni"
+            label={t("Plavka soni")}
             value={totalHeats}
             color="#00d4ff"
             big
@@ -3537,7 +3688,7 @@ function VODStatsTab({ c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="⚖️"
-            label="Jami yakuniy"
+            label={t("Jami yakuniy")}
             value={fmtN(totalFinal / 1000, 1)}
             unit="t"
             color="#00e676"
@@ -3546,7 +3697,7 @@ function VODStatsTab({ c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="⚖️"
-            label="O'rt yakuniy"
+            label={t("O'rt yakuniy")}
             value={fmtN(avgFinal / 1000, 2)}
             unit="t"
             color="#00e676"
@@ -3555,7 +3706,7 @@ function VODStatsTab({ c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="🌀"
-            label="Min vakuum"
+            label={t("Min vakuum")}
             value={avgVacuum}
             unit="mbar"
             color="#a78bfa"
@@ -3564,7 +3715,7 @@ function VODStatsTab({ c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="⏱️"
-            label="Chuqur vak."
+            label={t("Chuqur vak.")}
             value={Math.floor(avgDeep / 60)}
             unit="min"
             color="#00d4ff"
@@ -3573,7 +3724,7 @@ function VODStatsTab({ c, isDark }) {
         <Grid item xs={6} sm={4} md={2}>
           <StatCard
             icon="💨"
-            label="O'rt Ar"
+            label={t("O'rt Ar")}
             value={avgAr}
             unit="m³"
             color="#a78bfa"
@@ -3584,7 +3735,8 @@ function VODStatsTab({ c, isDark }) {
       {lastHeat && (
         <Box sx={{ mb: 4 }}>
           <SectionTitle color={c}>
-            Oxirgi Plavka #{lastHeat.heatId} — {lastHeat.steelGradeName}
+            {t("Oxirgi Plavka")} #{lastHeat.heatId} —{" "}
+            {t(lastHeat.steelGradeName || "—")}
             <Typography
               component="span"
               sx={{
@@ -3598,6 +3750,7 @@ function VODStatsTab({ c, isDark }) {
               {fmtDur(lastHeat.startTime, lastHeat.stopTime)})
             </Typography>
           </SectionTitle>
+
           <Grid container spacing={2}>
             <Grid item xs={12} md={4}>
               <Paper
@@ -3609,68 +3762,73 @@ function VODStatsTab({ c, isDark }) {
                 }}
               >
                 <InfoRow
-                  label="Boshlang'ich og'irlik"
+                  label={t("Boshlang'ich og'irlik")}
                   value={`${fmtN((lastHeat.startSteelWeight || 0) / 1000, 2)} t`}
                   color="#8896a5"
                 />
                 <InfoRow
-                  label="Yakuniy og'irlik"
+                  label={t("Yakuniy og'irlik")}
                   value={`${fmtN((lastHeat.finalSteelWeight || 0) / 1000, 2)} t`}
                   color="#00e676"
                 />
                 <InfoRow
-                  label="Yakuniy shlak"
+                  label={t("Yakuniy shlak")}
                   value={`${fmtN((lastHeat.finalSlagWeight || 0) / 1000, 2)} t`}
                   color="#ff9500"
                 />
+
                 <Divider
                   sx={{ my: 1.5, borderColor: "rgba(255,255,255,0.06)" }}
                 />
+
                 <InfoRow
-                  label="Min vakuum bosimi"
+                  label={t("Min vakuum bosimi")}
                   value={`${fmtN(lastHeat.minVacuumPressure, 1)} mbar`}
                   color="#a78bfa"
                 />
                 <InfoRow
-                  label="Jami pompalash"
+                  label={t("Jami pompalash")}
                   value={`${Math.floor((lastHeat.totalPumpVacuumTime || 0) / 60)} min`}
                   color="#00d4ff"
                 />
                 <InfoRow
-                  label="Chuqur vakuum"
+                  label={t("Chuqur vakuum")}
                   value={`${Math.floor((lastHeat.totalDeepVacuumTime || 0) / 60)} min`}
                   color="#a78bfa"
                 />
                 <InfoRow
-                  label="Purflash vaqti"
+                  label={t("Purflash vaqti")}
                   value={`${Math.floor((lastHeat.totalBlowTime || 0) / 60)} min`}
                   color="#ff6b1a"
                 />
+
                 <Divider
                   sx={{ my: 1.5, borderColor: "rgba(255,255,255,0.06)" }}
                 />
+
                 <InfoRow
-                  label="Ar sarfi"
+                  label={t("Ar sarfi")}
                   value={`${fmtN(lastHeat.totalArConsumption, 1)} m³`}
                   color="#a78bfa"
                 />
                 <InfoRow
-                  label="N₂ sarfi"
+                  label={t("N₂ sarfi")}
                   value={`${fmtN(lastHeat.totalN2Consumption, 1)} m³`}
                   color="#00d4ff"
                 />
                 <InfoRow
-                  label="Kislorod"
+                  label={t("Kislorod")}
                   value={`${fmtN(lastHeat.totalOxygen, 0)} m³`}
                   color="#ff6b1a"
                 />
                 <InfoRow
-                  label="Smena"
-                  value={lastHeat.shift || "—"}
+                  label={t("Smena")}
+                  value={t(lastHeat.shift || "—")}
                   color="#8896a5"
                 />
               </Paper>
             </Grid>
+
             <Grid item xs={12} md={8}>
               <Paper
                 sx={{
@@ -3689,8 +3847,9 @@ function VODStatsTab({ c, isDark }) {
                     letterSpacing: "0.08em",
                   }}
                 >
-                  HARORAT DINAMIKASI
+                  {t("HARORAT DINAMIKASI")}
                 </Typography>
+
                 <TempChart
                   data={tempData}
                   c={c}
@@ -3723,7 +3882,10 @@ function VODStatsTab({ c, isDark }) {
       <DelaysBlock heat={lastHeat} />
 
       <Box>
-        <SectionTitle color={c}>{periodLabel} — barcha heats</SectionTitle>
+        <SectionTitle color={c}>
+          {t(periodLabel)} — {t("barcha heats")}
+        </SectionTitle>
+
         <HeatsTable
           heats={heats}
           c={c}
@@ -3731,20 +3893,21 @@ function VODStatsTab({ c, isDark }) {
           columns={[
             {
               key: "heatId",
-              label: "Plavka ID",
+              label: t("Plavka ID"),
               bold: true,
               color: c,
               render: (h) => `#${h.heatId}`,
             },
             {
               key: "steelGradeName",
-              label: "Po'lat",
+              label: t("Po'lat"),
               mono: true,
               color: "#c8d8e8",
+              render: (h) => t(h.steelGradeName || "—"),
             },
             {
               key: "startTime",
-              label: "Boshlanish",
+              label: t("Boshlanish"),
               mono: true,
               color: "#8896a5",
               nowrap: true,
@@ -3752,28 +3915,28 @@ function VODStatsTab({ c, isDark }) {
             },
             {
               key: "dur",
-              label: "Davomiylik",
+              label: t("Davomiylik"),
               mono: true,
               color: "#8896a5",
               render: (h) => fmtDur(h.startTime, h.stopTime),
             },
             {
               key: "finalSteelWeight",
-              label: "Yakuniy",
+              label: t("Yakuniy"),
               bold: true,
               color: "#00e676",
               render: (h) => `${fmtN((h.finalSteelWeight || 0) / 1000, 2)} t`,
             },
             {
               key: "minVacuumPressure",
-              label: "Min vakuum",
+              label: t("Min vakuum"),
               mono: true,
               color: "#a78bfa",
               render: (h) => `${fmtN(h.minVacuumPressure, 1)} mbar`,
             },
             {
               key: "totalDeepVacuumTime",
-              label: "Chuqur vak.",
+              label: t("Chuqur vak."),
               mono: true,
               color: "#00d4ff",
               render: (h) =>
@@ -3790,8 +3953,10 @@ function VODStatsTab({ c, isDark }) {
 //  REAL HISTORY TAB — API datadan voqealar tarixi
 // ══════════════════════════════════════════════════════════════════
 function RealHistoryTab({ apiKey, c, isDark }) {
+  const { t } = useScriptText();
+
   const {
-    data: heats,
+    data: heats = [],
     isLoading,
     isError,
     period,
@@ -3799,22 +3964,7 @@ function RealHistoryTab({ apiKey, c, isDark }) {
     periodLabel,
   } = useProductionStatsWithFallback(apiKey, "today");
 
-  if (isLoading)
-    return (
-      <Box sx={{ py: 8, display: "flex", justifyContent: "center" }}>
-        <CircularProgress size={36} sx={{ color: c }} />
-      </Box>
-    );
-
-  if (isError)
-    return (
-      <Box sx={{ py: 6, textAlign: "center" }}>
-        <Typography sx={{ fontSize: "2rem", mb: 1 }}>⚠️</Typography>
-        <Typography sx={{ fontSize: "0.75rem", color: "#ff2d55" }}>
-          API xato
-        </Typography>
-      </Box>
-    );
+  const [filterType, setFilterType] = useState("all");
 
   // Barcha voqealarni yig'ish
   const allEvents = [];
@@ -3828,7 +3978,7 @@ function RealHistoryTab({ apiKey, c, isDark }) {
         type: "start",
         icon: "🔥",
         color: "#00e676",
-        title: `Plavka #${h.heatId} boshlandi`,
+        title: `${t("Plavka")} #${h.heatId} ${t("boshlandi")}`,
         detail: `${h.steelGradeName || "—"} · ${h.practiceName || "—"}`,
         heatId: h.heatId,
       });
@@ -3842,30 +3992,30 @@ function RealHistoryTab({ apiKey, c, isDark }) {
         type: "stop",
         icon: "✅",
         color: "#00d4ff",
-        title: `Plavka #${h.heatId} tugadi`,
+        title: `${t("Plavka")} #${h.heatId} ${t("tugadi")}`,
         detail: h.finalSteelWeight
-          ? `Yakuniy: ${fmtN((h.finalSteelWeight || 0) / 1000, 2)} t`
+          ? `${t("Yakuniy")}: ${fmtN((h.finalSteelWeight || 0) / 1000, 2)} t`
           : h.tappingWeight
-            ? `Chiqarish: ${fmtN((h.tappingWeight || 0) / 1000, 2)} t`
+            ? `${t("Chiqarish")}: ${fmtN((h.tappingWeight || 0) / 1000, 2)} t`
             : "",
         heatId: h.heatId,
       });
     }
 
     // Harorat o'lchovlari
-    (h.temperatures || []).forEach((t) => {
+    (h.temperatures || []).forEach((temp) => {
       allEvents.push({
-        time: new Date(t.dateTime),
+        time: new Date(temp.dateTime),
         type: "temp",
         icon: "🌡",
         color:
-          t.temperature > 1650
+          temp.temperature > 1650
             ? "#ff2d55"
-            : t.temperature > 1600
+            : temp.temperature > 1600
               ? "#ffd60a"
               : "#00e676",
-        title: `Harorat: ${t.temperature}°C`,
-        detail: `O₂: ${t.o2 || "—"} · C: ${t.carbon || "—"} · Heat #${h.heatId}`,
+        title: `${t("Harorat")}: ${temp.temperature}°C`,
+        detail: `O₂: ${temp.o2 || "—"} · C: ${temp.carbon || "—"} · ${t("Heat")} #${h.heatId}`,
         heatId: h.heatId,
       });
     });
@@ -3874,13 +4024,14 @@ function RealHistoryTab({ apiKey, c, isDark }) {
     (h.delays || []).forEach((d) => {
       const info = getDelayInfo(d.delayOperation);
       const dur = getDurMinutes(d.startTime, d.stopTime);
+
       allEvents.push({
         time: new Date(d.startTime),
         type: "delay",
         icon: info.icon,
         color: info.color,
-        title: `${info.label} — ${dur} min`,
-        detail: d.delayReason || info.desc,
+        title: `${t(info.label)} — ${dur} ${t("min")}`,
+        detail: d.delayReason ? t(d.delayReason) : t(info.desc),
         heatId: h.heatId,
         critical: info.type === "critical" || dur > 15,
       });
@@ -3894,7 +4045,7 @@ function RealHistoryTab({ apiKey, c, isDark }) {
         icon: "⚡",
         color: "#ffd60a",
         title: `EAF: ${e.eventCode}`,
-        detail: `Heat #${h.heatId}`,
+        detail: `${t("Heat")} #${h.heatId}`,
         heatId: h.heatId,
       });
     });
@@ -3907,7 +4058,7 @@ function RealHistoryTab({ apiKey, c, isDark }) {
         icon: "⚗️",
         color: "#a78bfa",
         title: `LRF: ${e.eventCode}`,
-        detail: `Heat #${h.heatId}`,
+        detail: `${t("Heat")} #${h.heatId}`,
         heatId: h.heatId,
       });
     });
@@ -3920,7 +4071,7 @@ function RealHistoryTab({ apiKey, c, isDark }) {
         icon: "🌀",
         color: "#00d4ff",
         title: `VOD: ${e.eventCode}`,
-        detail: `Heat #${h.heatId}`,
+        detail: `${t("Heat")} #${h.heatId}`,
         heatId: h.heatId,
       });
     });
@@ -3933,7 +4084,7 @@ function RealHistoryTab({ apiKey, c, isDark }) {
         icon: "🧊",
         color: "#00e676",
         title: `TSC: ${e.eventCode}`,
-        detail: `Heat #${h.heatId}`,
+        detail: `${t("Heat")} #${h.heatId}`,
         heatId: h.heatId,
       });
     });
@@ -3946,8 +4097,8 @@ function RealHistoryTab({ apiKey, c, isDark }) {
           type: "material",
           icon: "📦",
           color: "#ff9500",
-          title: `Material: ${m.materialCode}`,
-          detail: `${fmtN(m.materialWgt, 0)} kg · Heat #${h.heatId}`,
+          title: `${t("Material")}: ${m.materialCode}`,
+          detail: `${fmtN(m.materialWgt, 0)} kg · ${t("Heat")} #${h.heatId}`,
           heatId: h.heatId,
         });
       }
@@ -3965,8 +4116,8 @@ function RealHistoryTab({ apiKey, c, isDark }) {
           type: "scrap",
           icon: "🏗️",
           color: "#ff6b1a",
-          title: `Savat #${b.bucketSequence} tushirildi`,
-          detail: `${fmtN(totalWgt / 1000, 1)} t · ${(b.bucketCharges || []).length} qatlam · Heat #${h.heatId}`,
+          title: `${t("Savat")} #${b.bucketSequence} ${t("tushirildi")}`,
+          detail: `${fmtN(totalWgt / 1000, 1)} t · ${(b.bucketCharges || []).length} ${t("qatlam")} · ${t("Heat")} #${h.heatId}`,
           heatId: h.heatId,
         });
       }
@@ -3980,31 +4131,29 @@ function RealHistoryTab({ apiKey, c, isDark }) {
           type: "analysis",
           icon: "🔬",
           color: "#a78bfa",
-          title: `Kimyoviy tahlil: ${a.sampleId}`,
-          detail: `${(a.chemicalAnalysis || []).length} element · Heat #${h.heatId}`,
+          title: `${t("Kimyoviy tahlil")}: ${a.sampleId}`,
+          detail: `${(a.chemicalAnalysis || []).length} ${t("element")} · ${t("Heat")} #${h.heatId}`,
           heatId: h.heatId,
         });
       }
     });
   });
 
-  // Vaqt bo'yicha tartiblash (eng yangi tepada)
+  // Vaqt bo'yicha tartiblash
   allEvents.sort((a, b) => b.time - a.time);
 
   // Filtrlash uchun event turlari
   const EVENT_TYPES = [
-    { key: "all", label: "Barchasi", color: c },
-    { key: "start", label: "Boshlanish", color: "#00e676" },
-    { key: "stop", label: "Tugash", color: "#00d4ff" },
-    { key: "temp", label: "Harorat", color: "#ff6b1a" },
-    { key: "delay", label: "Kechikish", color: "#ffd60a" },
-    { key: "event", label: "Voqealar", color: "#a78bfa" },
-    { key: "material", label: "Materiallar", color: "#ff9500" },
-    { key: "scrap", label: "Savat", color: "#ff6b1a" },
-    { key: "analysis", label: "Tahlil", color: "#a78bfa" },
+    { key: "all", label: t("Barchasi"), color: c },
+    { key: "start", label: t("Boshlanish"), color: "#00e676" },
+    { key: "stop", label: t("Tugash"), color: "#00d4ff" },
+    { key: "temp", label: t("Harorat"), color: "#ff6b1a" },
+    { key: "delay", label: t("Kechikish"), color: "#ffd60a" },
+    { key: "event", label: t("Voqealar"), color: "#a78bfa" },
+    { key: "material", label: t("Materiallar"), color: "#ff9500" },
+    { key: "scrap", label: t("Savat"), color: "#ff6b1a" },
+    { key: "analysis", label: t("Tahlil"), color: "#a78bfa" },
   ];
-
-  const [filterType, setFilterType] = useState("all");
 
   const filtered =
     filterType === "all"
@@ -4029,9 +4178,25 @@ function RealHistoryTab({ apiKey, c, isDark }) {
   const totalDelayCount = delayEvents.length;
   const criticalDelays = delayEvents.filter((e) => e.critical).length;
 
+  if (isLoading)
+    return (
+      <Box sx={{ py: 8, display: "flex", justifyContent: "center" }}>
+        <CircularProgress size={36} sx={{ color: c }} />
+      </Box>
+    );
+
+  if (isError)
+    return (
+      <Box sx={{ py: 6, textAlign: "center" }}>
+        <Typography sx={{ fontSize: "2rem", mb: 1 }}>⚠️</Typography>
+        <Typography sx={{ fontSize: "0.75rem", color: "#ff2d55" }}>
+          {t("API xato")}
+        </Typography>
+      </Box>
+    );
+
   return (
     <Box sx={{ width: "100%" }}>
-      {/* Sarlavha */}
       <Box
         sx={{
           display: "flex",
@@ -4059,7 +4224,7 @@ function RealHistoryTab({ apiKey, c, isDark }) {
               letterSpacing: "0.12em",
             }}
           >
-            REAL VAQT TARIXI
+            {t("REAL VAQT TARIXI")}
           </Typography>
           <Box
             sx={{
@@ -4077,19 +4242,18 @@ function RealHistoryTab({ apiKey, c, isDark }) {
                 color: c,
               }}
             >
-              {filtered.length} voqea
+              {filtered.length} {t("voqea")}
             </Typography>
           </Box>
         </Box>
         <PeriodSelector period={period} onChange={setPeriod} color={c} />
       </Box>
 
-      {/* Statistika xulosa */}
       <Grid container spacing={1.5} sx={{ mb: 3 }}>
         <Grid item xs={6} sm={3}>
           <StatCard
             icon="🔥"
-            label="Plavkalar"
+            label={t("Plavkalar")}
             value={heats.length}
             color="#00d4ff"
           />
@@ -4097,7 +4261,7 @@ function RealHistoryTab({ apiKey, c, isDark }) {
         <Grid item xs={6} sm={3}>
           <StatCard
             icon="📋"
-            label="Voqealar"
+            label={t("Voqealar")}
             value={allEvents.length}
             color="#00e676"
           />
@@ -4105,7 +4269,7 @@ function RealHistoryTab({ apiKey, c, isDark }) {
         <Grid item xs={6} sm={3}>
           <StatCard
             icon="⏸️"
-            label="Kechikishlar"
+            label={t("Kechikishlar")}
             value={totalDelayCount}
             color="#ffd60a"
           />
@@ -4113,14 +4277,13 @@ function RealHistoryTab({ apiKey, c, isDark }) {
         <Grid item xs={6} sm={3}>
           <StatCard
             icon="🚨"
-            label="Kritik"
+            label={t("Kritik")}
             value={criticalDelays}
             color="#ff2d55"
           />
         </Grid>
       </Grid>
 
-      {/* Harorat mini-grafik */}
       {tempChartData.length > 0 && (
         <Paper
           sx={{
@@ -4139,7 +4302,7 @@ function RealHistoryTab({ apiKey, c, isDark }) {
               letterSpacing: "0.08em",
             }}
           >
-            HARORAT TARIXI
+            {t("HARORAT TARIXI")}
           </Typography>
           <ResponsiveContainer width="100%" height={160}>
             <AreaChart
@@ -4168,7 +4331,7 @@ function RealHistoryTab({ apiKey, c, isDark }) {
                   borderRadius: 8,
                   fontSize: 12,
                 }}
-                formatter={(v) => [`${v}°C`, "Harorat"]}
+                formatter={(v) => [`${v}°C`, t("Harorat")]}
               />
               <Area
                 type="monotone"
@@ -4182,30 +4345,36 @@ function RealHistoryTab({ apiKey, c, isDark }) {
         </Paper>
       )}
 
-      {/* Filtrlar */}
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.8, mb: 2.5 }}>
-        {EVENT_TYPES.map((t) => {
+        {EVENT_TYPES.map((typeItem) => {
           const count =
-            t.key === "all"
+            typeItem.key === "all"
               ? allEvents.length
-              : allEvents.filter((e) => e.type === t.key).length;
-          if (count === 0 && t.key !== "all") return null;
+              : allEvents.filter((e) => e.type === typeItem.key).length;
+          if (count === 0 && typeItem.key !== "all") return null;
           return (
             <Chip
-              key={t.key}
-              label={`${t.label} (${count})`}
+              key={typeItem.key}
+              label={`${typeItem.label} (${count})`}
               size="small"
-              onClick={() => setFilterType(t.key)}
+              onClick={() => setFilterType(typeItem.key)}
               sx={{
                 fontFamily: "'Arial',san-serif",
                 fontSize: "0.6rem",
-                bgcolor: filterType === t.key ? `${t.color}25` : "transparent",
-                color: filterType === t.key ? t.color : "#8896a5",
-                border: `1px solid ${filterType === t.key ? t.color : "rgba(255,255,255,0.08)"}`,
+                bgcolor:
+                  filterType === typeItem.key
+                    ? `${typeItem.color}25`
+                    : "transparent",
+                color: filterType === typeItem.key ? typeItem.color : "#8896a5",
+                border: `1px solid ${
+                  filterType === typeItem.key
+                    ? typeItem.color
+                    : "rgba(255,255,255,0.08)"
+                }`,
                 cursor: "pointer",
                 "&:hover": {
-                  bgcolor: `${t.color}15`,
-                  color: t.color,
+                  bgcolor: `${typeItem.color}15`,
+                  color: typeItem.color,
                 },
               }}
             />
@@ -4213,7 +4382,6 @@ function RealHistoryTab({ apiKey, c, isDark }) {
         })}
       </Box>
 
-      {/* Voqealar ro'yxati */}
       <Paper
         sx={{
           border: `1px solid ${c}15`,
@@ -4224,7 +4392,7 @@ function RealHistoryTab({ apiKey, c, isDark }) {
         {filtered.length === 0 ? (
           <Box sx={{ py: 4, textAlign: "center" }}>
             <Typography sx={{ fontSize: "0.72rem", color: "#8896a5" }}>
-              Voqealar topilmadi
+              {t("Voqealar topilmadi")}
             </Typography>
           </Box>
         ) : (
@@ -4246,7 +4414,6 @@ function RealHistoryTab({ apiKey, c, isDark }) {
                 transition: "background 0.15s",
               }}
             >
-              {/* Rang chizig'i */}
               <Box
                 sx={{
                   width: 3,
@@ -4258,12 +4425,10 @@ function RealHistoryTab({ apiKey, c, isDark }) {
                 }}
               />
 
-              {/* Icon */}
               <Typography sx={{ fontSize: "0.95rem", flexShrink: 0, mt: 0.1 }}>
                 {ev.icon}
               </Typography>
 
-              {/* Ma'lumot */}
               <Box sx={{ flex: 1, minWidth: 0 }}>
                 <Box
                   sx={{
@@ -4301,7 +4466,7 @@ function RealHistoryTab({ apiKey, c, isDark }) {
                           color: "#ff2d55",
                         }}
                       >
-                        KRITIK
+                        {t("KRITIK")}
                       </Typography>
                     </Box>
                   )}
@@ -4319,7 +4484,6 @@ function RealHistoryTab({ apiKey, c, isDark }) {
                 )}
               </Box>
 
-              {/* Vaqt */}
               <Box sx={{ textAlign: "right", flexShrink: 0 }}>
                 <Typography
                   sx={{
@@ -4361,7 +4525,7 @@ function RealHistoryTab({ apiKey, c, isDark }) {
             }}
           >
             <Typography sx={{ fontSize: "0.62rem", color: "#6b7280" }}>
-              Yana {filtered.length - 100} ta voqea...
+              {t("Yana")} {filtered.length - 100} {t("ta voqea")}...
             </Typography>
           </Box>
         )}
@@ -4379,6 +4543,7 @@ const CAMERA_FEED = {
 };
 
 function CamerasTab({ c, isDark }) {
+  const { t } = useScriptText();
   const [selectedCam, setSelectedCam] = useState(null);
 
   const cam = CAMERA_FEED;
@@ -4415,7 +4580,7 @@ function CamerasTab({ c, isDark }) {
             letterSpacing: "0.14em",
           }}
         >
-          KAMERA MONITORING
+          {t("KAMERA MONITORING")}
         </Typography>
 
         <Box
@@ -4436,7 +4601,7 @@ function CamerasTab({ c, isDark }) {
               letterSpacing: "0.05em",
             }}
           >
-            {isOnline ? "1 TA FAOL KAMERA" : "KAMERA O‘CHIQ"}
+            {isOnline ? t("1 TA FAOL KAMERA") : t("KAMERA O‘CHIQ")}
           </Typography>
         </Box>
       </Box>
@@ -4519,8 +4684,8 @@ function CamerasTab({ c, isDark }) {
               }}
             >
               {isOnline
-                ? "Jonli kamera oqimi shu yerda chiqadi"
-                : "Kamera hozir faol emas"}
+                ? t("Jonli kamera oqimi shu yerda chiqadi")
+                : t("Kamera hozir faol emas")}
             </Typography>
 
             <Typography
@@ -4530,7 +4695,7 @@ function CamerasTab({ c, isDark }) {
                 color: isDark ? "#94a3b8" : "#64748b",
               }}
             >
-              RTSP / HLS / WebRTC ulansa preview shu blokda ko‘rinadi
+              {t("RTSP / HLS / WebRTC ulansa preview shu blokda ko‘rinadi")}
             </Typography>
           </Box>
 
@@ -4575,7 +4740,7 @@ function CamerasTab({ c, isDark }) {
                   letterSpacing: "0.08em",
                 }}
               >
-                LIVE REC
+                {t("LIVE REC")}
               </Typography>
             </Box>
           )}
@@ -4618,7 +4783,7 @@ function CamerasTab({ c, isDark }) {
                 letterSpacing: "0.04em",
               }}
             >
-              {isOnline ? "ONLINE" : "OFFLINE"}
+              {isOnline ? t("ONLINE") : t("OFFLINE")}
             </Typography>
           </Box>
 
@@ -4668,7 +4833,7 @@ function CamerasTab({ c, isDark }) {
                 mb: 0.5,
               }}
             >
-              {cam.name}
+              {t(cam.name)}
             </Typography>
 
             <Typography
@@ -4679,7 +4844,7 @@ function CamerasTab({ c, isDark }) {
                 mb: 1.2,
               }}
             >
-              {cam.location}
+              {t(cam.location)}
             </Typography>
 
             <Box
@@ -4716,7 +4881,7 @@ function CamerasTab({ c, isDark }) {
                 }}
               >
                 <Typography sx={{ fontSize: "0.66rem", color: c }}>
-                  Asosiy kuzatuv kamerasi
+                  {t("Asosiy kuzatuv kamerasi")}
                 </Typography>
               </Box>
             </Box>
@@ -4740,7 +4905,7 @@ function CamerasTab({ c, isDark }) {
               },
             }}
           >
-            Katta ko‘rishda ochish
+            {t("Katta ko‘rishda ochish")}
           </Button>
         </Box>
       </Paper>
@@ -4774,7 +4939,7 @@ function CamerasTab({ c, isDark }) {
                       fontWeight: 700,
                     }}
                   >
-                    {selectedCam.name}
+                    {t(selectedCam.name)}
                   </Typography>
                   <Typography
                     sx={{
@@ -4783,7 +4948,7 @@ function CamerasTab({ c, isDark }) {
                       color: "text.secondary",
                     }}
                   >
-                    {selectedCam.location}
+                    {t(selectedCam.location)}
                   </Typography>
                 </Box>
               </Box>
@@ -4828,8 +4993,8 @@ function CamerasTab({ c, isDark }) {
                   }}
                 >
                   {selectedCam.status === "online"
-                    ? "Jonli oqim oynasi"
-                    : "Kamera hozir ishlamayapti"}
+                    ? t("Jonli oqim oynasi")
+                    : t("Kamera hozir ishlamayapti")}
                 </Typography>
 
                 <Typography
@@ -4841,8 +5006,9 @@ function CamerasTab({ c, isDark }) {
                     maxWidth: 520,
                   }}
                 >
-                  Bu joyga sen keyin `img`, `video`, `iframe`, `ReactPlayer`,
-                  HLS yoki WebRTC stream ulab qo‘yasan.
+                  {t(
+                    "Bu joyga sen keyin img, video, iframe, ReactPlayer, HLS yoki WebRTC stream ulab qo‘yasan.",
+                  )}
                 </Typography>
 
                 <Box
@@ -5085,6 +5251,8 @@ function RealDataSxemaInner({ uskuna, apiKey, c, isDark }) {
 }
 
 function SxemaLiveOverlay({ apiKey, c, isDark }) {
+  const { t } = useScriptText();
+
   const {
     data: heats,
     isLoading,
@@ -5108,7 +5276,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
     return (
       <Box sx={{ py: 3, textAlign: "center" }}>
         <Typography sx={{ fontSize: "0.7rem", color: "#6b7280" }}>
-          Hozircha plavka ma'lumoti yo'q
+          {t("Hozircha plavka ma'lumoti yo'q")}
         </Typography>
       </Box>
     );
@@ -5116,7 +5284,6 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
   const latest =
     heats.find((h) => h.heatId === selectedHeatId) || heats[heats.length - 1];
 
-  // ── Harorat ────────────────────────────────────────────────
   const temps = latest?.temperatures || [];
   const lastTemp = temps.length ? temps[temps.length - 1].temperature : 0;
   const lastO2 = temps.length ? temps[temps.length - 1].o2 : null;
@@ -5130,18 +5297,17 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
           ? "#00e676"
           : "#6b7280";
 
-  const tempChartData = temps.map((t, i) => ({
+  const tempChartData = temps.map((tItem, i) => ({
     i: i + 1,
-    temp: t.temperature,
-    o2: t.o2 || null,
-    carbon: t.carbon ? t.carbon * 100 : null,
-    t: new Date(t.dateTime).toLocaleTimeString("uz-UZ", {
+    temp: tItem.temperature,
+    o2: tItem.o2 || null,
+    carbon: tItem.carbon ? tItem.carbon * 100 : null,
+    t: new Date(tItem.dateTime).toLocaleTimeString("uz-UZ", {
       hour: "2-digit",
       minute: "2-digit",
     }),
   }));
 
-  // ── Suyuq metall ──────────────────────────────────────────
   const liquidMetal =
     (latest?.tappingWeight || latest?.finalSteelWeight || 0) / 1000;
   const startWeight =
@@ -5150,7 +5316,6 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
     (latest?.finalSlagWeight || latest?.startSlagWeight || 0) / 1000;
   const liquidPercent = Math.min(100, Math.max(0, (liquidMetal / 140) * 100));
 
-  // ── Heat davomiyligi ──────────────────────────────────────
   const heatStart =
     latest?.startTime || latest?.ladleArrivalDate || latest?.ladleOpeningDate;
   const heatStop = latest?.stopTime || latest?.ladleCloseDate;
@@ -5160,12 +5325,10 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
       : 0;
   const isLive = heatStart && !heatStop;
 
-  // ── Energiya ──────────────────────────────────────────────
   const energy = latest?.electricalEnergy || 0;
   const powerOnTime = latest?.powerOnTime || 0;
   const avgPower = latest?.averagePower || 0;
 
-  // ── EAF-specific ──────────────────────────────────────────
   const injectedO2 = latest?.injectedO2 || 0;
   const injectedCarbon = latest?.injectedCarbon || 0;
   const injectedFuel = latest?.injectedFuel || 0;
@@ -5173,18 +5336,15 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
   const totalHBI = latest?.totalHBI || 0;
   const hotHeel = latest?.startHotHeel || 0;
 
-  // ── LRF-specific ──────────────────────────────────────────
   const totalAr = latest?.totalArConsumption || 0;
   const totalN2 = latest?.totalN2Consumption || 0;
 
-  // ── VOD-specific ──────────────────────────────────────────
   const minVacuum = latest?.minVacuumPressure || 0;
   const deepVacuumTime = latest?.totalDeepVacuumTime || 0;
   const pumpVacuumTime = latest?.totalPumpVacuumTime || 0;
   const blowTime = latest?.totalBlowTime || 0;
   const totalOxygen = latest?.totalOxygen || 0;
 
-  // ── TSC-specific ──────────────────────────────────────────
   const strands = latest?.tscStrands || [];
   const products = latest?.tscProducts || [];
   const avgCastSpeed = strands.length
@@ -5197,29 +5357,24 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
   const tundishLife = latest?.tundishLife || 0;
   const liquidusTemp = latest?.liquidusTemperature || 0;
 
-  // ── Kechikishlar xulosa ───────────────────────────────────
   const delays = latest?.delays || [];
   const totalDelayMin = delays.reduce(
     (s, d) => s + getDurMinutes(d.startTime, d.stopTime),
     0,
   );
 
-  // ── Kimyoviy tarkib ───────────────────────────────────────
   const lastAnalysis = latest?.steelAnalysis?.length
     ? latest.steelAnalysis[latest.steelAnalysis.length - 1]
     : null;
 
-  // ── Materiallar ───────────────────────────────────────────
   const materials = latest?.materialAdditions || latest?.ladleAdditions || [];
   const materialGrouped = materials.reduce((acc, m) => {
     acc[m.materialCode] = (acc[m.materialCode] || 0) + (m.materialWgt || 0);
     return acc;
   }, {});
 
-  // ── Scrap bucketlar (EAF) ─────────────────────────────────
   const buckets = latest?.scrapBuckets || [];
 
-  // ── Energiya trendi (barcha heats) ────────────────────────
   const energyTrend = heats.map((h, i) => ({
     i: i + 1,
     heatId: h.heatId,
@@ -5227,7 +5382,6 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
     output: (h.tappingWeight || h.finalSteelWeight || 0) / 1000,
   }));
 
-  // ── Samaradorlik (EAF) ────────────────────────────────────
   const yieldVal =
     totalScrap + totalHBI > 0
       ? ((latest?.tappingWeight || 0) / (totalScrap + totalHBI)) * 100
@@ -5235,7 +5389,6 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
   const yieldColor =
     yieldVal > 90 ? "#00e676" : yieldVal > 80 ? "#ffd60a" : "#ff2d55";
 
-  // ── API nomi ──────────────────────────────────────────────
   const API_NAMES = {
     eaf: "ELEKTRDA ERITISH PECHI",
     lrf: "KOVSH TOZALASH PECHI",
@@ -5245,7 +5398,6 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
 
   return (
     <Box sx={{ mt: 2 }}>
-      {/* ═══ STATUS BAR ═══ */}
       <Paper
         sx={{
           p: 1.5,
@@ -5286,10 +5438,10 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
               letterSpacing: "0.1em",
             }}
           >
-            {API_NAMES[apiKey] || "USKUNA"}
+            {t(API_NAMES[apiKey] || "USKUNA")}
           </Typography>
           <Chip
-            label={isLive ? "JARAYONDA" : "TUGAGAN"}
+            label={isLive ? t("JARAYONDA") : t("TUGAGAN")}
             size="small"
             sx={{
               height: 18,
@@ -5325,7 +5477,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
           >
             {fmtT(heatStart)} → {heatStop ? fmtT(heatStop) : "..."} ·{" "}
             {durationMin > 0
-              ? `${Math.floor(durationMin / 60)}s ${durationMin % 60}d`
+              ? `${Math.floor(durationMin / 60)}${t("s")} ${durationMin % 60}${t("d")}`
               : "—"}
           </Typography>
           <PeriodSelector period={period} onChange={setPeriod} color={c} />
@@ -5343,9 +5495,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
         </Box>
       </Paper>
 
-      {/* ═══ ASOSIY METRIKALAR ═══ */}
       <Grid container spacing={1.5} sx={{ mb: 2 }}>
-        {/* Harorat — katta karta */}
         <Grid item xs={6} sm={4} md={2}>
           <Box
             sx={{
@@ -5366,7 +5516,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                 mb: 0.5,
               }}
             >
-              🌡 HARORAT
+              🌡 {t("HARORAT")}
             </Typography>
             <Typography
               sx={{
@@ -5390,7 +5540,6 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
           </Box>
         </Grid>
 
-        {/* Suyuq metall */}
         <Grid item xs={6} sm={4} md={2}>
           <Box
             sx={{
@@ -5412,7 +5561,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                 mb: 0.5,
               }}
             >
-              🫗 SUYUQ METALL
+              🫗 {t("SUYUQ METALL")}
             </Typography>
             <Typography
               sx={{
@@ -5426,7 +5575,6 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
               {fmtN(liquidMetal, 1)}
               <span style={{ fontSize: "0.7rem", color: "#8896a5" }}> t</span>
             </Typography>
-            {/* Vizual tank mini */}
             <Box
               sx={{
                 mt: 0.8,
@@ -5450,13 +5598,12 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
           </Box>
         </Grid>
 
-        {/* API-specific kartalar */}
         {apiKey === "eaf" && (
           <>
             <Grid item xs={6} sm={4} md={2}>
               <StatCard
                 icon="⚡"
-                label="Elektr"
+                label={t("Elektr")}
                 value={fmtN(energy / 1000, 1)}
                 unit="MWh"
                 color="#ffd60a"
@@ -5465,7 +5612,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
             <Grid item xs={6} sm={4} md={2}>
               <StatCard
                 icon="💨"
-                label="Kislorod"
+                label={t("Kislorod")}
                 value={fmtN(injectedO2, 0)}
                 unit="m³"
                 color="#00d4ff"
@@ -5474,7 +5621,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
             <Grid item xs={6} sm={4} md={2}>
               <StatCard
                 icon="🏗️"
-                label="Lom"
+                label={t("Lom")}
                 value={fmtN(totalScrap / 1000, 1)}
                 unit="t"
                 color="#ff6b1a"
@@ -5483,7 +5630,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
             <Grid item xs={6} sm={4} md={2}>
               <StatCard
                 icon="🧮"
-                label="Samaradorlik"
+                label={t("Samaradorlik")}
                 value={fmtN(yieldVal, 1)}
                 unit="%"
                 color={yieldColor}
@@ -5497,7 +5644,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
             <Grid item xs={6} sm={4} md={2}>
               <StatCard
                 icon="⚡"
-                label="Elektr"
+                label={t("Elektr")}
                 value={fmtN(energy / 1000, 1)}
                 unit="MWh"
                 color="#ffd60a"
@@ -5506,7 +5653,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
             <Grid item xs={6} sm={4} md={2}>
               <StatCard
                 icon="💨"
-                label="Argon"
+                label={t("Argon")}
                 value={fmtN(totalAr, 1)}
                 unit="m³"
                 color="#a78bfa"
@@ -5515,7 +5662,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
             <Grid item xs={6} sm={4} md={2}>
               <StatCard
                 icon="🔋"
-                label="Quvvat vaqti"
+                label={t("Quvvat vaqti")}
                 value={Math.floor(powerOnTime / 60)}
                 unit="min"
                 color="#00e676"
@@ -5524,7 +5671,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
             <Grid item xs={6} sm={4} md={2}>
               <StatCard
                 icon="💧"
-                label="N₂ sarfi"
+                label={t("N₂ sarfi")}
                 value={fmtN(totalN2, 1)}
                 unit="m³"
                 color="#00d4ff"
@@ -5538,7 +5685,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
             <Grid item xs={6} sm={4} md={2}>
               <StatCard
                 icon="🌀"
-                label="Min vakuum"
+                label={t("Min vakuum")}
                 value={fmtN(minVacuum, 1)}
                 unit="mbar"
                 color="#a78bfa"
@@ -5547,7 +5694,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
             <Grid item xs={6} sm={4} md={2}>
               <StatCard
                 icon="⏱️"
-                label="Chuqur vak."
+                label={t("Chuqur vak.")}
                 value={Math.floor(deepVacuumTime / 60)}
                 unit="min"
                 color="#00d4ff"
@@ -5556,7 +5703,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
             <Grid item xs={6} sm={4} md={2}>
               <StatCard
                 icon="💨"
-                label="Argon"
+                label={t("Argon")}
                 value={fmtN(totalAr, 1)}
                 unit="m³"
                 color="#a78bfa"
@@ -5565,7 +5712,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
             <Grid item xs={6} sm={4} md={2}>
               <StatCard
                 icon="🔥"
-                label="Purflash"
+                label={t("Purflash")}
                 value={Math.floor(blowTime / 60)}
                 unit="min"
                 color="#ff6b1a"
@@ -5579,7 +5726,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
             <Grid item xs={6} sm={4} md={2}>
               <StatCard
                 icon="⚡"
-                label="Quyish tezl."
+                label={t("Quyish tezl.")}
                 value={avgCastSpeed}
                 unit="m/min"
                 color="#00d4ff"
@@ -5588,7 +5735,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
             <Grid item xs={6} sm={4} md={2}>
               <StatCard
                 icon="🧊"
-                label="Strandlar"
+                label={t("Strandlar")}
                 value={strands.length}
                 color="#a78bfa"
               />
@@ -5596,7 +5743,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
             <Grid item xs={6} sm={4} md={2}>
               <StatCard
                 icon="📦"
-                label="Mahsulotlar"
+                label={t("Mahsulotlar")}
                 value={products.length}
                 color="#00e676"
               />
@@ -5604,7 +5751,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
             <Grid item xs={6} sm={4} md={2}>
               <StatCard
                 icon="🫙"
-                label="Tundish"
+                label={t("Tundish")}
                 value={tundishLife}
                 unit={"x · " + (tundishId || "—")}
                 color="#ff9500"
@@ -5614,9 +5761,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
         )}
       </Grid>
 
-      {/* ═══ CHARTLAR + DETALLAR ═══ */}
       <Grid container spacing={2}>
-        {/* Harorat grafik — interaktiv */}
         <Grid item xs={12} md={8}>
           <Paper
             sx={{
@@ -5642,7 +5787,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                   letterSpacing: "0.08em",
                 }}
               >
-                HARORAT DINAMIKASI — HEAT #{latest?.heatId}
+                {t("HARORAT DINAMIKASI")} — HEAT #{latest?.heatId}
               </Typography>
               {temps.length > 0 && (
                 <Typography
@@ -5652,11 +5797,12 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                     color: "#6b7280",
                   }}
                 >
-                  {temps.length} o'lchov · {fmtT(temps[0]?.dateTime)} →{" "}
+                  {temps.length} {t("o'lchov")} · {fmtT(temps[0]?.dateTime)} →{" "}
                   {fmtT(temps[temps.length - 1]?.dateTime)}
                 </Typography>
               )}
             </Box>
+
             {tempChartData.length > 0 ? (
               <ResponsiveContainer width="100%" height={220}>
                 <LineChart
@@ -5694,11 +5840,12 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                       fontFamily: "san-serif",
                     }}
                     formatter={(v, n) => {
-                      if (n === "Harorat °C") return [`${v}°C`, n];
-                      if (n === "O₂") return [v, n];
+                      if (n === "Harorat °C")
+                        return [`${v}°C`, t("Harorat °C")];
+                      if (n === "O₂") return [v, "O₂"];
                       if (n === "C×100")
-                        return [`${(v / 100).toFixed(4)}%`, "Carbon"];
-                      return [v, n];
+                        return [`${(v / 100).toFixed(4)}%`, t("Uglerod")];
+                      return [v, t(n)];
                     }}
                     labelFormatter={(_, p) => p?.[0]?.payload?.t || ""}
                   />
@@ -5709,7 +5856,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                     dataKey="temp"
                     stroke={c}
                     dot={{ r: 3, fill: c }}
-                    name="Harorat °C"
+                    name={t("Harorat °C")}
                     strokeWidth={2.5}
                   />
                   <Line
@@ -5740,11 +5887,11 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
             ) : (
               <Box sx={{ py: 4, textAlign: "center" }}>
                 <Typography sx={{ fontSize: "0.7rem", color: "#4b5563" }}>
-                  Harorat ma'lumoti yo'q
+                  {t("Harorat ma'lumoti yo'q")}
                 </Typography>
               </Box>
             )}
-            {/* Harorat ostida info */}
+
             {temps.length > 1 && (
               <Box
                 sx={{
@@ -5759,23 +5906,29 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
               >
                 {[
                   {
-                    l: "Min",
-                    v: `${Math.min(...temps.map((t) => t.temperature))}°C`,
+                    l: t("Min"),
+                    v: `${Math.min(...temps.map((tItem) => tItem.temperature))}°C`,
                     c: "#00d4ff",
                   },
                   {
-                    l: "Max",
-                    v: `${Math.max(...temps.map((t) => t.temperature))}°C`,
+                    l: t("Max"),
+                    v: `${Math.max(...temps.map((tItem) => tItem.temperature))}°C`,
                     c: "#ff2d55",
                   },
                   {
-                    l: "O'rtacha",
-                    v: `${Math.round(temps.reduce((s, t) => s + t.temperature, 0) / temps.length)}°C`,
+                    l: t("O'rtacha"),
+                    v: `${Math.round(
+                      temps.reduce((s, tItem) => s + tItem.temperature, 0) /
+                        temps.length,
+                    )}°C`,
                     c: "#ffd60a",
                   },
                   {
-                    l: "Delta",
-                    v: `${Math.max(...temps.map((t) => t.temperature)) - Math.min(...temps.map((t) => t.temperature))}°C`,
+                    l: t("Delta"),
+                    v: `${
+                      Math.max(...temps.map((tItem) => tItem.temperature)) -
+                      Math.min(...temps.map((tItem) => tItem.temperature))
+                    }°C`,
                     c: "#a78bfa",
                   },
                 ].map((m) => (
@@ -5803,7 +5956,6 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
           </Paper>
         </Grid>
 
-        {/* O'ng tomon: Suyuq metall + kechikishlar + plavka info */}
         <Grid item xs={12} md={4}>
           <Box
             sx={{
@@ -5813,7 +5965,6 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
               height: "100%",
             }}
           >
-            {/* Suyuq metall tank */}
             <Paper
               sx={{
                 p: 2,
@@ -5830,10 +5981,9 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                   mb: 1.5,
                 }}
               >
-                🫗 SUYUQ METALL HAJMI
+                🫗 {t("SUYUQ METALL HAJMI")}
               </Typography>
 
-              {/* Vizual tank */}
               <Box
                 sx={{
                   height: 80,
@@ -5858,7 +6008,6 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                     transition: "height 0.8s ease",
                   }}
                 />
-                {/* Suyuq metall to'lqini */}
                 {liquidPercent > 5 && (
                   <Box
                     sx={{
@@ -5906,7 +6055,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                       textShadow: "0 1px 4px rgba(0,0,0,0.5)",
                     }}
                   >
-                    {Math.round(liquidPercent)}% · Kovsh{" "}
+                    {Math.round(liquidPercent)}% · {t("Kovsh")}{" "}
                     {latest?.ladleId || "—"}
                   </Typography>
                 </Box>
@@ -5914,15 +6063,14 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
 
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography sx={{ fontSize: "0.55rem", color: "#6b7280" }}>
-                  Boshlang'ich: {fmtN(startWeight, 1)} t
+                  {t("Boshlang'ich")}: {fmtN(startWeight, 1)} t
                 </Typography>
                 <Typography sx={{ fontSize: "0.55rem", color: "#6b7280" }}>
-                  Shlak: {fmtN(slagWeight, 2)} t
+                  {t("Shlak")}: {fmtN(slagWeight, 2)} t
                 </Typography>
               </Box>
             </Paper>
 
-            {/* Plavka asosiy info */}
             <Paper
               sx={{
                 p: 2,
@@ -5940,91 +6088,96 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                   mb: 1,
                 }}
               >
-                📋 PLAVKA #{latest?.heatId} MA'LUMOTLARI
+                📋 {t("PLAVKA")} #{latest?.heatId} {t("MA'LUMOTLARI")}
               </Typography>
+
               <InfoRow
-                label="Po'lat markasi"
+                label={t("Po'lat markasi")}
                 value={latest?.steelGradeName || "—"}
                 color={c}
               />
               <InfoRow
-                label="Texnologiya"
+                label={t("Texnologiya")}
                 value={latest?.practiceName || "—"}
                 color="#c8d8e8"
               />
               <InfoRow
-                label="Smena / Brigada"
+                label={t("Smena / Brigada")}
                 value={`${latest?.shift || "—"} / ${latest?.team || "—"}`}
                 color="#8896a5"
               />
               <InfoRow
-                label="Usta"
+                label={t("Usta")}
                 value={latest?.foreman || "—"}
                 color="#8896a5"
               />
+
               {delays.length > 0 && (
                 <InfoRow
-                  label="Kechikishlar"
-                  value={`${delays.length} ta · ${Math.floor(totalDelayMin / 60)}s ${totalDelayMin % 60}d`}
+                  label={t("Kechikishlar")}
+                  value={`${delays.length} ${t("ta")} · ${Math.floor(totalDelayMin / 60)}${t("s")} ${totalDelayMin % 60}${t("d")}`}
                   color={totalDelayMin > 30 ? "#ff2d55" : "#ffd60a"}
                 />
               )}
+
               {apiKey === "eaf" && (
                 <>
                   <Divider
                     sx={{ my: 1, borderColor: "rgba(255,255,255,0.06)" }}
                   />
                   <InfoRow
-                    label="O'rt quvvat"
+                    label={t("O'rt quvvat")}
                     value={`${fmtN(avgPower / 1000, 0)} MW`}
                     color="#ffd60a"
                   />
                   <InfoRow
-                    label="Quvvat vaqti"
+                    label={t("Quvvat vaqti")}
                     value={`${Math.floor(powerOnTime / 60)} min`}
                     color="#00e676"
                   />
                   <InfoRow
-                    label="Uglerod"
+                    label={t("Uglerod")}
                     value={`${fmtN(injectedCarbon, 0)} kg`}
                     color="#ff9500"
                   />
                   <InfoRow
-                    label="Yoqilg'i"
+                    label={t("Yoqilg'i")}
                     value={`${fmtN(injectedFuel, 0)} kg`}
                     color="#a78bfa"
                   />
                   {hotHeel > 0 && (
                     <InfoRow
-                      label="Pech qolgan issiq suyuq metall"
+                      label={t("Pech qolgan issiq suyuq metall")}
                       value={`${fmtN(hotHeel / 1000, 1)} t`}
                       color="#ff6b1a"
                     />
                   )}
                 </>
               )}
+
               {apiKey === "vod" && (
                 <>
                   <Divider
                     sx={{ my: 1, borderColor: "rgba(255,255,255,0.06)" }}
                   />
                   <InfoRow
-                    label="Min vakuum"
+                    label={t("Min vakuum")}
                     value={`${fmtN(minVacuum, 1)} mbar`}
                     color="#a78bfa"
                   />
                   <InfoRow
-                    label="Pompalash"
+                    label={t("Pompalash")}
                     value={`${Math.floor(pumpVacuumTime / 60)} min`}
                     color="#00d4ff"
                   />
                   <InfoRow
-                    label="Kislorod"
+                    label={t("Kislorod")}
                     value={`${fmtN(totalOxygen, 0)} m³`}
                     color="#ff6b1a"
                   />
                 </>
               )}
+
               {apiKey === "tsc" && liquidusTemp > 0 && (
                 <>
                   <Divider
@@ -6042,9 +6195,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
         </Grid>
       </Grid>
 
-      {/* ═══ PASTKI QATOR: Energiya trendi + Materiallar + Kimyo ═══ */}
       <Grid container spacing={2} sx={{ mt: 0.5 }}>
-        {/* Energiya / chiqarish trendi */}
         {energyTrend.length > 1 && (
           <Grid item xs={12} md={6}>
             <Paper
@@ -6063,8 +6214,9 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                   mb: 1.5,
                 }}
               >
-                ⚡ ENERGIYA VA CHIQARISH TRENDI — {periodLabel}
+                ⚡ {t("ENERGIYA VA CHIQARISH TRENDI")} — {t(periodLabel)}
               </Typography>
+
               <ResponsiveContainer width="100%" height={180}>
                 <BarChart
                   data={energyTrend}
@@ -6089,27 +6241,27 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                     }}
                     formatter={(v, n) => [
                       `${fmtN(v, 1)} ${n === "Energiya" ? "MWh" : "t"}`,
-                      n,
+                      t(n),
                     ]}
                   />
                   <Legend wrapperStyle={{ fontSize: 11 }} />
                   <Bar
                     dataKey="energy"
                     fill="#ffd60a"
-                    name="Energiya"
+                    name={t("Energiya")}
                     radius={[3, 3, 0, 0]}
                     opacity={0.8}
                   />
                   <Bar
                     dataKey="output"
                     fill="#00e676"
-                    name="Chiqarish"
+                    name={t("Chiqarish")}
                     radius={[3, 3, 0, 0]}
                     opacity={0.8}
                   />
                 </BarChart>
               </ResponsiveContainer>
-              {/* Trendi ostida xulosa */}
+
               <Box
                 sx={{
                   display: "flex",
@@ -6123,7 +6275,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
               >
                 {[
                   {
-                    l: "Jami energiya",
+                    l: t("Jami energiya"),
                     v: `${fmtN(
                       energyTrend.reduce((s, e) => s + e.energy, 0),
                       1,
@@ -6131,7 +6283,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                     c: "#ffd60a",
                   },
                   {
-                    l: "Jami chiqarish",
+                    l: t("Jami chiqarish"),
                     v: `${fmtN(
                       energyTrend.reduce((s, e) => s + e.output, 0),
                       1,
@@ -6139,8 +6291,12 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                     c: "#00e676",
                   },
                   {
-                    l: "O'rtacha",
-                    v: `${fmtN(energyTrend.reduce((s, e) => s + e.energy, 0) / energyTrend.length, 1)} MWh`,
+                    l: t("O'rtacha"),
+                    v: `${fmtN(
+                      energyTrend.reduce((s, e) => s + e.energy, 0) /
+                        energyTrend.length,
+                      1,
+                    )} MWh`,
                     c: "#8896a5",
                   },
                 ].map((m) => (
@@ -6168,10 +6324,8 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
           </Grid>
         )}
 
-        {/* Materiallar + Kimyoviy tarkib */}
         <Grid item xs={12} md={energyTrend.length > 1 ? 6 : 12}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            {/* Materiallar */}
             {Object.keys(materialGrouped).length > 0 && (
               <Paper
                 sx={{
@@ -6189,7 +6343,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                     mb: 1,
                   }}
                 >
-                  📦 MATERIAL QO'SHILISHLARI
+                  📦 {t("MATERIAL QO'SHILISHLARI")}
                 </Typography>
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.8 }}>
                   {Object.entries(materialGrouped).map(([code, wgt]) => (
@@ -6234,7 +6388,6 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
               </Paper>
             )}
 
-            {/* Scrap bucketlar (EAF) */}
             {buckets.length > 0 && (
               <Paper
                 sx={{
@@ -6252,7 +6405,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                     mb: 1,
                   }}
                 >
-                  🏗️ SCRAP SAVATLAR
+                  🏗️ {t("SCRAP SAVATLAR")}
                 </Typography>
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
                   {buckets.map((b, i) => {
@@ -6280,7 +6433,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                             mb: 0.2,
                           }}
                         >
-                          Savat #{b.bucketSequence}
+                          {t("Savat")} #{b.bucketSequence}
                         </Typography>
                         <Typography
                           sx={{
@@ -6295,7 +6448,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                         <Typography
                           sx={{ fontSize: "0.5rem", color: "#6b7280" }}
                         >
-                          {(b.bucketCharges || []).length} qatlam
+                          {(b.bucketCharges || []).length} {t("qatlam")}
                         </Typography>
                       </Box>
                     );
@@ -6304,7 +6457,6 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
               </Paper>
             )}
 
-            {/* TSC strandlar */}
             {strands.length > 0 && (
               <Paper
                 sx={{
@@ -6322,7 +6474,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                     mb: 1,
                   }}
                 >
-                  🧊 STRANDLAR
+                  🧊 {t("STRANDLAR")}
                 </Typography>
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
                   {strands.map((s, i) => (
@@ -6345,7 +6497,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                           color: "#8896a5",
                         }}
                       >
-                        Strand #{s.strandNo}
+                        {t("Strand")} #{s.strandNo}
                       </Typography>
                       <Typography
                         sx={{
@@ -6366,7 +6518,6 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
               </Paper>
             )}
 
-            {/* Kimyoviy tarkib */}
             {lastAnalysis && (
               <Paper
                 sx={{
@@ -6384,7 +6535,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
                     mb: 1,
                   }}
                 >
-                  🔬 KIMYOVIY TARKIB — {lastAnalysis.sampleId} ·{" "}
+                  🔬 {t("KIMYOVIY TARKIB")} — {lastAnalysis.sampleId} ·{" "}
                   {fmtT(lastAnalysis.sampleTime)}
                 </Typography>
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.8 }}>
@@ -6407,7 +6558,7 @@ function SxemaLiveOverlay({ apiKey, c, isDark }) {
 }
 
 // Analytics
-export function analyzeHeat(h) {
+export function analyzeHeat(h, t = (v) => v) {
   const results = [];
 
   const scrap = h.totalScrap || 0;
@@ -6424,12 +6575,11 @@ export function analyzeHeat(h) {
 
   const lastTemp = temps.at(-1)?.temperature || 0;
   const minTemp = temps.length
-    ? Math.min(...temps.map((t) => t.temperature))
+    ? Math.min(...temps.map((tItem) => tItem.temperature))
     : 0;
 
   const ratio = hbi > 0 ? scrap / hbi : 0;
 
-  // ⏱ DELAY DETAIL (soat hisoblash)
   let totalDelayMin = 0;
   let delayReasons = [];
 
@@ -6441,87 +6591,82 @@ export function analyzeHeat(h) {
     totalDelayMin += diffMin;
 
     if (d.delayReason) {
-      delayReasons.push(`${d.delayReason} (${Math.round(diffMin)} min)`);
+      delayReasons.push(
+        `${t(d.delayReason)} (${Math.round(diffMin)} ${t("min")})`,
+      );
     }
   });
 
   const delayHours = (totalDelayMin / 60).toFixed(1);
 
-  // ⚡ ENERGY
   if (energyPerTon > 450) {
     results.push({
-      title: "⚡ Elektr sarfi yuqori",
+      title: t("⚡ Elektr sarfi yuqori"),
       value: `${energyPerTon.toFixed(0)} kWh/t`,
-      problem: `Normadan ${(energyPerTon - 400).toFixed(0)} kWh ko‘p`,
-
+      problem: `${t("Normadan")} ${(energyPerTon - 400).toFixed(0)} kWh ${t("ko‘p")}`,
       reason: [
         totalDelayMin > 0 &&
-          `⏱ ${delayHours} soat ishlamagan (${delayReasons.join(", ")})`,
+          `⏱ ${delayHours} ${t("soat ishlamagan")} (${delayReasons.join(", ")})`,
 
         minTemp > 0 &&
           minTemp < 1500 &&
-          `🌡 Harorat ${minTemp}°C gacha tushgan`,
+          `🌡 ${t("Harorat")} ${minTemp}°C ${t("gacha tushgan")}`,
 
-        ratio > 5 && `🪨 Scrap juda ko‘p (${ratio.toFixed(1)})`,
+        ratio > 5 && `🪨 ${t("Scrap juda ko‘p")} (${ratio.toFixed(1)})`,
       ].filter(Boolean),
-
-      solution: "Delaylarni kamaytirish va temperaturani ushlab turish",
+      solution: t("Delaylarni kamaytirish va temperaturani ushlab turish"),
     });
   }
 
-  // 🌡 TEMPERATURE
   if (minTemp < 1500) {
     results.push({
-      title: "🌡 Harorat muammosi",
+      title: t("🌡 Harorat muammosi"),
       value: `${lastTemp}°C`,
-      problem: `Minimal ${minTemp}°C bo‘lgan (norma 1600+)`,
+      problem: `${t("Minimal")} ${minTemp}°C ${t("bo‘lgan")} (${t("norma")} 1600+)`,
       reason: [
-        "Energiya yetishmagan",
-        totalDelayMin > 0 && "Jarayon uzilgan",
+        t("Energiya yetishmagan"),
+        totalDelayMin > 0 && t("Jarayon uzilgan"),
       ].filter(Boolean),
-      solution: "Power rejimini oshirish",
+      solution: t("Power rejimini oshirish"),
     });
   }
 
-  // ⏱ DELAY
   if (totalDelayMin > 0) {
     results.push({
-      title: "⏱ Kechikishlar",
-      value: `${delayHours} soat`,
-      problem: `${Math.round(totalDelayMin)} minut ishlab turmagan`,
+      title: t("⏱ Kechikishlar"),
+      value: `${delayHours} ${t("soat")}`,
+      problem: `${Math.round(totalDelayMin)} ${t("minut ishlab turmagan")}`,
       reason: delayReasons,
-      solution: "Uskunalarni tekshirish",
+      solution: t("Uskunalarni tekshirish"),
     });
   }
 
-  // 🧮 YIELD
   if (yieldVal < 0.9) {
     results.push({
-      title: "🧮 Samaradorlik past",
+      title: t("🧮 Samaradorlik past"),
       value: `${(yieldVal * 100).toFixed(1)}%`,
-      problem: "Metall yo‘qotish yuqori",
+      problem: t("Metall yo‘qotish yuqori"),
       reason: [
-        ratio < 1 && "HBI ko‘p ishlatilgan",
-        ratio > 6 && "Scrap sifati past",
+        ratio < 1 && t("HBI ko‘p ishlatilgan"),
+        ratio > 6 && t("Scrap sifati past"),
       ].filter(Boolean),
-      solution: "Material balansni optimallashtirish",
+      solution: t("Material balansni optimallashtirish"),
     });
   }
 
-  // 🪨 RATIO
   if (ratio > 6 || ratio < 1) {
     results.push({
-      title: "🪨 Scrap/HBI balans",
+      title: t("🪨 Scrap/HBI balans"),
       value: ratio.toFixed(2),
-      problem: "Optimal emas (2–4 bo‘lishi kerak)",
-      reason: [`Joriy ratio: ${ratio.toFixed(2)}`],
-      solution: "Xom ashyoni qayta balanslash",
+      problem: t("Optimal emas (2–4 bo‘lishi kerak)"),
+      reason: [`${t("Joriy ratio")}: ${ratio.toFixed(2)}`],
+      solution: t("Xom ashyoni qayta balanslash"),
     });
   }
 
   if (results.length === 0) {
     results.push({
-      title: "✅ Hammasi yaxshi",
+      title: t("✅ Hammasi yaxshi"),
       value: "",
       problem: "",
       reason: [],
@@ -6543,6 +6688,7 @@ export default function UskunaDetailPage() {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
   const [tab, setTab] = useState(0);
+  const { t } = useScriptText();
 
   const uskuna = location.state?.uskuna ?? null;
 
@@ -6555,7 +6701,7 @@ export default function UskunaDetailPage() {
             color: "text.secondary",
           }}
         >
-          Uskuna topilmadi: {id}
+          {t("Uskuna topilmadi:")} {id}
         </Typography>
         <Box sx={{ mt: 2 }}>
           <IconButton onClick={() => navigate(-1)}>
@@ -6633,7 +6779,7 @@ export default function UskunaDetailPage() {
             color: "text.secondary",
           }}
         >
-          Uskunalar
+          {t("Uskunalar")}
         </Typography>
 
         <Typography
@@ -6654,7 +6800,7 @@ export default function UskunaDetailPage() {
             ml: 0.5,
           }}
         >
-          {uskuna.nom}
+          {t(uskuna.nom)}
         </Typography>
 
         <Box sx={{ flex: 1 }} />
@@ -6662,7 +6808,7 @@ export default function UskunaDetailPage() {
         <StatusChip holat={uskuna.holat} />
 
         <Chip
-          label={uskuna.tur}
+          label={t(uskuna.tur)}
           size="small"
           sx={{
             height: 20,
@@ -6709,8 +6855,8 @@ export default function UskunaDetailPage() {
           },
         }}
       >
-        {tabs.map((t, i) => (
-          <Tab key={i} label={t} />
+        {tabs.map((text, i) => (
+          <Tab key={i} label={t(text)} />
         ))}
       </Tabs>
 
@@ -6758,9 +6904,11 @@ export default function UskunaDetailPage() {
                 textAlign: "center",
               }}
             >
-              Bu uskuna uchun real-time tarix mavjud emas.
+              {t("Bu uskuna uchun real-time tarix mavjud emas.")}
               <br />
-              Faqat EAF, LRF, VOD, TSC uskunalari uchun API tarixi ko'rsatiladi.
+              {t(
+                " Faqat EAF, LRF, VOD, TSC uskunalari uchun API tarixi ko'rsatiladi.",
+              )}
             </Typography>
           </Paper>
         )}

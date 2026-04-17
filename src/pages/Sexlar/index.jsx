@@ -1035,6 +1035,7 @@ const SexSVG = {
 function SexDetailPanel({ sex }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
+  const { t } = useScriptText();
   // const { data: uch } = useQuery({
   //   queryKey: ["uchastkalar", sex.id],
   //   queryFn: () => getUchastkalar(sex.id),
@@ -1110,7 +1111,7 @@ function SexDetailPanel({ sex }) {
                   mb: 0.5,
                 }}
               >
-                {s.l}
+                {t(s.l)}
               </Typography>
               {typeof s.v === "string" || typeof s.v === "number" ? (
                 <Typography
@@ -1120,10 +1121,10 @@ function SexDetailPanel({ sex }) {
                     color: s.c || "text.primary",
                   }}
                 >
-                  {s.v}
+                  {t(s.v)}
                 </Typography>
               ) : (
-                s.v
+                t(s.v)
               )}
             </Box>
           </Grid>
@@ -1141,7 +1142,7 @@ function SexDetailPanel({ sex }) {
               mb: 1,
             }}
           >
-            HUDUDLAR
+            {t("HUDUDLAR")}
           </Typography>
           {/* {uchastkalar.map((u) => (
             <Box
@@ -1204,10 +1205,10 @@ function SexDetailPanel({ sex }) {
                       color: "text.primary",
                     }}
                   >
-                    {u.nom}
+                    {t(u.nom)}
                   </Typography>
 
-                  {u.live && (
+                  {/* {u.live && (
                     <Typography
                       sx={{
                         fontFamily: "'Arial',san-serif",
@@ -1222,7 +1223,7 @@ function SexDetailPanel({ sex }) {
                     >
                       LIVE
                     </Typography>
-                  )}
+                  )} */}
                 </Box>
 
                 <Typography
@@ -1357,6 +1358,7 @@ function SexCard({ s, selected, onClick }) {
   const Illustration = SexSVG[s.id];
   const color = svgColor[s.id] || "#00d4ff";
   const isSelected = selected?.id === s.id;
+  const { t } = useScriptText();
   const hasImage =
     s.id === "SEX-02" ||
     s.id === "SEX-07" ||

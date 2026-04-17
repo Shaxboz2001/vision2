@@ -38,7 +38,9 @@ export default function App() {
           {(muiTheme) => (
             <MuiThemeProvider theme={muiTheme}>
               <CssBaseline />
-              <div style={{ fontFamily: "Arial, sans-serif !important" }}>
+              <div
+                style={{ fontFamily: "Serif, Arial, sans-serif !important" }}
+              >
                 <BrowserRouter>
                   <Layout>
                     <Routes>

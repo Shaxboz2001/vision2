@@ -232,6 +232,7 @@ export const SectionHeader = ({ title, dot = "#00d4ff", action, children }) => (
       borderBottom: "1px solid",
       borderColor: "divider",
       background: "rgba(128,128,128,0.02)",
+      fontFamily: "serif",
     }}
   >
     <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>

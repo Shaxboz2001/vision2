@@ -2052,26 +2052,26 @@ export default function Dashboard() {
 
     return [
       {
-        label: "KOMPLEKS ISHLAB CHIQARISH QUVVATI",
+        label: t("KOMPLEKS ISHLAB CHIQARISH QUVVATI"),
         value: fmtN(totalProductionTon, 1),
         unit: "t",
-        trend: `${periodLabel} bo'yicha jami`,
+        trend: `${periodLabel} ${t("bo'yicha jami")}`,
         trendUp: true,
         color: ui.orange,
       },
       {
-        label: "USKUNALARNING ISHLAB CHIQARISH JARAYONLARI",
+        label: t("USKUNALARNING ISHLAB CHIQARISH JARAYONLARI"),
         value: `${activeUnits}/${totalUnits}`,
         unit: "",
-        trend: "Eritish / Qayta ishlash / Vakuum / Quyish",
+        trend: t("Eritish / Qayta ishlash / Vakuum / Quyish"),
         trendUp: true,
         color: ui.blue,
       },
       {
-        label: "MAJMUADAGI PECHLARNING O'RTA HARORATI",
+        label: t("MAJMUADAGI PECHLARNING O'RTA HARORATI"),
         value: fmtN(avgTemp, 0),
         unit: "°C",
-        trend: "Kompleks bo‘yicha o‘rtacha",
+        trend: t("Kompleks bo‘yicha o‘rtacha"),
         trendUp: false,
         color: ui.red,
       },
@@ -2084,10 +2084,10 @@ export default function Dashboard() {
       //   color: ui.green,
       // },
       {
-        label: "MAJMUADAGI UMUMIY ENERGIYA SARFI",
+        label: t("MAJMUADAGI UMUMIY ENERGIYA SARFI"),
         value: fmtN(totalEnergy, 0),
-        unit: "kWh",
-        trend: "Eritish + Qayta ishlash bo‘yicha",
+        unit: t("kWh"),
+        trend: t("Eritish + Qayta ishlash bo‘yicha"),
         trendUp: false,
         color: ui.yellow,
       },
@@ -2126,7 +2126,7 @@ export default function Dashboard() {
       {
         id: "EAF",
         emoji: "🔥",
-        nom: "Elektrda Metallni Eritish",
+        nom: t("Elektrda Metallni Eritish"),
         holat: getStatusByProcess(latestEAF, "EAF"),
         uchastkalar: 1,
         faolUskunalar: latestEAF ? 1 : 0,
@@ -2140,7 +2140,7 @@ export default function Dashboard() {
       {
         id: "LRF",
         emoji: "⚡",
-        nom: "Po‘latni pechda qayta ishlash",
+        nom: t("Po‘latni pechda qayta ishlash"),
         holat: getStatusByProcess(latestLRF, "LRF"),
         uchastkalar: 1,
         faolUskunalar: latestLRF ? 1 : 0,
@@ -2154,7 +2154,7 @@ export default function Dashboard() {
       {
         id: "VOD",
         emoji: "🫧",
-        nom: "Vakuum ostida qayta ishlash",
+        nom: t("Vakuum ostida qayta ishlash"),
         holat: getStatusByProcess(latestVOD, "VOD"),
         uchastkalar: 1,
         faolUskunalar: latestVOD ? 1 : 0,
@@ -2168,7 +2168,7 @@ export default function Dashboard() {
       {
         id: "TSC",
         emoji: "🏭",
-        nom: "Uzluksiz quyish",
+        nom: t("Uzluksiz quyish"),
         holat: getStatusByProcess(latestTSC, "TSC"),
         uchastkalar: 1,
         faolUskunalar: latestTSC ? 1 : 0,
@@ -2194,7 +2194,7 @@ export default function Dashboard() {
       if (eafKwhTon > 520) {
         out.push({
           id: "eaf-energy",
-          xabar: `Elektrda metall eritishda energiya sarfi yuqori: ${fmtN(eafKwhTon, 1)} kWh/t`,
+          xabar: `${t("Elektrda metall eritishda energiya sarfi yuqori:")} ${fmtN(eafKwhTon, 1)} kWh/t`,
           daraja: "kritik",
           vaqt: new Date().toISOString(),
         });
@@ -2204,7 +2204,7 @@ export default function Dashboard() {
       if (delayMin > 30) {
         out.push({
           id: "eaf-delay",
-          xabar: `Elektrda metall eritishda to'xtalish vaqti yuqori: ${delayMin} min`,
+          xabar: `${t("Elektrda metall eritishda to'xtalish vaqti yuqori:")} ${delayMin} min`,
           daraja: "ogohlantirish",
           vaqt: new Date().toISOString(),
         });
@@ -2213,7 +2213,7 @@ export default function Dashboard() {
       if ((latestEAF.powerOnTime || 0) > 70) {
         out.push({
           id: "eaf-poweron",
-          xabar: `Elektrda metall eritishda ishlash vaqti uzun: ${latestEAF.powerOnTime} min`,
+          xabar: `${t("Elektrda metall eritishda ishlash vaqti uzun:")} ${latestEAF.powerOnTime} min`,
           daraja: "ogohlantirish",
           vaqt: new Date().toISOString(),
         });
@@ -2229,7 +2229,7 @@ export default function Dashboard() {
       if (lrfKwhTon > 80) {
         out.push({
           id: "lrf-energy",
-          xabar: `LRF energiya sarfi yuqori: ${fmtN(lrfKwhTon, 1)} kWh/t`,
+          xabar: `${t("LRF energiya sarfi yuqori:")} ${fmtN(lrfKwhTon, 1)} kWh/t`,
           daraja: "ogohlantirish",
           vaqt: new Date().toISOString(),
         });
@@ -2238,7 +2238,7 @@ export default function Dashboard() {
       if ((latestLRF.powerOnTime || 0) > 80) {
         out.push({
           id: "lrf-time",
-          xabar: `LRF davomiyligi uzun: ${latestLRF.powerOnTime} min`,
+          xabar: `${t("LRF davomiyligi uzun:")} ${latestLRF.powerOnTime} min`,
           daraja: "ogohlantirish",
           vaqt: new Date().toISOString(),
         });
@@ -2249,7 +2249,7 @@ export default function Dashboard() {
       if ((latestVOD.totalDeepVacuumTime || 0) > 40) {
         out.push({
           id: "vod-vacuum",
-          xabar: `VOD deep vacuum vaqti yuqori: ${latestVOD.totalDeepVacuumTime} min`,
+          xabar: `${t("VOD deep vacuum vaqti yuqori:")} ${latestVOD.totalDeepVacuumTime} min`,
           daraja: "ogohlantirish",
           vaqt: new Date().toISOString(),
         });
@@ -2258,7 +2258,7 @@ export default function Dashboard() {
       if ((latestVOD.minVacuumPressure || 0) > 5) {
         out.push({
           id: "vod-pressure",
-          xabar: `VOD vacuum pressure normadan yuqori: ${fmtN(
+          xabar: `${t("VOD vacuum pressure normadan yuqori:")} ${fmtN(
             latestVOD.minVacuumPressure,
             2,
           )}`,
@@ -2271,7 +2271,7 @@ export default function Dashboard() {
       if (vodDelay > 20) {
         out.push({
           id: "vod-delay",
-          xabar: `VOD bekor turish vaqti: ${vodDelay} min`,
+          xabar: `${t("VOD bekor turish vaqti:")} ${vodDelay} min`,
           daraja: "ogohlantirish",
           vaqt: new Date().toISOString(),
         });
@@ -2286,7 +2286,7 @@ export default function Dashboard() {
       if (avgCastSpeed > 0 && avgCastSpeed < 0.8) {
         out.push({
           id: "tsc-speed",
-          xabar: `TSC quyish tezligi past: ${fmtN(avgCastSpeed, 2)} m/min`,
+          xabar: `${t("TSC quyish tezligi past:")} ${fmtN(avgCastSpeed, 2)} m/min`,
           daraja: "kritik",
           vaqt: new Date().toISOString(),
         });
@@ -2298,7 +2298,7 @@ export default function Dashboard() {
       if (liquidus && temp > liquidus + 40) {
         out.push({
           id: "tsc-temp-high",
-          xabar: `TSC harorati liquidusdan ${fmtN(temp - liquidus, 0)}°C yuqori`,
+          xabar: `${t("TSC harorati liquidusdan")} ${fmtN(temp - liquidus, 0)}°C yuqori`,
           daraja: "ogohlantirish",
           vaqt: new Date().toISOString(),
         });
@@ -2307,7 +2307,7 @@ export default function Dashboard() {
       if (liquidus && temp < liquidus - 20) {
         out.push({
           id: "tsc-temp-low",
-          xabar: `TSC harorati liquidusdan ${fmtN(liquidus - temp, 0)}°C past`,
+          xabar: `${t("TSC harorati liquidusdan")} ${fmtN(liquidus - temp, 0)}°C past`,
           daraja: "kritik",
           vaqt: new Date().toISOString(),
         });
@@ -2317,7 +2317,7 @@ export default function Dashboard() {
     if (!out.length) {
       out.push({
         id: "normal",
-        xabar: "Muhim ogohlantirish aniqlanmadi",
+        xabar: t("Muhim ogohlantirish aniqlanmadi"),
         daraja: "info",
         vaqt: new Date().toISOString(),
       });
@@ -2468,7 +2468,7 @@ export default function Dashboard() {
               sx={{
                 fontFamily: "'Arial', san-serif",
                 fontSize: { xs: "1rem", md: "1.18rem" },
-                fontWeight: 900,
+                fontWeight: "bold",
                 letterSpacing: "0.08em",
                 color: ui.lpkAccent,
                 textTransform: "uppercase",

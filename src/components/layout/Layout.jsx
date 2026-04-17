@@ -1545,7 +1545,7 @@ function SectionLabel({ children, px = 2, pt = 1.5, pb = 0.6 }) {
     <Box sx={{ px, pt, pb }}>
       <Typography
         sx={{
-          fontFamily: "'Arial', san-serif",
+          fontFamily: "serif, 'Arial', san-serif",
           fontSize: "0.56rem",
           letterSpacing: "0.18em",
           color: "text.secondary",
@@ -1731,7 +1731,7 @@ export function Layout({ children }) {
           primary={t(item.label)}
           primaryTypographyProps={{
             fontSize: "1rem",
-            fontWeight: selected ? 900 : 600,
+            fontWeight: selected ? "bold" : 600,
             letterSpacing: "0.02em",
             color: selected ? "text.primary" : "text.secondary",
           }}
@@ -1817,7 +1817,7 @@ export function Layout({ children }) {
               />
               <Typography
                 sx={{
-                  fontFamily: "'Arial', san-serif",
+                  fontFamily: "serif, 'Arial', san-serif",
                   fontSize: "0.72rem",
                   letterSpacing: "0.12em",
                   color: aiOpen ? "text.primary" : "text.secondary",
@@ -1884,16 +1884,7 @@ export function Layout({ children }) {
             color: isDark ? "#22c55e" : "#0ea5e9",
           }}
         />
-        <Typography
-          sx={{
-            fontFamily: "'Arial', san-serif",
-            fontSize: "0.62rem",
-            color: "text.secondary",
-            fontWeight: 700,
-          }}
-        >
-          v2.4.1 · FAOL
-        </Typography>
+
         <Box sx={{ flex: 1 }} />
         <Typography
           sx={{
@@ -2089,7 +2080,7 @@ export function Layout({ children }) {
                       lg: open ? "1rem" : "1.5rem",
                       xl: "1.2rem",
                     },
-                    fontWeight: 800,
+                    fontWeight: "bold",
                     letterSpacing: {
                       md: open ? "0.08em" : "0.12em",
                       lg: open ? "0.12em" : "0.18em",

@@ -69,6 +69,7 @@ import {
   getTSCHeatReport,
   getVODHeatReport,
 } from "@/api/production";
+import { useScriptText } from "@/hooks/useScriptText";
 
 /* ═══ THRESHOLDS ═══ */
 const T = Object.freeze({
@@ -1776,7 +1777,7 @@ export default function Analitika() {
   const [fcUnit, setFcUnit] = useState("ALL");
   const [showFilters, setShowFilters] = useState(false);
   const [compPeriod, setCompPeriod] = useState("month");
-
+  const { t } = useScriptText();
   const now = dayjs(),
     b30 = now.subtract(30, "day");
   const [filters, setFilters] = useState({
@@ -1979,7 +1980,7 @@ export default function Analitika() {
         <Stack spacing={2} alignItems="center">
           <CircularProgress size={48} />
           <Typography sx={{ color: "text.secondary", fontSize: "0.9rem" }}>
-            AI tahlil yuklanmoqda — barcha pechlar tekshirilmoqda...
+            {t("AI tahlil yuklanmoqda — barcha pechlar tekshirilmoqda...")}
           </Typography>
         </Stack>
       </Box>
@@ -2038,17 +2039,19 @@ export default function Analitika() {
               <Typography
                 sx={{
                   fontSize: "1.25rem",
-                  fontWeight: 900,
+                  fontWeight: "bold",
                   color: ui.textMain,
                 }}
               >
-                AI Tahlil
+                {t("AI Tahlil")}
               </Typography>
             </Stack>
             <Typography
               sx={{ color: ui.textSoft, mt: 0.6, fontSize: "0.84rem" }}
             >
-              Elektrda eritish • Qayta ishlash • Quyish • Vakuum — tezkor xulosa
+              {t(
+                "Elektrda eritish • Qayta ishlash • Quyish • Vakuum — tezkor xulosa",
+              )}
             </Typography>
           </Box>
           <Stack
@@ -2081,7 +2084,7 @@ export default function Analitika() {
 
       {w.length > 0 && (
         <Alert severity="warning" sx={{ borderRadius: 3 }}>
-          API: {w.join(", ")}
+          {t("API:")} {w.join(", ")}
         </Alert>
       )}
 
@@ -2091,18 +2094,18 @@ export default function Analitika() {
       <Grid container spacing={1.5}>
         <Grid item xs={6} sm={3}>
           <KPI
-            title="Jami eritishlar soni"
+            title={t("Jami eritishlar soni")}
             value={fmtN(exec.totalHeats, 0)}
-            subtitle="Tanlangan davrdagi barcha jarayonlar"
+            subtitle={t("Tanlangan davrdagi barcha jarayonlar")}
             color="#0ea5e9"
             icon={<PrecisionManufacturingRoundedIcon />}
           />
         </Grid>
         <Grid item xs={6} sm={3}>
           <KPI
-            title="Jami suyuq metall"
+            title={t("Jami suyuq metall")}
             value={`${fmtN(exec.totalTons, 1)} t`}
-            subtitle="Barcha pechlardan olingan (tonna)"
+            subtitle={t("Barcha pechlardan olingan (tonna)")}
             color="#22c55e"
             icon={<WaterfallChartRoundedIcon />}
           />
@@ -2145,7 +2148,7 @@ export default function Analitika() {
           sx={{ mb: 2 }}
         >
           <Typography sx={{ fontWeight: 800, color: ui.textMain }}>
-            Davriy solishtirish (oldingi davr bilan taqqos)
+            {t("Davriy solishtirish (oldingi davr bilan taqqos)")}
           </Typography>
           <ToggleButtonGroup
             value={compPeriod}
@@ -2157,25 +2160,25 @@ export default function Analitika() {
               value="day"
               sx={{ fontWeight: 700, textTransform: "none" }}
             >
-              Kunlik
+              {t("Kunlik")}
             </ToggleButton>
             <ToggleButton
               value="week"
               sx={{ fontWeight: 700, textTransform: "none" }}
             >
-              Haftalik
+              {t("Haftalik")}
             </ToggleButton>
             <ToggleButton
               value="month"
               sx={{ fontWeight: 700, textTransform: "none" }}
             >
-              Oylik
+              {t("Oylik")}
             </ToggleButton>
             <ToggleButton
               value="year"
               sx={{ fontWeight: 700, textTransform: "none" }}
             >
-              Yillik
+              {t("Yillik")}
             </ToggleButton>
           </ToggleButtonGroup>
         </Stack>
@@ -2194,12 +2197,12 @@ export default function Analitika() {
           <DP>
             <Box sx={{ p: 2 }}>
               <Typography sx={{ fontWeight: 800, mb: 0.3 }}>
-                Ishlab chiqarish trendi (tonnada)
+                {t("Ishlab chiqarish trendi (tonnada)")}
               </Typography>
               <Typography
                 sx={{ fontSize: "0.68rem", color: "text.secondary", mb: 1 }}
               >
-                Har bir pechdan kunlik olingan suyuq po'lat miqdori
+                {t("Har bir pechdan kunlik olingan suyuq po'lat miqdori")}
               </Typography>
               <Box sx={{ height: 260 }}>
                 <ResponsiveContainer width="100%" height="100%">
@@ -2250,13 +2253,14 @@ export default function Analitika() {
           <DP>
             <Box sx={{ p: 2 }}>
               <Typography sx={{ fontWeight: 800, mb: 0.3 }}>
-                Pechlar baholari (100 ball tizimi)
+                {t("Pechlar baholari (100 ball tizimi)")}
               </Typography>
               <Typography
                 sx={{ fontSize: "0.68rem", color: "text.secondary", mb: 1 }}
               >
-                Yashil = yaxshi (85+), sariq = o'rtacha (65-84), qizil = xavfli
-                (65 dan past)
+                {t(
+                  "Yashil = yaxshi (85+), sariq = o'rtacha (65-84), qizil = xavfli(65 dan past)",
+                )}
               </Typography>
               <Box sx={{ height: 160 }}>
                 <ResponsiveContainer width="100%" height="100%">
@@ -2296,13 +2300,13 @@ export default function Analitika() {
                     color: ui.textMain,
                   }}
                 >
-                  AI xulosa
+                  {t("AI xulosa")}
                 </Typography>
               </Stack>
               <Typography
                 sx={{ color: ui.textSoft, fontSize: "0.8rem", lineHeight: 1.6 }}
               >
-                {dm}
+                {t(dm)}
               </Typography>
             </Box>
           </DP>
@@ -2316,7 +2320,7 @@ export default function Analitika() {
           onClick={() => setShowFilters(!showFilters)}
           sx={{ textTransform: "none", color: ui.textMuted, fontWeight: 700 }}
         >
-          {showFilters ? "Filterlarni yashirish ▲" : "Filterlar ▼"}
+          {showFilters ? t("Filterlarni yashirish ▲") : t("Filterlar ▼")}
         </Button>
         {showFilters && (
           <DP sx={{ p: 2, mt: 1 }}>

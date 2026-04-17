@@ -23,6 +23,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import { useScriptText } from "@/hooks/useScriptText";
 import {
   getUskunaImage,
   getUskunaTempPoints,
@@ -30,8 +31,8 @@ import {
 } from "./UskunaImageMap";
 
 // ═══════════════════════════════════════════════════════════════
-//  CALLOUT LINE — Premium SCADA/HMI annotation
-//  Nuqta (uskunada) → yorqin chiziq → premium glass karta (chetda)
+//  CALLOUT LINE — Premium SCADA/HMI annotation with elbow connector
+//  Nuqta (uskunada) → gorizontal chiziq → vertikal tirsakli → glass karta (chetda)
 // ═══════════════════════════════════════════════════════════════
 function CalloutLine({
   value,
@@ -40,6 +41,7 @@ function CalloutLine({
   color = "#00e676",
   dotX = 50,
   dotY = 50,
+  cardY: _cardY,
   side = "left",
   pulse,
   compact = false,
@@ -47,6 +49,12 @@ function CalloutLine({
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
   const isLeft = side === "left";
+  const { t } = useScriptText();
+
+  const cardY = _cardY ?? dotY;
+  const hasElbow = Math.abs(cardY - dotY) > 1.5;
+  const elbowTop = Math.min(dotY, cardY);
+  const elbowHeight = Math.abs(cardY - dotY);
 
   return (
     <>
@@ -61,17 +69,16 @@ function CalloutLine({
           pointerEvents: "none",
         }}
       >
-        {/* Tashqi halqa */}
         <Box
           sx={{
-            width: 18,
-            height: 18,
+            width: 20,
+            height: 20,
             borderRadius: "50%",
-            border: `1.5px solid ${color}55`,
+            border: `2px solid ${color}60`,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            background: `radial-gradient(circle, ${color}12 0%, transparent 70%)`,
+            background: `radial-gradient(circle, ${color}15 0%, transparent 70%)`,
             ...(pulse && {
               animation: "cRingPulse 2.5s ease-in-out infinite",
               "@keyframes cRingPulse": {
@@ -80,27 +87,26 @@ function CalloutLine({
                   boxShadow: `0 0 0 0 ${color}20`,
                 },
                 "50%": {
-                  borderColor: `${color}aa`,
-                  boxShadow: `0 0 0 5px ${color}08`,
+                  borderColor: `${color}bb`,
+                  boxShadow: `0 0 0 6px ${color}12`,
                 },
               },
             }),
           }}
         >
-          {/* Ichki yadro */}
           <Box
             sx={{
-              width: 7,
-              height: 7,
+              width: 8,
+              height: 8,
               borderRadius: "50%",
               background: color,
-              boxShadow: `0 0 8px ${color}cc, 0 0 16px ${color}40`,
+              boxShadow: `0 0 10px ${color}cc, 0 0 18px ${color}50`,
             }}
           />
         </Box>
       </Box>
 
-      {/* ── CHIZIQ: 3 qatlam (glow + asosiy + highlight) ── */}
+      {/* ── GORIZONTAL CHIZIQ: nuqtadan chetga (dotY darajasida) ── */}
       <Box
         sx={{
           position: "absolute",
@@ -110,7 +116,7 @@ function CalloutLine({
           height: 0,
           zIndex: 6,
           pointerEvents: "none",
-          // 1-qatlam: keng glow (pastda)
+          // Glow
           "&::before": {
             content: '""',
             position: "absolute",
@@ -120,32 +126,32 @@ function CalloutLine({
             height: "6px",
             borderRadius: "3px",
             background: isLeft
-              ? `linear-gradient(to right, ${color}03 0%, ${color}12 50%, ${color}25 100%)`
-              : `linear-gradient(to left, ${color}03 0%, ${color}12 50%, ${color}25 100%)`,
+              ? `linear-gradient(to right, ${color}04 0%, ${color}15 50%, ${color}30 100%)`
+              : `linear-gradient(to left, ${color}04 0%, ${color}15 50%, ${color}30 100%)`,
             filter: "blur(3px)",
           },
-          // 2-qatlam: asosiy chiziq
+          // Asosiy chiziq
           "&::after": {
             content: '""',
             position: "absolute",
-            top: "-0.5px",
+            top: "-0.75px",
             left: 0,
             right: 0,
-            height: "1.5px",
+            height: "2px",
             borderRadius: "1px",
             background: isLeft
-              ? `linear-gradient(to right, ${color}08 0%, ${color}40 30%, ${color}88 70%, ${color}cc 100%)`
-              : `linear-gradient(to left, ${color}08 0%, ${color}40 30%, ${color}88 70%, ${color}cc 100%)`,
+              ? `linear-gradient(to right, ${color}08 0%, ${color}50 30%, ${color}99 70%, ${color}dd 100%)`
+              : `linear-gradient(to left, ${color}08 0%, ${color}50 30%, ${color}99 70%, ${color}dd 100%)`,
           },
         }}
       >
-        {/* 3-qatlam: nuqta yonida yorqin uchi */}
+        {/* Nuqta yonida yorqin uchi */}
         <Box
           sx={{
             position: "absolute",
             top: "-1px",
             ...(isLeft ? { right: 0 } : { left: 0 }),
-            width: "30px",
+            width: "28px",
             height: "2px",
             borderRadius: "1px",
             background: `linear-gradient(${isLeft ? "to left" : "to right"}, ${color}dd, transparent)`,
@@ -154,11 +160,49 @@ function CalloutLine({
         />
       </Box>
 
-      {/* ── KARTA: premium glass panel ── */}
+      {/* ── VERTIKAL TIRSAKLI CHIZIQ: dotY dan cardY gacha chetda ── */}
+      {hasElbow && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: `${elbowTop}%`,
+            height: `${elbowHeight}%`,
+            ...(isLeft ? { left: 0 } : { right: 0 }),
+            width: 0,
+            zIndex: 6,
+            pointerEvents: "none",
+            // Vertikal chiziq
+            "&::after": {
+              content: '""',
+              position: "absolute",
+              top: 0,
+              ...(isLeft ? { left: "-1px" } : { right: "-1px" }),
+              width: "2px",
+              height: "100%",
+              borderRadius: "1px",
+              background: `linear-gradient(to bottom, ${color}${dotY < cardY ? "cc" : "40"} 0%, ${color}${dotY < cardY ? "40" : "cc"} 100%)`,
+            },
+            // Glow
+            "&::before": {
+              content: '""',
+              position: "absolute",
+              top: 0,
+              ...(isLeft ? { left: "-3px" } : { right: "-3px" }),
+              width: "6px",
+              height: "100%",
+              borderRadius: "3px",
+              background: `linear-gradient(to bottom, ${color}12, ${color}06)`,
+              filter: "blur(3px)",
+            },
+          }}
+        />
+      )}
+
+      {/* ── KARTA: premium glass panel — cardY pozitsiyasida ── */}
       <Box
         sx={{
           position: "absolute",
-          top: `${dotY}%`,
+          top: `${cardY}%`,
           transform: "translateY(-50%)",
           ...(isLeft ? { left: 0 } : { right: 0 }),
           zIndex: 9,
@@ -170,22 +214,19 @@ function CalloutLine({
             display: "flex",
             alignItems: "stretch",
             flexDirection: isLeft ? "row" : "row-reverse",
-            // Tashqi soya
             filter: isDark
-              ? `drop-shadow(0 4px 16px rgba(0,0,0,0.5)) drop-shadow(0 0 20px ${color}10)`
-              : `drop-shadow(0 4px 12px rgba(0,0,0,0.08))`,
+              ? `drop-shadow(0 4px 16px rgba(0,0,0,0.5)) drop-shadow(0 0 20px ${color}12)`
+              : `drop-shadow(0 4px 14px rgba(0,0,0,0.1)) drop-shadow(0 1px 3px rgba(0,0,0,0.06))`,
           }}
         >
-          {/* Rangli aksent chiziq (gradient + glow) */}
+          {/* Rangli aksent chiziq */}
           <Box
             sx={{
-              width: 3,
+              width: 4,
               position: "relative",
               borderRadius: isLeft ? "6px 0 0 6px" : "0 6px 6px 0",
               overflow: "hidden",
-              // Asosiy gradient
               background: `linear-gradient(180deg, ${color} 0%, ${color}60 100%)`,
-              // Glow effekt
               "&::before": {
                 content: '""',
                 position: "absolute",
@@ -201,22 +242,22 @@ function CalloutLine({
           {/* Asosiy karta */}
           <Box
             sx={{
-              minWidth: compact ? 82 : 105,
+              minWidth: compact ? 100 : 125,
               position: "relative",
               overflow: "hidden",
-              // Glass background
               background: isDark
-                ? `linear-gradient(135deg, rgba(12,15,28,0.95) 0%, rgba(8,10,22,0.98) 100%)`
-                : `linear-gradient(135deg, rgba(255,255,255,0.97) 0%, rgba(248,250,252,0.99) 100%)`,
+                ? `linear-gradient(135deg, rgba(15,18,35,0.96) 0%, rgba(10,12,26,0.98) 100%)`
+                : `linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(245,247,250,0.99) 100%)`,
               backdropFilter: "blur(24px)",
-              // Border
-              border: `1px solid ${isDark ? `${color}25` : `${color}30`}`,
+              border: `1px solid ${isDark ? `${color}30` : `${color}40`}`,
               borderLeft: isLeft ? "none" : undefined,
               borderRight: !isLeft ? "none" : undefined,
-              borderRadius: isLeft ? "0 8px 8px 0" : "8px 0 0 8px",
-              px: compact ? 1.2 : 1.5,
-              py: compact ? 0.6 : 0.8,
-              // Ichki yuqori yorug'lik
+              borderRadius: isLeft ? "0 10px 10px 0" : "10px 0 0 10px",
+              px: compact ? 1.4 : 1.8,
+              py: compact ? 0.8 : 1,
+              ...(!isDark && {
+                boxShadow: `0 2px 8px rgba(0,0,0,0.06), 0 0 0 1px ${color}12`,
+              }),
               "&::before": {
                 content: '""',
                 position: "absolute",
@@ -225,74 +266,72 @@ function CalloutLine({
                 right: 0,
                 height: "1px",
                 background: isDark
-                  ? `linear-gradient(90deg, transparent, ${color}20, transparent)`
-                  : `linear-gradient(90deg, transparent, ${color}15, transparent)`,
+                  ? `linear-gradient(90deg, transparent, ${color}25, transparent)`
+                  : `linear-gradient(90deg, transparent, ${color}20, transparent)`,
               },
-              // Pulse border animatsiya
               ...(pulse && {
                 animation: "cCardGlow 3s ease-in-out infinite",
                 "@keyframes cCardGlow": {
                   "0%,100%": {
-                    borderColor: isDark ? `${color}25` : `${color}30`,
+                    borderColor: isDark ? `${color}30` : `${color}40`,
                   },
-                  "50%": { borderColor: isDark ? `${color}55` : `${color}50` },
+                  "50%": { borderColor: isDark ? `${color}60` : `${color}55` },
                 },
               }),
             }}
           >
-            {/* Label sarlavha */}
+            {/* Label */}
             {!!label && (
               <Typography
                 sx={{
                   fontFamily: "'Arial', sans-serif",
-                  fontSize: compact ? "0.44rem" : "0.48rem",
-                  fontWeight: 600,
-                  color: isDark ? `${color}70` : `${color}90`,
+                  fontSize: compact ? "0.54rem" : "0.6rem",
+                  fontWeight: 700,
+                  color: isDark ? `${color}90` : color,
                   letterSpacing: "0.14em",
                   lineHeight: 1,
-                  mb: "4px",
+                  mb: "5px",
                   textTransform: "uppercase",
                   textAlign: isLeft ? "left" : "right",
                   whiteSpace: "nowrap",
                 }}
               >
-                {label}
+                {t(label)}
               </Typography>
             )}
 
-            {/* Qiymat qatori */}
+            {/* Qiymat */}
             <Box
               sx={{
                 display: "flex",
                 alignItems: "baseline",
                 justifyContent: isLeft ? "flex-start" : "flex-end",
-                gap: "5px",
+                gap: "6px",
               }}
             >
-              {/* Katta raqam */}
               <Typography
                 sx={{
                   fontFamily:
                     "'JetBrains Mono', 'SF Mono', 'Cascadia Code', 'Consolas', monospace",
-                  fontSize: compact ? "0.88rem" : "1.05rem",
+                  fontSize: compact ? "1.1rem" : "1.3rem",
                   fontWeight: 700,
                   color,
                   lineHeight: 1,
                   letterSpacing: "-0.03em",
-                  // Yengil text glow
-                  textShadow: isDark ? `0 0 12px ${color}30` : "none",
+                  textShadow: isDark
+                    ? `0 0 14px ${color}40`
+                    : `0 1px 2px rgba(0,0,0,0.08)`,
                 }}
               >
                 {value}
               </Typography>
-              {/* Birlik */}
               {!!unit && (
                 <Typography
                   sx={{
                     fontFamily: "'Arial', sans-serif",
-                    fontSize: compact ? "0.5rem" : "0.56rem",
-                    fontWeight: 500,
-                    color: isDark ? "#5e6d82" : "#94a3b8",
+                    fontSize: compact ? "0.6rem" : "0.68rem",
+                    fontWeight: 600,
+                    color: isDark ? "#7a8a9e" : "#64748b",
                     lineHeight: 1,
                   }}
                 >
@@ -307,11 +346,12 @@ function CalloutLine({
   );
 }
 
-// Backward compatibility — TempIndicator va DataIndicator CalloutLine ga yo'naltiradi
+// Backward compat — TempIndicator va DataIndicator CalloutLine ga yo'naltiradi
 function TempIndicator({
   temp,
   x,
   y,
+  cardY,
   side = "right",
   color = "#00e676",
   pulse,
@@ -324,6 +364,7 @@ function TempIndicator({
       color={color}
       dotX={x}
       dotY={y}
+      cardY={cardY}
       side={side}
       pulse={pulse}
     />
@@ -336,9 +377,11 @@ function DataIndicator({
   unit,
   x,
   y,
+  cardY,
   side = "right",
   color = "#00d4ff",
   pulse,
+  compact,
 }) {
   return (
     <CalloutLine
@@ -348,8 +391,10 @@ function DataIndicator({
       color={color}
       dotX={x}
       dotY={y}
+      cardY={cardY}
       side={side}
       pulse={pulse}
+      compact={compact}
     />
   );
 }
@@ -358,6 +403,7 @@ function DataIndicator({
 function GaugeWidget({ value, size = 140, color = "#ff6b1a", label }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
+  const { t } = useScriptText();
   const r = (size - 20) / 2;
   const cx = size / 2;
   const cy = size / 2 + 8;
@@ -414,8 +460,8 @@ function GaugeWidget({ value, size = 140, color = "#ff6b1a", label }) {
           filter={`url(#gl-${gid})`}
         />
         {/* Tick marks */}
-        {[0, 25, 50, 75, 100].map((t) => {
-          const a = startA - totalA * (t / 100);
+        {[0, 25, 50, 75, 100].map((tick) => {
+          const a = startA - totalA * (tick / 100);
           const o = p2c(a);
           const ir = r - 14;
           const inn = {
@@ -424,7 +470,7 @@ function GaugeWidget({ value, size = 140, color = "#ff6b1a", label }) {
           };
           return (
             <line
-              key={t}
+              key={tick}
               x1={inn.x}
               y1={inn.y}
               x2={o.x}
@@ -441,7 +487,7 @@ function GaugeWidget({ value, size = 140, color = "#ff6b1a", label }) {
           textAnchor="middle"
           fill={color}
           fontSize={size * 0.22}
-          fontFamily="'Arial', san-serif"
+          fontFamily="'Arial', sans-serif"
           fontWeight="700"
         >
           {typeof value === "number" ? value.toFixed(1) : value}
@@ -452,7 +498,7 @@ function GaugeWidget({ value, size = 140, color = "#ff6b1a", label }) {
           textAnchor="middle"
           fill={isDark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)"}
           fontSize={size * 0.09}
-          fontFamily="'Arial', san-serif"
+          fontFamily="'Arial', sans-serif"
         >
           %
         </text>
@@ -461,7 +507,7 @@ function GaugeWidget({ value, size = 140, color = "#ff6b1a", label }) {
         <Typography
           sx={{
             textAlign: "center",
-            fontFamily: "'san-serif', sans-serif",
+            fontFamily: "'Arial', sans-serif",
             fontWeight: 700,
             fontSize: "0.68rem",
             color: "text.secondary",
@@ -469,7 +515,7 @@ function GaugeWidget({ value, size = 140, color = "#ff6b1a", label }) {
             mt: -0.5,
           }}
         >
-          {label}
+          {t(label)}
         </Typography>
       )}
     </Box>
@@ -478,6 +524,8 @@ function GaugeWidget({ value, size = 140, color = "#ff6b1a", label }) {
 
 // ─── STAT ROW ────────────────────────────────────────────────
 function StatRow({ label, value, unit, valueColor }) {
+  const { t } = useScriptText();
+
   return (
     <Box
       sx={{
@@ -487,14 +535,14 @@ function StatRow({ label, value, unit, valueColor }) {
         py: 0.8,
         px: 1.5,
         borderBottom: "1px solid",
-        borderColor: (t) =>
-          t.palette.mode === "dark"
+        borderColor: (themeObj) =>
+          themeObj.palette.mode === "dark"
             ? "rgba(255,255,255,0.04)"
             : "rgba(0,0,0,0.04)",
         "&:last-child": { borderBottom: "none" },
         "&:hover": {
-          bgcolor: (t) =>
-            t.palette.mode === "dark"
+          bgcolor: (themeObj) =>
+            themeObj.palette.mode === "dark"
               ? "rgba(255,255,255,0.015)"
               : "rgba(0,0,0,0.01)",
         },
@@ -503,28 +551,28 @@ function StatRow({ label, value, unit, valueColor }) {
     >
       <Typography
         sx={{
-          fontFamily: "'Arial', san-serif",
+          fontFamily: "'Arial', sans-serif",
           fontSize: "0.7rem",
           color: "text.secondary",
         }}
       >
-        {label}
+        {t(label)}
       </Typography>
       <Box sx={{ display: "flex", alignItems: "baseline", gap: 0.5 }}>
         <Typography
           sx={{
-            fontFamily: "'Arial', san-serif",
+            fontFamily: "'Arial', sans-serif",
             fontSize: "0.9rem",
             fontWeight: 700,
             color: valueColor || "text.primary",
           }}
         >
-          {value}
+          {typeof value === "string" ? t(value) : value}
         </Typography>
         {unit && (
           <Typography
             sx={{
-              fontFamily: "'Arial', san-serif",
+              fontFamily: "'Arial', sans-serif",
               fontSize: "0.55rem",
               color: "text.disabled",
             }}
@@ -541,6 +589,7 @@ function StatRow({ label, value, unit, valueColor }) {
 function MiniChart({ data, dataKey, color, title, currentValue, unit }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
+  const { t } = useScriptText();
 
   return (
     <Box>
@@ -554,17 +603,17 @@ function MiniChart({ data, dataKey, color, title, currentValue, unit }) {
       >
         <Typography
           sx={{
-            fontFamily: "'Arial', san-serif",
+            fontFamily: "'Arial', sans-serif",
             fontSize: "0.58rem",
             color: "text.secondary",
             letterSpacing: "0.1em",
           }}
         >
-          {title}
+          {t(title)}
         </Typography>
         <Typography
           sx={{
-            fontFamily: "'Arial', san-serif",
+            fontFamily: "'Arial', sans-serif",
             fontSize: "0.82rem",
             fontWeight: 700,
             color,
@@ -632,6 +681,7 @@ function MiniChart({ data, dataKey, color, title, currentValue, unit }) {
 export default function UskunaImageView({ uskuna }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
+  const { t } = useScriptText();
 
   const u = uskuna;
   const c = getHolatColor(u.holat);
@@ -640,13 +690,14 @@ export default function UskunaImageView({ uskuna }) {
 
   // Agar real harorat o'lchovlari bo'lsa — ulardan temp nuqtalar yaratish
   const tempPoints = useMemo(() => {
+    const MAX_TEMP_POINTS = 2; // Faqat 2 ta harorat ko'rsatiladi
     const temps = u._temperatures || [];
-    if (temps.length === 0) return defaultTempPoints;
+    if (temps.length === 0) return defaultTempPoints.slice(0, MAX_TEMP_POINTS);
 
     // Real haroratlarni rasm ustidagi nuqtalarga mapping
     // DefaultTempPoints pozitsiyalarini saqlab, real qiymatlar bilan almashtirish
     if (defaultTempPoints.length > 0 && temps.length > 0) {
-      return defaultTempPoints.map((dp, i) => {
+      return defaultTempPoints.slice(0, MAX_TEMP_POINTS).map((dp, i) => {
         // Har bir default nuqtaga real harorat tayinlash (davriy)
         const tempIdx = Math.min(i, temps.length - 1);
         const realTemp = temps[tempIdx]?.temperature;
@@ -668,21 +719,19 @@ export default function UskunaImageView({ uskuna }) {
 
     // Agar defaultTempPoints bo'sh bo'lsa — real datadan to'liq yasash
     const positions = [
-      { x: 42, y: 38, side: "left" },
-      { x: 58, y: 50, side: "right" },
-      { x: 45, y: 65, side: "left" },
-      { x: 56, y: 35, side: "right" },
+      { x: 42, y: 40, side: "left" },
+      { x: 60, y: 62, side: "right" },
     ];
-    return temps.slice(0, 4).map((t, i) => {
+    return temps.slice(0, MAX_TEMP_POINTS).map((temp, i) => {
       const pos = positions[i] || positions[0];
       const tempColor =
-        t.temperature > 1680
+        temp.temperature > 1680
           ? "#ff2d55"
-          : t.temperature > 1620
+          : temp.temperature > 1620
             ? "#ffd60a"
             : "#00e676";
       return {
-        temp: t.temperature,
+        temp: temp.temperature,
         x: pos.x,
         y: pos.y,
         side: pos.side,
@@ -703,12 +752,12 @@ export default function UskunaImageView({ uskuna }) {
   const chartData = useMemo(() => {
     const temps = u._temperatures || [];
     if (temps.length > 0) {
-      return temps.map((t, i) => ({
-        time: new Date(t.dateTime).toLocaleTimeString("uz-UZ", {
+      return temps.map((temp) => ({
+        time: new Date(temp.dateTime).toLocaleTimeString("uz-UZ", {
           hour: "2-digit",
           minute: "2-digit",
         }),
-        harorat: t.temperature || 0,
+        harorat: temp.temperature || 0,
         quvvat: Math.round(u.quvvat || (u.averagePower || 0) / 1000 || 100),
       }));
     }
@@ -752,10 +801,11 @@ export default function UskunaImageView({ uskuna }) {
           label: "ENERGIYA",
           value: (h.electricalEnergy / 1000).toFixed(1),
           unit: "MWh",
-          x: 65,
-          y: 8,
+          x: 72,
+          y: 50,
           side: "right",
           color: "#ffd60a",
+          compact: true,
         });
 
       if (h.injectedO2 > 0)
@@ -938,6 +988,76 @@ export default function UskunaImageView({ uskuna }) {
     return points;
   }, [u._latestHeat, u._apiKey]);
 
+  // ═══ OVERLAP RESOLUTION (elbow connector support) ═══
+  // dotY — nuqta pozitsiyasi (o'zgarmaydi), cardY — karta pozitsiyasi (adjust qilinadi)
+  const { resolvedTempPoints, resolvedExtraPoints } = useMemo(() => {
+    const MIN_GAP = 14; // kartalar orasida minimal % masofa
+
+    // Barcha nuqtalarni yig'ish, dotY ni saqlash
+    const all = [
+      ...tempPoints.map((p, i) => ({
+        ...p,
+        _type: "temp",
+        _idx: i,
+        dotY: p.y,
+        cardY: p.y,
+      })),
+      ...extraDataPoints.map((p, i) => ({
+        ...p,
+        _type: "extra",
+        _idx: i,
+        dotY: p.y,
+        cardY: p.y,
+      })),
+    ];
+
+    // Tomonlar bo'yicha guruhlash
+    const sides = { left: [], right: [] };
+    all.forEach((p) => {
+      const s = p.side || "right";
+      if (sides[s]) sides[s].push(p);
+    });
+
+    // Har bir guruhdagi kartalarni dotY bo'yicha sort, keyin cardY ni adjust
+    Object.values(sides).forEach((group) => {
+      group.sort((a, b) => a.dotY - b.dotY);
+      for (let i = 1; i < group.length; i++) {
+        const prev = group[i - 1];
+        const curr = group[i];
+        if (curr.cardY - prev.cardY < MIN_GAP) {
+          curr.cardY = prev.cardY + MIN_GAP;
+        }
+      }
+      // Agar eng pastdagi karta 95% dan oshsa — yuqoriga qaytarish
+      const last = group[group.length - 1];
+      if (last && last.cardY > 95) {
+        const overflow = last.cardY - 95;
+        group.forEach((p) => {
+          p.cardY = Math.max(3, p.cardY - overflow);
+        });
+        // Qayta tekshirish
+        for (let i = 1; i < group.length; i++) {
+          if (group[i].cardY - group[i - 1].cardY < MIN_GAP) {
+            group[i].cardY = group[i - 1].cardY + MIN_GAP;
+          }
+        }
+      }
+    });
+
+    // Natijalarni qaytarish — y = dotY (nuqta), cardY = adjusted karta pozitsiyasi
+    const rTemp = all
+      .filter((p) => p._type === "temp")
+      .sort((a, b) => a._idx - b._idx)
+      .map(({ _type, _idx, ...rest }) => ({ ...rest, y: rest.dotY }));
+
+    const rExtra = all
+      .filter((p) => p._type === "extra")
+      .sort((a, b) => a._idx - b._idx)
+      .map(({ _type, _idx, ...rest }) => ({ ...rest, y: rest.dotY }));
+
+    return { resolvedTempPoints: rTemp, resolvedExtraPoints: rExtra };
+  }, [tempPoints, extraDataPoints]);
+
   return (
     <Grid container spacing={2}>
       {/* ═══ CHAP PANEL: Gauge + Grafik ═══ */}
@@ -956,14 +1076,14 @@ export default function UskunaImageView({ uskuna }) {
           >
             <Typography
               sx={{
-                fontFamily: "'Arial', san-serif",
+                fontFamily: "'Arial', sans-serif",
                 fontSize: "0.58rem",
                 color: "text.secondary",
                 letterSpacing: "0.12em",
                 mb: 1,
               }}
             >
-              QUVVAT
+              {t("QUVVAT")}
             </Typography>
             <GaugeWidget
               value={u.samaradorlik || 0}
@@ -1024,17 +1144,17 @@ export default function UskunaImageView({ uskuna }) {
                 >
                   <Typography
                     sx={{
-                      fontFamily: "'Arial', san-serif",
+                      fontFamily: "'Arial', sans-serif",
                       fontSize: "0.58rem",
                       color: "text.secondary",
                       letterSpacing: "0.1em",
                     }}
                   >
-                    🫗 SUYUQ METALL
+                    🫗 {t("SUYUQ METALL")}
                   </Typography>
                   <Typography
                     sx={{
-                      fontFamily: "'Arial', san-serif",
+                      fontFamily: "'Arial', sans-serif",
                       fontSize: "0.82rem",
                       fontWeight: 700,
                       color: "#00e676",
@@ -1119,54 +1239,6 @@ export default function UskunaImageView({ uskuna }) {
             }}
           />
 
-          {/* Glowing ring */}
-          {/* <Box
-            sx={{
-              position: "absolute",
-              bottom: "5%",
-              left: "50%",
-              transform: "translateX(-50%)",
-              width: "75%",
-              zIndex: 2,
-            }}
-          >
-            <svg
-              viewBox="0 0 400 60"
-              style={{ width: "100%", display: "block" }}
-            >
-              <ellipse
-                cx="200"
-                cy="30"
-                rx="195"
-                ry="25"
-                fill="none"
-                stroke={c}
-                strokeWidth="2.5"
-                opacity="0.4"
-              />
-              <ellipse
-                cx="200"
-                cy="30"
-                rx="195"
-                ry="25"
-                fill="none"
-                stroke={c}
-                strokeWidth="1"
-                opacity="0.12"
-                strokeDasharray="8,6"
-              >
-                <animateTransform
-                  attributeName="transform"
-                  type="rotate"
-                  from="0 200 30"
-                  to="360 200 30"
-                  dur="60s"
-                  repeatCount="indefinite"
-                />
-              </ellipse>
-            </svg>
-          </Box> */}
-
           {/* Glow shadow */}
           <Box
             sx={{
@@ -1186,7 +1258,6 @@ export default function UskunaImageView({ uskuna }) {
             sx={{
               position: "relative",
               width: "80%",
-              // maxWidth: 450,
               zIndex: 3,
               filter: isDark
                 ? "drop-shadow(0 20px 60px rgba(0,0,0,0.6))"
@@ -1208,33 +1279,34 @@ export default function UskunaImageView({ uskuna }) {
               }}
             />
 
-            {/* Temperature indicators */}
-            {tempPoints.map((tp, i) => (
+            {/* Temperature indicators — elbow connector */}
+            {resolvedTempPoints.map((tp, i) => (
               <TempIndicator
                 key={i}
                 temp={tp.temp}
                 x={tp.x}
-                y={tp.y}
+                y={tp.dotY}
+                cardY={tp.cardY}
                 color={tp.color}
                 side={tp.side}
                 pulse={tp.pulse}
               />
             ))}
 
-            {/* Qo'shimcha real data indikatorlar (suyuq metall, energiya, O2...) */}
-            {extraDataPoints.map((dp, i) => (
+            {/* Qo'shimcha real data indikatorlar — elbow connector */}
+            {resolvedExtraPoints.map((dp, i) => (
               <DataIndicator
                 key={`data-${i}`}
                 label={dp.label}
                 value={dp.value}
                 unit={dp.unit}
-                icon={dp.icon}
                 x={dp.x}
-                y={dp.y}
+                y={dp.dotY}
+                cardY={dp.cardY}
                 side={dp.side}
                 color={dp.color}
                 pulse={dp.pulse}
-                size={dp.size}
+                compact={dp.compact}
               />
             ))}
           </Box>
@@ -1253,23 +1325,25 @@ export default function UskunaImageView({ uskuna }) {
           >
             <Typography
               sx={{
-                fontFamily: "'Arial', san-serif",
+                fontFamily: "'Arial', sans-serif",
                 fontSize: "0.68rem",
                 fontWeight: 600,
                 color: "text.secondary",
                 letterSpacing: "0.15em",
               }}
             >
-              KO'RSATKICHLAR
+              {t("KO'RSATKICHLAR")}
             </Typography>
             {u._latestHeat && (
               <Chip
-                label={`#${u._latestHeat.heatId} · ${u._latestHeat.steelGradeName || ""}`}
+                label={`#${u._latestHeat.heatId} · ${t(
+                  u._latestHeat.steelGradeName || "",
+                )}`}
                 size="small"
                 sx={{
                   height: 18,
                   fontSize: "0.5rem",
-                  fontFamily: "'Arial', san-serif",
+                  fontFamily: "'Arial', sans-serif",
                   bgcolor: `${c}15`,
                   color: c,
                   border: `1px solid ${c}30`,
@@ -1309,14 +1383,14 @@ export default function UskunaImageView({ uskuna }) {
             />
             <Typography
               sx={{
-                fontFamily: "'Arial', san-serif",
+                fontFamily: "'Arial', sans-serif",
                 fontSize: "0.6rem",
                 color: c,
                 fontWeight: 700,
                 letterSpacing: "0.08em",
               }}
             >
-              {u.holat?.toUpperCase?.() || "—"}
+              {t(u.holat?.toUpperCase?.() || "—")}
             </Typography>
           </Box>
         </Paper>
@@ -1338,7 +1412,7 @@ export default function UskunaImageView({ uskuna }) {
           >
             <Typography
               sx={{
-                fontFamily: "'Arial', san-serif",
+                fontFamily: "'Arial', sans-serif",
                 fontSize: "0.58rem",
                 color: "text.secondary",
                 letterSpacing: "0.12em",
@@ -1362,13 +1436,13 @@ export default function UskunaImageView({ uskuna }) {
             >
               <Typography
                 sx={{
-                  fontFamily: "'Arial', san-serif",
+                  fontFamily: "'Arial', sans-serif",
                   fontSize: "0.58rem",
                   color: "text.secondary",
                   letterSpacing: "0.12em",
                 }}
               >
-                ISH VAQTI
+                {t("ISH VAQTI")}
               </Typography>
             </Box>
             <StatRow
@@ -1392,13 +1466,13 @@ export default function UskunaImageView({ uskuna }) {
             >
               <Typography
                 sx={{
-                  fontFamily: "'Arial', san-serif",
+                  fontFamily: "'Arial', sans-serif",
                   fontSize: "0.58rem",
                   color: "text.secondary",
                   letterSpacing: "0.12em",
                 }}
               >
-                PARAMETRLAR
+                {t("PARAMETRLAR")}
               </Typography>
             </Box>
             <StatRow

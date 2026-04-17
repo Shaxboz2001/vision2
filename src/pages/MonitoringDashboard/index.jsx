@@ -42,6 +42,7 @@ import {
   setUskunaFilter,
   setUskunaSelected,
 } from "@/store";
+import { useScriptText } from "../../hooks/useScriptText";
 
 /* =========================================================
    TOKENS
@@ -283,6 +284,7 @@ function StatusAvatar({ statusColor, tokens, icon }) {
 }
 
 function StatCard({ label, value, color, tokens }) {
+  const { t } = useScriptText();
   return (
     <Paper
       elevation={0}
@@ -305,7 +307,7 @@ function StatCard({ label, value, color, tokens }) {
           fontWeight: 700,
         }}
       >
-        {label}
+        {t(label)}
       </Typography>
 
       <Typography
@@ -326,6 +328,7 @@ function StatCard({ label, value, color, tokens }) {
 function UskunaCard({ u, tokens, onClick }) {
   const statusColor = getStatusColor(u.holat, tokens);
   const effColor = getEffColor(u.samaradorlik, tokens);
+  const { t } = useScriptText();
 
   return (
     <Paper
@@ -406,7 +409,7 @@ function UskunaCard({ u, tokens, onClick }) {
           pr: 2,
         }}
       >
-        {u.nom}
+        {t(u.nom)}
       </Typography>
 
       <Stack spacing={0.9}>
@@ -418,7 +421,7 @@ function UskunaCard({ u, tokens, onClick }) {
               fontWeight: 500,
             }}
           >
-            Samaradorlik
+            {t("Samaradorlik")}
           </Typography>
           <Typography
             sx={{
@@ -462,7 +465,7 @@ function UskunaCard({ u, tokens, onClick }) {
             fontWeight: 700,
           }}
         >
-          Batafsil
+          {t("Batafsil")}
         </Typography>
         <ChevronRightRoundedIcon sx={{ fontSize: 18, color: tokens.accent }} />
       </Box>
@@ -473,6 +476,7 @@ function UskunaCard({ u, tokens, onClick }) {
 function UchastkaCard({ u, tokens, open, onToggle, children }) {
   const statusColor = getStatusColor(u.holat, tokens);
   const effColor = getEffColor(u.samaradorlik, tokens);
+  const { t } = useScriptText();
 
   return (
     <Box>
@@ -517,7 +521,7 @@ function UchastkaCard({ u, tokens, open, onToggle, children }) {
                   lineHeight: 1.2,
                 }}
               >
-                {u.nom}
+                {t(u.nom)}
               </Typography>
               <StatusChip holat={u.holat} />
             </Box>
@@ -542,7 +546,7 @@ function UchastkaCard({ u, tokens, open, onToggle, children }) {
             <Chip
               size="small"
               icon={<BuildRoundedIcon sx={{ fontSize: "15px !important" }} />}
-              label={`${u.uskunalar || 0} uskuna`}
+              label={`${u.uskunalar || 0} ${t("uskuna")}`}
               sx={{
                 color: tokens.accent,
                 bgcolor: alpha(tokens.accent, 0.08),
@@ -576,6 +580,7 @@ function UchastkaCard({ u, tokens, open, onToggle, children }) {
 
 function UskunalarSection({ uchastka, tokens, onUskunaClick }) {
   const today = useMemo(() => new Date().toISOString().split("T")[0], []);
+  const { t } = useScriptText();
 
   const { data, isLoading, isFetching } = useQuery({
     queryKey: ["monitoring-uskunalar", uchastka.sexId, uchastka.id, today],
@@ -606,7 +611,7 @@ function UskunalarSection({ uchastka, tokens, onUskunaClick }) {
       <Grid container spacing={1.5} sx={{ mb: 1.7 }}>
         <Grid item xs={6} md={3}>
           <StatCard
-            label="USKUNALAR"
+            label={t("USKUNALAR")}
             value={`${uskunalar.length} ta`}
             color={tokens.accent}
             tokens={tokens}
@@ -614,7 +619,7 @@ function UskunalarSection({ uchastka, tokens, onUskunaClick }) {
         </Grid>
         <Grid item xs={6} md={3}>
           <StatCard
-            label="FAOL"
+            label={t("FAOL")}
             value={`${activeCount} ta`}
             color={tokens.green}
             tokens={tokens}
@@ -622,7 +627,7 @@ function UskunalarSection({ uchastka, tokens, onUskunaClick }) {
         </Grid>
         <Grid item xs={6} md={3}>
           <StatCard
-            label="O'RTA SAMARADORLIK"
+            label={t("O'RTA SAMARADORLIK")}
             value={`${fmtN(avgEff, 0)}%`}
             color={getEffColor(avgEff, tokens)}
             tokens={tokens}
@@ -648,7 +653,7 @@ function UskunalarSection({ uchastka, tokens, onUskunaClick }) {
             fontWeight: 700,
           }}
         >
-          USKUNALAR RO‘YXATI
+          {t("USKUNALAR RO‘YXATI")}
         </Typography>
         <Box sx={{ flex: 1, height: 1, bgcolor: tokens.border }} />
         {(isLoading || isFetching) && <CircularProgress size={16} />}
@@ -680,7 +685,7 @@ function UskunalarSection({ uchastka, tokens, onUskunaClick }) {
               fontWeight: 600,
             }}
           >
-            Bu uchastkada uskunalar topilmadi
+            {t("Bu uchastkada uskunalar topilmadi")}
           </Typography>
         </Paper>
       ) : (
@@ -697,6 +702,7 @@ function UskunalarSection({ uchastka, tokens, onUskunaClick }) {
 }
 
 function FilterBar({ sexlar, sexFilter, setSexFilter, pageStats, tokens }) {
+  const { t } = useScriptText();
   return (
     <Paper
       elevation={0}
@@ -719,12 +725,12 @@ function FilterBar({ sexlar, sexFilter, setSexFilter, pageStats, tokens }) {
       >
         <FormControl size="small" sx={{ minWidth: 250 }}>
           <InputLabel id="sex-filter-label">
-            Bo'linma bo‘yicha filter
+            {t("Bo'linma bo‘yicha filter")}
           </InputLabel>
           <Select
             labelId="sex-filter-label"
             value={sexFilter}
-            label="Bo'linma bo‘yicha filter"
+            label={t("Bo'linma bo‘yicha filter")}
             onChange={(e) => setSexFilter(e.target.value)}
             sx={{
               borderRadius: 2.3,
@@ -734,7 +740,7 @@ function FilterBar({ sexlar, sexFilter, setSexFilter, pageStats, tokens }) {
             <MenuItem value="">Barcha sexlar</MenuItem>
             {sexlar.map((s) => (
               <MenuItem key={s.id} value={s.id}>
-                {s.nom}
+                {t(s.nom)}
               </MenuItem>
             ))}
           </Select>
@@ -742,7 +748,7 @@ function FilterBar({ sexlar, sexFilter, setSexFilter, pageStats, tokens }) {
 
         <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
           <Chip
-            label={`Hududlar: ${pageStats.totalUch}`}
+            label={`${t("Hududlar:")} ${pageStats.totalUch}`}
             sx={{
               fontWeight: 700,
               color: tokens.text,
@@ -751,7 +757,7 @@ function FilterBar({ sexlar, sexFilter, setSexFilter, pageStats, tokens }) {
             }}
           />
           <Chip
-            label={`Faol: ${pageStats.activeUch}`}
+            label={`${t("Faol:")} ${pageStats.activeUch}`}
             sx={{
               fontWeight: 700,
               color: tokens.green,
@@ -760,7 +766,7 @@ function FilterBar({ sexlar, sexFilter, setSexFilter, pageStats, tokens }) {
             }}
           />
           <Chip
-            label={`Uskunalar: ${pageStats.totalEquip}`}
+            label={`${"Uskunalar:"} ${pageStats.totalEquip}`}
             sx={{
               fontWeight: 700,
               color: tokens.text,
@@ -769,7 +775,7 @@ function FilterBar({ sexlar, sexFilter, setSexFilter, pageStats, tokens }) {
             }}
           />
           <Chip
-            label={`O'rtacha samaradorlik: ${fmtN(pageStats.avgEff, 0)}%`}
+            label={`${"O'rtacha samaradorlik:"} ${fmtN(pageStats.avgEff, 0)}%`}
             sx={{
               fontWeight: 700,
               color: tokens.accent,
@@ -791,6 +797,8 @@ export default function MonitoringPage() {
   const tokens = useTokens();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { t } = useScriptText();
+
   const selectedSex = useSelector((state) => state.ui.selectedSex);
 
   const [sexFilter, setSexFilter] = useState(selectedSex?.id || "");
@@ -938,12 +946,12 @@ export default function MonitoringPage() {
           .map(([sexId, { sex, items }]) => (
             <Box key={sexId}>
               <SectionHeader
-                title={sex?.nom || sexId}
-                action={`${items.length} ta uchastka`}
+                title={t(sex?.nom)}
+                action={`${items.length} ${t("ta uchastka")}`}
               >
                 <Chip
                   size="small"
-                  label="Bo'lim"
+                  label={t("Bo'lim")}
                   sx={{
                     fontFamily: tokens.mono,
                     fontSize: "0.54rem",

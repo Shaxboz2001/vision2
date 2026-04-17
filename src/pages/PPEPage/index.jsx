@@ -1,7 +1,216 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 const API = "https://ai.uzbeksteel.uz:8008";
+const WS_URL = "wss://ai.uzbeksteel.uz:8008/ws/video";
 
+/**
+ * ============================================================
+ * VideoWebSocket — eng optimal camera streaming komponenti
+ * ============================================================
+ *
+ * Arxitektura:
+ *   WebSocket (binary JPEG) → createImageBitmap (off-thread decode)
+ *                            → Canvas.drawImage → bitmap.close()
+ *
+ * Nima uchun bu optimal:
+ *   1. WebSocket — bitta persistent connection, ping/pong keepalive
+ *   2. createImageBitmap — JPEG decode main threadda emas (UI qotmaydi)
+ *   3. Canvas — brauzer memory yig'maydi (MJPEG <img> dan farqi)
+ *   4. bitmap.close() — har frame dan keyin memory bo'shatiladi
+ *   5. Visibility API — tab yashirinsa WS yopiladi (traffic tejaydi)
+ *   6. Auto-reconnect — exponential backoff (1s → 2s → 4s → max 10s)
+ *   7. Frame dropping — rendering sekin bo'lsa, yangi frame skip qiladi
+ *
+ * Muammo bo'lmaydi:
+ *   - "Rasm yo'qoladi" — reconnect avtomatik, oxirgi frame canvasda qoladi
+ *   - "Memory leak" — bitmap.close() + canvas (yig'ilmaydigan)
+ *   - "Qotish" — createImageBitmap off-thread, frame dropping bor
+ *   - "Network timeout" — server har 15s ping beradi, WS keepalive
+ */
+
+// Reconnect settings
+const RECONNECT_BASE_MS = 1000;
+const RECONNECT_MAX_MS = 10000;
+const RECONNECT_MULTIPLIER = 2;
+
+function VideoWebSocket({ url, style }) {
+  const canvasRef = useRef(null);
+  const wsRef = useRef(null);
+  const mountedRef = useRef(true);
+  const processingRef = useRef(false);
+  const reconnectDelayRef = useRef(RECONNECT_BASE_MS);
+  const reconnectTimerRef = useRef(null);
+  const [status, setStatus] = useState("connecting");
+
+  const cleanup = useCallback(() => {
+    if (reconnectTimerRef.current) {
+      clearTimeout(reconnectTimerRef.current);
+      reconnectTimerRef.current = null;
+    }
+    if (wsRef.current) {
+      try {
+        wsRef.current.onclose = null; // reconnect triggerlamaslik uchun
+        wsRef.current.close();
+      } catch (_) {}
+      wsRef.current = null;
+    }
+  }, []);
+
+  const connect = useCallback(() => {
+    cleanup();
+    if (!mountedRef.current) return;
+
+    setStatus("connecting");
+
+    const ws = new WebSocket(url);
+    ws.binaryType = "blob";
+    wsRef.current = ws;
+
+    ws.onopen = () => {
+      if (!mountedRef.current) return;
+      setStatus("live");
+      reconnectDelayRef.current = RECONNECT_BASE_MS;
+    };
+
+    ws.onmessage = async (event) => {
+      // Server "ping" text yuboradi — skip
+      if (typeof event.data === "string") return;
+
+      // Frame dropping — oldingi hali render bo'lmagan bo'lsa, skip
+      if (processingRef.current) return;
+      processingRef.current = true;
+
+      try {
+        // Off-thread JPEG decode — main thread qotmaydi
+        const bitmap = await createImageBitmap(event.data);
+
+        if (!mountedRef.current || !canvasRef.current) {
+          bitmap.close();
+          return;
+        }
+
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext("2d");
+
+        // Canvas o'lchamini frame ga moslashtirish (faqat o'zgarsa)
+        if (canvas.width !== bitmap.width || canvas.height !== bitmap.height) {
+          canvas.width = bitmap.width;
+          canvas.height = bitmap.height;
+        }
+
+        ctx.drawImage(bitmap, 0, 0);
+        bitmap.close();
+      } catch (_) {
+        // Corrupt frame — skip, keyingisi keladi
+      } finally {
+        processingRef.current = false;
+      }
+    };
+
+    ws.onclose = () => {
+      if (!mountedRef.current) return;
+      scheduleReconnect();
+    };
+
+    ws.onerror = () => {
+      if (!mountedRef.current) return;
+      setStatus("error");
+    };
+  }, [url, cleanup]);
+
+  const scheduleReconnect = useCallback(() => {
+    if (!mountedRef.current) return;
+    setStatus("connecting");
+
+    const delay = reconnectDelayRef.current;
+    reconnectDelayRef.current = Math.min(
+      delay * RECONNECT_MULTIPLIER,
+      RECONNECT_MAX_MS,
+    );
+
+    reconnectTimerRef.current = setTimeout(() => {
+      if (mountedRef.current) connect();
+    }, delay);
+  }, [connect]);
+
+  useEffect(() => {
+    mountedRef.current = true;
+
+    // Visibility API — tab yashirinsa WS yopish, ko'rinsa qayta ulash
+    const handleVisibility = () => {
+      if (document.hidden) {
+        cleanup();
+      } else {
+        reconnectDelayRef.current = RECONNECT_BASE_MS;
+        connect();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibility);
+    connect();
+
+    return () => {
+      mountedRef.current = false;
+      document.removeEventListener("visibilitychange", handleVisibility);
+      cleanup();
+    };
+  }, [connect, cleanup]);
+
+  return (
+    <div style={{ position: "relative", background: "#0c0e14", ...style }}>
+      <canvas
+        ref={canvasRef}
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "block",
+        }}
+      />
+      {status !== "live" && (
+        <div
+          style={{
+            position: "absolute",
+            top: 12,
+            left: 12,
+            background:
+              status === "error" ? "rgba(220,38,38,0.85)" : "rgba(0,0,0,0.7)",
+            color: "#fff",
+            padding: "6px 14px",
+            borderRadius: 6,
+            fontSize: 12,
+            fontWeight: 600,
+            backdropFilter: "blur(4px)",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
+          <span
+            style={{
+              width: 8,
+              height: 8,
+              borderRadius: "50%",
+              background: status === "error" ? "#fca5a5" : "#fbbf24",
+              display: "inline-block",
+              animation: "blink 1.5s infinite",
+            }}
+          />
+          {status === "error" ? "Kamera ulanmadi" : "Ulanmoqda..."}
+        </div>
+      )}
+      <style>{`
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.3; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+// =============================================================
+// PPE PAGE
+// =============================================================
 export default function PPEPage() {
   const [panel, setPanel] = useState(false);
   const [shots, setShots] = useState([]);
@@ -47,7 +256,6 @@ export default function PPEPage() {
       <div style={styles.header}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={styles.dot} />
-          {/* <span style={{ fontWeight: 700, fontSize: 18 }}>PPE Monitoring</span> */}
         </div>
         <button
           onClick={() => setPanel((p) => !p)}
@@ -57,9 +265,12 @@ export default function PPEPage() {
         </button>
       </div>
 
-      {/* Video */}
+      {/* Video — WebSocket + Canvas */}
       <div style={styles.videoWrap}>
-        <img src={`${API}/video`} alt="cam" style={styles.video} />
+        <VideoWebSocket
+          url={WS_URL}
+          style={{ width: "100%", aspectRatio: "16/9" }}
+        />
       </div>
 
       {/* Panel */}
@@ -69,7 +280,6 @@ export default function PPEPage() {
             Qoidabuzarliklar
           </h3>
 
-          {/* Filters */}
           <div style={styles.filters}>
             <Field label="Sana">
               <select
@@ -122,7 +332,6 @@ export default function PPEPage() {
             </button>
           </div>
 
-          {/* Grid */}
           {loading ? (
             <p style={styles.muted}>Yuklanmoqda...</p>
           ) : shots.length === 0 ? (
@@ -159,7 +368,6 @@ export default function PPEPage() {
         </div>
       )}
 
-      {/* Fullscreen Lightbox */}
       {lightbox && (
         <div style={styles.overlay}>
           <button onClick={() => setLightbox(null)} style={styles.closeBtn}>
@@ -242,7 +450,6 @@ const styles = {
     border: "1px solid #1e293b",
     boxShadow: "0 4px 24px rgba(0,0,0,.4)",
   },
-  video: { width: "100%", display: "block" },
   panel: {
     width: "82%",
     maxWidth: 1200,
@@ -307,7 +514,6 @@ const styles = {
     fontSize: 11,
     fontWeight: 700,
   },
-  // Fullscreen overlay
   overlay: {
     position: "fixed",
     inset: 0,
