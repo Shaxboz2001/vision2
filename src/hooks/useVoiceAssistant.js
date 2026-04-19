@@ -1,18 +1,15 @@
 // hooks/useVoiceAssistant.js
 //
-// Fix: wake word "Muhlisa" ning boshi ("mu") yo'qolish muammosi.
+// FINAL — clean logging + reliable VAD
 //
-// Eski arxitektura: VAD rms > threshold bo'lganda MediaRecorder yaratardi →
-//   natijada "mu" tovushi ALREADY tugab ketgandan keyin record boshlanardi →
-//   Whisper ga "xlisa, kameralarni och" keladi → has_wake_word: false.
+// Console log policy (user feedback: "hamma so'zni consolega yozmoqda"):
+//   - SUCCESS: routing bajarildi → "✓ /datchiklar ← datchiklarni och"
+//   - WAKE but no target: → "⚠ wake but no target: '...'"
+//   - IGNORED: no wake word → SILENT (console clean)
+//   - ERROR: always logged
 //
-// Yangi arxitektura:
-//   1. AudioWorklet DOIM ishlaydi va main thread ga PCM frame yuboradi.
-//   2. Ring buffer (600ms) doim to'ladi — idle holda ham.
-//   3. RMS > START_THRESHOLD bo'lganda: ring buffer ni PRE-ROLL sifatida olib,
-//      undan keyingi PCM frame larni qo'shib ketamiz. "mu" saqlanadi.
-//   4. STOP_THRESHOLD pastroq (hysteresis) — false stop larni oldini oladi.
-//   5. WAV encode client-side — backend ffmpeg avtomatik o'qiydi.
+// Agar user DevTools'da to'liq log kerak bo'lsa:
+//   window.__voiceVerbose = true
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -20,37 +17,47 @@ import { voiceFeedback } from "@/utils/voiceFeedback";
 
 const API = import.meta.env.VITE_VOICE_API || "https://172.16.55.13:8006";
 
-// VAD parametrlari
+// VAD
 const SR = 16000;
-const PREROLL_MS = 600; // Wake word boshini qamrash uchun
-const START_THRESHOLD = 0.025; // Start uchun pastroq (sensitive)
-const STOP_THRESHOLD = 0.015; // Stop uchun yanada pastroq (hysteresis)
-const SILENCE_MS = 600;
-const MAX_REC_MS = 4500;
-const MIN_REC_MS = 600;
+const PREROLL_MS = 900;
+const START_THRESHOLD = 0.018;
+const STOP_THRESHOLD = 0.012;
+const SILENCE_MS = 700;
+const MAX_REC_MS = 5000;
+const MIN_REC_MS = 500;
 
-// ─── WAV encoder (Float32 → WAV Blob) ───────────────
+const HEALTH_CHECK_MS = 30_000;
+
+// Log helpers
+const isVerbose = () =>
+  typeof window !== "undefined" && window.__voiceVerbose === true;
+
+const logInfo = (...args) => console.log("%c[Voice]", "color:#00d4ff", ...args);
+const logWarn = (...args) => console.warn("[Voice]", ...args);
+const logError = (...args) => console.error("[Voice]", ...args);
+const logDebug = (...args) => {
+  if (isVerbose()) console.log("%c[Voice debug]", "color:#666", ...args);
+};
+
 function encodeWAV(samples, sampleRate) {
   const buffer = new ArrayBuffer(44 + samples.length * 2);
   const view = new DataView(buffer);
   const writeStr = (off, s) => {
     for (let i = 0; i < s.length; i++) view.setUint8(off + i, s.charCodeAt(i));
   };
-
   writeStr(0, "RIFF");
   view.setUint32(4, 36 + samples.length * 2, true);
   writeStr(8, "WAVE");
   writeStr(12, "fmt ");
   view.setUint32(16, 16, true);
-  view.setUint16(20, 1, true); // PCM
-  view.setUint16(22, 1, true); // mono
+  view.setUint16(20, 1, true);
+  view.setUint16(22, 1, true);
   view.setUint32(24, sampleRate, true);
   view.setUint32(28, sampleRate * 2, true);
   view.setUint16(32, 2, true);
   view.setUint16(34, 16, true);
   writeStr(36, "data");
   view.setUint32(40, samples.length * 2, true);
-
   let off = 44;
   for (let i = 0; i < samples.length; i++, off += 2) {
     const s = Math.max(-1, Math.min(1, samples[i]));
@@ -68,41 +75,42 @@ export function useVoiceAssistant() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [lastTranscript, setLastTranscript] = useState("");
   const [lastCommand, setLastCommand] = useState(null);
-  const [error, setError] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
 
-  // Audio pipeline
   const streamRef = useRef(null);
   const ctxRef = useRef(null);
   const workletRef = useRef(null);
 
-  // Ring buffer — doim to'ladi (pre-roll)
   const ringRef = useRef(null);
   const ringIdxRef = useRef(0);
   const ringFilledRef = useRef(0);
 
-  // Active recording buffer
-  const recBufRef = useRef([]); // Float32Array[] chunks
+  const recBufRef = useRef([]);
   const recSamplesRef = useRef(0);
   const recordingRef = useRef(false);
   const startTimeRef = useRef(0);
 
-  // Timers / flags
   const silenceTimerRef = useRef(null);
   const maxTimerRef = useRef(null);
+  const healthTimerRef = useRef(null);
   const enabledRef = useRef(false);
   const busyRef = useRef(false);
   const abortRef = useRef(null);
 
-  // ─── Cleanup ──────────────────────────────────────
+  const statsRef = useRef({ frames: 0, recordings: 0, sends: 0, routed: 0 });
+
   const cleanup = useCallback(() => {
     enabledRef.current = false;
     busyRef.current = false;
     recordingRef.current = false;
 
-    clearTimeout(silenceTimerRef.current);
-    clearTimeout(maxTimerRef.current);
-    silenceTimerRef.current = null;
-    maxTimerRef.current = null;
+    [silenceTimerRef, maxTimerRef, healthTimerRef].forEach((r) => {
+      if (r.current) {
+        clearTimeout(r.current);
+        clearInterval(r.current);
+        r.current = null;
+      }
+    });
 
     if (abortRef.current) {
       abortRef.current.abort();
@@ -141,7 +149,6 @@ export function useVoiceAssistant() {
     setIsSpeaking(false);
   }, []);
 
-  // ─── Say (audio feedback) ─────────────────────────
   const say = useCallback(async (key) => {
     busyRef.current = true;
     setIsSpeaking(true);
@@ -153,13 +160,13 @@ export function useVoiceAssistant() {
     busyRef.current = false;
   }, []);
 
-  // ─── Send to backend ──────────────────────────────
   const send = useCallback(
     async (samples) => {
-      if (samples.length < SR * 0.4) return; // <400ms — juda qisqa
+      if (samples.length < SR * 0.4) return;
       busyRef.current = true;
       setIsProcessing(true);
-      setError(null);
+      setErrorMsg(null);
+      statsRef.current.sends++;
 
       if (abortRef.current) abortRef.current.abort();
       const ctrl = new AbortController();
@@ -180,8 +187,15 @@ export function useVoiceAssistant() {
           throw new Error(errData.detail || `HTTP ${res.status}`);
         }
         const d = await res.json();
-        console.log("[Voice]", d.transcript, d);
 
+        // ═══ LOG POLICY ═══
+        // Verbose mode: hammasini log qiladi
+        // Normal: faqat wake + routing'ni
+        if (isVerbose()) {
+          logDebug(d.transcript, d);
+        }
+
+        // No wake → silent exit
         if (!d.has_wake_word) {
           busyRef.current = false;
           setIsProcessing(false);
@@ -193,6 +207,13 @@ export function useVoiceAssistant() {
         const found = d.nav_path || d.camera_name || d.camera_id;
 
         if (found) {
+          // ✓ Successful routing
+          statsRef.current.routed++;
+          const target = d.camera_name
+            ? `cam:${d.camera_name}`
+            : d.nav_label || d.nav_path;
+          logInfo(`✓ ${target} ← "${d.transcript}"`);
+
           if (d.camera_name || d.camera_id) {
             setLastCommand({ label: d.camera_name || `Kamera ${d.camera_id}` });
             nav("/kameralar");
@@ -214,18 +235,20 @@ export function useVoiceAssistant() {
           await say("opened");
           setTimeout(() => setLastCommand(null), 3000);
         } else {
+          // ⚠ Wake but no target
+          logWarn(`⚠ wake but no target: "${d.transcript}"`);
           await say("accepted");
-          setError("Tanilmadi");
+          setErrorMsg("Tanilmadi");
           await say("retry");
-          setTimeout(() => setError(null), 3000);
+          setTimeout(() => setErrorMsg(null), 3000);
         }
       } catch (e) {
         if (e.name === "AbortError") return;
-        console.error("[Voice]", e);
+        logError("send error:", e.message);
         setIsProcessing(false);
-        setError(e.message);
+        setErrorMsg(e.message);
         await say("retry");
-        setTimeout(() => setError(null), 3000);
+        setTimeout(() => setErrorMsg(null), 3000);
       } finally {
         busyRef.current = false;
         setIsProcessing(false);
@@ -235,13 +258,12 @@ export function useVoiceAssistant() {
     [nav, say],
   );
 
-  // ─── Recording start — ring buffer ni pre-roll sifatida oladi ─
   const startRecording = useCallback(() => {
     if (recordingRef.current) return;
     recordingRef.current = true;
     startTimeRef.current = Date.now();
+    statsRef.current.recordings++;
 
-    // Ring buffer ni linear ketma-ketlikda ajratib olish
     const ring = ringRef.current;
     if (ring) {
       const idx = ringIdxRef.current;
@@ -249,10 +271,8 @@ export function useVoiceAssistant() {
       const preroll = new Float32Array(filled);
 
       if (filled < ring.length) {
-        // Buffer hali to'lmagan — [0..filled] qismini olamiz
         preroll.set(ring.subarray(0, filled));
       } else {
-        // Buffer to'lgan — circular: [idx..end] + [0..idx]
         const tailLen = ring.length - idx;
         preroll.set(ring.subarray(idx), 0);
         preroll.set(ring.subarray(0, idx), tailLen);
@@ -267,13 +287,11 @@ export function useVoiceAssistant() {
 
     setIsRecording(true);
 
-    // Max duration safeguard
     maxTimerRef.current = setTimeout(() => {
       stopRecordingRef.current?.(true);
     }, MAX_REC_MS);
   }, []);
 
-  // ─── Recording stop ───────────────────────────────
   const stopRecording = useCallback(
     (force = false) => {
       if (!recordingRef.current) return;
@@ -293,7 +311,6 @@ export function useVoiceAssistant() {
         return;
       }
 
-      // Merge chunks → single Float32Array
       const total = recSamplesRef.current;
       const merged = new Float32Array(total);
       let off = 0;
@@ -309,24 +326,21 @@ export function useVoiceAssistant() {
     [send],
   );
 
-  // stopRecording ref — startRecording ichidan chaqirish uchun
   const stopRecordingRef = useRef(stopRecording);
   useEffect(() => {
     stopRecordingRef.current = stopRecording;
   }, [stopRecording]);
 
-  // ─── Frame handler (AudioWorklet dan keladi) ──────
   const onFrame = useCallback(
     (pcm, rms) => {
       const ring = ringRef.current;
       if (!ring) return;
+      statsRef.current.frames++;
 
-      // Recording active — PCM ni rec buffer ga qo'shamiz
       if (recordingRef.current) {
         recBufRef.current.push(pcm);
         recSamplesRef.current += pcm.length;
 
-        // Silence detection (hysteresis)
         if (rms < STOP_THRESHOLD) {
           if (!silenceTimerRef.current) {
             silenceTimerRef.current = setTimeout(() => {
@@ -341,17 +355,14 @@ export function useVoiceAssistant() {
         return;
       }
 
-      // Idle — ring buffer ni yangilaymiz (pre-roll uchun)
       for (let i = 0; i < pcm.length; i++) {
         ring[ringIdxRef.current] = pcm[i];
         ringIdxRef.current = (ringIdxRef.current + 1) % ring.length;
         if (ringFilledRef.current < ring.length) ringFilledRef.current++;
       }
 
-      // Feedback playing yoki processing — speech detect qilmaymiz
       if (busyRef.current || voiceFeedback.isSpeaking()) return;
 
-      // Speech start detection
       if (rms > START_THRESHOLD) {
         startRecording();
       }
@@ -359,7 +370,24 @@ export function useVoiceAssistant() {
     [startRecording],
   );
 
-  // ─── Toggle mic ───────────────────────────────────
+  const startHealthCheck = useCallback(() => {
+    healthTimerRef.current = setInterval(async () => {
+      const ctx = ctxRef.current;
+      if (!ctx) return;
+      if (ctx.state === "suspended") {
+        logWarn("AudioContext suspended — resuming");
+        try {
+          await ctx.resume();
+        } catch (e) {
+          logError("resume failed:", e);
+        }
+      }
+      if (typeof window !== "undefined") {
+        window.__voiceStats = { ...statsRef.current, ctxState: ctx.state };
+      }
+    }, HEALTH_CHECK_MS);
+  }, []);
+
   const toggleMic = useCallback(async () => {
     if (isEnabled) {
       cleanup();
@@ -381,26 +409,25 @@ export function useVoiceAssistant() {
       });
       streamRef.current = stream;
 
-      const ctx = new AudioContext({ sampleRate: SR });
+      const ctx = new AudioContext({
+        sampleRate: SR,
+        latencyHint: "interactive",
+      });
       ctxRef.current = ctx;
       if (ctx.state === "suspended") await ctx.resume();
 
-      // AudioWorklet yuklash
       try {
         await ctx.audioWorklet.addModule("/audio-vad-processor.js");
       } catch (e) {
         cleanup();
-        setError(
-          "AudioWorklet yuklanmadi. /audio-vad-processor.js fayli public/ da bormi?",
-        );
-        console.error(e);
+        setErrorMsg("AudioWorklet yuklanmadi (public/audio-vad-processor.js)");
+        logError(e);
         return;
       }
 
       const src = ctx.createMediaStreamSource(stream);
       const worklet = new AudioWorkletNode(ctx, "vad-processor");
 
-      // Ring buffer init
       const ringSize = Math.floor((SR * PREROLL_MS) / 1000);
       ringRef.current = new Float32Array(ringSize);
       ringIdxRef.current = 0;
@@ -413,22 +440,23 @@ export function useVoiceAssistant() {
       };
 
       src.connect(worklet);
-      // Worklet output ga ulash SHART EMAS (faqat analysis node sifatida ishlatyapmiz).
-      // Ba'zi browser lar da output yo'q bo'lsa process() chaqirilmasligi mumkin —
-      // shu sababli ctx.destination ga ulamaymiz, lekin agar muammo chiqsa:
-      // worklet.connect(ctx.destination);
-
       workletRef.current = worklet;
 
       enabledRef.current = true;
       busyRef.current = false;
       recordingRef.current = false;
+      statsRef.current = { frames: 0, recordings: 0, sends: 0, routed: 0 };
+
+      startHealthCheck();
+
       setIsEnabled(true);
       setIsListening(true);
-      setError(null);
+      setErrorMsg(null);
+
+      logInfo("mic enabled — say 'Muxlisa, ...'");
     } catch (e) {
       cleanup();
-      setError(
+      setErrorMsg(
         e.name === "NotAllowedError"
           ? "Mikrofon ruxsati yo'q"
           : e.name === "NotFoundError"
@@ -436,7 +464,7 @@ export function useVoiceAssistant() {
             : e.message,
       );
     }
-  }, [isEnabled, cleanup, onFrame]);
+  }, [isEnabled, cleanup, onFrame, startHealthCheck]);
 
   useEffect(() => () => cleanup(), [cleanup]);
 
@@ -448,7 +476,7 @@ export function useVoiceAssistant() {
     isSpeaking,
     lastTranscript,
     lastCommand,
-    error,
+    error: errorMsg,
     toggleMic,
   };
 }

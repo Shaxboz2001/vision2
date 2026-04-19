@@ -48,7 +48,7 @@ export const VOICE_ROUTES = [
   },
   {
     path: "/analitika",
-    label: "Analitika",
+    label: "Ai tahlil",
     aliases: [
       "аналитика",
       "аналитику",
