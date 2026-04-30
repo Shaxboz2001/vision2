@@ -85,6 +85,7 @@ export default function App() {
 }
 
 import { useState, useEffect } from "react";
+import AILom from "./pages/AILom";
 
 // function PPEPage() {
 //   return (
@@ -108,23 +109,23 @@ import { useState, useEffect } from "react";
 //   );
 // }
 
-function AILom() {
-  return (
-    <div
-      style={{
-        width: "80%",
-        margin: "50px auto",
-        border: "2px solid #333",
-      }}
-    >
-      <img
-        src="https://ai.uzbeksteel.uz:8009/video"
-        alt="camera"
-        style={{
-          width: "100%",
-          display: "block",
-        }}
-      />
-    </div>
-  );
-}
+// function AILom() {
+//   return (
+//     <div
+//       style={{
+//         width: "80%",
+//         margin: "50px auto",
+//         border: "2px solid #333",
+//       }}
+//     >
+//       <img
+//         src="https://ai.uzbeksteel.uz:8009/video"
+//         alt="camera"
+//         style={{
+//           width: "100%",
+//           display: "block",
+//         }}
+//       />
+//     </div>
+//   );
+// }
