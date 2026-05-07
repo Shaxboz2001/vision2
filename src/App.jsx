@@ -63,6 +63,10 @@ export default function App() {
                         path="/ogohlantirishlar"
                         element={<Ogohlantirishlar />}
                       />
+                      {/* <Route
+                        path="/kpp-monitoring"
+                        element={<KppMonitoringPage />}
+                      /> */}
                       <Route path="/armatura" element={<ProkatLivePage />} />
                       <Route
                         path="/voice-calibration"
@@ -86,46 +90,4 @@ export default function App() {
 
 import { useState, useEffect } from "react";
 import AILom from "./pages/AILom";
-
-// function PPEPage() {
-//   return (
-//     <div
-//       style={{
-//         width: "80%",
-//         margin: "50px auto",
-//         border: "2px solid #333",
-//       }}
-//     >
-//       <img
-//         src="https://ai.uzbeksteel.uz:8008/video"
-//         // src="http://172.16.55.12:8005/video"
-//         alt="camera"
-//         style={{
-//           width: "100%",
-//           display: "block",
-//         }}
-//       />
-//     </div>
-//   );
-// }
-
-// function AILom() {
-//   return (
-//     <div
-//       style={{
-//         width: "80%",
-//         margin: "50px auto",
-//         border: "2px solid #333",
-//       }}
-//     >
-//       <img
-//         src="https://ai.uzbeksteel.uz:8009/video"
-//         alt="camera"
-//         style={{
-//           width: "100%",
-//           display: "block",
-//         }}
-//       />
-//     </div>
-//   );
-// }
+import KppMonitoringPage from "./pages/KPPMonitoring";

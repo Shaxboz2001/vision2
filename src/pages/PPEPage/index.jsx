@@ -1,569 +1,9 @@
-// import { useState, useEffect, useCallback, useRef } from "react";
-
-// const API = "https://ai.uzbeksteel.uz:8008";
-// const WS_URL = "wss://ai.uzbeksteel.uz:8008/ws/video";
-
-// /**
-//  * ============================================================
-//  * VideoWebSocket — eng optimal camera streaming komponenti
-//  * ============================================================
-//  *
-//  * Arxitektura:
-//  *   WebSocket (binary JPEG) → createImageBitmap (off-thread decode)
-//  *                            → Canvas.drawImage → bitmap.close()
-//  *
-//  * Nima uchun bu optimal:
-//  *   1. WebSocket — bitta persistent connection, ping/pong keepalive
-//  *   2. createImageBitmap — JPEG decode main threadda emas (UI qotmaydi)
-//  *   3. Canvas — brauzer memory yig'maydi (MJPEG <img> dan farqi)
-//  *   4. bitmap.close() — har frame dan keyin memory bo'shatiladi
-//  *   5. Visibility API — tab yashirinsa WS yopiladi (traffic tejaydi)
-//  *   6. Auto-reconnect — exponential backoff (1s → 2s → 4s → max 10s)
-//  *   7. Frame dropping — rendering sekin bo'lsa, yangi frame skip qiladi
-//  *
-//  * Muammo bo'lmaydi:
-//  *   - "Rasm yo'qoladi" — reconnect avtomatik, oxirgi frame canvasda qoladi
-//  *   - "Memory leak" — bitmap.close() + canvas (yig'ilmaydigan)
-//  *   - "Qotish" — createImageBitmap off-thread, frame dropping bor
-//  *   - "Network timeout" — server har 15s ping beradi, WS keepalive
-//  */
-
-// // Reconnect settings
-// const RECONNECT_BASE_MS = 1000;
-// const RECONNECT_MAX_MS = 10000;
-// const RECONNECT_MULTIPLIER = 2;
-
-// function VideoWebSocket({ url, style }) {
-//   const canvasRef = useRef(null);
-//   const wsRef = useRef(null);
-//   const mountedRef = useRef(true);
-//   const processingRef = useRef(false);
-//   const reconnectDelayRef = useRef(RECONNECT_BASE_MS);
-//   const reconnectTimerRef = useRef(null);
-//   const [status, setStatus] = useState("connecting");
-
-//   const cleanup = useCallback(() => {
-//     if (reconnectTimerRef.current) {
-//       clearTimeout(reconnectTimerRef.current);
-//       reconnectTimerRef.current = null;
-//     }
-//     if (wsRef.current) {
-//       try {
-//         wsRef.current.onclose = null; // reconnect triggerlamaslik uchun
-//         wsRef.current.close();
-//       } catch (_) {}
-//       wsRef.current = null;
-//     }
-//   }, []);
-
-//   const connect = useCallback(() => {
-//     cleanup();
-//     if (!mountedRef.current) return;
-
-//     setStatus("connecting");
-
-//     const ws = new WebSocket(url);
-//     ws.binaryType = "blob";
-//     wsRef.current = ws;
-
-//     ws.onopen = () => {
-//       if (!mountedRef.current) return;
-//       setStatus("live");
-//       reconnectDelayRef.current = RECONNECT_BASE_MS;
-//     };
-
-//     ws.onmessage = async (event) => {
-//       // Server "ping" text yuboradi — skip
-//       if (typeof event.data === "string") return;
-
-//       // Frame dropping — oldingi hali render bo'lmagan bo'lsa, skip
-//       if (processingRef.current) return;
-//       processingRef.current = true;
-
-//       try {
-//         // Off-thread JPEG decode — main thread qotmaydi
-//         const bitmap = await createImageBitmap(event.data);
-
-//         if (!mountedRef.current || !canvasRef.current) {
-//           bitmap.close();
-//           return;
-//         }
-
-//         const canvas = canvasRef.current;
-//         const ctx = canvas.getContext("2d");
-
-//         // Canvas o'lchamini frame ga moslashtirish (faqat o'zgarsa)
-//         if (canvas.width !== bitmap.width || canvas.height !== bitmap.height) {
-//           canvas.width = bitmap.width;
-//           canvas.height = bitmap.height;
-//         }
-
-//         ctx.drawImage(bitmap, 0, 0);
-//         bitmap.close();
-//       } catch (_) {
-//         // Corrupt frame — skip, keyingisi keladi
-//       } finally {
-//         processingRef.current = false;
-//       }
-//     };
-
-//     ws.onclose = () => {
-//       if (!mountedRef.current) return;
-//       scheduleReconnect();
-//     };
-
-//     ws.onerror = () => {
-//       if (!mountedRef.current) return;
-//       setStatus("error");
-//     };
-//   }, [url, cleanup]);
-
-//   const scheduleReconnect = useCallback(() => {
-//     if (!mountedRef.current) return;
-//     setStatus("connecting");
-
-//     const delay = reconnectDelayRef.current;
-//     reconnectDelayRef.current = Math.min(
-//       delay * RECONNECT_MULTIPLIER,
-//       RECONNECT_MAX_MS,
-//     );
-
-//     reconnectTimerRef.current = setTimeout(() => {
-//       if (mountedRef.current) connect();
-//     }, delay);
-//   }, [connect]);
-
-//   useEffect(() => {
-//     mountedRef.current = true;
-
-//     // Visibility API — tab yashirinsa WS yopish, ko'rinsa qayta ulash
-//     const handleVisibility = () => {
-//       if (document.hidden) {
-//         cleanup();
-//       } else {
-//         reconnectDelayRef.current = RECONNECT_BASE_MS;
-//         connect();
-//       }
-//     };
-
-//     document.addEventListener("visibilitychange", handleVisibility);
-//     connect();
-
-//     return () => {
-//       mountedRef.current = false;
-//       document.removeEventListener("visibilitychange", handleVisibility);
-//       cleanup();
-//     };
-//   }, [connect, cleanup]);
-
-//   return (
-//     <div style={{ position: "relative", background: "#0c0e14", ...style }}>
-//       <canvas
-//         ref={canvasRef}
-//         style={{
-//           width: "100%",
-//           height: "100%",
-//           display: "block",
-//         }}
-//       />
-//       {status !== "live" && (
-//         <div
-//           style={{
-//             position: "absolute",
-//             top: 12,
-//             left: 12,
-//             background:
-//               status === "error" ? "rgba(220,38,38,0.85)" : "rgba(0,0,0,0.7)",
-//             color: "#fff",
-//             padding: "6px 14px",
-//             borderRadius: 6,
-//             fontSize: 12,
-//             fontWeight: 600,
-//             backdropFilter: "blur(4px)",
-//             display: "flex",
-//             alignItems: "center",
-//             gap: 8,
-//           }}
-//         >
-//           <span
-//             style={{
-//               width: 8,
-//               height: 8,
-//               borderRadius: "50%",
-//               background: status === "error" ? "#fca5a5" : "#fbbf24",
-//               display: "inline-block",
-//               animation: "blink 1.5s infinite",
-//             }}
-//           />
-//           {status === "error" ? "Kamera ulanmadi" : "Ulanmoqda..."}
-//         </div>
-//       )}
-//       <style>{`
-//         @keyframes blink {
-//           0%, 100% { opacity: 1; }
-//           50% { opacity: 0.3; }
-//         }
-//       `}</style>
-//     </div>
-//   );
-// }
-
-// // =============================================================
-// // PPE PAGE
-// // =============================================================
-// export default function PPEPage() {
-//   const [panel, setPanel] = useState(false);
-//   const [shots, setShots] = useState([]);
-//   const [dates, setDates] = useState([]);
-//   const [loading, setLoading] = useState(false);
-//   const [lightbox, setLightbox] = useState(null);
-
-//   const now = new Date();
-//   const [date, setDate] = useState(now.toISOString().split("T")[0]);
-//   const [hStart, setHStart] = useState(Math.max(0, now.getHours() - 1));
-//   const [hEnd, setHEnd] = useState(now.getHours());
-
-//   const load = useCallback(async () => {
-//     setLoading(true);
-//     try {
-//       const r = await fetch(
-//         `${API}/api/screenshots?date=${date}&hour_start=${hStart}&hour_end=${hEnd}`,
-//       );
-//       const d = await r.json();
-//       setShots(d.screenshots || []);
-//     } catch (e) {
-//       console.error(e);
-//     }
-//     setLoading(false);
-//   }, [date, hStart, hEnd]);
-
-//   useEffect(() => {
-//     if (!panel) return;
-//     fetch(`${API}/api/available-dates`)
-//       .then((r) => r.json())
-//       .then((d) => setDates(d.dates || []))
-//       .catch(() => {});
-//     load();
-//   }, [panel, load]);
-
-//   const hours = Array.from({ length: 24 }, (_, i) => i);
-//   const today = new Date().toISOString().split("T")[0];
-//   const allDates = [...new Set([today, ...dates])].sort().reverse();
-
-//   return (
-//     <div style={styles.page}>
-//       {/* Header */}
-//       <div style={styles.header}>
-//         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-//           <div style={styles.dot} />
-//         </div>
-//         <button
-//           onClick={() => setPanel((p) => !p)}
-//           style={{ ...styles.btn, background: panel ? "#dc2626" : "#2563eb" }}
-//         >
-//           {panel ? "✕ Yopish" : "📷 Qoidabuzarlar"}
-//         </button>
-//       </div>
-
-//       {/* Video — WebSocket + Canvas */}
-//       <div style={styles.videoWrap}>
-//         <VideoWebSocket
-//           url={WS_URL}
-//           style={{ width: "100%", aspectRatio: "16/9" }}
-//         />
-//       </div>
-
-//       {/* Panel */}
-//       {panel && (
-//         <div style={styles.panel}>
-//           <h3 style={{ margin: "0 0 16px", fontSize: 16, fontWeight: 600 }}>
-//             Qoidabuzarliklar
-//           </h3>
-
-//           <div style={styles.filters}>
-//             <Field label="Sana">
-//               <select
-//                 value={date}
-//                 onChange={(e) => setDate(e.target.value)}
-//                 style={styles.select}
-//               >
-//                 {allDates.map((d) => (
-//                   <option key={d} value={d}>
-//                     {d}
-//                   </option>
-//                 ))}
-//               </select>
-//             </Field>
-//             <Field label="Dan">
-//               <select
-//                 value={hStart}
-//                 onChange={(e) => setHStart(+e.target.value)}
-//                 style={styles.select}
-//               >
-//                 {hours.map((h) => (
-//                   <option key={h} value={h}>
-//                     {pad(h)}:00
-//                   </option>
-//                 ))}
-//               </select>
-//             </Field>
-//             <Field label="Gacha">
-//               <select
-//                 value={hEnd}
-//                 onChange={(e) => setHEnd(+e.target.value)}
-//                 style={styles.select}
-//               >
-//                 {hours.map((h) => (
-//                   <option key={h} value={h}>
-//                     {pad(h)}:59
-//                   </option>
-//                 ))}
-//               </select>
-//             </Field>
-//             <button
-//               onClick={load}
-//               style={{
-//                 ...styles.btn,
-//                 background: "#2563eb",
-//                 alignSelf: "flex-end",
-//               }}
-//             >
-//               Qidirish
-//             </button>
-//           </div>
-
-//           {loading ? (
-//             <p style={styles.muted}>Yuklanmoqda...</p>
-//           ) : shots.length === 0 ? (
-//             <p style={styles.muted}>Bu oraliqda rasm topilmadi.</p>
-//           ) : (
-//             <>
-//               <p style={{ ...styles.muted, marginBottom: 12 }}>
-//                 {shots.length} ta rasm
-//               </p>
-//               <div style={styles.grid}>
-//                 {shots.map((s) => (
-//                   <div
-//                     key={s.filename}
-//                     onClick={() => setLightbox(s)}
-//                     style={styles.card}
-//                   >
-//                     <img
-//                       src={`${API}${s.url}`}
-//                       alt=""
-//                       style={styles.thumb}
-//                       loading="lazy"
-//                     />
-//                     <div style={styles.cardInfo}>
-//                       <span>{s.time}</span>
-//                       <span style={styles.idBadge}>
-//                         {s.filename.split("_")[1]?.replace(".jpg", "")}
-//                       </span>
-//                     </div>
-//                   </div>
-//                 ))}
-//               </div>
-//             </>
-//           )}
-//         </div>
-//       )}
-
-//       {lightbox && (
-//         <div style={styles.overlay}>
-//           <button onClick={() => setLightbox(null)} style={styles.closeBtn}>
-//             ✕
-//           </button>
-//           <img src={`${API}${lightbox.url}`} alt="" style={styles.fullImg} />
-//           <div style={styles.overlayInfo}>
-//             {lightbox.time} —{" "}
-//             {lightbox.filename.split("_")[1]?.replace(".jpg", "")}
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
-// function Field({ label, children }) {
-//   return (
-//     <div>
-//       <div
-//         style={{
-//           fontSize: 11,
-//           color: "#64748b",
-//           marginBottom: 4,
-//           textTransform: "uppercase",
-//           letterSpacing: 1,
-//         }}
-//       >
-//         {label}
-//       </div>
-//       {children}
-//     </div>
-//   );
-// }
-
-// function pad(n) {
-//   return String(n).padStart(2, "0");
-// }
-
-// const styles = {
-//   page: {
-//     fontFamily: "'Segoe UI', system-ui, sans-serif",
-//     background: "transparent",
-//     minHeight: "100vh",
-//     color: "#e2e8f0",
-//     padding: "0 0 40px",
-//   },
-//   header: {
-//     width: "82%",
-//     maxWidth: 1200,
-//     margin: "0 auto",
-//     padding: "20px 0",
-//     display: "flex",
-//     justifyContent: "space-between",
-//     alignItems: "center",
-//   },
-//   dot: {
-//     width: 10,
-//     height: 10,
-//     borderRadius: "50%",
-//     background: "#22c55e",
-//     boxShadow: "0 0 8px #22c55e",
-//   },
-//   btn: {
-//     color: "#fff",
-//     border: "none",
-//     borderRadius: 6,
-//     padding: "8px 18px",
-//     cursor: "pointer",
-//     fontWeight: 600,
-//     fontSize: 13,
-//     transition: "opacity .15s",
-//   },
-//   videoWrap: {
-//     width: "82%",
-//     maxWidth: 1200,
-//     margin: "0 auto",
-//     borderRadius: 10,
-//     overflow: "hidden",
-//     border: "1px solid #1e293b",
-//     boxShadow: "0 4px 24px rgba(0,0,0,.4)",
-//   },
-//   panel: {
-//     width: "82%",
-//     maxWidth: 1200,
-//     margin: "20px auto 0",
-//     background: "#111827",
-//     borderRadius: 10,
-//     padding: 24,
-//     border: "1px solid #1e293b",
-//   },
-//   filters: {
-//     display: "flex",
-//     gap: 14,
-//     flexWrap: "wrap",
-//     alignItems: "flex-end",
-//     marginBottom: 20,
-//     paddingBottom: 16,
-//     borderBottom: "1px solid #1e293b",
-//   },
-//   select: {
-//     background: "#0c0e14",
-//     color: "#e2e8f0",
-//     border: "1px solid #1e293b",
-//     borderRadius: 6,
-//     padding: "7px 12px",
-//     fontSize: 13,
-//     height: 34,
-//     minWidth: 110,
-//   },
-//   muted: { color: "#64748b", fontSize: 13, margin: 0 },
-//   grid: {
-//     display: "grid",
-//     gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-//     gap: 14,
-//   },
-//   card: {
-//     borderRadius: 8,
-//     overflow: "hidden",
-//     border: "1px solid #1e293b",
-//     cursor: "pointer",
-//     transition: "border-color .2s, transform .15s",
-//     background: "#0c0e14",
-//   },
-//   thumb: {
-//     width: "100%",
-//     display: "block",
-//     aspectRatio: "16/9",
-//     objectFit: "cover",
-//   },
-//   cardInfo: {
-//     padding: "8px 12px",
-//     display: "flex",
-//     justifyContent: "space-between",
-//     alignItems: "center",
-//     fontSize: 12,
-//     color: "#94a3b8",
-//   },
-//   idBadge: {
-//     background: "#dc2626",
-//     color: "#fff",
-//     padding: "2px 8px",
-//     borderRadius: 4,
-//     fontSize: 11,
-//     fontWeight: 700,
-//   },
-//   overlay: {
-//     position: "fixed",
-//     inset: 0,
-//     background: "#000",
-//     zIndex: 9999,
-//     display: "flex",
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-//   closeBtn: {
-//     position: "absolute",
-//     top: 20,
-//     right: 24,
-//     background: "rgba(255,255,255,.12)",
-//     border: "none",
-//     color: "#fff",
-//     width: 44,
-//     height: 44,
-//     borderRadius: "50%",
-//     fontSize: 20,
-//     cursor: "pointer",
-//     display: "flex",
-//     alignItems: "center",
-//     justifyContent: "center",
-//     zIndex: 10,
-//     transition: "background .15s",
-//   },
-//   fullImg: { maxWidth: "95vw", maxHeight: "90vh", objectFit: "contain" },
-//   overlayInfo: {
-//     position: "absolute",
-//     bottom: 24,
-//     left: "50%",
-//     transform: "translateX(-50%)",
-//     background: "rgba(0,0,0,.7)",
-//     color: "#e2e8f0",
-//     padding: "8px 20px",
-//     borderRadius: 8,
-//     fontSize: 14,
-//     backdropFilter: "blur(8px)",
-//   },
-// };
-
 import { useState, useEffect, useCallback, useRef } from "react";
 
-const API = "https://ai.uzbeksteel.uz:8008";
-
-const STREAM_URL =
-  "https://ai.uzbeksteel.uz:8889/cam1_main?controls=false&muted=true&autoplay=true&playsInline=true";
-
-const AI_WS_URL = "wss://ai.uzbeksteel.uz:8008/ws/ppe/cam1";
+const CAMERA_API = "https://172.16.55.13:8011";
+const AI_API = "https://ai.uzbeksteel.uz:8008";
+const WS_BASE = "wss://ai.uzbeksteel.uz:8008/ws/ai";
+const STREAM_BASE = "https://ai.uzbeksteel.uz:8889";
 
 const BOX_HOLD_MS = 900;
 const BOX_MAX_AGE_MS = 1500;
@@ -572,9 +12,52 @@ const MAX_RECONNECT_DELAY = 15000;
 
 function makeKey(det, index) {
   if (det.id !== undefined && det.id !== null) return String(det.id);
-
   const [x1, y1] = det.bbox || [0, 0];
   return `${det.label}-${Math.round(x1 / 40)}-${Math.round(y1 / 40)}-${index}`;
+}
+
+function buildStreamUrl(cam, large = false) {
+  if (!cam?.mediamtx_name) return "";
+  const path = large ? `${cam.mediamtx_name}_main` : `${cam.mediamtx_name}_sub`;
+  return `${STREAM_BASE}/${path}?controls=false&muted=true&autoplay=true&playsInline=true`;
+}
+
+function buildWsUrl(cam) {
+  if (!cam?.mediamtx_name) return "";
+  return `${WS_BASE}/${cam.mediamtx_name}`;
+}
+
+function getBoxStyle(det, frameSize, containerSize) {
+  const [x1, y1, x2, y2] = det.bbox;
+
+  const fw = frameSize.width || 1280;
+  const fh = frameSize.height || 720;
+
+  const cw = containerSize.width || window.innerWidth;
+  const ch = containerSize.height || window.innerHeight;
+
+  const videoRatio = fw / fh;
+  const containerRatio = cw / ch;
+
+  let scale;
+  let offsetX = 0;
+  let offsetY = 0;
+
+  // object-fit: contain logikasi
+  if (videoRatio > containerRatio) {
+    scale = cw / fw;
+    offsetY = (ch - fh * scale) / 2;
+  } else {
+    scale = ch / fh;
+    offsetX = (cw - fw * scale) / 2;
+  }
+
+  return {
+    left: x1 * scale + offsetX,
+    top: y1 * scale + offsetY,
+    width: (x2 - x1) * scale,
+    height: (y2 - y1) * scale,
+  };
 }
 
 export default function PPEPage() {
@@ -582,6 +65,11 @@ export default function PPEPage() {
   const reconnectTimerRef = useRef(null);
   const mountedRef = useRef(false);
   const attemptRef = useRef(0);
+  const videoContainerRef = useRef(null);
+
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+  const [cameras, setCameras] = useState([]);
+  const [fullscreenCam, setFullscreenCam] = useState(null);
 
   const [status, setStatus] = useState("connecting");
   const [detections, setDetections] = useState([]);
@@ -602,6 +90,53 @@ export default function PPEPage() {
   const [date, setDate] = useState(now.toISOString().split("T")[0]);
   const [hStart, setHStart] = useState(Math.max(0, now.getHours() - 1));
   const [hEnd, setHEnd] = useState(now.getHours());
+
+  const updateContainerSize = useCallback(() => {
+    const el = videoContainerRef.current;
+    if (!el) return;
+
+    const rect = el.getBoundingClientRect();
+    setContainerSize({
+      width: rect.width,
+      height: rect.height,
+    });
+  }, []);
+
+  useEffect(() => {
+    updateContainerSize();
+    window.addEventListener("resize", updateContainerSize);
+    return () => window.removeEventListener("resize", updateContainerSize);
+  }, [updateContainerSize, fullscreenCam]);
+
+  const loadCameras = useCallback(async () => {
+    try {
+      const res = await fetch(`${CAMERA_API}/api/cameras`);
+      const data = await res.json();
+
+      const list = (data.data || []).filter(
+        (cam) => cam.purpose === "ai_tb" && cam.holat === "jonli",
+      );
+
+      setCameras(list);
+    } catch (err) {
+      console.error("Camera load error:", err);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadCameras();
+    const timer = setInterval(loadCameras, 10000);
+    return () => clearInterval(timer);
+  }, [loadCameras]);
+
+  useEffect(() => {
+    const onEsc = (e) => {
+      if (e.key === "Escape") setFullscreenCam(null);
+    };
+
+    window.addEventListener("keydown", onEsc);
+    return () => window.removeEventListener("keydown", onEsc);
+  }, []);
 
   const clearReconnect = useCallback(() => {
     if (reconnectTimerRef.current) {
@@ -653,14 +188,14 @@ export default function PPEPage() {
   const connect = useCallback(() => {
     closeSocket();
 
-    if (!mountedRef.current || document.hidden) return;
+    if (!mountedRef.current || document.hidden || !fullscreenCam) return;
 
     setStatus("connecting");
 
     let ws;
 
     try {
-      ws = new WebSocket(AI_WS_URL);
+      ws = new WebSocket(buildWsUrl(fullscreenCam));
     } catch (err) {
       console.error("WebSocket create error:", err);
       setStatus("error");
@@ -711,15 +246,14 @@ export default function PPEPage() {
           const heldOld = prev
             .filter((det) => !incomingKeys.has(det.key))
             .filter((det) => timestamp - det.lastSeen <= BOX_HOLD_MS)
-            .map((det) => ({
-              ...det,
-              stale: true,
-            }));
+            .map((det) => ({ ...det, stale: true }));
 
           return [...incoming, ...heldOld].filter(
             (det) => timestamp - det.lastSeen <= BOX_MAX_AGE_MS,
           );
         });
+
+        requestAnimationFrame(updateContainerSize);
       } catch (err) {
         console.error("PPE JSON parse error:", err);
       }
@@ -735,11 +269,10 @@ export default function PPEPage() {
       setStatus("connecting");
       scheduleReconnect();
     };
-  }, [closeSocket, scheduleReconnect]);
+  }, [closeSocket, fullscreenCam, scheduleReconnect, updateContainerSize]);
 
   useEffect(() => {
     mountedRef.current = true;
-    connect();
 
     const cleanupInterval = setInterval(() => {
       const timestamp = Date.now();
@@ -774,12 +307,29 @@ export default function PPEPage() {
     };
   }, [connect, closeSocket]);
 
+  useEffect(() => {
+    setDetections([]);
+    setStats({ persons: 0, with_uniform: 0, without_uniform: 0 });
+    setFrameSize({ width: 1280, height: 720 });
+    setContainerSize({ width: 0, height: 0 });
+    attemptRef.current = 0;
+
+    setTimeout(updateContainerSize, 100);
+
+    if (fullscreenCam) {
+      connect();
+    } else {
+      closeSocket();
+    }
+  }, [fullscreenCam, connect, closeSocket, updateContainerSize]);
+
   const loadScreenshots = useCallback(async () => {
     setLoading(true);
 
     try {
+      const cameraId = fullscreenCam?.mediamtx_name || "";
       const response = await fetch(
-        `${API}/api/screenshots?date=${date}&hour_start=${hStart}&hour_end=${hEnd}&camera_id=cam1`,
+        `${AI_API}/api/screenshots-image?date=${date}&hour_start=${hStart}&hour_end=${hEnd}&camera_id=${cameraId}`,
       );
       const data = await response.json();
       setShots(data.screenshots || []);
@@ -788,12 +338,12 @@ export default function PPEPage() {
     } finally {
       setLoading(false);
     }
-  }, [date, hStart, hEnd]);
+  }, [date, hStart, hEnd, fullscreenCam]);
 
   useEffect(() => {
     if (!panel) return;
 
-    fetch(`${API}/api/available-dates`)
+    fetch(`${AI_API}/api/available-dates`)
       .then((res) => res.json())
       .then((data) => setDates(data.dates || []))
       .catch(() => {});
@@ -823,25 +373,74 @@ export default function PPEPage() {
   const today = new Date().toISOString().split("T")[0];
   const allDates = [...new Set([today, ...dates])].sort().reverse();
 
-  return (
-    <div style={styles.page}>
-      <div style={styles.header}>
-        <div>
-          <h2 style={styles.title}>PPE Forma Monitoring</h2>
-          <p style={styles.subtitle}>
-            Video: MediaMTX WebRTC · AI: FastAPI JSON Overlay
-          </p>
+  if (fullscreenCam) {
+    return (
+      <div style={styles.fullscreen}>
+        <div ref={videoContainerRef} style={styles.videoLayer}>
+          <iframe
+            src={buildStreamUrl(fullscreenCam, true)}
+            title="PPE Fullscreen"
+            allow="autoplay; fullscreen"
+            style={styles.fullIframe}
+            onLoad={updateContainerSize}
+          />
+
+          <div style={styles.overlay}>
+            {detections.map((det, index) => {
+              const box = getBoxStyle(det, frameSize, containerSize);
+              const isDanger = det.status === "danger";
+              const color = isDanger ? "#ef4444" : "#22c55e";
+
+              return (
+                <div
+                  key={det.key || index}
+                  style={{
+                    ...styles.box,
+                    left: `${box.left}px`,
+                    top: `${box.top}px`,
+                    width: `${box.width}px`,
+                    height: `${box.height}px`,
+                    borderColor: "transparent",
+                    // opacity: det.stale ? 0.45 : 1,
+                    // boxShadow: `0 0 18px ${color}99`,
+                  }}
+                >
+                  <div style={{ ...styles.boxLabel, background: color }}>
+                    {det.label}
+                    {det.confidence
+                      ? ` ${Math.round(det.confidence * 100)}%`
+                      : ""}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
-        <div style={styles.headerRight}>
-          <div style={styles.stats}>
-            <Badge color="#38bdf8" label={`Odam: ${stats.persons}`} />
-            <Badge color="#22c55e" label={`Forma bor: ${stats.with_uniform}`} />
-            <Badge
-              color="#ef4444"
-              label={`Forma yo'q: ${stats.without_uniform}`}
-            />
+        <div style={styles.fullTop}>
+          <div>
+            <b>{fullscreenCam.nom || fullscreenCam.mediamtx_name}</b>
+            <span style={{ marginLeft: 12, color: "#94a3b8" }}>
+              {fullscreenCam.location || fullscreenCam.ip || ""}
+            </span>
           </div>
+
+          <button
+            onClick={() => setFullscreenCam(null)}
+            style={styles.closeBtn}
+          >
+            ✕
+          </button>
+        </div>
+
+        <div style={styles.fullBadges}>
+          <Badge color={statusColor} label={statusText} />
+          <Badge color="#38bdf8" label={`Odam: ${stats.persons}`} />
+          <Badge color="#22c55e" label={`Forma bor: ${stats.with_uniform}`} />
+          <Badge
+            color="#ef4444"
+            label={`Forma yo'q: ${stats.without_uniform}`}
+          />
 
           <button
             onClick={() => setPanel((prev) => !prev)}
@@ -853,126 +452,63 @@ export default function PPEPage() {
             {panel ? "✕ Yopish" : "📷 Qoidabuzarlar"}
           </button>
         </div>
-      </div>
 
-      <div style={styles.videoBox}>
-        <iframe
-          src={STREAM_URL}
-          title="PPE Camera"
-          allow="autoplay; fullscreen"
-          style={styles.iframe}
-        />
+        {panel && (
+          <div style={styles.panelFullscreen}>
+            <div style={styles.filters}>
+              <Field label="Sana">
+                <select
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  style={styles.select}
+                >
+                  {allDates.map((d) => (
+                    <option key={d} value={d}>
+                      {d}
+                    </option>
+                  ))}
+                </select>
+              </Field>
 
-        <div style={styles.overlay}>
-          {detections.map((det, index) => {
-            const [x1, y1, x2, y2] = det.bbox;
+              <Field label="Dan">
+                <select
+                  value={hStart}
+                  onChange={(e) => setHStart(Number(e.target.value))}
+                  style={styles.select}
+                >
+                  {hours.map((h) => (
+                    <option key={h} value={h}>
+                      {pad(h)}:00
+                    </option>
+                  ))}
+                </select>
+              </Field>
 
-            const left = (x1 / frameSize.width) * 100;
-            const top = (y1 / frameSize.height) * 100;
-            const width = ((x2 - x1) / frameSize.width) * 100;
-            const height = ((y2 - y1) / frameSize.height) * 100;
+              <Field label="Gacha">
+                <select
+                  value={hEnd}
+                  onChange={(e) => setHEnd(Number(e.target.value))}
+                  style={styles.select}
+                >
+                  {hours.map((h) => (
+                    <option key={h} value={h}>
+                      {pad(h)}:59
+                    </option>
+                  ))}
+                </select>
+              </Field>
 
-            const isDanger = det.status === "danger";
-            const color = isDanger ? "#ef4444" : "#22c55e";
-
-            return (
-              <div
-                key={det.key || index}
-                style={{
-                  ...styles.box,
-                  left: `${left}%`,
-                  top: `${top}%`,
-                  width: `${width}%`,
-                  height: `${height}%`,
-                  borderColor: color,
-                  opacity: det.stale ? 0.45 : 1,
-                  boxShadow: `0 0 18px ${color}99`,
-                }}
-              >
-                <div style={{ ...styles.boxLabel, background: color }}>
-                  {det.label}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        <div style={styles.liveBadge}>
-          <span style={{ ...styles.liveDot, background: statusColor }} />
-          {statusText}
-        </div>
-      </div>
-
-      {panel && (
-        <div style={styles.panel}>
-          <div style={styles.panelHeader}>
-            <div>
-              <h3 style={styles.panelTitle}>Qoidabuzarliklar</h3>
-              <p style={styles.panelSubtitle}>
-                Forma yo‘q holatlari bo‘yicha saqlangan rasmlar
-              </p>
+              <button onClick={loadScreenshots} style={styles.searchBtn}>
+                Qidirish
+              </button>
             </div>
-          </div>
 
-          <div style={styles.filters}>
-            <Field label="Sana">
-              <select
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                style={styles.select}
-              >
-                {allDates.map((d) => (
-                  <option key={d} value={d}>
-                    {d}
-                  </option>
-                ))}
-              </select>
-            </Field>
-
-            <Field label="Dan">
-              <select
-                value={hStart}
-                onChange={(e) => setHStart(Number(e.target.value))}
-                style={styles.select}
-              >
-                {hours.map((h) => (
-                  <option key={h} value={h}>
-                    {pad(h)}:00
-                  </option>
-                ))}
-              </select>
-            </Field>
-
-            <Field label="Gacha">
-              <select
-                value={hEnd}
-                onChange={(e) => setHEnd(Number(e.target.value))}
-                style={styles.select}
-              >
-                {hours.map((h) => (
-                  <option key={h} value={h}>
-                    {pad(h)}:59
-                  </option>
-                ))}
-              </select>
-            </Field>
-
-            <button onClick={loadScreenshots} style={styles.searchBtn}>
-              Qidirish
-            </button>
-          </div>
-
-          {loading ? (
-            <p style={styles.muted}>Yuklanmoqda...</p>
-          ) : shots.length === 0 ? (
-            <p style={styles.muted}>Bu oraliqda rasm topilmadi.</p>
-          ) : (
-            <>
-              <p style={{ ...styles.muted, marginBottom: 12 }}>
-                {shots.length} ta rasm topildi
-              </p>
-
-              <div style={styles.grid}>
+            {loading ? (
+              <p style={styles.muted}>Yuklanmoqda...</p>
+            ) : shots.length === 0 ? (
+              <p style={styles.muted}>Bu oraliqda rasm topilmadi.</p>
+            ) : (
+              <div style={styles.gridShots}>
                 {shots.map((shot) => (
                   <div
                     key={shot.filename}
@@ -980,12 +516,11 @@ export default function PPEPage() {
                     style={styles.card}
                   >
                     <img
-                      src={`${API}${shot.url}`}
+                      src={`${AI_API}${shot.url}`}
                       alt=""
                       style={styles.thumb}
                       loading="lazy"
                     />
-
                     <div style={styles.cardInfo}>
                       <span>{shot.time}</span>
                       <span style={styles.idBadge}>ID: {shot.track_id}</span>
@@ -993,23 +528,65 @@ export default function PPEPage() {
                   </div>
                 ))}
               </div>
-            </>
-          )}
-        </div>
-      )}
-
-      {lightbox && (
-        <div style={styles.lightbox}>
-          <button onClick={() => setLightbox(null)} style={styles.closeBtn}>
-            ✕
-          </button>
-
-          <img src={`${API}${lightbox.url}`} alt="" style={styles.fullImg} />
-
-          <div style={styles.lightboxInfo}>
-            {lightbox.time} — Kamera: {lightbox.camera_id} — ID:{" "}
-            {lightbox.track_id}
+            )}
           </div>
+        )}
+        {lightbox && (
+          <div style={styles.lightbox}>
+            <button
+              onClick={() => setLightbox(null)}
+              style={styles.closeBtnBig}
+            >
+              ✕
+            </button>
+            <img
+              src={`${AI_API}${lightbox.url}`}
+              alt=""
+              style={styles.fullImg}
+            />
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div style={styles.page}>
+      <div style={styles.header}>
+        <div>
+          <h2 style={styles.title}>PPE / AI TB Monitoring</h2>
+          <p style={styles.subtitle}>
+            Grid: sub stream · Click: fullscreen main stream + pixel-perfect AI
+            overlay
+          </p>
+        </div>
+      </div>
+
+      {cameras.length === 0 ? (
+        <div style={styles.empty}>AI TB kameralar topilmadi</div>
+      ) : (
+        <div style={styles.cameraGrid}>
+          {cameras.map((cam) => (
+            <div
+              key={cam.mediamtx_name}
+              style={styles.cameraCard}
+              onClick={() => setFullscreenCam(cam)}
+            >
+              <iframe
+                src={buildStreamUrl(cam, false)}
+                title={cam.mediamtx_name}
+                allow="autoplay; fullscreen"
+                style={styles.gridIframe}
+              />
+
+              <div style={styles.cameraLabel}>
+                <b>{cam.nom || cam.mediamtx_name}</b>
+                <span>{cam.location || cam.ip || ""}</span>
+              </div>
+
+              {/* <div style={styles.clickHint}>Kattalashtirish</div> */}
+            </div>
+          ))}
         </div>
       )}
     </div>
@@ -1054,13 +631,8 @@ const styles = {
     fontFamily: "Segoe UI, system-ui, sans-serif",
   },
   header: {
-    maxWidth: 1440,
+    maxWidth: 1600,
     margin: "0 auto 14px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: 16,
-    flexWrap: "wrap",
   },
   title: {
     margin: 0,
@@ -1073,18 +645,124 @@ const styles = {
     fontSize: 14,
     color: "rgba(255,255,255,0.6)",
   },
-  headerRight: {
+  cameraGrid: {
+    maxWidth: 1600,
+    margin: "0 auto",
+    display: "grid",
+    gridTemplateColumns: "repeat(4, 1fr)",
+    gap: 12,
+  },
+  cameraCard: {
+    position: "relative",
+    aspectRatio: "16/10",
+    borderRadius: 16,
+    overflow: "hidden",
+    background: "#000",
+    cursor: "pointer",
+    border: "1px solid rgba(255,255,255,0.10)",
+    boxShadow: "0 14px 30px rgba(0,0,0,0.25)",
+  },
+  gridIframe: {
+    width: "100%",
+    height: "100%",
+    border: "none",
+    display: "block",
+    background: "#000",
+    pointerEvents: "none",
+  },
+  cameraLabel: {
+    position: "absolute",
+    left: 10,
+    bottom: 10,
+    display: "flex",
+    flexDirection: "column",
+    gap: 2,
+    background: "rgba(0,0,0,0.65)",
+    color: "#fff",
+    padding: "7px 10px",
+    borderRadius: 10,
+    fontSize: 12,
+    backdropFilter: "blur(8px)",
+  },
+  clickHint: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    background: "rgba(37,99,235,0.86)",
+    color: "#fff",
+    padding: "6px 10px",
+    borderRadius: 999,
+    fontSize: 11,
+    fontWeight: 800,
+  },
+  fullscreen: {
+    position: "fixed",
+    inset: 0,
+    background: "#000",
+    zIndex: 9999,
+    fontFamily: "Segoe UI, system-ui, sans-serif",
+  },
+  videoLayer: {
+    position: "absolute",
+    inset: 0,
+    background: "#000",
+    overflow: "hidden",
+  },
+  fullIframe: {
+    width: "100%",
+    height: "100%",
+    border: "none",
+    display: "block",
+    background: "#000",
+  },
+  overlay: {
+    position: "absolute",
+    inset: 0,
+    zIndex: 3,
+    pointerEvents: "none",
+  },
+  box: {
+    position: "absolute",
+    border: "3px solid",
+    borderRadius: 8,
+    transition: "opacity 80ms ease",
+  },
+  boxLabel: {
+    position: "absolute",
+    top: -32,
+    left: 0,
+    color: "#fff",
+    padding: "5px 9px",
+    borderRadius: 8,
+    fontSize: 13,
+    fontWeight: 900,
+    whiteSpace: "nowrap",
+    boxShadow: "0 8px 20px rgba(0,0,0,0.25)",
+  },
+  fullTop: {
+    position: "absolute",
+    top: 14,
+    left: 14,
+    right: 14,
+    zIndex: 5,
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    color: "#fff",
+    background: "transparent",
+    padding: "10px 14px",
+    borderRadius: 14,
+    // backdropFilter: "blur(8px)",
+  },
+  fullBadges: {
+    position: "absolute",
+    left: 14,
+    bottom: 14,
+    zIndex: 5,
     display: "flex",
     alignItems: "center",
-    gap: 12,
-    flexWrap: "wrap",
-    justifyContent: "flex-end",
-  },
-  stats: {
-    display: "flex",
     gap: 10,
     flexWrap: "wrap",
-    justifyContent: "flex-end",
   },
   badge: {
     padding: "8px 12px",
@@ -1103,103 +781,35 @@ const styles = {
     fontWeight: 800,
     fontSize: 13,
   },
-  videoBox: {
-    maxWidth: 1440,
-    height: "calc(100vh - 120px)",
-    minHeight: 520,
-    margin: "0 auto",
-    position: "relative",
-    overflow: "hidden",
-    borderRadius: 22,
-    background: "#000",
-    border: "1px solid rgba(255,255,255,0.08)",
-    boxShadow: "0 20px 60px rgba(0,0,0,0.45)",
-  },
-  iframe: {
-    width: "100%",
-    height: "100%",
+  closeBtn: {
+    background: "rgba(255,255,255,0.12)",
     border: "none",
-    display: "block",
-    background: "#000",
-  },
-  overlay: {
-    position: "absolute",
-    inset: 0,
-    zIndex: 3,
-    pointerEvents: "none",
-  },
-  box: {
-    position: "absolute",
-    border: "3px solid",
-    borderRadius: 8,
-    transition:
-      "left 120ms linear, top 120ms linear, width 120ms linear, height 120ms linear, opacity 180ms ease",
-  },
-  boxLabel: {
-    position: "absolute",
-    top: -32,
-    left: 0,
     color: "#fff",
-    padding: "5px 9px",
-    borderRadius: 8,
-    fontSize: 13,
-    fontWeight: 900,
-    whiteSpace: "nowrap",
-    boxShadow: "0 8px 20px rgba(0,0,0,0.25)",
-  },
-  liveBadge: {
-    position: "absolute",
-    top: 14,
-    left: 14,
-    zIndex: 5,
-    display: "flex",
-    alignItems: "center",
-    gap: 8,
-    padding: "8px 14px",
-    borderRadius: 999,
-    background: "rgba(15,23,42,0.82)",
-    color: "#fff",
-    fontSize: 13,
-    fontWeight: 900,
-    backdropFilter: "blur(8px)",
-  },
-  liveDot: {
-    width: 9,
-    height: 9,
+    width: 38,
+    height: 38,
     borderRadius: "50%",
-    boxShadow: "0 0 10px currentColor",
-  },
-  panel: {
-    maxWidth: 1440,
-    margin: "18px auto 0",
-    background: "rgba(15,23,42,0.92)",
-    borderRadius: 18,
-    padding: 22,
-    border: "1px solid rgba(255,255,255,0.08)",
-    boxShadow: "0 16px 45px rgba(0,0,0,0.35)",
-  },
-  panelHeader: {
-    marginBottom: 16,
-  },
-  panelTitle: {
-    margin: 0,
     fontSize: 18,
-    color: "#fff",
-    fontWeight: 900,
+    cursor: "pointer",
   },
-  panelSubtitle: {
-    margin: "4px 0 0",
-    color: "#94a3b8",
-    fontSize: 13,
+  panelFullscreen: {
+    position: "absolute",
+    right: 14,
+    top: 78,
+    bottom: 14,
+    width: 420,
+    zIndex: 6,
+    background: "rgba(15,23,42,0.94)",
+    borderRadius: 18,
+    padding: 18,
+    border: "1px solid rgba(255,255,255,0.08)",
+    overflow: "auto",
   },
   filters: {
     display: "flex",
-    gap: 14,
+    gap: 10,
     flexWrap: "wrap",
     alignItems: "flex-end",
-    marginBottom: 18,
-    paddingBottom: 16,
-    borderBottom: "1px solid rgba(255,255,255,0.08)",
+    marginBottom: 16,
   },
   fieldLabel: {
     fontSize: 11,
@@ -1217,7 +827,7 @@ const styles = {
     padding: "8px 12px",
     fontSize: 13,
     height: 38,
-    minWidth: 120,
+    minWidth: 100,
   },
   searchBtn: {
     background: "#2563eb",
@@ -1234,10 +844,10 @@ const styles = {
     fontSize: 13,
     margin: 0,
   },
-  grid: {
+  gridShots: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-    gap: 14,
+    gridTemplateColumns: "1fr",
+    gap: 12,
   },
   card: {
     borderRadius: 12,
@@ -1245,7 +855,6 @@ const styles = {
     border: "1px solid rgba(255,255,255,0.08)",
     cursor: "pointer",
     background: "#020617",
-    transition: "transform 150ms ease, border-color 150ms ease",
   },
   thumb: {
     width: "100%",
@@ -1273,12 +882,12 @@ const styles = {
     position: "fixed",
     inset: 0,
     background: "rgba(0,0,0,0.96)",
-    zIndex: 9999,
+    zIndex: 10000,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
   },
-  closeBtn: {
+  closeBtnBig: {
     position: "absolute",
     top: 20,
     right: 24,
@@ -1297,16 +906,15 @@ const styles = {
     maxHeight: "90vh",
     objectFit: "contain",
   },
-  lightboxInfo: {
-    position: "absolute",
-    bottom: 24,
-    left: "50%",
-    transform: "translateX(-50%)",
-    background: "rgba(15,23,42,0.8)",
-    color: "#e2e8f0",
-    padding: "8px 18px",
-    borderRadius: 999,
-    fontSize: 14,
-    backdropFilter: "blur(8px)",
+  empty: {
+    maxWidth: 1600,
+    margin: "0 auto",
+    height: 420,
+    display: "grid",
+    placeItems: "center",
+    color: "#94a3b8",
+    fontWeight: 900,
+    background: "rgba(15,23,42,0.7)",
+    borderRadius: 18,
   },
 };

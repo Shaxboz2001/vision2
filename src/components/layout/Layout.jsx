@@ -1430,6 +1430,7 @@ import VoiceAssistantIndicator from "@/components/VoiceAssistantIndicator";
 import TranslateIcon from "@mui/icons-material/Translate";
 import { toggleScript } from "@/store";
 import { useScriptText } from "@/hooks/useScriptText";
+import SensorOccupiedRoundedIcon from "@mui/icons-material/SensorOccupiedRounded";
 
 const DRAWER_WIDTH = 250;
 const APPBAR_HEIGHT = 56;
@@ -1468,6 +1469,11 @@ const mainNavItems = [
     icon: <VideocamIcon sx={{ fontSize: 18 }} />,
     badge: null,
   },
+  // {
+  //   path: "/kpp-monitoring",
+  //   label: "KPP Monitoring",
+  //   icon: <SensorOccupiedRoundedIcon sx={{ fontSize: 18 }} />,
+  // },
 ];
 
 const manageNavItems = [
